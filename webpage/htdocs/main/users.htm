@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="content-type"     content="text/html;charset=iso-8859-1"/>
+    <meta http-equiv="content-language" content="en"/>
+    <meta http-equiv="pragma"           content="no-cache"/>
+    <title><%sys_longname%></title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>          
+    <script type="text/javascript" src="../js/system.js"></script>
+    <script type="text/javascript">
+    <!--
+
+      function MyCancel()
+      {
+         document.getElementById("tr0_err").style.display  = "none";
+      }
+    
+      function MySubmit()
+      {
+         var new_pass;
+         var new_pass2;
+         var user = "<%sys_login_user%>"
+
+         new_pass  = document.formular.new_pass.value;
+         new_pass2 = document.formular.new_pass2.value;
+
+         if (new_pass != new_pass2)
+         {
+            document.getElementById("tr0_err").style.display = "block";
+            document.getElementById("tr0_msg").innerHTML = "The Confirm Password does not match the New Password.";
+         }
+         else
+         {
+            document.formular.submit();
+         }            
+      }
+      
+      function Ready()
+      {
+         let err = GetURLParameter("err");
+         let msg;
+
+         document.getElementById("tr0_err").style.display  = "none";
+         
+         if (err != undefined)
+         {
+            switch(err) 
+            {
+               case "-1": msg = "Incorrect Old Password entered.";                              break;
+               case "-2": msg = "The password does not meet the password policy requirements."; break;
+               default:   msg = "An internal error has occurred: " + err;                       break;
+            }   
+            document.getElementById("tr0_msg").innerHTML = msg;
+            document.getElementById("tr0_err").style.display  = "block";
+         }
+      }
+
+    -->
+    </script>
+  </head>        
+
+  <body bgcolor="#ffffff" onload="Ready()">
+    <table class="table_body">
+      <tr align="center">
+        <td> 
+        
+          <!-- Header -->
+          <div class="header">
+            <h1><%sys_longname%></h1>
+            <div class="div"></div>
+            <div class="login"><a href="../logout.htm">Logout</a></div>
+            <div class="logo"></div>
+          </div>
+      
+          <!-- Navigation #1 -->
+          <table class="table_navi1">
+            <tr>
+              <td>&nbsp;</td>
+              <td class="main">
+                <ul>
+                  <li class="nb"><a href="../home/index.htm">Home</a></li>
+                  <li class="nm"><a href="../dhcp/index.htm">DHCP Server</a></li>
+                  <li class="nm"><a href="../sntp/index.htm">SNTP Server</a></li>
+                  <li class="ne"><a class="active" href="#">Maintenance</a></li>
+                </ul>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+          </table> 
+
+          <!-- Navigation #2, #3 -->
+          <div class="navi2">
+            <ul>
+              <li class="nb"><a href="index.htm">Overview</a></li>
+              <li class="nm"><a href="upweb.htm">Update</a></li>
+              <li class="nm"><a href="stattask.htm">Statistic</a></li>
+              <li class="nm"><a href="time.htm">Time</a></li>
+              <li class="nm"><a href="net.htm">Network</a></li>
+              <li class="nm"><a href="dhcp.htm">DHCP Server</a></li>
+              <li class="ne"><a class="active" href="users.htm">Users</a></li>
+            </ul>
+            <p><%sys_shortname%></p>
+          </div> 
+          <div class="navi3">
+            <ul>
+              <li><a class="active" href="#">Change password</a></li>
+            </ul>
+          </div>
+
+          <!-- table_row -->
+          <table class="table_row">
+            <tr align="center">
+              <td>
+              
+                <table class="table_variable">
+                  <thead>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>Change password</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </thead>
+                  
+                  <tbody>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>
+                      
+                        <div class="content">
+                          <form name="formular" method="post" action="/cgi-bin/change_pass.cgi">
+
+                            <p style="text-align:center">
+                              <br><br>Password requirement: 8-32 characters, at least one uppercase letter,
+                              <br><br>one lowercase letter, one number and one symbol.
+                            </p>
+
+                            <div id="tr0_err" style="display:none">
+                              <p style="text-align:center; font-weight:bold">
+                                <br><br><span id="tr0_msg">error</span>
+                              </p>
+                            </div>
+                          
+                            <fieldset>
+                              <label class="normal">&nbsp;</label>
+                              <br/>
+                              
+                              <label class="normal">User</label>
+                              <p><%sys_login_user%></p>
+                              <br/>
+                              <label class="normal">Old Password</label>
+                              <input type="password" id="old_pass" name="old_pass"  />
+                              <br/>
+                              <label class="normal">New Password</label>
+                              <input type="password" id="new_pass" name="new_pass"  />
+                              <br/>
+                              <label class="normal">Confirm Password</label>
+                              <input type="password" id="new_pass2" name="new_pass2"  />
+                              <br/>
+
+                              <input type="hidden" name="redir" value="/main/users.htm"/>
+                              <label class="normal">&nbsp;</label>
+                              <button class="save" type="button" name="button" value="submit" onclick="javascript:MySubmit()">
+                                Save
+                              </button>
+                              <button class="cancel" type="reset" name="button2" value="cancel" onclick="javascript:MyCancel()">
+                                Cancel
+                            </fieldset>
+                          </form>
+
+                          <br/>
+                        </div>
+                        
+                      </td>
+                      <td>&nbsp;</td>
+                    </tr>
+                  </tbody>
+                  
+                  <tfoot>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </tfoot>                            
+                </table>
+              </td>
+            </tr>
+          </table>
+          <!-- table_row --> 
+
+        </td>
+      </tr>
+    </table> <!-- table_body -->
+  </body>
+</html>

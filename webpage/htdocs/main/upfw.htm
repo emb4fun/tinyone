@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="content-type"     content="text/html;charset=iso-8859-1"/>
+    <meta http-equiv="content-language" content="en"/>
+    <meta http-equiv="pragma"           content="no-cache"/>
+    <title><%sys_longname%></title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>          
+    <script type="text/javascript" src="../js/system.js"></script>
+    <script type="text/javascript">
+    <!--
+    
+      function f_fw_up() 
+      {
+        document.getElementById("form_fw_up").disabled = false;
+
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("button").style.display = "block";
+      }    
+
+      function f_fw_ac() 
+      {
+        document.getElementById("form_fw_ac").disabled = false;
+      }
+      
+      function update_submit()
+      {
+        document.getElementById("form_fw_up").disabled = true;
+
+        document.getElementById("loader").style.display = "block";
+        document.getElementById("button").style.display = "none";
+      }
+
+      function upgrade_submit()
+      {
+        document.getElementById("form_fw_ac").disabled = true;
+      }
+
+      function Ready()
+      {
+        document.getElementById("form_fw_up").disabled = true;
+        document.getElementById("form_fw_ac").disabled = true;
+
+        document.getElementById("loader").style.display = "none";
+      }
+    
+    -->
+    </script>
+  </head>        
+
+  <body bgcolor="#ffffff" onload="Ready()">
+    <table class="table_body">
+      <tr align="center">
+        <td> 
+        
+          <!-- Header -->
+          <div class="header">
+            <h1><%sys_longname%></h1>
+            <div class="div"></div>
+            <div class="login"><a href="../logout.htm">Logout</a></div>
+            <div class="logo"></div>
+          </div>
+      
+          <!-- Navigation #1 -->
+          <table class="table_navi1">
+            <tr>
+              <td>&nbsp;</td>
+              <td class="main">
+                <ul>
+                  <li class="nb"><a href="../home/index.htm">Home</a></li>
+                  <li class="nm"><a href="../dhcp/index.htm">DHCP Server</a></li>
+                  <li class="nm"><a href="../sntp/index.htm">SNTP Server</a></li>
+                  <li class="ne"><a class="active" href="index.htm">Maintenance</a></li>
+                </ul>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+          </table> 
+
+          <!-- Navigation #2, #3 -->
+          <div class="navi2">
+            <ul>
+              <li class="nb"><a href="index.htm">Overview</a></li>
+              <li class="nm"><a class="active" href="#">Update</a></li>
+              <li class="nm"><a href="stattask.htm">Statistic</a></li>
+              <li class="nm"><a href="time.htm">Time</a></li>
+              <li class="nm"><a href="net.htm">Network</a></li>
+              <li class="nm"><a href="dhcp.htm">DHCP Server</a></li>
+              <li class="ne"><a href="users.htm">Users</a></li>
+            </ul>
+            <p><%sys_shortname%></p>
+          </div> 
+          <div class="navi3">
+            <ul>
+              <li class="nb"><a href="upweb.htm">Webpage</a></li>
+              <li class="ne"><a class="active" href="#">Firmware</a></li>
+            </ul>
+          </div>
+
+          <!-- table_row -->
+          <table class="table_row">
+            <tr align="center">
+              <td>
+              
+                <table class="table_variable">
+                  <thead>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>Update Firmware</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </thead>
+                  
+                  <tbody>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>
+                      
+                        <div class="content">
+                          <fieldset>
+                            <legend>Version</legend>
+                            <label class="normal">Firmware</label>
+                            <p id="curdate"><%sys_longname%>&nbsp;<%sys_fw_ver%></p>
+                          </fieldset>
+
+                          <fieldset>
+                            <form method="post" action="/cgi-bin/upload.cgi" enctype="multipart/form-data">
+                              <legend>Install Firmware</legend>
+
+                              <label class="normal">Buffer 1</label>
+                              <input onchange="f_fw_up();" id="ucheck1" type="radio" name="buffer" value="1"/>
+                              <label class="shifted" for="ucheck1"><%sys_fw1_name%>&nbsp;<%sys_fw1_ver%></label>
+                              <br/>
+                              
+                              <label class="normal">Buffer 2</label>
+                              <input onchange="f_fw_up();" id="ucheck2" type="radio" name="buffer" value="2"/>
+                              <label class="shifted" for="ucheck2"><%sys_fw2_name%>&nbsp;<%sys_fw2_ver%></label>
+                              <br/>
+
+                              <label class="normal" for="ucheck1">File</label>
+                              <input type="file" name="image" title="Valid firmware image"/>
+                              <br/>
+                              
+                              <input type="hidden" name="type" value="fw"/>
+                              <input type="hidden" name="redir_ok" value="/main/upfw.htm"/>
+                              <input type="hidden" name="redir_err" value="/main/uperr.htm"/>
+
+                              <div id="loader" style="display:none">
+                                <br/>
+                                <label class="normal">&nbsp;</label>
+                                <p>Processing data ...&nbsp;&nbsp;<span><img src="../img/loader.gif" alt="" /></span></p>
+                              </div>
+
+                              <div id="button" style="display:block">
+                                <label class="normal">&nbsp;</label>
+                                <button type="submit" name="form_fw_up" id="form_fw_up" value="Submit" onclick="update_submit()" >
+                                  Upload
+                                </button>
+                              </div>
+                              
+                            </form>                          
+                          </fieldset>
+                          
+                          <br/>
+
+                          <fieldset>
+                            <form method="post" action="/cgi-bin/upgrade.cgi">
+                              <legend>Activate Firmware</legend>
+
+                              <label class="normal">Buffer 1</label>
+                              <input onchange="f_fw_ac();" id="acheck1" type="radio" name="buffer" value="1"/>
+                              <label class="shifted" for="acheck1"><%sys_fw1_name%>&nbsp;<%sys_fw1_ver%></label>
+                              <br/>
+                              
+                              <label class="normal">Buffer 2</label>
+                              <input onchange="f_fw_ac();" id="acheck2" type="radio" name="buffer" value="2"/>
+                              <label class="shifted" for="acheck2"><%sys_fw2_name%>&nbsp;<%sys_fw2_ver%></label>
+                              <br/>
+
+                              <input type="hidden" name="type" value="fw"/>
+                              <input type="hidden" name="redir_ok" value="/main/upboot.htm"/>
+                              <input type="hidden" name="redir_err" value="/main/uperr.htm"/>
+                              
+                              <label class="normal">&nbsp;</label>
+                              <button type="submit" name="form_fw_ac" id="form_fw_ac" value="Submit" onclick="upgrade_submit()" >
+                                Activate
+                              </button>
+                            </form>                          
+                          </fieldset>
+                          
+                          <br/>
+                          
+                        </div>  <!-- content -->
+                        
+                      </td>
+                      <td>&nbsp;</td>
+                    </tr>
+                  </tbody>
+                  
+                  <tfoot>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </tfoot>                            
+                </table>
+              </td>
+              
+            </tr>
+          </table>
+          <!-- table_row --> 
+
+        </td>
+      </tr>
+    </table> <!-- table_body -->
+  </body>
+</html>

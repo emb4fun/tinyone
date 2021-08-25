@@ -1,0 +1,28 @@
+<!DOCTYPE Linker_Placement_File>
+<Root name="SDRAM Section Placement">
+  <MemorySegment name="SDRAM">
+    <ProgramSection load="Yes" name=".vectors" start="$(SDRAM_START:)" />
+    <ProgramSection alignment="4" load="Yes" name=".init" />
+    <ProgramSection alignment="4" load="Yes" name=".init_rodata" />
+    <ProgramSection alignment="0x4000" load="No" name=".mmu" />
+    <ProgramSection alignment="4" load="Yes" name=".fast" />
+    <ProgramSection alignment="4" load="Yes" name=".text" />
+    <ProgramSection alignment="4" load="Yes" name=".dtors" />
+    <ProgramSection alignment="4" load="Yes" name=".ctors" />
+    <ProgramSection alignment="4" load="Yes" name=".data" />
+    <ProgramSection alignment="4" load="Yes" name=".tdata" />
+    <ProgramSection alignment="4" load="Yes" name=".rodata" />
+    <ProgramSection alignment="4" load="Yes" name=".ARM.exidx" address_symbol="__exidx_start" end_symbol="__exidx_end" />
+    <ProgramSection alignment="4" load="No"  name=".bss" />
+    <ProgramSection alignment="4" load="No"  name=".tbss" />
+    <ProgramSection alignment="4" load="No"  name=".non_init" />
+    <ProgramSection alignment="4" load="No"  name=".heap"      size="__HEAPSIZE__"      />
+    <ProgramSection alignment="8" load="No"  name=".stack"     size="__STACKSIZE__"     />
+    <ProgramSection alignment="8" load="No"  name=".stack_irq" size="__STACKSIZE_IRQ__" />
+    <ProgramSection alignment="8" load="No"  name=".stack_fiq" size="__STACKSIZE_FIQ__" />
+    <ProgramSection alignment="8" load="No"  name=".stack_svc" size="__STACKSIZE_SVC__" />
+    <ProgramSection alignment="8" load="No"  name=".stack_abt" size="__STACKSIZE_ABT__" />
+    <ProgramSection alignment="8" load="No"  name=".stack_und" size="__STACKSIZE_UND__" />
+  </MemorySegment>
+</Root>
+

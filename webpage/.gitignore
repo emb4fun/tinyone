@@ -1,0 +1,9 @@
+#
+# Ignore files by file types
+#
+**/*.bak
+
+#
+# Some more specific rules
+#
+build/

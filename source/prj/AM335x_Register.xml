@@ -1,0 +1,3477 @@
+<Processor name="AM335x" description="AM335x">
+  <RegisterGroup start="(0x44E00000)" name="CM_PER">
+    <Register name="L4LS_CLKSTCTRL" start="+(0x0)">
+      <BitField name="CLKTRCTRL" start="0" size="2" />
+      <BitField name="CLKACTIVITY_L4LS_GCLK" start="8" size="1" />
+      <BitField name="CLKACTIVITY_UART_GFCLK" start="10" size="1" />
+      <BitField name="CLKACTIVITY_CAN_CLK" start="11" size="1" />
+      <BitField name="CLKACTIVITY_TIMER7_GCLK" start="13" size="1" />
+      <BitField name="CLKACTIVITY_TIMER2_GCLK" start="14" size="1" />
+      <BitField name="CLKACTIVITY_TIMER3_GCLK" start="15" size="1" />
+      <BitField name="CLKACTIVITY_TIMER4_GCLK" start="16" size="1" />
+      <BitField name="CLKACTIVITY_LCDC_GCLK" start="17" size="1" />
+      <BitField name="CLKACTIVITY_GPIO_1_GDBCLK" start="19" size="1" />
+      <BitField name="CLKACTIVITY_GPIO_2_GDBCLK" start="20" size="1" />
+      <BitField name="CLKACTIVITY_GPIO_3_GDBCLK" start="21" size="1" />
+      <BitField name="CLKACTIVITY_I2C_FCLK" start="24" size="1" />
+      <BitField name="CLKACTIVITY_SPI_GCLK" start="25" size="1" />
+      <BitField name="CLKACTIVITY_TIMER5_GCLK" start="27" size="1" />
+      <BitField name="CLKACTIVITY_TIMER6_GCLK" start="28" size="1" />
+    </Register>
+    <Register name="L3S_CLKSTCTRL" start="+(0x4)">
+      <BitField name="CLKTRCTRL" start="0" size="2" />
+      <BitField name="CLKACTIVITY_L3LS_GCLK" start="3" size="1" />
+    </Register>
+    <Register name="L4FW_CLKSTCTRL" start="+(0x8)" />
+    <Register name="L3_CLKSTCTRL" start="+(0xc)">
+      <BitField name="CLKTRCTRL" start="0" size="2" />
+      <BitField name="CLKACTIVITY_EMIF_GCLK" start="2" size="1" />
+      <BitField name="CLKACTIVITY_MMC_GCLK" start="3" size="1" />
+      <BitField name="CLKACTIVITY_L3_GCLK" start="4" size="1" />
+      <BitField name="CLKACTIVITY_CPTS_RFT_GCLK" start="6" size="1" />
+      <BitField name="CLKACTIVITY_MCASP_GCLK" start="7" size="1" />
+    </Register>
+    <Register name="CPGMAC0_CLKCTRL" start="+(0x14)" />
+    <Register name="LCDC_CLKCTRL" start="+(0x18)" />
+    <Register name="USB0_CLKCTRL" start="+(0x1c)" />
+    <Register name="MLB_CLKCTRL" start="+(0x20)" />
+    <Register name="TPTC0_CLKCTRL" start="+(0x24)" />
+    <Register name="EMIF_CLKCTRL" start="+(0x28)" />
+    <Register name="OCMCRAM_CLKCTRL" start="+(0x2c)" />
+    <Register name="GPMC_CLKCTRL" start="+(0x30)" />
+    <Register name="MCASP0_CLKCTRL" start="+(0x34)" />
+    <Register name="UART5_CLKCTRL" start="+(0x38)" />
+    <Register name="MMC0_CLKCTRL" start="+(0x3c)" />
+    <Register name="ELM_CLKCTRL" start="+(0x40)" />
+    <Register name="I2C2_CLKCTRL" start="+(0x44)" />
+    <Register name="I2C1_CLKCTRL" start="+(0x48)" />
+    <Register name="SPI0_CLKCTRL" start="+(0x4c)" />
+    <Register name="SPI1_CLKCTRL" start="+(0x50)" />
+    <Register name="L4LS_CLKCTRL" start="+(0x60)" />
+    <Register name="L4FW_CLKCTRL" start="+(0x64)" />
+    <Register name="MCASP1_CLKCTRL" start="+(0x68)" />
+    <Register name="UART1_CLKCTRL" start="+(0x6c)" />
+    <Register name="UART2_CLKCTRL" start="+(0x70)" />
+    <Register name="UART3_CLKCTRL" start="+(0x74)" />
+    <Register name="UART4_CLKCTRL" start="+(0x78)" />
+    <Register name="TIMER7_CLKCTRL" start="+(0x7c)" />
+    <Register name="TIMER2_CLKCTRL" start="+(0x80)" />
+    <Register name="TIMER3_CLKCTRL" start="+(0x84)" />
+    <Register name="TIMER4_CLKCTRL" start="+(0x88)" />
+    <Register name="RNG_CLKCTRL" start="+(0x90)" />
+    <Register name="AES0_CLKCTRL" start="+(0x94)" />
+    <Register name="SHA0_CLKCTRL" start="+(0xa0)" />
+    <Register name="PKA_CLKCTRL" start="+(0xa4)" />
+    <Register name="GPIO6_CLKCTRL" start="+(0xa8)" />
+    <Register name="GPIO1_CLKCTRL" start="+(0xac)" />
+    <Register name="GPIO2_CLKCTRL" start="+(0xb0)" />
+    <Register name="GPIO3_CLKCTRL" start="+(0xb4)" />
+    <Register name="TPCC_CLKCTRL" start="+(0xbc)" />
+    <Register name="DCAN0_CLKCTRL" start="+(0xc0)" />
+    <Register name="DCAN1_CLKCTRL" start="+(0xc4)" />
+    <Register name="EPWMSS1_CLKCTRL" start="+(0xcc)" />
+    <Register name="EMIF_FW_CLKCTRL" start="+(0xd0)" />
+    <Register name="EPWMSS0_CLKCTRL" start="+(0xd4)" />
+    <Register name="EPWMSS2_CLKCTRL" start="+(0xd8)" />
+    <Register name="L3_INSTR_CLKCTRL" start="+(0xdc)" />
+    <Register name="L3_CLKCTRL" start="+(0xe0)" />
+    <Register name="IEEE5000_CLKCTRL" start="+(0xe4)" />
+    <Register name="ICSS_CLKCTRL" start="+(0xe8)" />
+    <Register name="TIMER5_CLKCTRL" start="+(0xec)" />
+    <Register name="TIMER6_CLKCTRL" start="+(0xf0)" />
+    <Register name="MMC1_CLKCTRL" start="+(0xf4)" />
+    <Register name="MMC2_CLKCTRL" start="+(0xf8)" />
+    <Register name="TPTC1_CLKCTRL" start="+(0xfc)" />
+    <Register name="TPTC2_CLKCTRL" start="+(0x100)" />
+    <Register name="SPINLOCK_CLKCTRL" start="+(0x10c)" />
+    <Register name="MAILBOX0_CLKCTRL" start="+(0x110)" />
+    <Register name="L4HS_CLKSTCTRL" start="+(0x11c)" />
+    <Register name="L4HS_CLKCTRL" start="+(0x120)" />
+    <Register name="MSTR_EXPS_CLKCTRL" start="+(0x124)" />
+    <Register name="SLV_EXPS_CLKCTRL" start="+(0x128)" />
+    <Register name="OCPWP_L3_CLKSTCTRL" start="+(0x12c)" />
+    <Register name="OCPWP_CLKCTRL" start="+(0x130)" />
+    <Register name="ICSS_CLKSTCTRL" start="+(0x140)" />
+    <Register name="CPSW_CLKSTCTRL" start="+(0x144)" />
+    <Register name="LCDC_CLKSTCTRL" start="+(0x148)" />
+    <Register name="CLKDIV32K_CLKCTRL" start="+(0x14c)" />
+    <Register name="CLK_24MHZ_CLKSTCTRL" start="+(0x150)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E00400)" name="CM_WKUP">
+    <Register name="CLKSTCTRL" start="+(0x0)" />
+    <Register name="CONTROL_CLKCTRL" start="+(0x4)" />
+    <Register name="GPIO0_CLKCTRL" start="+(0x8)" />
+    <Register name="L4WKUP_CLKCTRL" start="+(0xc)" />
+    <Register name="TIMER0_CLKCTRL" start="+(0x10)" />
+    <Register name="DEBUGSS_CLKCTRL" start="+(0x14)" />
+    <Register name="CM_L3_AON_CLKSTCTRL" start="+(0x18)" />
+    <Register name="CM_AUTOIDLE_DPLL_MPU" start="+(0x1c)" />
+    <Register name="CM_IDLEST_DPLL_MPU" start="+(0x20)" />
+    <Register name="CM_SSC_DELTAMSTEP_DPLL_MPU" start="+(0x24)" />
+    <Register name="CM_SSC_MODFREQDIV_DPLL_MPU" start="+(0x28)" />
+    <Register name="CM_CLKSEL_DPLL_MPU" start="+(0x2c)" />
+    <Register name="CM_AUTOIDLE_DPLL_DDR" start="+(0x30)" />
+    <Register name="CM_IDLEST_DPLL_DDR" start="+(0x34)" />
+    <Register name="CM_SSC_DELTAMSTEP_DPLL_DDR" start="+(0x38)" />
+    <Register name="CM_SSC_MODFREQDIV_DPLL_DDR" start="+(0x3c)" />
+    <Register name="CM_CLKSEL_DPLL_DDR" start="+(0x40)" />
+    <Register name="CM_AUTOIDLE_DPLL_DISP" start="+(0x44)" />
+    <Register name="CM_IDLEST_DPLL_DISP" start="+(0x48)" />
+    <Register name="CM_SSC_DELTAMSTEP_DPLL_DISP" start="+(0x4c)" />
+    <Register name="CM_SSC_MODFREQDIV_DPLL_DISP" start="+(0x50)" />
+    <Register name="CM_CLKSEL_DPLL_DISP" start="+(0x54)" />
+    <Register name="CM_AUTOIDLE_DPLL_CORE" start="+(0x58)" />
+    <Register name="CM_IDLEST_DPLL_CORE" start="+(0x5c)" />
+    <Register name="CM_SSC_DELTAMSTEP_DPLL_CORE" start="+(0x60)" />
+    <Register name="CM_SSC_MODFREQDIV_DPLL_CORE" start="+(0x64)" />
+    <Register name="CM_CLKSEL_DPLL_CORE" start="+(0x68)" />
+    <Register name="CM_AUTOIDLE_DPLL_PER" start="+(0x6c)" />
+    <Register name="CM_IDLEST_DPLL_PER" start="+(0x70)" />
+    <Register name="CM_SSC_DELTAMSTEP_DPLL_PER" start="+(0x74)" />
+    <Register name="CM_SSC_MODFREQDIV_DPLL_PER" start="+(0x78)" />
+    <Register name="CM_CLKDCOLDO_DPLL_PER" start="+(0x7c)" />
+    <Register name="CM_DIV_M4_DPLL_CORE" start="+(0x80)" />
+    <Register name="CM_DIV_M5_DPLL_CORE" start="+(0x84)" />
+    <Register name="CM_CLKMODE_DPLL_MPU" start="+(0x88)" />
+    <Register name="CM_CLKMODE_DPLL_PER" start="+(0x8c)" />
+    <Register name="CM_CLKMODE_DPLL_CORE" start="+(0x90)" />
+    <Register name="CM_CLKMODE_DPLL_DDR" start="+(0x94)" />
+    <Register name="CM_CLKMODE_DPLL_DISP" start="+(0x98)" />
+    <Register name="CM_CLKSEL_DPLL_PERIPH" start="+(0x9c)" />
+    <Register name="CM_DIV_M2_DPLL_DDR" start="+(0xa0)" />
+    <Register name="CM_DIV_M2_DPLL_DISP" start="+(0xa4)" />
+    <Register name="CM_DIV_M2_DPLL_MPU" start="+(0xa8)" />
+    <Register name="CM_DIV_M2_DPLL_PER" start="+(0xac)" />
+    <Register name="WKUP_M3_CLKCTRL" start="+(0xb0)" />
+    <Register name="UART0_CLKCTRL" start="+(0xb4)" />
+    <Register name="I2C0_CLKCTRL" start="+(0xb8)" />
+    <Register name="ADC_TSC_CLKCTRL" start="+(0xbc)" />
+    <Register name="SMARTREFLEX0_CLKCTRL" start="+(0xc0)" />
+    <Register name="TIMER1_CLKCTRL" start="+(0xc4)" />
+    <Register name="SMARTREFLEX1_CLKCTRL" start="+(0xc8)" />
+    <Register name="CM_L4_WKUP_AON_CLKSTCTRL" start="+(0xcc)" />
+    <Register name="WDT0_CLKCTRL" start="+(0xd0)" />
+    <Register name="WDT1_CLKCTRL" start="+(0xd4)" />
+    <Register name="CM_DIV_M6_DPLL_CORE" start="+(0xd8)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E00500)" name="CM_DPLL">
+    <Register name="CLKSEL_TIMER7_CLK" start="+(0x4)" />
+    <Register name="CLKSEL_TIMER2_CLK" start="+(0x8)" />
+    <Register name="CLKSEL_TIMER3_CLK" start="+(0xc)" />
+    <Register name="CLKSEL_TIMER4_CLK" start="+(0x10)" />
+    <Register name="CM_MAC_CLKSEL" start="+(0x14)" />
+    <Register name="CLKSEL_TIMER5_CLK" start="+(0x18)" />
+    <Register name="CLKSEL_TIMER6_CLK" start="+(0x1c)" />
+    <Register name="CM_CPTS_RFT_CLKSEL" start="+(0x20)" />
+    <Register name="CLKSEL_TIMER1MS_CLK" start="+(0x28)" />
+    <Register name="CLKSEL_GFX_FCLK" start="+(0x2c)" />
+    <Register name="CLKSEL_ICSS_OCP_CLK" start="+(0x30)" />
+    <Register name="CLKSEL_LCDC_PIXEL_CLK" start="+(0x34)" />
+    <Register name="CLKSEL_WDT1_CLK" start="+(0x38)" />
+    <Register name="CLKSEL_GPIO0_DBCLK" start="+(0x3c)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E00600)" name="CM_MPU">
+    <Register name="CLKSTCTRL" start="+(0x0)" />
+    <Register name="MPU_CLKCTRL" start="+(0x4)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E00700)" name="CM_DEVICE">
+    <Register name="CM_CLKOUT_CTRL" start="+(0x0)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E00800)" name="CM_RTC">
+    <Register name="RTC_CLKCTRL" start="+(0x0)" />
+    <Register name="CLKSTCTRL" start="+(0x4)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E00900)" name="CM_GFX">
+    <Register name="L3_CLKSTCTRL" start="+(0x0)" />
+    <Register name="GFX_CLKCTRL" start="+(0x4)" />
+    <Register name="BITBLT_CLKCTRL" start="+(0x8)" />
+    <Register name="L4LS_GFX_CLKSTCTRL" start="+(0xC)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E00A00)" name="CM_CEFUSE">
+    <Register name="CLKSTCTRL" start="+(0x0)" />
+    <Register name="CEFUSE_CLKCTRL" start="+(0x20)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E00B00)" name="PRM_IRQ">
+    <Register name="REVISION_PRM" start="+(0x0)" />
+    <Register name="PRM_IRQSTATUS_MPU" start="+(0x4)" />
+    <Register name="PRM_IRQENABLE_MPU" start="+(0x8)" />
+    <Register name="PRM_IRQSTATUS_M3" start="+(0xC)" />
+    <Register name="PRM_IRQENABLE_M3" start="+(0x10)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E00C00)" name="PRM_PER">
+    <Register name="RM_PER_RSTCTRL" start="+(0x0)" />
+    <Register name="RM_PER_RSTST" start="+(0x4)" />
+    <Register name="PM_PER_PWRSTST" start="+(0x8)" />
+    <Register name="PM_PER_PWRSTCTRL" start="+(0xC)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E00D00)" name="PRM_WKUP">
+    <Register name="RM_WKUP_RSTCTRL" start="+(0x0)" />
+    <Register name="PM_WKUP_PWRSTCTRL" start="+(0x4)" />
+    <Register name="PM_WKUP_PWRSTST" start="+(0x8)" />
+    <Register name="RM_WKUP_RSTST" start="+(0xC)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E00E00)" name="PRM_MPU">
+    <Register name="PM_MPU_PWRSTCTRL" start="+(0x0)" />
+    <Register name="PM_MPU_PWRSTST" start="+(0x4)" />
+    <Register name="RM_MPU_RSTST" start="+(0x8)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E00F00)" name="PRM_DEVICE">
+    <Register name="PRM_RSTCTRL" start="+(0x0)" />
+    <Register name="PRM_RSTTIME" start="+(0x4)" />
+    <Register name="PRM_RSTST" start="+(0x8)" />
+    <Register name="PRM_SRAM_COUNT" start="+(0xc)" />
+    <Register name="PRM_LDO_SRAM_CORE_SETUP" start="+(0x10)" />
+    <Register name="PRM_LDO_SRAM_CORE_CTRL" start="+(0x14)" />
+    <Register name="PRM_LDO_SRAM_MPU_SETUP" start="+(0x18)" />
+    <Register name="PRM_LDO_SRAM_MPU_CTRL" start="+(0x1c)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E01000)" name="PRM_RTC">
+    <Register name="PM_RTC_PWRSTCTRL" start="+(0x0)" />
+    <Register name="PM_RTC_PWRSTST" start="+(0x4)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E01100)" name="PRM_GFX">
+    <Register name="PM_GFX_PWRSTCTRL" start="+(0x0)" />
+    <Register name="RM_GFX_RSTCTRL" start="+(0x4)" />
+    <Register name="PM_GFX_PWRSTST" start="+(0x10)" />
+    <Register name="RM_GFX_RSTST" start="+(0x14)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E01200)" name="PRM_CEFUSE">
+    <Register name="PM_CEFUSE_PWRSTCTRL" start="+(0x0)" />
+    <Register name="PM_CEFUSE_PWRSTST" start="+(0x4)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E05000)" name="DMTIMER0">
+    <Register name="TIDR" start="+(0x0)" />
+    <Register name="TIOCP_CFG" start="+(0x10)" />
+    <Register name="IRQ_EOI" start="+(0x20)" />
+    <Register name="IRQSTATUS_RAW" start="+(0x24)" />
+    <Register name="IRQSTATUS" start="+(0x28)" />
+    <Register name="IRQENABLE_SET" start="+(0x2C)" />
+    <Register name="IRQENABLE_CLR" start="+(0x30)" />
+    <Register name="IRQWAKEEN" start="+(0x34)" />
+    <Register name="TCLR" start="+(0x38)" />
+    <Register name="TCRR" start="+(0x3C)" />
+    <Register name="TLDR" start="+(0x40)" />
+    <Register name="TTGR" start="+(0x44)" />
+    <Register name="TWPS" start="+(0x48)" />
+    <Register name="TMAR" start="+(0x4C)" />
+    <Register name="TCAR1" start="+(0x50)" />
+    <Register name="TSICR" start="+(0x54)" />
+    <Register name="TCAR2" start="+(0x58)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E07000)" name="GPIO0">
+    <Register name="REVISION" start="+(0x0)" />
+    <Register name="SYSCONFIG" start="+(0x10)" />
+    <Register name="EOI" start="+(0x20)" />
+    <Register name="IRQSTATUS_RAW_0" start="+(0x24)" />
+    <Register name="IRQSTATUS_RAW_1" start="+(0x28)" />
+    <Register name="IRQSTATUS_0" start="+(0x2C)" />
+    <Register name="IRQSTATUS_1" start="+(0x30)" />
+    <Register name="IRQSTATUS_SET_0" start="+(0x34)" />
+    <Register name="IRQSTATUS_SET_1" start="+(0x38)" />
+    <Register name="IRQSTATUS_CLR_0" start="+(0x3C)" />
+    <Register name="IRQSTATUS_CLR_1" start="+(0x40)" />
+    <Register name="SYSSTATUS" start="+(0x114)" />
+    <Register name="WAKEUPENABLE" start="+(0x120)" />
+    <Register name="CTRL" start="+(0x130)" />
+    <Register name="OE" start="+(0x134)" />
+    <Register name="DATAIN" start="+(0x138)" />
+    <Register name="DATAOUT" start="+(0x13C)" />
+    <Register name="LEVELDETECT0" start="+(0x140)" />
+    <Register name="LEVELDETECT1" start="+(0x144)" />
+    <Register name="RISINGDETECT" start="+(0x148)" />
+    <Register name="FALLINGDETECT" start="+(0x14C)" />
+    <Register name="DEBOUNCENABLE" start="+(0x150)" />
+    <Register name="DEBOUNCINGTIME" start="+(0x154)" />
+    <Register name="CLEARDATAOUT" start="+(0x190)" />
+    <Register name="SETDATAOUT" start="+(0x194)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E09000)" name="UART0">
+    <Register name="RHR_THR" start="+(0x0)" access="None" />
+    <Register name="IER" start="+(0x4)" />
+    <Register name="IIR" start="+(0x8)" />
+    <Register name="LCR" start="+(0xC)" />
+    <Register name="MCR" start="+(0x10)" />
+    <Register name="LSR" start="+(0x14)" />
+    <Register name="MSR" start="+(0x18)" />
+    <Register name="SPR" start="+(0x1C)" />
+    <Register name="MDR1" start="+(0x20)" />
+    <Register name="MDR2" start="+(0x24)" />
+    <Register name="SFLSR" start="+(0x28)" />
+    <Register name="RESUME" start="+(0x2C)" />
+    <Register name="RXFLL" start="+(0x30)" />
+    <Register name="RXFLH" start="+(0x34)" />
+    <Register name="BLR" start="+(0x38)" />
+    <Register name="ACREG" start="+(0x3C)" />
+    <Register name="SCR" start="+(0x40)" />
+    <Register name="SSR" start="+(0x44)" />
+    <Register name="EBLR" start="+(0x48)" />
+    <Register name="MVR" start="+(0x50)" />
+    <Register name="SYSC" start="+(0x54)" />
+    <Register name="SYSS" start="+(0x58)" />
+    <Register name="WER" start="+(0x5C)" />
+    <Register name="CFPS" start="+(0x60)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E0B000)" name="I2C0">
+    <Register name="REVNB_LO" start="+(0x0)" />
+    <Register name="REVNB_HI" start="+(0x4)" />
+    <Register name="SYSC" start="+(0x10)" />
+    <Register name="EOI" start="+(0x20)" />
+    <Register name="IRQSTATUS_RAW" start="+(0x24)" />
+    <Register name="IRQSTATUS" start="+(0x28)" />
+    <Register name="IRQENABLE_SET" start="+(0x2C)" />
+    <Register name="IRQENABLE_CLR" start="+(0x30)" />
+    <Register name="WE" start="+(0x34)" />
+    <Register name="DMARXENABLE_SET" start="+(0x38)" />
+    <Register name="DMATXENABLE_SET" start="+(0x3C)" />
+    <Register name="DMARXENABLE_CLR" start="+(0x40)" />
+    <Register name="DMATXENABLE_CLR" start="+(0x44)" />
+    <Register name="DMARXWAKE_EN" start="+(0x48)" />
+    <Register name="DMATXWAKE_EN" start="+(0x4C)" />
+    <Register name="SYSS" start="+(0x90)" />
+    <Register name="BUF" start="+(0x94)" />
+    <Register name="CNT" start="+(0x98)" />
+    <Register name="DATA" start="+(0x9C)" />
+    <Register name="CON" start="+(0xA4)" />
+    <Register name="OA" start="+(0xA8)" />
+    <Register name="SA" start="+(0xAC)" />
+    <Register name="PSC" start="+(0xB0)" />
+    <Register name="SCLL" start="+(0xB4)" />
+    <Register name="SCLH" start="+(0xB8)" />
+    <Register name="SYSTEST" start="+(0xBC)" />
+    <Register name="BUFSTAT" start="+(0xC0)" />
+    <Register name="OA1" start="+(0xC4)" />
+    <Register name="OA2" start="+(0xC8)" />
+    <Register name="OA3" start="+(0xCC)" />
+    <Register name="ACTOA" start="+(0xD0)" />
+    <Register name="SBLOCK" start="+(0xD4)" />
+  </RegisterGroup>
+  <RegisterGroup start="0x44E0D000" name="TSC_ADC_SS">
+    <Register name="REVISION" start="+(0x0)" />
+    <Register name="SYSCONFIG" start="+(0x10)" />
+    <Register name="IRQ_EOI" start="+(0x20)" />
+    <Register name="IRQSTATUS_RAW" start="+(0x24)" />
+    <Register name="IRQSTATUS" start="+(0x28)" />
+    <Register name="IRQENABLE_SET" start="+(0x2c)" />
+    <Register name="IRQENABLE_CLR" start="+(0x30)" />
+    <Register name="IRQWAKEUP" start="+(0x34)" />
+    <Register name="DMAENABLE_SET" start="+(0x38)" />
+    <Register name="DMAENABLE_CLR" start="+(0x3c)" />
+    <Register name="CTRL" start="+(0x40)" />
+    <Register name="ADCSTAT" start="+(0x44)" />
+    <Register name="ADCRANGE" start="+(0x48)" />
+    <Register name="ADC_CLKDIV" start="+(0x4c)" />
+    <Register name="ADC_MISC" start="+(0x50)" />
+    <Register name="STEPENABLE" start="+(0x54)" />
+    <Register name="IDLECONFIG" start="+(0x58)" />
+    <Register name="TS_CHARGE_STEPCONFIG" start="+(0x5c)" />
+    <Register name="TS_CHARGE_DELAY" start="+(0x60)" />
+    <Register name="STEPCONFIG1" start="+(0x64 + ((1-1) * 0x8))" />
+    <Register name="STEPDELAY1" start="+(0x68 + ((1-1) * 0x8))" />
+    <Register name="STEPCONFIG2" start="+(0x64 + ((2-1) * 0x8))" />
+    <Register name="STEPDELAY2" start="+(0x68 + ((2-1) * 0x8))" />
+    <Register name="STEPCONFIG3" start="+(0x64 + ((3-1) * 0x8))" />
+    <Register name="STEPDELAY3" start="+(0x68 + ((3-1) * 0x8))" />
+    <Register name="STEPCONFIG4" start="+(0x64 + ((4-1) * 0x8))" />
+    <Register name="STEPDELAY4" start="+(0x68 + ((4-1) * 0x8))" />
+    <Register name="STEPCONFIG5" start="+(0x64 + ((5-1) * 0x8))" />
+    <Register name="STEPDELAY5" start="+(0x68 + ((5-1) * 0x8))" />
+    <Register name="STEPCONFIG6" start="+(0x64 + ((6-1) * 0x8))" />
+    <Register name="STEPDELAY6" start="+(0x68 + ((6-1) * 0x8))" />
+    <Register name="STEPCONFIG7" start="+(0x64 + ((7-1) * 0x8))" />
+    <Register name="STEPDELAY7" start="+(0x68 + ((7-1) * 0x8))" />
+    <Register name="STEPCONFIG8" start="+(0x64 + ((8-1) * 0x8))" />
+    <Register name="STEPDELAY8" start="+(0x68 + ((8-1) * 0x8))" />
+    <Register name="STEPCONFIG9" start="+(0x64 + ((9-1) * 0x8))" />
+    <Register name="STEPDELAY9" start="+(0x68 + ((9-1) * 0x8))" />
+    <Register name="STEPCONFIG10" start="+(0x64 + ((10-1) * 0x8))" />
+    <Register name="STEPDELAY10" start="+(0x68 + ((10-1) * 0x8))" />
+    <Register name="STEPCONFIG11" start="+(0x64 + ((11-1) * 0x8))" />
+    <Register name="STEPDELAY11" start="+(0x68 + ((11-1) * 0x8))" />
+    <Register name="STEPCONFIG12" start="+(0x64 + ((12-1) * 0x8))" />
+    <Register name="STEPDELAY12" start="+(0x68 + ((12-1) * 0x8))" />
+    <Register name="STEPCONFIG13" start="+(0x64 + ((13-1) * 0x8))" />
+    <Register name="STEPDELAY13" start="+(0x68 + ((13-1) * 0x8))" />
+    <Register name="STEPCONFIG14" start="+(0x64 + ((14-1) * 0x8))" />
+    <Register name="STEPDELAY14" start="+(0x68 + ((14-1) * 0x8))" />
+    <Register name="STEPCONFIG15" start="+(0x64 + ((15-1) * 0x8))" />
+    <Register name="STEPDELAY15" start="+(0x68 + ((15-1) * 0x8))" />
+    <Register name="STEPCONFIG16" start="+(0x64 + ((16-1) * 0x8))" />
+    <Register name="STEPDELAY16" start="+(0x68 + ((16-1) * 0x8))" />
+    <Register name="FIFO0COUNT" start="+(0xe4 + (0 * 0xc))" />
+    <Register name="FIFO0THRESHOLD" start="+(0xe8 + (0 * 0xc))" />
+    <Register name="DMA0REQ" start="+(0xec + (0 * 0xc))" />
+    <Register name="FIFO0DATA" start="+(0x100 + (0 * 0x100))" />
+    <Register name="FIFO1COUNT" start="+(0xe4 + (1 * 0xc))" />
+    <Register name="FIFO1THRESHOLD" start="+(0xe8 + (1 * 0xc))" />
+    <Register name="DMA1REQ" start="+(0xec + (1 * 0xc))" />
+    <Register name="FIFO1DATA" start="+(0x100 + (1 * 0x100))" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E10000)" name="CONTROL">
+    <Register name="REVISION" start="+(0x0)" />
+    <Register name="HWINFO" start="+(0x4)" />
+    <Register name="SYSCONFIG" start="+(0x10)" />
+    <Register name="STATUS" start="+(0x40)" />
+    <Register name="CORTEX_VBBLDO_CTRL" start="+(0x41c)" />
+    <Register name="CORE_SLDO_CTRL" start="+(0x428)" />
+    <Register name="MPU_SLDO_CTRL" start="+(0x42c)" />
+    <Register name="REFCLK_LJCBLDO_CTRL" start="+(0x440)" />
+    <Register name="CLK32KDIVRATIO_CTRL" start="+(0x444)" />
+    <Register name="BANDGAP_CTRL" start="+(0x448)" />
+    <Register name="BANDGAP_TRIM" start="+(0x44c)" />
+    <Register name="PLL_CLKINPULOW_CTRL" start="+(0x458)" />
+    <Register name="MOSC_CTRL" start="+(0x468)" />
+    <Register name="RCOSC_CTRL" start="+(0x46c)" />
+    <Register name="DEEPSLEEP_CTRL" start="+(0x470)" />
+    <Register name="DEVICE_ID" start="+(0x600)" />
+    <Register name="DEV_FEATURE" start="+(0x604)" />
+    <Register name="INIT_PRIORITY_0" start="+(0x608 + (0 * 4))" />
+    <Register name="INIT_PRIORITY_1" start="+(0x608 + (1 * 4))" />
+    <Register name="MMU_CFG" start="+(0x610)" />
+    <Register name="TPTC_CFG" start="+(0x614)" />
+    <Register name="OCMC_CFG" start="+(0x618)" />
+    <Register name="USB_CTRL0" start="+(0x620 + (0 * 8))" />
+    <Register name="USB_STS0" start="+(0x624 + (0 * 8))" />
+    <Register name="USB_CTRL1" start="+(0x620 + (1 * 8))" />
+    <Register name="USB_STS1" start="+(0x624 + (1 * 8))" />
+    <Register name="MAC_ID0_LO" start="+(0x630 + (0 * 8))" />
+    <Register name="MAC_ID0_HI" start="+(0x634 + (0 * 8))" />
+    <Register name="MAC_ID1_LO" start="+(0x630 + (1 * 8))" />
+    <Register name="MAC_ID1_HI" start="+(0x634 + (1 * 8))" />
+    <Register name="DCAN_RAMINIT" start="+(0x644)" />
+    <Register name="USB_WKUP_CTRL" start="+(0x648)" />
+    <Register name="GMII_SEL" start="+(0x650)" />
+    <Register name="PWMSS_CTRL" start="+(0x664)" />
+    <Register name="MREQPRIO_0" start="+(0x670 + (0 * 4))" />
+    <Register name="MREQPRIO_1" start="+(0x670 + (1 * 4))" />
+    <Register name="HW_EVENT_SEL_GRP1" start="+(0x690-4 + (1 * 4))" />
+    <Register name="HW_EVENT_SEL_GRP2" start="+(0x690-4 + (2 * 4))" />
+    <Register name="HW_EVENT_SEL_GRP3" start="+(0x690-4 + (3 * 4))" />
+    <Register name="HW_EVENT_SEL_GRP4" start="+(0x690-4 + (4 * 4))" />
+    <Register name="SMRT_CTRL" start="+(0x6a0)" />
+    <Register name="SABTOOTH_HW_DEBUG_SEL" start="+(0x6a4)" />
+    <Register name="SABTOOTH_HW_DBG_INFO" start="+(0x6a8)" />
+    <Register name="VDD_MPU_OPP_050" start="+(0x770)" />
+    <Register name="VDD_MPU_OPP_100" start="+(0x774)" />
+    <Register name="VDD_MPU_OPP_120" start="+(0x778)" />
+    <Register name="VDD_MPU_OPP_TURBO" start="+(0x77c)" />
+    <Register name="VDD_CORE_OPP_050" start="+(0x7b8)" />
+    <Register name="VDD_CORE_OPP_100" start="+(0x7bc)" />
+    <Register name="BB_SCALE" start="+(0x7d0)" />
+    <Register name="USB_VID_PID" start="+(0x7f4)" />
+    <Register name="EFUSE_SMA" start="+(0x7fc)" />
+    <Register name="CONF_GPMC_AD0" start="+(0x800 + (0 * 4))" />
+    <Register name="CONF_GPMC_AD1" start="+(0x800 + (1 * 4))" />
+    <Register name="CONF_GPMC_AD2" start="+(0x800 + (2 * 4))" />
+    <Register name="CONF_GPMC_AD3" start="+(0x800 + (3 * 4))" />
+    <Register name="CONF_GPMC_AD4" start="+(0x800 + (4 * 4))" />
+    <Register name="CONF_GPMC_AD5" start="+(0x800 + (5 * 4))" />
+    <Register name="CONF_GPMC_AD6" start="+(0x800 + (6 * 4))" />
+    <Register name="CONF_GPMC_AD7" start="+(0x800 + (7 * 4))" />
+    <Register name="CONF_GPMC_AD8" start="+(0x800 + (8 * 4))" />
+    <Register name="CONF_GPMC_AD9" start="+(0x800 + (9 * 4))" />
+    <Register name="CONF_GPMC_AD10" start="+(0x800 + (10 * 4))" />
+    <Register name="CONF_GPMC_AD11" start="+(0x800 + (11 * 4))" />
+    <Register name="CONF_GPMC_AD12" start="+(0x800 + (12 * 4))" />
+    <Register name="CONF_GPMC_AD13" start="+(0x800 + (13 * 4))" />
+    <Register name="CONF_GPMC_AD14" start="+(0x800 + (14 * 4))" />
+    <Register name="CONF_GPMC_AD15" start="+(0x800 + (15 * 4))" />
+    <Register name="CONF_GPMC_A0" start="+(0x840 + (0 * 4))" />
+    <Register name="CONF_GPMC_A1" start="+(0x840 + (1 * 4))" />
+    <Register name="CONF_GPMC_A2" start="+(0x840 + (2 * 4))" />
+    <Register name="CONF_GPMC_A3" start="+(0x840 + (3 * 4))" />
+    <Register name="CONF_GPMC_A4" start="+(0x840 + (4 * 4))" />
+    <Register name="CONF_GPMC_A5" start="+(0x840 + (5 * 4))" />
+    <Register name="CONF_GPMC_A6" start="+(0x840 + (6 * 4))" />
+    <Register name="CONF_GPMC_A7" start="+(0x840 + (7 * 4))" />
+    <Register name="CONF_GPMC_A8" start="+(0x840 + (8 * 4))" />
+    <Register name="CONF_GPMC_A9" start="+(0x840 + (9 * 4))" />
+    <Register name="CONF_GPMC_A10" start="+(0x840 + (10 * 4))" />
+    <Register name="CONF_GPMC_A11" start="+(0x840 + (11 * 4))" />
+    <Register name="CONF_GPMC_WAIT0" start="+(0x870)" />
+    <Register name="CONF_GPMC_WPN" start="+(0x874)" />
+    <Register name="CONF_GPMC_BE1N" start="+(0x878)" />
+    <Register name="CONF_GPMC_CSN0" start="+(0x87c + (0 * 4))" />
+    <Register name="CONF_GPMC_CSN1" start="+(0x87c + (1 * 4))" />
+    <Register name="CONF_GPMC_CSN2" start="+(0x87c + (2 * 4))" />
+    <Register name="CONF_GPMC_CSN3" start="+(0x87c + (3 * 4))" />
+    <Register name="CONF_GPMC_CLK" start="+(0x88c)" />
+    <Register name="CONF_GPMC_ADVN_ALE" start="+(0x890)" />
+    <Register name="CONF_GPMC_OEN_REN" start="+(0x894)" />
+    <Register name="CONF_GPMC_WEN" start="+(0x898)" />
+    <Register name="CONF_GPMC_BE0N_CLE" start="+(0x89c)" />
+    <Register name="CONF_LCD_DATA0" start="+(0x8a0 + (0 * 4))" />
+    <Register name="CONF_LCD_DATA1" start="+(0x8a0 + (1 * 4))" />
+    <Register name="CONF_LCD_DATA2" start="+(0x8a0 + (2 * 4))" />
+    <Register name="CONF_LCD_DATA3" start="+(0x8a0 + (3 * 4))" />
+    <Register name="CONF_LCD_DATA4" start="+(0x8a0 + (4 * 4))" />
+    <Register name="CONF_LCD_DATA5" start="+(0x8a0 + (5 * 4))" />
+    <Register name="CONF_LCD_DATA6" start="+(0x8a0 + (6 * 4))" />
+    <Register name="CONF_LCD_DATA7" start="+(0x8a0 + (7 * 4))" />
+    <Register name="CONF_LCD_DATA8" start="+(0x8a0 + (8 * 4))" />
+    <Register name="CONF_LCD_DATA9" start="+(0x8a0 + (9 * 4))" />
+    <Register name="CONF_LCD_DATA10" start="+(0x8a0 + (10 * 4))" />
+    <Register name="CONF_LCD_DATA11" start="+(0x8a0 + (11 * 4))" />
+    <Register name="CONF_LCD_DATA12" start="+(0x8a0 + (12 * 4))" />
+    <Register name="CONF_LCD_DATA13" start="+(0x8a0 + (13 * 4))" />
+    <Register name="CONF_LCD_DATA14" start="+(0x8a0 + (14 * 4))" />
+    <Register name="CONF_LCD_DATA15" start="+(0x8a0 + (15 * 4))" />
+    <Register name="CONF_LCD_VSYNC" start="+(0x8e0)" />
+    <Register name="CONF_LCD_HSYNC" start="+(0x8e4)" />
+    <Register name="CONF_LCD_PCLK" start="+(0x8e8)" />
+    <Register name="CONF_LCD_AC_BIAS_EN" start="+(0x8ec)" />
+    <Register name="CONF_MMC0_DAT3" start="+(0x8f0)" />
+    <Register name="CONF_MMC0_DAT2" start="+(0x8f4)" />
+    <Register name="CONF_MMC0_DAT1" start="+(0x8f8)" />
+    <Register name="CONF_MMC0_DAT0" start="+(0x8fc)" />
+    <Register name="CONF_MMC0_CLK" start="+(0x900)" />
+    <Register name="CONF_MMC0_CMD" start="+(0x904)" />
+    <Register name="CONF_MII1_COL" start="+(0x908)" />
+    <Register name="CONF_MII1_CRS" start="+(0x90c)" />
+    <Register name="CONF_MII1_RXERR" start="+(0x910)" />
+    <Register name="CONF_MII1_TXEN" start="+(0x914)" />
+    <Register name="CONF_MII1_RXDV" start="+(0x918)" />
+    <Register name="CONF_MII1_TXD3" start="+(0x91c)" />
+    <Register name="CONF_MII1_TXD2" start="+(0x920)" />
+    <Register name="CONF_MII1_TXD1" start="+(0x924)" />
+    <Register name="CONF_MII1_TXD0" start="+(0x928)" />
+    <Register name="CONF_MII1_TXCLK" start="+(0x92c)" />
+    <Register name="CONF_MII1_RXCLK" start="+(0x930)" />
+    <Register name="CONF_MII1_RXD3" start="+(0x934)" />
+    <Register name="CONF_MII1_RXD2" start="+(0x938)" />
+    <Register name="CONF_MII1_RXD1" start="+(0x93c)" />
+    <Register name="CONF_MII1_RXD0" start="+(0x940)" />
+    <Register name="CONF_RMII1_REFCLK" start="+(0x944)" />
+    <Register name="CONF_MDIO_DATA" start="+(0x948)" />
+    <Register name="CONF_MDIO_CLK" start="+(0x94c)" />
+    <Register name="CONF_SPI0_SCLK" start="+(0x950)" />
+    <Register name="CONF_SPI0_D0" start="+(0x954)" />
+    <Register name="CONF_SPI0_D1" start="+(0x958)" />
+    <Register name="CONF_SPI0_CS0" start="+(0x95c)" />
+    <Register name="CONF_SPI0_CS1" start="+(0x960)" />
+    <Register name="CONF_ECAP0_IN_PWM0_OUT" start="+(0x964)" />
+    <Register name="CONF_UART0_CTSN" start="+(0x968 + (0 * 0x10))" />
+    <Register name="CONF_UART0_RTSN" start="+(0x96c + (0 * 0x10))" />
+    <Register name="CONF_UART0_RXD" start="+(0x970 + (0 * 0x10))" />
+    <Register name="CONF_UART0_TXD" start="+(0x974 + (0 * 0x10))" />
+    <Register name="CONF_UART1_CTSN" start="+(0x968 + (1 * 0x10))" />
+    <Register name="CONF_UART1_RTSN" start="+(0x96c + (1 * 0x10))" />
+    <Register name="CONF_UART1_RXD" start="+(0x970 + (1 * 0x10))" />
+    <Register name="CONF_UART1_TXD" start="+(0x974 + (1 * 0x10))" />
+    <Register name="CONF_I2C0_SDA" start="+(0x988)" />
+    <Register name="CONF_I2C0_SCL" start="+(0x98c)" />
+    <Register name="CONF_MCASP0_ACLKX" start="+(0x990)" />
+    <Register name="CONF_MCASP0_FSX" start="+(0x994)" />
+    <Register name="CONF_MCASP0_AXR0" start="+(0x998)" />
+    <Register name="CONF_MCASP0_AHCLKR" start="+(0x99c)" />
+    <Register name="CONF_MCASP0_ACLKR" start="+(0x9a0)" />
+    <Register name="CONF_MCASP0_FSR" start="+(0x9a4)" />
+    <Register name="CONF_MCASP0_AXR1" start="+(0x9a8)" />
+    <Register name="CONF_MCASP0_AHCLKX" start="+(0x9ac)" />
+    <Register name="CONF_XDMA_EVENT_INTR0" start="+(0x9b0 + (0 * 4))" />
+    <Register name="CONF_XDMA_EVENT_INTR1" start="+(0x9b0 + (1 * 4))" />
+    <Register name="CONF_NRESETIN_OUT" start="+(0x9b8)" />
+    <Register name="CONF_PORZ" start="+(0x9bc)" />
+    <Register name="CONF_NNMI" start="+(0x9c0)" />
+    <Register name="CONF_OSC0_IN" start="+(0x9c4 + (0 * 0x24))" />
+    <Register name="CONF_OSC0_OUT" start="+(0x9c8 + (0 * 0x24))" />
+    <Register name="CONF_OSC0_VSS" start="+(0x9cc + (0 * 0x24))" />
+    <Register name="CONF_OSC1_IN" start="+(0x9c4 + (1 * 0x24))" />
+    <Register name="CONF_OSC1_OUT" start="+(0x9c8 + (1 * 0x24))" />
+    <Register name="CONF_OSC1_VSS" start="+(0x9cc + (1 * 0x24))" />
+    <Register name="CONF_TMS" start="+(0x9d0)" />
+    <Register name="CONF_TDI" start="+(0x9d4)" />
+    <Register name="CONF_TDO" start="+(0x9d8)" />
+    <Register name="CONF_TCK" start="+(0x9dc)" />
+    <Register name="CONF_NTRST" start="+(0x9e0)" />
+    <Register name="CONF_EMU0" start="+(0x9e4 + (0 * 4))" />
+    <Register name="CONF_EMU1" start="+(0x9e4 + (1 * 4))" />
+    <Register name="CONF_RTC_PORZ" start="+(0x9f8)" />
+    <Register name="CONF_PMIC_POWER_EN" start="+(0x9fc)" />
+    <Register name="CONF_EXT_WAKEUP" start="+(0xa00)" />
+    <Register name="CONF_ENZ_KALDO_1P8V" start="+(0xa04)" />
+    <Register name="CONF_USB0_DM" start="+(0xa08 + (0 * 0x18))" />
+    <Register name="CONF_USB0_DP" start="+(0xa0c + (0 * 0x18))" />
+    <Register name="CONF_USB0_CE" start="+(0xa10 + (0 * 0x18))" />
+    <Register name="CONF_USB0_ID" start="+(0xa14 + (0 * 0x18))" />
+    <Register name="CONF_USB0_VBUS" start="+(0xa18 + (0 * 0x18))" />
+    <Register name="CONF_USB0_DRVVBUS" start="+(0xa1c + (0 * 0x18))" />
+    <Register name="CONF_USB1_DM" start="+(0xa08 + (1 * 0x18))" />
+    <Register name="CONF_USB1_DP" start="+(0xa0c + (1 * 0x18))" />
+    <Register name="CONF_USB1_CE" start="+(0xa10 + (1 * 0x18))" />
+    <Register name="CONF_USB1_ID" start="+(0xa14 + (1 * 0x18))" />
+    <Register name="CONF_USB1_VBUS" start="+(0xa18 + (1 * 0x18))" />
+    <Register name="CONF_USB1_DRVVBUS" start="+(0xa1c + (1 * 0x18))" />
+    <Register name="CONF_DDR_RESETN" start="+(0xa38)" />
+    <Register name="CONF_DDR_CSN0" start="+(0xa3c)" />
+    <Register name="CONF_DDR_CKE" start="+(0xa40)" />
+    <Register name="CONF_DDR_CK" start="+(0xa44)" />
+    <Register name="CONF_DDR_NCK" start="+(0xa48)" />
+    <Register name="CONF_DDR_CASN" start="+(0xa4c)" />
+    <Register name="CONF_DDR_RASN" start="+(0xa50)" />
+    <Register name="CONF_DDR_WEN" start="+(0xa54)" />
+    <Register name="CONF_DDR_BA0" start="+(0xa58 + (0 * 4))" />
+    <Register name="CONF_DDR_BA1" start="+(0xa58 + (1 * 4))" />
+    <Register name="CONF_DDR_BA2" start="+(0xa58 + (2 * 4))" />
+    <Register name="CONF_DDR_A0" start="+(0xa64 + (0 * 4))" />
+    <Register name="CONF_DDR_A1" start="+(0xa64 + (1 * 4))" />
+    <Register name="CONF_DDR_A2" start="+(0xa64 + (2 * 4))" />
+    <Register name="CONF_DDR_A3" start="+(0xa64 + (3 * 4))" />
+    <Register name="CONF_DDR_A4" start="+(0xa64 + (4 * 4))" />
+    <Register name="CONF_DDR_A5" start="+(0xa64 + (5 * 4))" />
+    <Register name="CONF_DDR_A6" start="+(0xa64 + (6 * 4))" />
+    <Register name="CONF_DDR_A7" start="+(0xa64 + (7 * 4))" />
+    <Register name="CONF_DDR_A8" start="+(0xa64 + (8 * 4))" />
+    <Register name="CONF_DDR_A9" start="+(0xa64 + (9 * 4))" />
+    <Register name="CONF_DDR_A10" start="+(0xa64 + (10 * 4))" />
+    <Register name="CONF_DDR_A11" start="+(0xa64 + (11 * 4))" />
+    <Register name="CONF_DDR_A12" start="+(0xa64 + (12 * 4))" />
+    <Register name="CONF_DDR_A13" start="+(0xa64 + (13 * 4))" />
+    <Register name="CONF_DDR_A14" start="+(0xa64 + (14 * 4))" />
+    <Register name="CONF_DDR_A15" start="+(0xa64 + (15 * 4))" />
+    <Register name="CONF_DDR_ODT" start="+(0xaa4)" />
+    <Register name="CONF_DDR_D0" start="+(0xaa8 + (0 * 4))" />
+    <Register name="CONF_DDR_D1" start="+(0xaa8 + (1 * 4))" />
+    <Register name="CONF_DDR_D2" start="+(0xaa8 + (2 * 4))" />
+    <Register name="CONF_DDR_D3" start="+(0xaa8 + (3 * 4))" />
+    <Register name="CONF_DDR_D4" start="+(0xaa8 + (4 * 4))" />
+    <Register name="CONF_DDR_D5" start="+(0xaa8 + (5 * 4))" />
+    <Register name="CONF_DDR_D6" start="+(0xaa8 + (6 * 4))" />
+    <Register name="CONF_DDR_D7" start="+(0xaa8 + (7 * 4))" />
+    <Register name="CONF_DDR_D8" start="+(0xaa8 + (8 * 4))" />
+    <Register name="CONF_DDR_D9" start="+(0xaa8 + (9 * 4))" />
+    <Register name="CONF_DDR_D10" start="+(0xaa8 + (10 * 4))" />
+    <Register name="CONF_DDR_D11" start="+(0xaa8 + (11 * 4))" />
+    <Register name="CONF_DDR_D12" start="+(0xaa8 + (12 * 4))" />
+    <Register name="CONF_DDR_D13" start="+(0xaa8 + (13 * 4))" />
+    <Register name="CONF_DDR_D14" start="+(0xaa8 + (14 * 4))" />
+    <Register name="CONF_DDR_D15" start="+(0xaa8 + (15 * 4))" />
+    <Register name="CONF_DDR_DQM0" start="+(0xae8 + (0 * 4))" />
+    <Register name="CONF_DDR_DQM1" start="+(0xae8 + (1 * 4))" />
+    <Register name="CONF_DDR_DQS0" start="+(0xaf0 + (0 * 8))" />
+    <Register name="CONF_DDR_DQSN0" start="+(0xaf4 + (0 * 8))" />
+    <Register name="CONF_DDR_DQS1" start="+(0xaf0 + (1 * 8))" />
+    <Register name="CONF_DDR_DQSN1" start="+(0xaf4 + (1 * 8))" />
+    <Register name="CONF_DDR_VREF" start="+(0xb00)" />
+    <Register name="CONF_DDR_VTP" start="+(0xb04)" />
+    <Register name="CONF_DDR_STRBEN0" start="+(0xb08 + (0 * 4))" />
+    <Register name="CONF_DDR_STRBEN1" start="+(0xb08 + (1 * 4))" />
+    <Register name="CONF_AIN0" start="+(0xb2c)" />
+    <Register name="CONF_AIN1" start="+(0xb28)" />
+    <Register name="CONF_AIN2" start="+(0xb24)" />
+    <Register name="CONF_AIN3" start="+(0xb20)" />
+    <Register name="CONF_AIN4" start="+(0xb1c)" />
+    <Register name="CONF_AIN5" start="+(0xb18)" />
+    <Register name="CONF_AIN6" start="+(0xb14)" />
+    <Register name="CONF_AIN7" start="+(0xb10)" />
+    <Register name="CONF_VREFP" start="+(0xb30)" />
+    <Register name="CONF_VREFN" start="+(0xb34)" />
+    <Register name="CONF_AVDD" start="+(0xb38)" />
+    <Register name="CONF_AVSS" start="+(0xb3c)" />
+    <Register name="CONF_IFORCE" start="+(0xb40)" />
+    <Register name="CONF_VSENSE" start="+(0xb44)" />
+    <Register name="CONF_TESTOUT" start="+(0xb48)" />
+    <Register name="CQDETECT_STATUS" start="+(0xe00)" />
+    <Register name="DDR_IO_CTRL" start="+(0xe04)" />
+    <Register name="VTP_CTRL" start="+(0xe0c)" />
+    <Register name="VREF_CTRL" start="+(0xe14)" />
+    <Register name="SERDES_REFCLK_CTL" start="+(0xe24)" />
+    <Register name="TPCC_EVT_MUX_0_3" start="+(0xf90)" />
+    <Register name="TPCC_EVT_MUX_4_7" start="+(0xf94)" />
+    <Register name="TPCC_EVT_MUX_8_11" start="+(0xf98)" />
+    <Register name="TPCC_EVT_MUX_12_15" start="+(0xf9c)" />
+    <Register name="TPCC_EVT_MUX_16_19" start="+(0xfa0)" />
+    <Register name="TPCC_EVT_MUX_20_23" start="+(0xfa4)" />
+    <Register name="TPCC_EVT_MUX_24_27" start="+(0xfa8)" />
+    <Register name="TPCC_EVT_MUX_28_31" start="+(0xfac)" />
+    <Register name="TPCC_EVT_MUX_32_35" start="+(0xfb0)" />
+    <Register name="TPCC_EVT_MUX_36_39" start="+(0xfb4)" />
+    <Register name="TPCC_EVT_MUX_40_43" start="+(0xfb8)" />
+    <Register name="TPCC_EVT_MUX_44_47" start="+(0xfbc)" />
+    <Register name="TPCC_EVT_MUX_48_51" start="+(0xfc0)" />
+    <Register name="TPCC_EVT_MUX_52_55" start="+(0xfc4)" />
+    <Register name="TPCC_EVT_MUX_56_59" start="+(0xfc8)" />
+    <Register name="TPCC_EVT_MUX_60_63" start="+(0xfcc)" />
+    <Register name="TIMER_EVT_CAPT" start="+(0xfd0)" />
+    <Register name="ECAP_EVT_CAPT" start="+(0xfd4)" />
+    <Register name="ADC_EVT_CAPT" start="+(0xfd8)" />
+    <Register name="RESET_ISO" start="+(0x1000)" />
+    <Register name="DDR_CKE_CTRL" start="+(0x131c)" />
+    <Register name="M3_TXEV_EOI" start="+(0x1324)" />
+    <Register name="IPC_MSG_REG0" start="+(0x1328 + (0 * 4))" />
+    <Register name="IPC_MSG_REG1" start="+(0x1328 + (1 * 4))" />
+    <Register name="IPC_MSG_REG2" start="+(0x1328 + (2 * 4))" />
+    <Register name="IPC_MSG_REG3" start="+(0x1328 + (3 * 4))" />
+    <Register name="IPC_MSG_REG4" start="+(0x1328 + (4 * 4))" />
+    <Register name="IPC_MSG_REG5" start="+(0x1328 + (5 * 4))" />
+    <Register name="IPC_MSG_REG6" start="+(0x1328 + (6 * 4))" />
+    <Register name="IPC_MSG_REG7" start="+(0x1328 + (7 * 4))" />
+    <Register name="DDR_CMD0_IOCTRL" start="+(0x1404 + (0 * 4))" />
+    <Register name="DDR_CMD1_IOCTRL" start="+(0x1404 + (1 * 4))" />
+    <Register name="DDR_CMD2_IOCTRL" start="+(0x1404 + (2 * 4))" />
+    <Register name="DDR_DATA0_IOCTRL" start="+(0x1440 + (0 * 4))" />
+    <Register name="DDR_DATA1_IOCTRL" start="+(0x1440 + (1 * 4))" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E12000)" name="DDR_PHY">
+    <Register name="CMD0_SLAVE_RATIO_0" start="+(0x1C)" />
+    <Register name="CMD0_SLAVE_FORCE_0" start="+(0x20)" />
+    <Register name="CMD0_SLAVE_DELAY_0" start="+(0x24)" />
+    <Register name="CMD0_LOCK_DIFF_0" start="+(0x28)" />
+    <Register name="CMD0_INVERT_CLKOUT_0" start="+(0x2C)" />
+    <Register name="CMD1_SLAVE_RATIO_0" start="+(0x50)" />
+    <Register name="CMD1_SLAVE_FORCE_0" start="+(0x54)" />
+    <Register name="CMD1_SLAVE_DELAY_0" start="+(0x58)" />
+    <Register name="CMD1_LOCK_DIFF_0" start="+(0x5C)" />
+    <Register name="CMD1_INVERT_CLKOUT_0" start="+(0x60)" />
+    <Register name="CMD2_SLAVE_RATIO_0" start="+(0x84)" />
+    <Register name="CMD2_SLAVE_FORCE_0" start="+(0x88)" />
+    <Register name="CMD2_SLAVE_DELAY_0" start="+(0x8C)" />
+    <Register name="CMD2_LOCK_DIFF_0" start="+(0x90)" />
+    <Register name="CMD2_INVERT_CLKOUT_0" start="+(0x94)" />
+    <Register name="DATA0_RD_DQS_SLAVE_RATIO_0" start="+(0xC8)" />
+    <Register name="DATA0_RD_DQS_SLAVE_RATIO_1" start="+(0xCC)" />
+    <Register name="DATA0_WR_DQS_SLAVE_RATIO_0" start="+(0xDC)" />
+    <Register name="DATA0_WR_DQS_SLAVE_RATIO_1" start="+(0xE0)" />
+    <Register name="DATA0_WRLVL_INIT_RATIO_0" start="+(0xF0)" />
+    <Register name="DATA0_WRLVL_INIT_RATIO_1" start="+(0xF4)" />
+    <Register name="DATA0_GATELVL_INIT_RATIO_0" start="+(0xFC)" />
+    <Register name="DATA0_GATELVL_INIT_RATIO_1" start="+(0x100)" />
+    <Register name="DATA0_FIFO_WE_SLAVE_RATIO_0" start="+(0x108)" />
+    <Register name="DATA0_FIFO_WE_SLAVE_RATIO_1" start="+(0x10C)" />
+    <Register name="DATA0_WR_DATA_SLAVE_RATIO_0" start="+(0x120)" />
+    <Register name="DATA0_WR_DATA_SLAVE_RATIO_1" start="+(0x124)" />
+    <Register name="DATA0_USE_RANK0_DELAYS_0" start="+(0x134)" />
+    <Register name="DATA0_LOCK_DIFF_0" start="+(0x138)" />
+    <Register name="DATA1_RD_DQS_SLAVE_RATIO_0" start="+(0x16c)" />
+    <Register name="DATA1_RD_DQS_SLAVE_RATIO_1" start="+(0x170)" />
+    <Register name="DATA1_WR_DQS_SLAVE_RATIO_0" start="+(0x180)" />
+    <Register name="DATA1_WR_DQS_SLAVE_RATIO_1" start="+(0x184)" />
+    <Register name="DATA1_WRLVL_INIT_RATIO_0" start="+(0x194)" />
+    <Register name="DATA1_WRLVL_INIT_RATIO_1" start="+(0x198)" />
+    <Register name="DATA1_GATELVL_INIT_RATIO_0" start="+(0x1a0)" />
+    <Register name="DATA1_GATELVL_INIT_RATIO_1" start="+(0x1a4)" />
+    <Register name="DATA1_FIFO_WE_SLAVE_RATIO_0" start="+(0x1ac)" />
+    <Register name="DATA1_FIFO_WE_SLAVE_RATIO_1" start="+(0x1b0)" />
+    <Register name="DATA1_WR_DATA_SLAVE_RATIO_0" start="+(0x1c4)" />
+    <Register name="DATA1_WR_DATA_SLAVE_RATIO_1" start="+(0x1c8)" />
+    <Register name="DATA1_USE_RANK0_DELAYS_0" start="+(0x1d8)" />
+    <Register name="DATA1_LOCK_DIFF_0" start="+(0x1dc)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E31000)" name="DMTIMER1_1MS">
+    <Register name="TIDR" start="+(0x0)" />
+    <Register name="TIOCP_CFG" start="+(0x10)" />
+    <Register name="TISTAT" start="+(0x14)" />
+    <Register name="TISR" start="+(0x18)" />
+    <Register name="TIER" start="+(0x1C)" />
+    <Register name="TWER" start="+(0x20)" />
+    <Register name="TCLR" start="+(0x24)" />
+    <Register name="TCCR" start="+(0x28)" />
+    <Register name="TLDR" start="+(0x2C)" />
+    <Register name="TTGR" start="+(0x30)" />
+    <Register name="TWPS" start="+(0x34)" />
+    <Register name="TMAR" start="+(0x38)" />
+    <Register name="TCAR1" start="+(0x3C)" />
+    <Register name="TSICR" start="+(0x40)" />
+    <Register name="TCAR2" start="+(0x44)" />
+    <Register name="TPIR" start="+(0x48)" />
+    <Register name="TNIR" start="+(0x4C)" />
+    <Register name="TCVR" start="+(0x50)" />
+    <Register name="TOCR" start="+(0x54)" />
+    <Register name="TOWR" start="+(0x58)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E35000)" name="WDT1">
+    <Register name="WIDR" start="+(0x0)" />
+    <Register name="WDSC" start="+(0x10)" />
+    <Register name="WDST" start="+(0x14)" />
+    <Register name="WISR" start="+(0x18)" />
+    <Register name="WIER" start="+(0x1C)" />
+    <Register name="WWER" start="+(0x20)" />
+    <Register name="WCLR" start="+(0x24)" />
+    <Register name="WCRR" start="+(0x28)" />
+    <Register name="WLDR" start="+(0x2C)" />
+    <Register name="WTGR" start="+(0x30)" />
+    <Register name="WWPS" start="+(0x34)" />
+    <Register name="WDLY" start="+(0x44)" />
+    <Register name="WSPR" start="+(0x48)" />
+    <Register name="WIRQSTATRAW" start="+(0x54)" />
+    <Register name="WIRQSTAT" start="+(0x58)" />
+    <Register name="WIRQENSET" start="+(0x5C)" />
+    <Register name="WIRQENCLR" start="+(0x60)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x44E3E000)" name="RTC">
+    <Register name="SECONDS_REG" start="(0x0)" />
+    <Register name="MINUTES_REG" start="(0x4)" />
+    <Register name="HOURS_REG" start="(0x8)" />
+    <Register name="DAYS_REG" start="(0xC)" />
+    <Register name="MONTHS_REG" start="(0x10)" />
+    <Register name="YEARS_REG" start="(0x14)" />
+    <Register name="WEEK_REG" start="(0x18)" />
+    <Register name="ALARM_SECONDS_REG" start="(0x20)" />
+    <Register name="ALARM_MINUTES_REG" start="(0x24)" />
+    <Register name="ALARM_HOURS_REG" start="(0x28)" />
+    <Register name="ALARM_DAYS_REG" start="(0x2C)" />
+    <Register name="ALARM_MONTHS_REG" start="(0x30)" />
+    <Register name="ALARM_YEARS_REG" start="(0x34)" />
+    <Register name="CTRL_REG" start="(0x40)" />
+    <Register name="STATUS_REG" start="(0x44)" />
+    <Register name="INTERRUPTS_REG" start="(0x48)" />
+    <Register name="COMP_LSB_REG" start="(0x4C)" />
+    <Register name="COMP_MSB_REG" start="(0x50)" />
+    <Register name="OSC_REG" start="(0x54)" />
+    <Register name="SCRATCH0_REG" start="(0x60)" />
+    <Register name="SCRATCH1_REG" start="(0x64)" />
+    <Register name="SCRATCH2_REG" start="(0x68)" />
+    <Register name="KICK0R" start="(0x6C)" />
+    <Register name="KICK1R" start="(0x70)" />
+    <Register name="REVISION" start="(0x74)" />
+    <Register name="SYSCONFIG" start="(0x78)" />
+    <Register name="IRQWAKEEN_0" start="(0x7C)" />
+    <Register name="ALARM2_SECONDS" start="(0x80)" />
+    <Register name="ALARM2_MINUTES" start="(0x84)" />
+    <Register name="ALARM2_HOURS" start="(0x88)" />
+    <Register name="ALARM2_DAYS" start="(0x8C)" />
+    <Register name="ALARM2_MONTHS" start="(0x90)" />
+    <Register name="ALARM2_YEARS" start="(0x94)" />
+    <Register name="PMIC" start="(0x98)" />
+    <Register name="DEBOUNCE" start="(0x9C)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x47400000)" name="USBSS">
+    <Register name="REVREG" start="+(0x0)" />
+    <Register name="SYSCONFIG" start="+(0x10)" />
+    <Register name="EOI" start="+(0x20)" />
+    <Register name="IRQSTATRAW" start="+(0x24)" />
+    <Register name="IRQSTAT" start="+(0x28)" />
+    <Register name="IRQENABLER" start="+(0x2C)" />
+    <Register name="IRQCLEARR" start="+(0x30)" />
+    <Register name="IRQDMATHOLDTX00" start="+(0x100 + (0 * 0x04))" />
+    <Register name="IRQDMATHOLDTX01" start="+(0x100 + (1 * 0x04))" />
+    <Register name="IRQDMATHOLDTX02" start="+(0x100 + (2 * 0x04))" />
+    <Register name="IRQDMATHOLDTX03" start="+(0x100 + (3 * 0x04))" />
+    <Register name="IRQDMATHOLDRX00" start="+(0x110 + (0 * 0x04))" />
+    <Register name="IRQDMATHOLDRX01" start="+(0x110 + (1 * 0x04))" />
+    <Register name="IRQDMATHOLDRX02" start="+(0x110 + (2 * 0x04))" />
+    <Register name="IRQDMATHOLDRX03" start="+(0x110 + (3 * 0x04))" />
+    <Register name="IRQDMATHOLDTX10" start="+(0x120 + (0 * 0x04))" />
+    <Register name="IRQDMATHOLDTX11" start="+(0x120 + (1 * 0x04))" />
+    <Register name="IRQDMATHOLDTX12" start="+(0x120 + (2 * 0x04))" />
+    <Register name="IRQDMATHOLDTX13" start="+(0x120 + (3 * 0x04))" />
+    <Register name="IRQDMATHOLDRX10" start="+(0x130 + (0 * 0x04))" />
+    <Register name="IRQDMATHOLDRX11" start="+(0x130 + (1 * 0x04))" />
+    <Register name="IRQDMATHOLDRX12" start="+(0x130 + (2 * 0x04))" />
+    <Register name="IRQDMATHOLDRX13" start="+(0x130 + (3 * 0x04))" />
+    <Register name="IRQDMAENABLE0" start="+(0x140)" />
+    <Register name="IRQDMAENABLE1" start="+(0x144)" />
+    <Register name="IRQFRAMETHOLDTX00" start="+(0x200 + (0 * 0x04))" />
+    <Register name="IRQFRAMETHOLDTX01" start="+(0x200 + (1 * 0x04))" />
+    <Register name="IRQFRAMETHOLDTX02" start="+(0x200 + (2 * 0x04))" />
+    <Register name="IRQFRAMETHOLDTX03" start="+(0x200 + (3 * 0x04))" />
+    <Register name="IRQFRAMETHOLDRX00" start="+(0x210 + (0 * 0x04))" />
+    <Register name="IRQFRAMETHOLDRX01" start="+(0x210 + (1 * 0x04))" />
+    <Register name="IRQFRAMETHOLDRX02" start="+(0x210 + (2 * 0x04))" />
+    <Register name="IRQFRAMETHOLDRX03" start="+(0x210 + (3 * 0x04))" />
+    <Register name="IRQFRAMETHOLDTX10" start="+(0x220 + (0 * 0x04))" />
+    <Register name="IRQFRAMETHOLDTX11" start="+(0x220 + (1 * 0x04))" />
+    <Register name="IRQFRAMETHOLDTX12" start="+(0x220 + (2 * 0x04))" />
+    <Register name="IRQFRAMETHOLDTX13" start="+(0x220 + (3 * 0x04))" />
+    <Register name="IRQFRAMETHOLDRX10" start="+(0x230 + (0 * 0x04))" />
+    <Register name="IRQFRAMETHOLDRX11" start="+(0x230 + (1 * 0x04))" />
+    <Register name="IRQFRAMETHOLDRX12" start="+(0x230 + (2 * 0x04))" />
+    <Register name="IRQFRAMETHOLDRX13" start="+(0x230 + (3 * 0x04))" />
+    <Register name="IRQFRAMEENABLE0" start="+(0x240)" />
+    <Register name="IRQFRAMEENABLE1" start="+(0x244)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x47401000)" name="USB0">
+    <Register name="REV" start="+(0x00)" />
+    <Register name="CTRL" start="+(0x14)" />
+    <Register name="STAT" start="+(0x18)" />
+    <Register name="IRQMSTAT" start="+(0x20)" />
+    <Register name="IRQEOI" start="+(0x24)" />
+    <Register name="IRQSTATRAW0" start="+(0x28)" />
+    <Register name="IRQSTATRAW1" start="+(0x2C)" />
+    <Register name="IRQSTAT0" start="+(0x30)" />
+    <Register name="IRQSTAT1" start="+(0x34)" />
+    <Register name="IRQENABLESET0" start="+(0x38)" />
+    <Register name="IRQENABLESET1" start="+(0x3C)" />
+    <Register name="IRQENABLECLR0" start="+(0x40)" />
+    <Register name="IRQENABLECLR1" start="+(0x44)" />
+    <Register name="TXMODE" start="+(0x70)" />
+    <Register name="RXMODE" start="+(0x74)" />
+    <Register name="GENRNDISEP0" start="+(0x80 + (0 * 0x04))" />
+    <Register name="GENRNDISEP1" start="+(0x80 + (1 * 0x04))" />
+    <Register name="GENRNDISEP2" start="+(0x80 + (2 * 0x04))" />
+    <Register name="GENRNDISEP3" start="+(0x80 + (3 * 0x04))" />
+    <Register name="GENRNDISEP4" start="+(0x80 + (4 * 0x04))" />
+    <Register name="GENRNDISEP5" start="+(0x80 + (5 * 0x04))" />
+    <Register name="GENRNDISEP6" start="+(0x80 + (6 * 0x04))" />
+    <Register name="GENRNDISEP7" start="+(0x80 + (7 * 0x04))" />
+    <Register name="GENRNDISEP8" start="+(0x80 + (8 * 0x04))" />
+    <Register name="GENRNDISEP9" start="+(0x80 + (9 * 0x04))" />
+    <Register name="GENRNDISEP10" start="+(0x80 + (10 * 0x04))" />
+    <Register name="GENRNDISEP11" start="+(0x80 + (11 * 0x04))" />
+    <Register name="GENRNDISEP12" start="+(0x80 + (12 * 0x04))" />
+    <Register name="GENRNDISEP13" start="+(0x80 + (13 * 0x04))" />
+    <Register name="GENRNDISEP14" start="+(0x80 + (14 * 0x04))" />
+    <Register name="GENRNDISEP15" start="+(0x80 + (15 * 0x04))" />
+    <Register name="AUTOREQ" start="+(0xD0)" />
+    <Register name="SRPFIXTIME" start="+(0xD4)" />
+    <Register name="_TDOWN" start="+(0xD8)" />
+    <Register name="OUTMI" start="+(0xE0)" />
+    <Register name="MGCUTMILB" start="+(0xE4)" />
+    <Register name="MODE" start="+(0xE8)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x47401300)" name="USB0_PHY">
+    <Register name="Termination_control" start="+(0x00)" />
+    <Register name="RX_CALIB" start="+(0x04)" />
+    <Register name="DLLHS_2" start="+(0x08)" />
+    <Register name="RX_TEST_2" start="+(0x0C)" />
+    <Register name="CHRG_DET" start="+(0x14)" />
+    <Register name="PWR_CNTL" start="+(0x18)" />
+    <Register name="UTIM_INTERFACE_CNTL_1" start="+(0x1C)" />
+    <Register name="UTIM_INTERFACE_CNTL_2" start="+(0x20)" />
+    <Register name="BIST" start="+(0x24)" />
+    <Register name="BIST_CRC" start="+(0x28)" />
+    <Register name="CDR_BIST2" start="+(0x2C)" />
+    <Register name="GPIO" start="+(0x30)" />
+    <Register name="DLLHS" start="+(0x34)" />
+    <Register name="USB2PHYCM_TRIM" start="+(0x38)" />
+    <Register name="USB2PHYCM_CONFIG" start="+(0x3C)" />
+    <Register name="USBOTG" start="+(0x40)" />
+    <Register name="AD_INTERFACE_REG1" start="+(0x44)" />
+    <Register name="AD_INTERFACE_REG2" start="+(0x48)" />
+    <Register name="AD_INTERFACE_REG3" start="+(0x4C)" />
+    <Register name="ANA_CONFIG1" start="+(0x50)" />
+    <Register name="ANA_CONFIG2" start="+(0x54)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x47401800)" name="USB1">
+    <Register name="REV" start="+(0x00)" />
+    <Register name="CTRL" start="+(0x14)" />
+    <Register name="STAT" start="+(0x18)" />
+    <Register name="IRQMSTAT" start="+(0x20)" />
+    <Register name="IRQEOI" start="+(0x24)" />
+    <Register name="IRQSTATRAW0" start="+(0x28)" />
+    <Register name="IRQSTATRAW1" start="+(0x2C)" />
+    <Register name="IRQSTAT0" start="+(0x30)" />
+    <Register name="IRQSTAT1" start="+(0x34)" />
+    <Register name="IRQENABLESET0" start="+(0x38)" />
+    <Register name="IRQENABLESET1" start="+(0x3C)" />
+    <Register name="IRQENABLECLR0" start="+(0x40)" />
+    <Register name="IRQENABLECLR1" start="+(0x44)" />
+    <Register name="TXMODE" start="+(0x70)" />
+    <Register name="RXMODE" start="+(0x74)" />
+    <Register name="GENRNDISEP0" start="+(0x80 + (0 * 0x04))" />
+    <Register name="GENRNDISEP1" start="+(0x80 + (1 * 0x04))" />
+    <Register name="GENRNDISEP2" start="+(0x80 + (2 * 0x04))" />
+    <Register name="GENRNDISEP3" start="+(0x80 + (3 * 0x04))" />
+    <Register name="GENRNDISEP4" start="+(0x80 + (4 * 0x04))" />
+    <Register name="GENRNDISEP5" start="+(0x80 + (5 * 0x04))" />
+    <Register name="GENRNDISEP6" start="+(0x80 + (6 * 0x04))" />
+    <Register name="GENRNDISEP7" start="+(0x80 + (7 * 0x04))" />
+    <Register name="GENRNDISEP8" start="+(0x80 + (8 * 0x04))" />
+    <Register name="GENRNDISEP9" start="+(0x80 + (9 * 0x04))" />
+    <Register name="GENRNDISEP10" start="+(0x80 + (10 * 0x04))" />
+    <Register name="GENRNDISEP11" start="+(0x80 + (11 * 0x04))" />
+    <Register name="GENRNDISEP12" start="+(0x80 + (12 * 0x04))" />
+    <Register name="GENRNDISEP13" start="+(0x80 + (13 * 0x04))" />
+    <Register name="GENRNDISEP14" start="+(0x80 + (14 * 0x04))" />
+    <Register name="GENRNDISEP15" start="+(0x80 + (15 * 0x04))" />
+    <Register name="AUTOREQ" start="+(0xD0)" />
+    <Register name="SRPFIXTIME" start="+(0xD4)" />
+    <Register name="_TDOWN" start="+(0xD8)" />
+    <Register name="OUTMI" start="+(0xE0)" />
+    <Register name="MGCUTMILB" start="+(0xE4)" />
+    <Register name="MODE" start="+(0xE8)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x47401B00)" name="USB1_PHY">
+    <Register name="Termination_control" start="+(0x00)" />
+    <Register name="RX_CALIB" start="+(0x04)" />
+    <Register name="DLLHS_2" start="+(0x08)" />
+    <Register name="RX_TEST_2" start="+(0x0C)" />
+    <Register name="CHRG_DET" start="+(0x14)" />
+    <Register name="PWR_CNTL" start="+(0x18)" />
+    <Register name="UTIM_INTERFACE_CNTL_1" start="+(0x1C)" />
+    <Register name="UTIM_INTERFACE_CNTL_2" start="+(0x20)" />
+    <Register name="BIST" start="+(0x24)" />
+    <Register name="BIST_CRC" start="+(0x28)" />
+    <Register name="CDR_BIST2" start="+(0x2C)" />
+    <Register name="GPIO" start="+(0x30)" />
+    <Register name="DLLHS" start="+(0x34)" />
+    <Register name="USB2PHYCM_TRIM" start="+(0x38)" />
+    <Register name="USB2PHYCM_CONFIG" start="+(0x3C)" />
+    <Register name="USBOTG" start="+(0x40)" />
+    <Register name="AD_INTERFACE_REG1" start="+(0x44)" />
+    <Register name="AD_INTERFACE_REG2" start="+(0x48)" />
+    <Register name="AD_INTERFACE_REG3" start="+(0x4C)" />
+    <Register name="ANA_CONFIG1" start="+(0x50)" />
+    <Register name="ANA_CONFIG2" start="+(0x54)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x47810000)" name="MMCHS2">
+    <Register name="SD_SYSCONFIG" start="+(0x110)" />
+    <Register name="SD_SYSSTATUS" start="+(0x114)" />
+    <Register name="SD_CSRE" start="+(0x124)" />
+    <Register name="SD_SYSTEST" start="+(0x128)" />
+    <Register name="SD_CON" start="+(0x12C)" />
+    <Register name="SD_PWCNT" start="+(0x130)" />
+    <Register name="SD_SDMASA" start="+(0x200)" />
+    <Register name="SD_BLK" start="+(0x204)" />
+    <Register name="SD_ARG" start="+(0x208)" />
+    <Register name="SD_CMD" start="+(0x20C)" />
+    <Register name="SD_RSP10" start="+(0x210)" />
+    <Register name="SD_RSP32" start="+(0x214)" />
+    <Register name="SD_RSP54" start="+(0x218)" />
+    <Register name="SD_RSP76" start="+(0x21c)" />
+    <Register name="SD_DATA" start="+(0x220)" />
+    <Register name="SD_PSTATE" start="+(0x224)" />
+    <Register name="SD_HCTL" start="+(0x228)" />
+    <Register name="SD_SYSCTL" start="+(0x22C)" />
+    <Register name="SD_STAT" start="+(0x230)" />
+    <Register name="SD_IE" start="+(0x234)" />
+    <Register name="SD_ISE" start="+(0x238)" />
+    <Register name="SD_AC12" start="+(0x23C)" />
+    <Register name="SD_CAPA" start="+(0x240)" />
+    <Register name="SD_CUR_CAPA" start="+(0x248)" />
+    <Register name="SD_FE" start="+(0x250)" />
+    <Register name="SD_ADMAES" start="+(0x254)" />
+    <Register name="SD_ADMASAL" start="+(0x258)" />
+    <Register name="SD_ADMASAH" start="+(0x25C)" />
+    <Register name="SD_REV" start="+(0x2FC)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48022000)" name="UART1">
+    <Register name="RHR_THR" start="+(0x0)" access="None" />
+    <Register name="IER" start="+(0x4)" />
+    <Register name="IIR" start="+(0x8)" />
+    <Register name="LCR" start="+(0xC)" />
+    <Register name="MCR" start="+(0x10)" />
+    <Register name="LSR" start="+(0x14)" />
+    <Register name="MSR" start="+(0x18)" />
+    <Register name="SPR" start="+(0x1C)" />
+    <Register name="MDR1" start="+(0x20)" />
+    <Register name="MDR2" start="+(0x24)" />
+    <Register name="SFLSR" start="+(0x28)" />
+    <Register name="RESUME" start="+(0x2C)" />
+    <Register name="RXFLL" start="+(0x30)" />
+    <Register name="RXFLH" start="+(0x34)" />
+    <Register name="BLR" start="+(0x38)" />
+    <Register name="ACREG" start="+(0x3C)" />
+    <Register name="SCR" start="+(0x40)" />
+    <Register name="SSR" start="+(0x44)" />
+    <Register name="EBLR" start="+(0x48)" />
+    <Register name="MVR" start="+(0x50)" />
+    <Register name="SYSC" start="+(0x54)" />
+    <Register name="SYSS" start="+(0x58)" />
+    <Register name="WER" start="+(0x5C)" />
+    <Register name="CFPS" start="+(0x60)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48024000)" name="UART2">
+    <Register name="RHR_THR" start="+(0x0)" access="None" />
+    <Register name="IER" start="+(0x4)" />
+    <Register name="IIR" start="+(0x8)" />
+    <Register name="LCR" start="+(0xC)" />
+    <Register name="MCR" start="+(0x10)" />
+    <Register name="LSR" start="+(0x14)" />
+    <Register name="MSR" start="+(0x18)" />
+    <Register name="SPR" start="+(0x1C)" />
+    <Register name="MDR1" start="+(0x20)" />
+    <Register name="MDR2" start="+(0x24)" />
+    <Register name="SFLSR" start="+(0x28)" />
+    <Register name="RESUME" start="+(0x2C)" />
+    <Register name="RXFLL" start="+(0x30)" />
+    <Register name="RXFLH" start="+(0x34)" />
+    <Register name="BLR" start="+(0x38)" />
+    <Register name="ACREG" start="+(0x3C)" />
+    <Register name="SCR" start="+(0x40)" />
+    <Register name="SSR" start="+(0x44)" />
+    <Register name="EBLR" start="+(0x48)" />
+    <Register name="MVR" start="+(0x50)" />
+    <Register name="SYSC" start="+(0x54)" />
+    <Register name="SYSS" start="+(0x58)" />
+    <Register name="WER" start="+(0x5C)" />
+    <Register name="CFPS" start="+(0x60)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x4802A000)" name="I2C1">
+    <Register name="REVNB_LO" start="+(0x0)" />
+    <Register name="REVNB_HI" start="+(0x4)" />
+    <Register name="SYSC" start="+(0x10)" />
+    <Register name="EOI" start="+(0x20)" />
+    <Register name="IRQSTATUS_RAW" start="+(0x24)" />
+    <Register name="IRQSTATUS" start="+(0x28)" />
+    <Register name="IRQENABLE_SET" start="+(0x2C)" />
+    <Register name="IRQENABLE_CLR" start="+(0x30)" />
+    <Register name="WE" start="+(0x34)" />
+    <Register name="DMARXENABLE_SET" start="+(0x38)" />
+    <Register name="DMATXENABLE_SET" start="+(0x3C)" />
+    <Register name="DMARXENABLE_CLR" start="+(0x40)" />
+    <Register name="DMATXENABLE_CLR" start="+(0x44)" />
+    <Register name="DMARXWAKE_EN" start="+(0x48)" />
+    <Register name="DMATXWAKE_EN" start="+(0x4C)" />
+    <Register name="SYSS" start="+(0x90)" />
+    <Register name="BUF" start="+(0x94)" />
+    <Register name="CNT" start="+(0x98)" />
+    <Register name="DATA" start="+(0x9C)" />
+    <Register name="CON" start="+(0xA4)" />
+    <Register name="OA" start="+(0xA8)" />
+    <Register name="SA" start="+(0xAC)" />
+    <Register name="PSC" start="+(0xB0)" />
+    <Register name="SCLL" start="+(0xB4)" />
+    <Register name="SCLH" start="+(0xB8)" />
+    <Register name="SYSTEST" start="+(0xBC)" />
+    <Register name="BUFSTAT" start="+(0xC0)" />
+    <Register name="OA1" start="+(0xC4)" />
+    <Register name="OA2" start="+(0xC8)" />
+    <Register name="OA3" start="+(0xCC)" />
+    <Register name="ACTOA" start="+(0xD0)" />
+    <Register name="SBLOCK" start="+(0xD4)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48030000)" name="MCSPI0">
+    <Register name="REVISION" start="+(0x100)" />
+    <Register name="SYSCONFIG" start="+(0x110)" />
+    <Register name="SYSSTATUS" start="+(0x114)" />
+    <Register name="IRQSTATUS" start="+(0x118)" />
+    <Register name="IRQENABLE" start="+(0x11C)" />
+    <Register name="WAKEUPENABLE" start="+(0x120)" />
+    <Register name="SYST" start="+(0x124)" />
+    <Register name="MODULCTRL" start="+(0x128)" />
+    <Register name="CH0CONF" start="+(0x12C + (0 * 0x14))" />
+    <Register name="CH0STAT" start="+(0x130 + (0 * 0x14))" />
+    <Register name="CH0CTRL" start="+(0x134 + (0 * 0x14))" />
+    <Register name="TX0" start="+(0x138 + (0 * 0x14))" />
+    <Register name="RX0" start="+(0x13C + (0 * 0x14))" />
+    <Register name="CH1CONF" start="+(0x12C + (1 * 0x14))" />
+    <Register name="CH1STAT" start="+(0x130 + (1 * 0x14))" />
+    <Register name="CH1CTRL" start="+(0x134 + (1 * 0x14))" />
+    <Register name="TX1" start="+(0x138 + (1 * 0x14))" />
+    <Register name="RX1" start="+(0x13C + (1 * 0x14))" />
+    <Register name="CH2CONF" start="+(0x12C + (2 * 0x14))" />
+    <Register name="CH2STAT" start="+(0x130 + (2 * 0x14))" />
+    <Register name="CH2CTRL" start="+(0x134 + (2 * 0x14))" />
+    <Register name="TX2" start="+(0x138 + (2 * 0x14))" />
+    <Register name="RX2" start="+(0x13C + (2 * 0x14))" />
+    <Register name="CH3CONF" start="+(0x12C + (3 * 0x14))" />
+    <Register name="CH3STAT" start="+(0x130 + (3 * 0x14))" />
+    <Register name="CH3CTRL" start="+(0x134 + (3 * 0x14))" />
+    <Register name="TX3" start="+(0x138 + (3 * 0x14))" />
+    <Register name="RX3" start="+(0x13C + (3 * 0x14))" />
+    <Register name="XFERLEVEL" start="+(0x17C)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48038000)" name="MCASP0">
+    <Register name="REV" start="+(0x0)" />
+    <Register name="PFUNC" start="+(0x10)" />
+    <Register name="PDIR" start="+(0x14)" />
+    <Register name="PDOUT" start="+(0x18)" />
+    <Register name="PDIN" start="+(0x1C)" />
+    <Register name="PDSET" start="+(0x1C)" />
+    <Register name="PDCLR" start="+(0x20)" />
+    <Register name="GBLCTL" start="+(0x44)" />
+    <Register name="AMUTE" start="+(0x48)" />
+    <Register name="DLBCTL" start="+(0x4C)" />
+    <Register name="DITCTL" start="+(0x50)" />
+    <Register name="RGBLCTL" start="+(0x60)" />
+    <Register name="RMASK" start="+(0x64)" />
+    <Register name="RFMT" start="+(0x68)" />
+    <Register name="AFSRCTL" start="+(0x6C)" />
+    <Register name="ACLKRCTL" start="+(0x70)" />
+    <Register name="AHCLKRCTL" start="+(0x74)" />
+    <Register name="RTDM" start="+(0x78)" />
+    <Register name="RINTCTL" start="+(0x7C)" />
+    <Register name="RSTAT" start="+(0x80)" />
+    <Register name="RSLOT" start="+(0x84)" />
+    <Register name="RCLKCHK" start="+(0x88)" />
+    <Register name="REVTCTL" start="+(0x8C)" />
+    <Register name="XGBLCTL" start="+(0xA0)" />
+    <Register name="XMASK" start="+(0xA4)" />
+    <Register name="XFMT" start="+(0xA8)" />
+    <Register name="AFSXCTL" start="+(0xAC)" />
+    <Register name="ACLKXCTL" start="+(0xB0)" />
+    <Register name="AHCLKXCTL" start="+(0xB4)" />
+    <Register name="XTDM" start="+(0xB8)" />
+    <Register name="XINTCTL" start="+(0xBC)" />
+    <Register name="XSTAT" start="+(0xC0)" />
+    <Register name="XSLOT" start="+(0xC4)" />
+    <Register name="XCLKCHK" start="+(0xC8)" />
+    <Register name="XEVTCTL" start="+(0xCC)" />
+    <Register name="DITCSRA0" start="+(0x100 + (0 * 4))" />
+    <Register name="DITCSRA1" start="+(0x100 + (1 * 4))" />
+    <Register name="DITCSRA2" start="+(0x100 + (2 * 4))" />
+    <Register name="DITCSRA3" start="+(0x100 + (3 * 4))" />
+    <Register name="DITCSRA4" start="+(0x100 + (4 * 4))" />
+    <Register name="DITCSRA5" start="+(0x100 + (5 * 4))" />
+    <Register name="DITCSRB0" start="+(0x118 + (0 * 4))" />
+    <Register name="DITCSRB1" start="+(0x118 + (1 * 4))" />
+    <Register name="DITCSRB2" start="+(0x118 + (2 * 4))" />
+    <Register name="DITCSRB3" start="+(0x118 + (3 * 4))" />
+    <Register name="DITCSRB4" start="+(0x118 + (4 * 4))" />
+    <Register name="DITCSRB5" start="+(0x118 + (5 * 4))" />
+    <Register name="DITUDRA0" start="+(0x130 + (0 * 4))" />
+    <Register name="DITUDRA1" start="+(0x130 + (1 * 4))" />
+    <Register name="DITUDRA2" start="+(0x130 + (2 * 4))" />
+    <Register name="DITUDRA3" start="+(0x130 + (3 * 4))" />
+    <Register name="DITUDRA4" start="+(0x130 + (4 * 4))" />
+    <Register name="DITUDRA5" start="+(0x130 + (5 * 4))" />
+    <Register name="DITUDRB0" start="+(0x148 + (0 * 4))" />
+    <Register name="DITUDRB1" start="+(0x148 + (1 * 4))" />
+    <Register name="DITUDRB2" start="+(0x148 + (2 * 4))" />
+    <Register name="DITUDRB3" start="+(0x148 + (3 * 4))" />
+    <Register name="DITUDRB4" start="+(0x148 + (4 * 4))" />
+    <Register name="DITUDRB5" start="+(0x148 + (5 * 4))" />
+    <Register name="SRCTL0" start="+(0x180 + (0 * 4))" />
+    <Register name="SRCTL1" start="+(0x180 + (1 * 4))" />
+    <Register name="SRCTL2" start="+(0x180 + (2 * 4))" />
+    <Register name="SRCTL3" start="+(0x180 + (3 * 4))" />
+    <Register name="XBUF0" start="+(0x200 + (0 * 4))" />
+    <Register name="XBUF1" start="+(0x200 + (1 * 4))" />
+    <Register name="XBUF2" start="+(0x200 + (2 * 4))" />
+    <Register name="XBUF3" start="+(0x200 + (3 * 4))" />
+    <Register name="RBUF0" start="+(0x280 + (0 * 4))" />
+    <Register name="RBUF1" start="+(0x280 + (1 * 4))" />
+    <Register name="RBUF2" start="+(0x280 + (2 * 4))" />
+    <Register name="RBUF3" start="+(0x280 + (3 * 4))" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x4803C000)" name="MCASP1">
+    <Register name="REV" start="+(0x0)" />
+    <Register name="PFUNC" start="+(0x10)" />
+    <Register name="PDIR" start="+(0x14)" />
+    <Register name="PDOUT" start="+(0x18)" />
+    <Register name="PDIN" start="+(0x1C)" />
+    <Register name="PDSET" start="+(0x1C)" />
+    <Register name="PDCLR" start="+(0x20)" />
+    <Register name="GBLCTL" start="+(0x44)" />
+    <Register name="AMUTE" start="+(0x48)" />
+    <Register name="DLBCTL" start="+(0x4C)" />
+    <Register name="DITCTL" start="+(0x50)" />
+    <Register name="RGBLCTL" start="+(0x60)" />
+    <Register name="RMASK" start="+(0x64)" />
+    <Register name="RFMT" start="+(0x68)" />
+    <Register name="AFSRCTL" start="+(0x6C)" />
+    <Register name="ACLKRCTL" start="+(0x70)" />
+    <Register name="AHCLKRCTL" start="+(0x74)" />
+    <Register name="RTDM" start="+(0x78)" />
+    <Register name="RINTCTL" start="+(0x7C)" />
+    <Register name="RSTAT" start="+(0x80)" />
+    <Register name="RSLOT" start="+(0x84)" />
+    <Register name="RCLKCHK" start="+(0x88)" />
+    <Register name="REVTCTL" start="+(0x8C)" />
+    <Register name="XGBLCTL" start="+(0xA0)" />
+    <Register name="XMASK" start="+(0xA4)" />
+    <Register name="XFMT" start="+(0xA8)" />
+    <Register name="AFSXCTL" start="+(0xAC)" />
+    <Register name="ACLKXCTL" start="+(0xB0)" />
+    <Register name="AHCLKXCTL" start="+(0xB4)" />
+    <Register name="XTDM" start="+(0xB8)" />
+    <Register name="XINTCTL" start="+(0xBC)" />
+    <Register name="XSTAT" start="+(0xC0)" />
+    <Register name="XSLOT" start="+(0xC4)" />
+    <Register name="XCLKCHK" start="+(0xC8)" />
+    <Register name="XEVTCTL" start="+(0xCC)" />
+    <Register name="DITCSRA0" start="+(0x100 + (0 * 4))" />
+    <Register name="DITCSRA1" start="+(0x100 + (1 * 4))" />
+    <Register name="DITCSRA2" start="+(0x100 + (2 * 4))" />
+    <Register name="DITCSRA3" start="+(0x100 + (3 * 4))" />
+    <Register name="DITCSRA4" start="+(0x100 + (4 * 4))" />
+    <Register name="DITCSRA5" start="+(0x100 + (5 * 4))" />
+    <Register name="DITCSRB0" start="+(0x118 + (0 * 4))" />
+    <Register name="DITCSRB1" start="+(0x118 + (1 * 4))" />
+    <Register name="DITCSRB2" start="+(0x118 + (2 * 4))" />
+    <Register name="DITCSRB3" start="+(0x118 + (3 * 4))" />
+    <Register name="DITCSRB4" start="+(0x118 + (4 * 4))" />
+    <Register name="DITCSRB5" start="+(0x118 + (5 * 4))" />
+    <Register name="DITUDRA0" start="+(0x130 + (0 * 4))" />
+    <Register name="DITUDRA1" start="+(0x130 + (1 * 4))" />
+    <Register name="DITUDRA2" start="+(0x130 + (2 * 4))" />
+    <Register name="DITUDRA3" start="+(0x130 + (3 * 4))" />
+    <Register name="DITUDRA4" start="+(0x130 + (4 * 4))" />
+    <Register name="DITUDRA5" start="+(0x130 + (5 * 4))" />
+    <Register name="DITUDRB0" start="+(0x148 + (0 * 4))" />
+    <Register name="DITUDRB1" start="+(0x148 + (1 * 4))" />
+    <Register name="DITUDRB2" start="+(0x148 + (2 * 4))" />
+    <Register name="DITUDRB3" start="+(0x148 + (3 * 4))" />
+    <Register name="DITUDRB4" start="+(0x148 + (4 * 4))" />
+    <Register name="DITUDRB5" start="+(0x148 + (5 * 4))" />
+    <Register name="SRCTL0" start="+(0x180 + (0 * 4))" />
+    <Register name="SRCTL1" start="+(0x180 + (1 * 4))" />
+    <Register name="SRCTL2" start="+(0x180 + (2 * 4))" />
+    <Register name="SRCTL3" start="+(0x180 + (3 * 4))" />
+    <Register name="XBUF0" start="+(0x200 + (0 * 4))" />
+    <Register name="XBUF1" start="+(0x200 + (1 * 4))" />
+    <Register name="XBUF2" start="+(0x200 + (2 * 4))" />
+    <Register name="XBUF3" start="+(0x200 + (3 * 4))" />
+    <Register name="RBUF0" start="+(0x280 + (0 * 4))" />
+    <Register name="RBUF1" start="+(0x280 + (1 * 4))" />
+    <Register name="RBUF2" start="+(0x280 + (2 * 4))" />
+    <Register name="RBUF3" start="+(0x280 + (3 * 4))" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48040000)" name="DMTIMER2">
+    <Register name="TIDR" start="+(0x0)" />
+    <Register name="TIOCP_CFG" start="+(0x10)" />
+    <Register name="IRQ_EOI" start="+(0x20)" />
+    <Register name="IRQSTATUS_RAW" start="+(0x24)" />
+    <Register name="IRQSTATUS" start="+(0x28)" />
+    <Register name="IRQENABLE_SET" start="+(0x2C)" />
+    <Register name="IRQENABLE_CLR" start="+(0x30)" />
+    <Register name="IRQWAKEEN" start="+(0x34)" />
+    <Register name="TCLR" start="+(0x38)" />
+    <Register name="TCRR" start="+(0x3C)" />
+    <Register name="TLDR" start="+(0x40)" />
+    <Register name="TTGR" start="+(0x44)" />
+    <Register name="TWPS" start="+(0x48)" />
+    <Register name="TMAR" start="+(0x4C)" />
+    <Register name="TCAR1" start="+(0x50)" />
+    <Register name="TSICR" start="+(0x54)" />
+    <Register name="TCAR2" start="+(0x58)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48042000)" name="DMTIMER3">
+    <Register name="TIDR" start="+(0x0)" />
+    <Register name="TIOCP_CFG" start="+(0x10)" />
+    <Register name="IRQ_EOI" start="+(0x20)" />
+    <Register name="IRQSTATUS_RAW" start="+(0x24)" />
+    <Register name="IRQSTATUS" start="+(0x28)" />
+    <Register name="IRQENABLE_SET" start="+(0x2C)" />
+    <Register name="IRQENABLE_CLR" start="+(0x30)" />
+    <Register name="IRQWAKEEN" start="+(0x34)" />
+    <Register name="TCLR" start="+(0x38)" />
+    <Register name="TCRR" start="+(0x3C)" />
+    <Register name="TLDR" start="+(0x40)" />
+    <Register name="TTGR" start="+(0x44)" />
+    <Register name="TWPS" start="+(0x48)" />
+    <Register name="TMAR" start="+(0x4C)" />
+    <Register name="TCAR1" start="+(0x50)" />
+    <Register name="TSICR" start="+(0x54)" />
+    <Register name="TCAR2" start="+(0x58)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48044000)" name="DMTIMER4">
+    <Register name="TIDR" start="+(0x0)" />
+    <Register name="TIOCP_CFG" start="+(0x10)" />
+    <Register name="IRQ_EOI" start="+(0x20)" />
+    <Register name="IRQSTATUS_RAW" start="+(0x24)" />
+    <Register name="IRQSTATUS" start="+(0x28)" />
+    <Register name="IRQENABLE_SET" start="+(0x2C)" />
+    <Register name="IRQENABLE_CLR" start="+(0x30)" />
+    <Register name="IRQWAKEEN" start="+(0x34)" />
+    <Register name="TCLR" start="+(0x38)" />
+    <Register name="TCRR" start="+(0x3C)" />
+    <Register name="TLDR" start="+(0x40)" />
+    <Register name="TTGR" start="+(0x44)" />
+    <Register name="TWPS" start="+(0x48)" />
+    <Register name="TMAR" start="+(0x4C)" />
+    <Register name="TCAR1" start="+(0x50)" />
+    <Register name="TSICR" start="+(0x54)" />
+    <Register name="TCAR2" start="+(0x58)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48046000)" name="DMTIMER5">
+    <Register name="TIDR" start="+(0x0)" />
+    <Register name="TIOCP_CFG" start="+(0x10)" />
+    <Register name="IRQ_EOI" start="+(0x20)" />
+    <Register name="IRQSTATUS_RAW" start="+(0x24)" />
+    <Register name="IRQSTATUS" start="+(0x28)" />
+    <Register name="IRQENABLE_SET" start="+(0x2C)" />
+    <Register name="IRQENABLE_CLR" start="+(0x30)" />
+    <Register name="IRQWAKEEN" start="+(0x34)" />
+    <Register name="TCLR" start="+(0x38)" />
+    <Register name="TCRR" start="+(0x3C)" />
+    <Register name="TLDR" start="+(0x40)" />
+    <Register name="TTGR" start="+(0x44)" />
+    <Register name="TWPS" start="+(0x48)" />
+    <Register name="TMAR" start="+(0x4C)" />
+    <Register name="TCAR1" start="+(0x50)" />
+    <Register name="TSICR" start="+(0x54)" />
+    <Register name="TCAR2" start="+(0x58)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48048000)" name="DMTIMER6">
+    <Register name="TIDR" start="+(0x0)" />
+    <Register name="TIOCP_CFG" start="+(0x10)" />
+    <Register name="IRQ_EOI" start="+(0x20)" />
+    <Register name="IRQSTATUS_RAW" start="+(0x24)" />
+    <Register name="IRQSTATUS" start="+(0x28)" />
+    <Register name="IRQENABLE_SET" start="+(0x2C)" />
+    <Register name="IRQENABLE_CLR" start="+(0x30)" />
+    <Register name="IRQWAKEEN" start="+(0x34)" />
+    <Register name="TCLR" start="+(0x38)" />
+    <Register name="TCRR" start="+(0x3C)" />
+    <Register name="TLDR" start="+(0x40)" />
+    <Register name="TTGR" start="+(0x44)" />
+    <Register name="TWPS" start="+(0x48)" />
+    <Register name="TMAR" start="+(0x4C)" />
+    <Register name="TCAR1" start="+(0x50)" />
+    <Register name="TSICR" start="+(0x54)" />
+    <Register name="TCAR2" start="+(0x58)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x4804A000)" name="DMTIMER7">
+    <Register name="TIDR" start="+(0x0)" />
+    <Register name="TIOCP_CFG" start="+(0x10)" />
+    <Register name="IRQ_EOI" start="+(0x20)" />
+    <Register name="IRQSTATUS_RAW" start="+(0x24)" />
+    <Register name="IRQSTATUS" start="+(0x28)" />
+    <Register name="IRQENABLE_SET" start="+(0x2C)" />
+    <Register name="IRQENABLE_CLR" start="+(0x30)" />
+    <Register name="IRQWAKEEN" start="+(0x34)" />
+    <Register name="TCLR" start="+(0x38)" />
+    <Register name="TCRR" start="+(0x3C)" />
+    <Register name="TLDR" start="+(0x40)" />
+    <Register name="TTGR" start="+(0x44)" />
+    <Register name="TWPS" start="+(0x48)" />
+    <Register name="TMAR" start="+(0x4C)" />
+    <Register name="TCAR1" start="+(0x50)" />
+    <Register name="TSICR" start="+(0x54)" />
+    <Register name="TCAR2" start="+(0x58)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x4804C000)" name="GPIO1">
+    <Register name="REVISION" start="+(0x0)" />
+    <Register name="SYSCONFIG" start="+(0x10)" />
+    <Register name="EOI" start="+(0x20)" />
+    <Register name="IRQSTATUS_RAW_0" start="+(0x24)" />
+    <Register name="IRQSTATUS_RAW_1" start="+(0x28)" />
+    <Register name="IRQSTATUS_0" start="+(0x2C)" />
+    <Register name="IRQSTATUS_1" start="+(0x30)" />
+    <Register name="IRQSTATUS_SET_0" start="+(0x34)" />
+    <Register name="IRQSTATUS_SET_1" start="+(0x38)" />
+    <Register name="IRQSTATUS_CLR_0" start="+(0x3C)" />
+    <Register name="IRQSTATUS_CLR_1" start="+(0x40)" />
+    <Register name="SYSSTATUS" start="+(0x114)" />
+    <Register name="WAKEUPENABLE" start="+(0x120)" />
+    <Register name="CTRL" start="+(0x130)" />
+    <Register name="OE" start="+(0x134)" />
+    <Register name="DATAIN" start="+(0x138)" />
+    <Register name="DATAOUT" start="+(0x13C)" />
+    <Register name="LEVELDETECT0" start="+(0x140)" />
+    <Register name="LEVELDETECT1" start="+(0x144)" />
+    <Register name="RISINGDETECT" start="+(0x148)" />
+    <Register name="FALLINGDETECT" start="+(0x14C)" />
+    <Register name="DEBOUNCENABLE" start="+(0x150)" />
+    <Register name="DEBOUNCINGTIME" start="+(0x154)" />
+    <Register name="CLEARDATAOUT" start="+(0x190)" />
+    <Register name="SETDATAOUT" start="+(0x194)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48060000)" name="MMCHS0">
+    <Register name="SD_SYSCONFIG" start="+(0x110)" />
+    <Register name="SD_SYSSTATUS" start="+(0x114)" />
+    <Register name="SD_CSRE" start="+(0x124)" />
+    <Register name="SD_SYSTEST" start="+(0x128)" />
+    <Register name="SD_CON" start="+(0x12C)" />
+    <Register name="SD_PWCNT" start="+(0x130)" />
+    <Register name="SD_SDMASA" start="+(0x200)" />
+    <Register name="SD_BLK" start="+(0x204)" />
+    <Register name="SD_ARG" start="+(0x208)" />
+    <Register name="SD_CMD" start="+(0x20C)" />
+    <Register name="SD_RSP10" start="+(0x210)" />
+    <Register name="SD_RSP32" start="+(0x214)" />
+    <Register name="SD_RSP54" start="+(0x218)" />
+    <Register name="SD_RSP76" start="+(0x21c)" />
+    <Register name="SD_DATA" start="+(0x220)" />
+    <Register name="SD_PSTATE" start="+(0x224)" />
+    <Register name="SD_HCTL" start="+(0x228)" />
+    <Register name="SD_SYSCTL" start="+(0x22C)" />
+    <Register name="SD_STAT" start="+(0x230)" />
+    <Register name="SD_IE" start="+(0x234)" />
+    <Register name="SD_ISE" start="+(0x238)" />
+    <Register name="SD_AC12" start="+(0x23C)" />
+    <Register name="SD_CAPA" start="+(0x240)" />
+    <Register name="SD_CUR_CAPA" start="+(0x248)" />
+    <Register name="SD_FE" start="+(0x250)" />
+    <Register name="SD_ADMAES" start="+(0x254)" />
+    <Register name="SD_ADMASAL" start="+(0x258)" />
+    <Register name="SD_ADMASAH" start="+(0x25C)" />
+    <Register name="SD_REV" start="+(0x2FC)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48080000)" name="ELM">
+    <Register name="REVISION" start="+(0x0)" />
+    <Register name="SYSCONFIG" start="+(0x10)" />
+    <Register name="SYSSTATUS" start="+(0x14)" />
+    <Register name="IRQSTATUS" start="+(0x18)" />
+    <Register name="IRQENABLE" start="+(0x1C)" />
+    <Register name="LOCATION_CONFIG" start="+(0x20)" />
+    <Register name="PAGE_CTRL" start="+(0x80)" />
+    <Register name="SYNDROME_FRAGMENT_0" start="+(0x400 + (0 * 4))" />
+    <Register name="SYNDROME_FRAGMENT_1" start="+(0x400 + (1 * 4))" />
+    <Register name="SYNDROME_FRAGMENT_2" start="+(0x400 + (2 * 4))" />
+    <Register name="SYNDROME_FRAGMENT_3" start="+(0x400 + (3 * 4))" />
+    <Register name="SYNDROME_FRAGMENT_4" start="+(0x400 + (4 * 4))" />
+    <Register name="SYNDROME_FRAGMENT_5" start="+(0x400 + (5 * 4))" />
+    <Register name="SYNDROME_FRAGMENT_6" start="+(0x400 + (6 * 4))" />
+    <Register name="LOCATION_STATUS" start="+(0x800)" />
+    <Register name="ERROR_LOCATION_0" start="+(0x880 + (0 * 4))" />
+    <Register name="ERROR_LOCATION_1" start="+(0x880 + (1 * 4))" />
+    <Register name="ERROR_LOCATION_2" start="+(0x880 + (2 * 4))" />
+    <Register name="ERROR_LOCATION_3" start="+(0x880 + (3 * 4))" />
+    <Register name="ERROR_LOCATION_4" start="+(0x880 + (4 * 4))" />
+    <Register name="ERROR_LOCATION_5" start="+(0x880 + (5 * 4))" />
+    <Register name="ERROR_LOCATION_6" start="+(0x880 + (6 * 4))" />
+    <Register name="ERROR_LOCATION_7" start="+(0x880 + (7 * 4))" />
+    <Register name="ERROR_LOCATION_8" start="+(0x880 + (8 * 4))" />
+    <Register name="ERROR_LOCATION_9" start="+(0x880 + (9 * 4))" />
+    <Register name="ERROR_LOCATION_10" start="+(0x880 + (10 * 4))" />
+    <Register name="ERROR_LOCATION_11" start="+(0x880 + (11 * 4))" />
+    <Register name="ERROR_LOCATION_12" start="+(0x880 + (12 * 4))" />
+    <Register name="ERROR_LOCATION_13" start="+(0x880 + (13 * 4))" />
+    <Register name="ERROR_LOCATION_14" start="+(0x880 + (14 * 4))" />
+    <Register name="ERROR_LOCATION_15" start="+(0x880 + (15 * 4))" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x480C8000)" name="MAILBOX">
+    <Register name="REVISION" start="+(0x00)" />
+    <Register name="SYSCONFIG" start="+(0x04)" />
+    <Register name="MESSAGE_0" start="+(0x40 + (0 * 0x04))" access="None" />
+    <Register name="MESSAGE_1" start="+(0x40 + (1 * 0x04))" access="None" />
+    <Register name="MESSAGE_2" start="+(0x40 + (2 * 0x04))" access="None" />
+    <Register name="MESSAGE_3" start="+(0x40 + (3 * 0x04))" access="None" />
+    <Register name="MESSAGE_4" start="+(0x40 + (4 * 0x04))" access="None" />
+    <Register name="MESSAGE_5" start="+(0x40 + (5 * 0x04))" access="None" />
+    <Register name="MESSAGE_6" start="+(0x40 + (6 * 0x04))" access="None" />
+    <Register name="MESSAGE_7" start="+(0x40 + (7 * 0x04))" access="None" />
+    <Register name="FIFOSTATUS_0" start="+(0x80 + (0 * 0x04))" access="None" />
+    <Register name="FIFOSTATUS_1" start="+(0x80 + (1 * 0x04))" access="None" />
+    <Register name="FIFOSTATUS_2" start="+(0x80 + (2 * 0x04))" access="None" />
+    <Register name="FIFOSTATUS_3" start="+(0x80 + (3 * 0x04))" access="None" />
+    <Register name="FIFOSTATUS_4" start="+(0x80 + (4 * 0x04))" access="None" />
+    <Register name="FIFOSTATUS_5" start="+(0x80 + (5 * 0x04))" access="None" />
+    <Register name="FIFOSTATUS_6" start="+(0x80 + (6 * 0x04))" access="None" />
+    <Register name="FIFOSTATUS_7" start="+(0x80 + (7 * 0x04))" access="None" />
+    <Register name="MSGSTATUS_0" start="+(0xC0 + (0 * 0x04))" access="None" />
+    <Register name="MSGSTATUS_1" start="+(0xC0 + (1 * 0x04))" access="None" />
+    <Register name="MSGSTATUS_2" start="+(0xC0 + (2 * 0x04))" access="None" />
+    <Register name="MSGSTATUS_3" start="+(0xC0 + (3 * 0x04))" access="None" />
+    <Register name="MSGSTATUS_4" start="+(0xC0 + (4 * 0x04))" access="None" />
+    <Register name="MSGSTATUS_5" start="+(0xC0 + (5 * 0x04))" access="None" />
+    <Register name="MSGSTATUS_6" start="+(0xC0 + (6 * 0x04))" access="None" />
+    <Register name="MSGSTATUS_7" start="+(0xC0 + (7 * 0x04))" access="None" />
+    <Register name="IRQSTATUS_RAW_0" start="+(0x100 + (0 * 0x10))" />
+    <Register name="IRQSTATUS_CLR_0" start="+(0x104 + (0 * 0x10))" />
+    <Register name="IRQENABLE_SET_0" start="+(0x108 + (0 * 0x10))" />
+    <Register name="IRQENABLE_CLR_0" start="+(0x10C + (0 * 0x10))" />
+    <Register name="IRQSTATUS_RAW_1" start="+(0x100 + (1 * 0x10))" />
+    <Register name="IRQSTATUS_CLR_1" start="+(0x104 + (1 * 0x10))" />
+    <Register name="IRQENABLE_SET_1" start="+(0x108 + (1 * 0x10))" />
+    <Register name="IRQENABLE_CLR_1" start="+(0x10C + (1 * 0x10))" />
+    <Register name="IRQSTATUS_RAW_2" start="+(0x100 + (2 * 0x10))" />
+    <Register name="IRQSTATUS_CLR_2" start="+(0x104 + (2 * 0x10))" />
+    <Register name="IRQENABLE_SET_2" start="+(0x108 + (2 * 0x10))" />
+    <Register name="IRQENABLE_CLR_2" start="+(0x10C + (2 * 0x10))" />
+    <Register name="IRQSTATUS_RAW_3" start="+(0x100 + (3 * 0x10))" />
+    <Register name="IRQSTATUS_CLR_3" start="+(0x104 + (3 * 0x10))" />
+    <Register name="IRQENABLE_SET_3" start="+(0x108 + (3 * 0x10))" />
+    <Register name="IRQENABLE_CLR_3" start="+(0x10C + (3 * 0x10))" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x480CA000)" name="SPINLOCK">
+    <Register name="REV" start="+(0x00)" />
+    <Register name="SYSCONFIG" start="+(0x10)" />
+    <Register name="SYSSTATUS" start="+(0x10)" />
+    <Register name="LOCK_REG_0" start="+(0x800 + (0 * 0x04))" access="None" />
+    <Register name="LOCK_REG_1" start="+(0x800 + (1 * 0x04))" access="None" />
+    <Register name="LOCK_REG_2" start="+(0x800 + (2 * 0x04))" access="None" />
+    <Register name="LOCK_REG_3" start="+(0x800 + (3 * 0x04))" access="None" />
+    <Register name="LOCK_REG_4" start="+(0x800 + (4 * 0x04))" access="None" />
+    <Register name="LOCK_REG_5" start="+(0x800 + (5 * 0x04))" access="None" />
+    <Register name="LOCK_REG_6" start="+(0x800 + (6 * 0x04))" access="None" />
+    <Register name="LOCK_REG_7" start="+(0x800 + (7 * 0x04))" access="None" />
+    <Register name="LOCK_REG_8" start="+(0x800 + (8 * 0x04))" access="None" />
+    <Register name="LOCK_REG_9" start="+(0x800 + (9 * 0x04))" access="None" />
+    <Register name="LOCK_REG_10" start="+(0x800 + (10 * 0x04))" access="None" />
+    <Register name="LOCK_REG_11" start="+(0x800 + (11 * 0x04))" access="None" />
+    <Register name="LOCK_REG_12" start="+(0x800 + (12 * 0x04))" access="None" />
+    <Register name="LOCK_REG_13" start="+(0x800 + (13 * 0x04))" access="None" />
+    <Register name="LOCK_REG_14" start="+(0x800 + (14 * 0x04))" access="None" />
+    <Register name="LOCK_REG_15" start="+(0x800 + (15 * 0x04))" access="None" />
+    <Register name="LOCK_REG_16" start="+(0x800 + (16 * 0x04))" access="None" />
+    <Register name="LOCK_REG_17" start="+(0x800 + (17 * 0x04))" access="None" />
+    <Register name="LOCK_REG_18" start="+(0x800 + (18 * 0x04))" access="None" />
+    <Register name="LOCK_REG_19" start="+(0x800 + (19 * 0x04))" access="None" />
+    <Register name="LOCK_REG_20" start="+(0x800 + (20 * 0x04))" access="None" />
+    <Register name="LOCK_REG_21" start="+(0x800 + (21 * 0x04))" access="None" />
+    <Register name="LOCK_REG_22" start="+(0x800 + (22 * 0x04))" access="None" />
+    <Register name="LOCK_REG_23" start="+(0x800 + (23 * 0x04))" access="None" />
+    <Register name="LOCK_REG_24" start="+(0x800 + (24 * 0x04))" access="None" />
+    <Register name="LOCK_REG_25" start="+(0x800 + (25 * 0x04))" access="None" />
+    <Register name="LOCK_REG_26" start="+(0x800 + (26 * 0x04))" access="None" />
+    <Register name="LOCK_REG_27" start="+(0x800 + (27 * 0x04))" access="None" />
+    <Register name="LOCK_REG_28" start="+(0x800 + (28 * 0x04))" access="None" />
+    <Register name="LOCK_REG_29" start="+(0x800 + (29 * 0x04))" access="None" />
+    <Register name="LOCK_REG_30" start="+(0x800 + (30 * 0x04))" access="None" />
+    <Register name="LOCK_REG_31" start="+(0x800 + (31 * 0x04))" access="None" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x4819C000)" name="I2C2">
+    <Register name="REVNB_LO" start="+(0x0)" />
+    <Register name="REVNB_HI" start="+(0x4)" />
+    <Register name="SYSC" start="+(0x10)" />
+    <Register name="EOI" start="+(0x20)" />
+    <Register name="IRQSTATUS_RAW" start="+(0x24)" />
+    <Register name="IRQSTATUS" start="+(0x28)" />
+    <Register name="IRQENABLE_SET" start="+(0x2C)" />
+    <Register name="IRQENABLE_CLR" start="+(0x30)" />
+    <Register name="WE" start="+(0x34)" />
+    <Register name="DMARXENABLE_SET" start="+(0x38)" />
+    <Register name="DMATXENABLE_SET" start="+(0x3C)" />
+    <Register name="DMARXENABLE_CLR" start="+(0x40)" />
+    <Register name="DMATXENABLE_CLR" start="+(0x44)" />
+    <Register name="DMARXWAKE_EN" start="+(0x48)" />
+    <Register name="DMATXWAKE_EN" start="+(0x4C)" />
+    <Register name="SYSS" start="+(0x90)" />
+    <Register name="BUF" start="+(0x94)" />
+    <Register name="CNT" start="+(0x98)" />
+    <Register name="DATA" start="+(0x9C)" />
+    <Register name="CON" start="+(0xA4)" />
+    <Register name="OA" start="+(0xA8)" />
+    <Register name="SA" start="+(0xAC)" />
+    <Register name="PSC" start="+(0xB0)" />
+    <Register name="SCLL" start="+(0xB4)" />
+    <Register name="SCLH" start="+(0xB8)" />
+    <Register name="SYSTEST" start="+(0xBC)" />
+    <Register name="BUFSTAT" start="+(0xC0)" />
+    <Register name="OA1" start="+(0xC4)" />
+    <Register name="OA2" start="+(0xC8)" />
+    <Register name="OA3" start="+(0xCC)" />
+    <Register name="ACTOA" start="+(0xD0)" />
+    <Register name="SBLOCK" start="+(0xD4)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x481A0000)" name="MCSPI1">
+    <Register name="REVISION" start="+(0x100)" />
+    <Register name="SYSCONFIG" start="+(0x110)" />
+    <Register name="SYSSTATUS" start="+(0x114)" />
+    <Register name="IRQSTATUS" start="+(0x118)" />
+    <Register name="IRQENABLE" start="+(0x11C)" />
+    <Register name="WAKEUPENABLE" start="+(0x120)" />
+    <Register name="SYST" start="+(0x124)" />
+    <Register name="MODULCTRL" start="+(0x128)" />
+    <Register name="CH0CONF" start="+(0x12C + (0 * 0x14))" />
+    <Register name="CH0STAT" start="+(0x130 + (0 * 0x14))" />
+    <Register name="CH0CTRL" start="+(0x134 + (0 * 0x14))" />
+    <Register name="TX0" start="+(0x138 + (0 * 0x14))" />
+    <Register name="RX0" start="+(0x13C + (0 * 0x14))" />
+    <Register name="CH1CONF" start="+(0x12C + (1 * 0x14))" />
+    <Register name="CH1STAT" start="+(0x130 + (1 * 0x14))" />
+    <Register name="CH1CTRL" start="+(0x134 + (1 * 0x14))" />
+    <Register name="TX1" start="+(0x138 + (1 * 0x14))" />
+    <Register name="RX1" start="+(0x13C + (1 * 0x14))" />
+    <Register name="CH2CONF" start="+(0x12C + (2 * 0x14))" />
+    <Register name="CH2STAT" start="+(0x130 + (2 * 0x14))" />
+    <Register name="CH2CTRL" start="+(0x134 + (2 * 0x14))" />
+    <Register name="TX2" start="+(0x138 + (2 * 0x14))" />
+    <Register name="RX2" start="+(0x13C + (2 * 0x14))" />
+    <Register name="CH3CONF" start="+(0x12C + (3 * 0x14))" />
+    <Register name="CH3STAT" start="+(0x130 + (3 * 0x14))" />
+    <Register name="CH3CTRL" start="+(0x134 + (3 * 0x14))" />
+    <Register name="TX3" start="+(0x138 + (3 * 0x14))" />
+    <Register name="RX3" start="+(0x13C + (3 * 0x14))" />
+    <Register name="XFERLEVEL" start="+(0x17C)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x481A6000)" name="UART3">
+    <Register name="RHR_THR" start="+(0x0)" access="None" />
+    <Register name="IER" start="+(0x4)" />
+    <Register name="IIR" start="+(0x8)" />
+    <Register name="LCR" start="+(0xC)" />
+    <Register name="MCR" start="+(0x10)" />
+    <Register name="LSR" start="+(0x14)" />
+    <Register name="MSR" start="+(0x18)" />
+    <Register name="SPR" start="+(0x1C)" />
+    <Register name="MDR1" start="+(0x20)" />
+    <Register name="MDR2" start="+(0x24)" />
+    <Register name="SFLSR" start="+(0x28)" />
+    <Register name="RESUME" start="+(0x2C)" />
+    <Register name="RXFLL" start="+(0x30)" />
+    <Register name="RXFLH" start="+(0x34)" />
+    <Register name="BLR" start="+(0x38)" />
+    <Register name="ACREG" start="+(0x3C)" />
+    <Register name="SCR" start="+(0x40)" />
+    <Register name="SSR" start="+(0x44)" />
+    <Register name="EBLR" start="+(0x48)" />
+    <Register name="MVR" start="+(0x50)" />
+    <Register name="SYSC" start="+(0x54)" />
+    <Register name="SYSS" start="+(0x58)" />
+    <Register name="WER" start="+(0x5C)" />
+    <Register name="CFPS" start="+(0x60)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x481A8000)" name="UART4">
+    <Register name="RHR_THR" start="+(0x0)" access="None" />
+    <Register name="IER" start="+(0x4)" />
+    <Register name="IIR" start="+(0x8)" />
+    <Register name="LCR" start="+(0xC)" />
+    <Register name="MCR" start="+(0x10)" />
+    <Register name="LSR" start="+(0x14)" />
+    <Register name="MSR" start="+(0x18)" />
+    <Register name="SPR" start="+(0x1C)" />
+    <Register name="MDR1" start="+(0x20)" />
+    <Register name="MDR2" start="+(0x24)" />
+    <Register name="SFLSR" start="+(0x28)" />
+    <Register name="RESUME" start="+(0x2C)" />
+    <Register name="RXFLL" start="+(0x30)" />
+    <Register name="RXFLH" start="+(0x34)" />
+    <Register name="BLR" start="+(0x38)" />
+    <Register name="ACREG" start="+(0x3C)" />
+    <Register name="SCR" start="+(0x40)" />
+    <Register name="SSR" start="+(0x44)" />
+    <Register name="EBLR" start="+(0x48)" />
+    <Register name="MVR" start="+(0x50)" />
+    <Register name="SYSC" start="+(0x54)" />
+    <Register name="SYSS" start="+(0x58)" />
+    <Register name="WER" start="+(0x5C)" />
+    <Register name="CFPS" start="+(0x60)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x481AA000)" name="UART5">
+    <Register name="RHR_THR" start="+(0x0)" access="None" />
+    <Register name="IER" start="+(0x4)" />
+    <Register name="IIR" start="+(0x8)" />
+    <Register name="LCR" start="+(0xC)" />
+    <Register name="MCR" start="+(0x10)" />
+    <Register name="LSR" start="+(0x14)" />
+    <Register name="MSR" start="+(0x18)" />
+    <Register name="SPR" start="+(0x1C)" />
+    <Register name="MDR1" start="+(0x20)" />
+    <Register name="MDR2" start="+(0x24)" />
+    <Register name="SFLSR" start="+(0x28)" />
+    <Register name="RESUME" start="+(0x2C)" />
+    <Register name="RXFLL" start="+(0x30)" />
+    <Register name="RXFLH" start="+(0x34)" />
+    <Register name="BLR" start="+(0x38)" />
+    <Register name="ACREG" start="+(0x3C)" />
+    <Register name="SCR" start="+(0x40)" />
+    <Register name="SSR" start="+(0x44)" />
+    <Register name="EBLR" start="+(0x48)" />
+    <Register name="MVR" start="+(0x50)" />
+    <Register name="SYSC" start="+(0x54)" />
+    <Register name="SYSS" start="+(0x58)" />
+    <Register name="WER" start="+(0x5C)" />
+    <Register name="CFPS" start="+(0x60)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x481AC000)" name="GPIO2">
+    <Register name="REVISION" start="+(0x0)" />
+    <Register name="SYSCONFIG" start="+(0x10)" />
+    <Register name="EOI" start="+(0x20)" />
+    <Register name="IRQSTATUS_RAW_0" start="+(0x24)" />
+    <Register name="IRQSTATUS_RAW_1" start="+(0x28)" />
+    <Register name="IRQSTATUS_0" start="+(0x2C)" />
+    <Register name="IRQSTATUS_1" start="+(0x30)" />
+    <Register name="IRQSTATUS_SET_0" start="+(0x34)" />
+    <Register name="IRQSTATUS_SET_1" start="+(0x38)" />
+    <Register name="IRQSTATUS_CLR_0" start="+(0x3C)" />
+    <Register name="IRQSTATUS_CLR_1" start="+(0x40)" />
+    <Register name="SYSSTATUS" start="+(0x114)" />
+    <Register name="WAKEUPENABLE" start="+(0x120)" />
+    <Register name="CTRL" start="+(0x130)" />
+    <Register name="OE" start="+(0x134)" />
+    <Register name="DATAIN" start="+(0x138)" />
+    <Register name="DATAOUT" start="+(0x13C)" />
+    <Register name="LEVELDETECT0" start="+(0x140)" />
+    <Register name="LEVELDETECT1" start="+(0x144)" />
+    <Register name="RISINGDETECT" start="+(0x148)" />
+    <Register name="FALLINGDETECT" start="+(0x14C)" />
+    <Register name="DEBOUNCENABLE" start="+(0x150)" />
+    <Register name="DEBOUNCINGTIME" start="+(0x154)" />
+    <Register name="CLEARDATAOUT" start="+(0x190)" />
+    <Register name="SETDATAOUT" start="+(0x194)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x481AE000)" name="GPIO3">
+    <Register name="REVISION" start="+(0x0)" />
+    <Register name="SYSCONFIG" start="+(0x10)" />
+    <Register name="EOI" start="+(0x20)" />
+    <Register name="IRQSTATUS_RAW_0" start="+(0x24)" />
+    <Register name="IRQSTATUS_RAW_1" start="+(0x28)" />
+    <Register name="IRQSTATUS_0" start="+(0x2C)" />
+    <Register name="IRQSTATUS_1" start="+(0x30)" />
+    <Register name="IRQSTATUS_SET_0" start="+(0x34)" />
+    <Register name="IRQSTATUS_SET_1" start="+(0x38)" />
+    <Register name="IRQSTATUS_CLR_0" start="+(0x3C)" />
+    <Register name="IRQSTATUS_CLR_1" start="+(0x40)" />
+    <Register name="SYSSTATUS" start="+(0x114)" />
+    <Register name="WAKEUPENABLE" start="+(0x120)" />
+    <Register name="CTRL" start="+(0x130)" />
+    <Register name="OE" start="+(0x134)" />
+    <Register name="DATAIN" start="+(0x138)" />
+    <Register name="DATAOUT" start="+(0x13C)" />
+    <Register name="LEVELDETECT0" start="+(0x140)" />
+    <Register name="LEVELDETECT1" start="+(0x144)" />
+    <Register name="RISINGDETECT" start="+(0x148)" />
+    <Register name="FALLINGDETECT" start="+(0x14C)" />
+    <Register name="DEBOUNCENABLE" start="+(0x150)" />
+    <Register name="DEBOUNCINGTIME" start="+(0x154)" />
+    <Register name="CLEARDATAOUT" start="+(0x190)" />
+    <Register name="SETDATAOUT" start="+(0x194)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x481CC000)" name="DCAN0">
+    <Register name="CTL" start="+(0x0)" />
+    <Register name="PARITYERR_EOI" start="+(0x04)" />
+    <Register name="ES" start="+(0x4)" />
+    <Register name="ERRC" start="+(0x8)" />
+    <Register name="BTR" start="+(0xc)" />
+    <Register name="INT" start="+(0x10)" />
+    <Register name="TEST" start="+(0x14)" />
+    <Register name="PERR" start="+(0x1c)" />
+    <Register name="ABOTR" start="+(0x80)" />
+    <Register name="TXRQ_X" start="+(0x84)" />
+    <Register name="TXRQ12" start="+(0x88)" />
+    <Register name="TXRQ34" start="+(0x8C)" />
+    <Register name="TXRQ56" start="+(0x90)" />
+    <Register name="TXRQ78" start="+(0x94)" />
+    <Register name="NWDAT_X" start="+(0x98)" />
+    <Register name="NWDAT12" start="+(0x9c)" />
+    <Register name="NWDAT34" start="+(0xa0)" />
+    <Register name="NWDAT56" start="+(0xa4)" />
+    <Register name="NWDAT78" start="+(0xa8)" />
+    <Register name="INTPND_X" start="+(0xac)" />
+    <Register name="INTPND12" start="+(0xb0)" />
+    <Register name="INTPND34" start="+(0xb4)" />
+    <Register name="INTPND56" start="+(0xb8)" />
+    <Register name="INTPND78" start="+(0xbc)" />
+    <Register name="MSGVAL_X" start="+(0xc0)" />
+    <Register name="MSGVAL12" start="+(0xc4)" />
+    <Register name="MSGVAL34" start="+(0xc8)" />
+    <Register name="MSGVAL56" start="+(0xcc)" />
+    <Register name="MSGVAL78" start="+(0xd0)" />
+    <Register name="INTMUX12" start="+(0xd8)" />
+    <Register name="INTMUX34" start="+(0xdc)" />
+    <Register name="INTMUX56" start="+(0xe0)" />
+    <Register name="INTMUX38" start="+(0xe4)" />
+    <Register name="IF1CMD" start="+(0x100 + ((1 - 1) * 0x20))" />
+    <Register name="IF1MSK" start="+(0x104 + ((1 - 1) * 0x20))" />
+    <Register name="IF1ARB" start="+(0x108 + ((1 - 1) * 0x20))" />
+    <Register name="IF1MCTL" start="+(0x10c + ((1 - 1) * 0x20))" />
+    <Register name="IF1DATA" start="+(0x110 + ((1 - 1) * 0x20))" />
+    <Register name="IF1DATB" start="+(0x114 + ((1 - 1) * 0x20))" />
+    <Register name="IF2CMD" start="+(0x100 + ((2 - 1) * 0x20))" />
+    <Register name="IF2MSK" start="+(0x104 + ((2 - 1) * 0x20))" />
+    <Register name="IF2ARB" start="+(0x108 + ((2 - 1) * 0x20))" />
+    <Register name="IF2MCTL" start="+(0x10c + ((2 - 1) * 0x20))" />
+    <Register name="IF2DATA" start="+(0x110 + ((2 - 1) * 0x20))" />
+    <Register name="IF2DATB" start="+(0x114 + ((2 - 1) * 0x20))" />
+    <Register name="IF3CMD" start="+(0x100 + ((3 - 1) * 0x20))" />
+    <Register name="IF3MSK" start="+(0x104 + ((3 - 1) * 0x20))" />
+    <Register name="IF3ARB" start="+(0x108 + ((3 - 1) * 0x20))" />
+    <Register name="IF3MCTL" start="+(0x10c + ((3 - 1) * 0x20))" />
+    <Register name="IF3DATA" start="+(0x110 + ((3 - 1) * 0x20))" />
+    <Register name="IF3DATB" start="+(0x114 + ((3 - 1) * 0x20))" />
+    <Register name="IF3OBS" start="+(0x140)" />
+    <Register name="IF3UPD12" start="+(0x160)" />
+    <Register name="IF3UPD34" start="+(0x164)" />
+    <Register name="IF3UPD56" start="+(0x168)" />
+    <Register name="IF3UPD78" start="+(0x16C)" />
+    <Register name="TIOC" start="+(0x1e0)" />
+    <Register name="RIOC" start="+(0x1e4)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x481D0000)" name="DCAN1">
+    <Register name="CTL" start="+(0x0)" />
+    <Register name="PARITYERR_EOI" start="+(0x04)" />
+    <Register name="ES" start="+(0x4)" />
+    <Register name="ERRC" start="+(0x8)" />
+    <Register name="BTR" start="+(0xc)" />
+    <Register name="INT" start="+(0x10)" />
+    <Register name="TEST" start="+(0x14)" />
+    <Register name="PERR" start="+(0x1c)" />
+    <Register name="ABOTR" start="+(0x80)" />
+    <Register name="TXRQ_X" start="+(0x84)" />
+    <Register name="TXRQ12" start="+(0x88)" />
+    <Register name="TXRQ34" start="+(0x8C)" />
+    <Register name="TXRQ56" start="+(0x90)" />
+    <Register name="TXRQ78" start="+(0x94)" />
+    <Register name="NWDAT_X" start="+(0x98)" />
+    <Register name="NWDAT12" start="+(0x9c)" />
+    <Register name="NWDAT34" start="+(0xa0)" />
+    <Register name="NWDAT56" start="+(0xa4)" />
+    <Register name="NWDAT78" start="+(0xa8)" />
+    <Register name="INTPND_X" start="+(0xac)" />
+    <Register name="INTPND12" start="+(0xb0)" />
+    <Register name="INTPND34" start="+(0xb4)" />
+    <Register name="INTPND56" start="+(0xb8)" />
+    <Register name="INTPND78" start="+(0xbc)" />
+    <Register name="MSGVAL_X" start="+(0xc0)" />
+    <Register name="MSGVAL12" start="+(0xc4)" />
+    <Register name="MSGVAL34" start="+(0xc8)" />
+    <Register name="MSGVAL56" start="+(0xcc)" />
+    <Register name="MSGVAL78" start="+(0xd0)" />
+    <Register name="INTMUX12" start="+(0xd8)" />
+    <Register name="INTMUX34" start="+(0xdc)" />
+    <Register name="INTMUX56" start="+(0xe0)" />
+    <Register name="INTMUX38" start="+(0xe4)" />
+    <Register name="IF1CMD" start="+(0x100 + ((1 - 1) * 0x20))" />
+    <Register name="IF1MSK" start="+(0x104 + ((1 - 1) * 0x20))" />
+    <Register name="IF1ARB" start="+(0x108 + ((1 - 1) * 0x20))" />
+    <Register name="IF1MCTL" start="+(0x10c + ((1 - 1) * 0x20))" />
+    <Register name="IF1DATA" start="+(0x110 + ((1 - 1) * 0x20))" />
+    <Register name="IF1DATB" start="+(0x114 + ((1 - 1) * 0x20))" />
+    <Register name="IF2CMD" start="+(0x100 + ((2 - 1) * 0x20))" />
+    <Register name="IF2MSK" start="+(0x104 + ((2 - 1) * 0x20))" />
+    <Register name="IF2ARB" start="+(0x108 + ((2 - 1) * 0x20))" />
+    <Register name="IF2MCTL" start="+(0x10c + ((2 - 1) * 0x20))" />
+    <Register name="IF2DATA" start="+(0x110 + ((2 - 1) * 0x20))" />
+    <Register name="IF2DATB" start="+(0x114 + ((2 - 1) * 0x20))" />
+    <Register name="IF3CMD" start="+(0x100 + ((3 - 1) * 0x20))" />
+    <Register name="IF3MSK" start="+(0x104 + ((3 - 1) * 0x20))" />
+    <Register name="IF3ARB" start="+(0x108 + ((3 - 1) * 0x20))" />
+    <Register name="IF3MCTL" start="+(0x10c + ((3 - 1) * 0x20))" />
+    <Register name="IF3DATA" start="+(0x110 + ((3 - 1) * 0x20))" />
+    <Register name="IF3DATB" start="+(0x114 + ((3 - 1) * 0x20))" />
+    <Register name="IF3OBS" start="+(0x140)" />
+    <Register name="IF3UPD12" start="+(0x160)" />
+    <Register name="IF3UPD34" start="+(0x164)" />
+    <Register name="IF3UPD56" start="+(0x168)" />
+    <Register name="IF3UPD78" start="+(0x16C)" />
+    <Register name="TIOC" start="+(0x1e0)" />
+    <Register name="RIOC" start="+(0x1e4)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x481D8000)" name="MMCHS1">
+    <Register name="SD_SYSCONFIG" start="+(0x110)" />
+    <Register name="SD_SYSSTATUS" start="+(0x114)" />
+    <Register name="SD_CSRE" start="+(0x124)" />
+    <Register name="SD_SYSTEST" start="+(0x128)" />
+    <Register name="SD_CON" start="+(0x12C)" />
+    <Register name="SD_PWCNT" start="+(0x130)" />
+    <Register name="SD_SDMASA" start="+(0x200)" />
+    <Register name="SD_BLK" start="+(0x204)" />
+    <Register name="SD_ARG" start="+(0x208)" />
+    <Register name="SD_CMD" start="+(0x20C)" />
+    <Register name="SD_RSP10" start="+(0x210)" />
+    <Register name="SD_RSP32" start="+(0x214)" />
+    <Register name="SD_RSP54" start="+(0x218)" />
+    <Register name="SD_RSP76" start="+(0x21c)" />
+    <Register name="SD_DATA" start="+(0x220)" />
+    <Register name="SD_PSTATE" start="+(0x224)" />
+    <Register name="SD_HCTL" start="+(0x228)" />
+    <Register name="SD_SYSCTL" start="+(0x22C)" />
+    <Register name="SD_STAT" start="+(0x230)" />
+    <Register name="SD_IE" start="+(0x234)" />
+    <Register name="SD_ISE" start="+(0x238)" />
+    <Register name="SD_AC12" start="+(0x23C)" />
+    <Register name="SD_CAPA" start="+(0x240)" />
+    <Register name="SD_CUR_CAPA" start="+(0x248)" />
+    <Register name="SD_FE" start="+(0x250)" />
+    <Register name="SD_ADMAES" start="+(0x254)" />
+    <Register name="SD_ADMASAL" start="+(0x258)" />
+    <Register name="SD_ADMASAH" start="+(0x25C)" />
+    <Register name="SD_REV" start="+(0x2FC)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48200000)" name="INTC">
+    <Register name="REVISION" start="+(0x0)" />
+    <Register name="SYSCONFIG" start="+(0x10)" />
+    <Register name="SYSSTATUS" start="+(0x14)" />
+    <Register name="SIR_IRQ" start="+(0x40)" />
+    <Register name="SIR_FIQ" start="+(0x44)" />
+    <Register name="CONTROL" start="+(0x48)" />
+    <Register name="PROTECTION" start="+(0x4C)" />
+    <Register name="IDLE" start="+(0x50)" />
+    <Register name="IRQ_PRIORITY" start="+(0x60)" />
+    <Register name="FIQ_PRIORITY" start="+(0x64)" />
+    <Register name="THRESHOLD" start="+(0x68)" />
+    <Register name="ITR0" start="+(0x80 + (0 * 0x20))" />
+    <Register name="MIR0" start="+(0x84 + (0 * 0x20))" />
+    <Register name="MIR_CLEAR0" start="+(0x88 + (0 * 0x20))" />
+    <Register name="MIR_SET0" start="+(0x8c + (0 * 0x20))" />
+    <Register name="ISR_SET0" start="+(0x90 + (0 * 0x20))" />
+    <Register name="ISR_CLEAR0" start="+(0x94 + (0 * 0x20))" />
+    <Register name="PENDING_IRQ0" start="+(0x98 + (0 * 0x20))" />
+    <Register name="PENDING_FIQ0" start="+(0x9c + (0 * 0x20))" />
+    <Register name="ITR1" start="+(0x80 + (1 * 0x20))" />
+    <Register name="MIR1" start="+(0x84 + (1 * 0x20))" />
+    <Register name="MIR_CLEAR1" start="+(0x88 + (1 * 0x20))" />
+    <Register name="MIR_SET1" start="+(0x8c + (1 * 0x20))" />
+    <Register name="ISR_SET1" start="+(0x90 + (1 * 0x20))" />
+    <Register name="ISR_CLEAR1" start="+(0x94 + (1 * 0x20))" />
+    <Register name="PENDING_IRQ1" start="+(0x98 + (1 * 0x20))" />
+    <Register name="PENDING_FIQ1" start="+(0x9c + (1 * 0x20))" />
+    <Register name="ITR2" start="+(0x80 + (2 * 0x20))" />
+    <Register name="MIR2" start="+(0x84 + (2 * 0x20))" />
+    <Register name="MIR_CLEAR2" start="+(0x88 + (2 * 0x20))" />
+    <Register name="MIR_SET2" start="+(0x8c + (2 * 0x20))" />
+    <Register name="ISR_SET2" start="+(0x90 + (2 * 0x20))" />
+    <Register name="ISR_CLEAR2" start="+(0x94 + (2 * 0x20))" />
+    <Register name="PENDING_IRQ2" start="+(0x98 + (2 * 0x20))" />
+    <Register name="PENDING_FIQ2" start="+(0x9c + (2 * 0x20))" />
+    <Register name="ITR3" start="+(0x80 + (3 * 0x20))" />
+    <Register name="MIR3" start="+(0x84 + (3 * 0x20))" />
+    <Register name="MIR_CLEAR3" start="+(0x88 + (3 * 0x20))" />
+    <Register name="MIR_SET3" start="+(0x8c + (3 * 0x20))" />
+    <Register name="ISR_SET3" start="+(0x90 + (3 * 0x20))" />
+    <Register name="ISR_CLEAR3" start="+(0x94 + (3 * 0x20))" />
+    <Register name="PENDING_IRQ3" start="+(0x98 + (3 * 0x20))" />
+    <Register name="PENDING_FIQ3" start="+(0x9c + (3 * 0x20))" />
+    <Register name="ILR0" start="+(0x100 + (0 * 0x04))" />
+    <Register name="ILR1" start="+(0x100 + (1 * 0x04))" />
+    <Register name="ILR2" start="+(0x100 + (2 * 0x04))" />
+    <Register name="ILR3" start="+(0x100 + (3 * 0x04))" />
+    <Register name="ILR4" start="+(0x100 + (4 * 0x04))" />
+    <Register name="ILR5" start="+(0x100 + (5 * 0x04))" />
+    <Register name="ILR6" start="+(0x100 + (6 * 0x04))" />
+    <Register name="ILR7" start="+(0x100 + (7 * 0x04))" />
+    <Register name="ILR8" start="+(0x100 + (8 * 0x04))" />
+    <Register name="ILR9" start="+(0x100 + (9 * 0x04))" />
+    <Register name="ILR10" start="+(0x100 + (10 * 0x04))" />
+    <Register name="ILR11" start="+(0x100 + (11 * 0x04))" />
+    <Register name="ILR12" start="+(0x100 + (12 * 0x04))" />
+    <Register name="ILR13" start="+(0x100 + (13 * 0x04))" />
+    <Register name="ILR14" start="+(0x100 + (14 * 0x04))" />
+    <Register name="ILR15" start="+(0x100 + (15 * 0x04))" />
+    <Register name="ILR16" start="+(0x100 + (16 * 0x04))" />
+    <Register name="ILR17" start="+(0x100 + (17 * 0x04))" />
+    <Register name="ILR18" start="+(0x100 + (18 * 0x04))" />
+    <Register name="ILR19" start="+(0x100 + (19 * 0x04))" />
+    <Register name="ILR20" start="+(0x100 + (20 * 0x04))" />
+    <Register name="ILR21" start="+(0x100 + (21 * 0x04))" />
+    <Register name="ILR22" start="+(0x100 + (22 * 0x04))" />
+    <Register name="ILR23" start="+(0x100 + (23 * 0x04))" />
+    <Register name="ILR24" start="+(0x100 + (24 * 0x04))" />
+    <Register name="ILR25" start="+(0x100 + (25 * 0x04))" />
+    <Register name="ILR26" start="+(0x100 + (26 * 0x04))" />
+    <Register name="ILR27" start="+(0x100 + (27 * 0x04))" />
+    <Register name="ILR28" start="+(0x100 + (28 * 0x04))" />
+    <Register name="ILR29" start="+(0x100 + (29 * 0x04))" />
+    <Register name="ILR30" start="+(0x100 + (30 * 0x04))" />
+    <Register name="ILR31" start="+(0x100 + (31 * 0x04))" />
+    <Register name="ILR32" start="+(0x100 + (32 * 0x04))" />
+    <Register name="ILR33" start="+(0x100 + (33 * 0x04))" />
+    <Register name="ILR34" start="+(0x100 + (34 * 0x04))" />
+    <Register name="ILR35" start="+(0x100 + (35 * 0x04))" />
+    <Register name="ILR36" start="+(0x100 + (36 * 0x04))" />
+    <Register name="ILR37" start="+(0x100 + (37 * 0x04))" />
+    <Register name="ILR38" start="+(0x100 + (38 * 0x04))" />
+    <Register name="ILR39" start="+(0x100 + (39 * 0x04))" />
+    <Register name="ILR40" start="+(0x100 + (40 * 0x04))" />
+    <Register name="ILR41" start="+(0x100 + (41 * 0x04))" />
+    <Register name="ILR42" start="+(0x100 + (42 * 0x04))" />
+    <Register name="ILR43" start="+(0x100 + (43 * 0x04))" />
+    <Register name="ILR44" start="+(0x100 + (44 * 0x04))" />
+    <Register name="ILR45" start="+(0x100 + (45 * 0x04))" />
+    <Register name="ILR46" start="+(0x100 + (46 * 0x04))" />
+    <Register name="ILR47" start="+(0x100 + (47 * 0x04))" />
+    <Register name="ILR48" start="+(0x100 + (48 * 0x04))" />
+    <Register name="ILR49" start="+(0x100 + (49 * 0x04))" />
+    <Register name="ILR50" start="+(0x100 + (50 * 0x04))" />
+    <Register name="ILR51" start="+(0x100 + (51 * 0x04))" />
+    <Register name="ILR52" start="+(0x100 + (52 * 0x04))" />
+    <Register name="ILR53" start="+(0x100 + (53 * 0x04))" />
+    <Register name="ILR54" start="+(0x100 + (54 * 0x04))" />
+    <Register name="ILR55" start="+(0x100 + (55 * 0x04))" />
+    <Register name="ILR56" start="+(0x100 + (56 * 0x04))" />
+    <Register name="ILR57" start="+(0x100 + (57 * 0x04))" />
+    <Register name="ILR58" start="+(0x100 + (58 * 0x04))" />
+    <Register name="ILR59" start="+(0x100 + (59 * 0x04))" />
+    <Register name="ILR60" start="+(0x100 + (60 * 0x04))" />
+    <Register name="ILR61" start="+(0x100 + (61 * 0x04))" />
+    <Register name="ILR62" start="+(0x100 + (62 * 0x04))" />
+    <Register name="ILR63" start="+(0x100 + (63 * 0x04))" />
+    <Register name="ILR64" start="+(0x100 + (64 * 0x04))" />
+    <Register name="ILR65" start="+(0x100 + (65 * 0x04))" />
+    <Register name="ILR66" start="+(0x100 + (66 * 0x04))" />
+    <Register name="ILR67" start="+(0x100 + (67 * 0x04))" />
+    <Register name="ILR68" start="+(0x100 + (68 * 0x04))" />
+    <Register name="ILR69" start="+(0x100 + (69 * 0x04))" />
+    <Register name="ILR70" start="+(0x100 + (70 * 0x04))" />
+    <Register name="ILR71" start="+(0x100 + (71 * 0x04))" />
+    <Register name="ILR72" start="+(0x100 + (72 * 0x04))" />
+    <Register name="ILR73" start="+(0x100 + (73 * 0x04))" />
+    <Register name="ILR74" start="+(0x100 + (74 * 0x04))" />
+    <Register name="ILR75" start="+(0x100 + (75 * 0x04))" />
+    <Register name="ILR76" start="+(0x100 + (76 * 0x04))" />
+    <Register name="ILR77" start="+(0x100 + (77 * 0x04))" />
+    <Register name="ILR78" start="+(0x100 + (78 * 0x04))" />
+    <Register name="ILR79" start="+(0x100 + (79 * 0x04))" />
+    <Register name="ILR80" start="+(0x100 + (80 * 0x04))" />
+    <Register name="ILR81" start="+(0x100 + (81 * 0x04))" />
+    <Register name="ILR82" start="+(0x100 + (82 * 0x04))" />
+    <Register name="ILR83" start="+(0x100 + (83 * 0x04))" />
+    <Register name="ILR84" start="+(0x100 + (84 * 0x04))" />
+    <Register name="ILR85" start="+(0x100 + (85 * 0x04))" />
+    <Register name="ILR86" start="+(0x100 + (86 * 0x04))" />
+    <Register name="ILR87" start="+(0x100 + (87 * 0x04))" />
+    <Register name="ILR88" start="+(0x100 + (88 * 0x04))" />
+    <Register name="ILR89" start="+(0x100 + (89 * 0x04))" />
+    <Register name="ILR90" start="+(0x100 + (90 * 0x04))" />
+    <Register name="ILR91" start="+(0x100 + (91 * 0x04))" />
+    <Register name="ILR92" start="+(0x100 + (92 * 0x04))" />
+    <Register name="ILR93" start="+(0x100 + (93 * 0x04))" />
+    <Register name="ILR94" start="+(0x100 + (94 * 0x04))" />
+    <Register name="ILR95" start="+(0x100 + (95 * 0x04))" />
+    <Register name="ILR96" start="+(0x100 + (96 * 0x04))" />
+    <Register name="ILR97" start="+(0x100 + (97 * 0x04))" />
+    <Register name="ILR98" start="+(0x100 + (98 * 0x04))" />
+    <Register name="ILR99" start="+(0x100 + (99 * 0x04))" />
+    <Register name="ILR100" start="+(0x100 + (100 * 0x04))" />
+    <Register name="ILR101" start="+(0x100 + (101 * 0x04))" />
+    <Register name="ILR102" start="+(0x100 + (102 * 0x04))" />
+    <Register name="ILR103" start="+(0x100 + (103 * 0x04))" />
+    <Register name="ILR104" start="+(0x100 + (104 * 0x04))" />
+    <Register name="ILR105" start="+(0x100 + (105 * 0x04))" />
+    <Register name="ILR106" start="+(0x100 + (106 * 0x04))" />
+    <Register name="ILR107" start="+(0x100 + (107 * 0x04))" />
+    <Register name="ILR108" start="+(0x100 + (108 * 0x04))" />
+    <Register name="ILR109" start="+(0x100 + (109 * 0x04))" />
+    <Register name="ILR110" start="+(0x100 + (110 * 0x04))" />
+    <Register name="ILR111" start="+(0x100 + (111 * 0x04))" />
+    <Register name="ILR112" start="+(0x100 + (112 * 0x04))" />
+    <Register name="ILR113" start="+(0x100 + (113 * 0x04))" />
+    <Register name="ILR114" start="+(0x100 + (114 * 0x04))" />
+    <Register name="ILR115" start="+(0x100 + (115 * 0x04))" />
+    <Register name="ILR116" start="+(0x100 + (116 * 0x04))" />
+    <Register name="ILR117" start="+(0x100 + (117 * 0x04))" />
+    <Register name="ILR118" start="+(0x100 + (118 * 0x04))" />
+    <Register name="ILR119" start="+(0x100 + (119 * 0x04))" />
+    <Register name="ILR120" start="+(0x100 + (120 * 0x04))" />
+    <Register name="ILR121" start="+(0x100 + (121 * 0x04))" />
+    <Register name="ILR122" start="+(0x100 + (122 * 0x04))" />
+    <Register name="ILR123" start="+(0x100 + (123 * 0x04))" />
+    <Register name="ILR124" start="+(0x100 + (124 * 0x04))" />
+    <Register name="ILR125" start="+(0x100 + (125 * 0x04))" />
+    <Register name="ILR126" start="+(0x100 + (126 * 0x04))" />
+    <Register name="ILR127" start="+(0x100 + (127 * 0x04))" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48300000)" name="PWMSS0">
+    <Register name="IDVER" start="+(0x0)" />
+    <Register name="SYSCONFIG" start="+(0x4)" />
+    <Register name="CLKCONFIG" start="+(0x8)" />
+    <Register name="CLKSTATUS" start="+(0xC)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48300000)+0x100" name="PWMSSeCAP0">
+    <Register name="TSCTR" start="+(0x0)" />
+    <Register name="CTRPHS" start="+(0x4)" />
+    <Register name="CAP1" start="+(0x8)" />
+    <Register name="CAP2" start="+(0xC)" />
+    <Register name="CAP3" start="+(0x10)" />
+    <Register name="CAP4" start="+(0x14)" />
+    <Register name="ECCTL1" start="+(0x28)" size="2" />
+    <Register name="ECCTL2" start="+(0x2A)" size="2" />
+    <Register name="ECEINT" start="+(0x2C)" size="2" />
+    <Register name="ECFLG" start="+(0x2E)" size="2" />
+    <Register name="ECCLR" start="+(0x30)" size="2" />
+    <Register name="ECFRC" start="+(0x32)" size="2" />
+    <Register name="REVID" start="+(0x5C)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48300000)+0x180" name="PWMSSeQEP0">
+    <Register name="QPOSCNT" start="+(0x0)" />
+    <Register name="QPOSINIT" start="+(0x4)" />
+    <Register name="QPOSMAX" start="+(0x8)" />
+    <Register name="QPOSCMP" start="+(0xC)" />
+    <Register name="QPOSILAT" start="+(0x10)" />
+    <Register name="QPOSSLAT" start="+(0x14)" />
+    <Register name="QPOSLAT" start="+(0x18)" />
+    <Register name="QUTMR" start="+(0x1C)" />
+    <Register name="QUPRD" start="+(0x20)" />
+    <Register name="QWDTMR" start="+(0x24)" size="2" />
+    <Register name="QWDPRD" start="+(0x26)" size="2" />
+    <Register name="QDECCTL" start="+(0x28)" size="2" />
+    <Register name="QEPCTL" start="+(0x2A)" size="2" />
+    <Register name="QCAPCTL" start="+(0x2C)" size="2" />
+    <Register name="QPOSCTL" start="+(0x2E)" size="2" />
+    <Register name="QEINT" start="+(0x30)" size="2" />
+    <Register name="QFLG" start="+(0x32)" size="2" />
+    <Register name="QCLR" start="+(0x34)" size="2" />
+    <Register name="QFRC" start="+(0x36)" size="2" />
+    <Register name="QEPSTS" start="+(0x38)" size="2" />
+    <Register name="QCTMR" start="+(0x3A)" size="2" />
+    <Register name="QCPRD" start="+(0x3C)" size="2" />
+    <Register name="QCTMRLAT" start="+(0x3E)" size="2" />
+    <Register name="QCPRDLAT" start="+(0x40)" size="2" />
+    <Register name="REVID" start="+(0x5C)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48300000)+0x200" name="PWMSSePWM0">
+    <Register name="TBCTL" start="+(0x00)" size="2" />
+    <Register name="TBSTS" start="+(0x02)" size="2" />
+    <Register name="TBPHSHR" start="+(0x04)" size="2" />
+    <Register name="TBPHS" start="+(0x06)" size="2" />
+    <Register name="TBCNT" start="+(0x08)" size="2" />
+    <Register name="TBPRD" start="+(0x0A)" size="2" />
+    <Register name="CMPCTL" start="+(0x0E)" size="2" />
+    <Register name="CMPAHR" start="+(0x10)" size="2" />
+    <Register name="CMPA" start="+(0x12)" size="2" />
+    <Register name="CMPB" start="+(0x14)" size="2" />
+    <Register name="AQCTLA" start="+(0x16)" size="2" />
+    <Register name="AQCTLB" start="+(0x18)" size="2" />
+    <Register name="AQSFRC" start="+(0x1A)" size="2" />
+    <Register name="AQCSFRC" start="+(0x1C)" size="2" />
+    <Register name="DBCTL" start="+(0x1E)" size="2" />
+    <Register name="DBRED" start="+(0x20)" size="2" />
+    <Register name="DBFED" start="+(0x22)" size="2" />
+    <Register name="TZSEL" start="+(0x24)" size="2" />
+    <Register name="TZCTL" start="+(0x28)" size="2" />
+    <Register name="TZEINT" start="+(0x2A)" size="2" />
+    <Register name="TZFLG" start="+(0x2C)" size="2" />
+    <Register name="TZCLR" start="+(0x2E)" size="2" />
+    <Register name="TZFRC" start="+(0x30)" size="2" />
+    <Register name="ETSEL" start="+(0x32)" size="2" />
+    <Register name="ETPS" start="+(0x34)" size="2" />
+    <Register name="ETFLG" start="+(0x36)" size="2" />
+    <Register name="ETCLR" start="+(0x38)" size="2" />
+    <Register name="ETFRC" start="+(0x3A)" size="2" />
+    <Register name="PCCTL" start="+(0x3C)" size="2" />
+    <Register name="HRCTL" start="+(0x40)" size="2" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48302000)" name="PWMSS1">
+    <Register name="IDVER" start="+(0x0)" />
+    <Register name="SYSCONFIG" start="+(0x4)" />
+    <Register name="CLKCONFIG" start="+(0x8)" />
+    <Register name="CLKSTATUS" start="+(0xC)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48302000)+0x100" name="PWMSSeCAP1">
+    <Register name="TSCTR" start="+(0x0)" />
+    <Register name="CTRPHS" start="+(0x4)" />
+    <Register name="CAP1" start="+(0x8)" />
+    <Register name="CAP2" start="+(0xC)" />
+    <Register name="CAP3" start="+(0x10)" />
+    <Register name="CAP4" start="+(0x14)" />
+    <Register name="ECCTL1" start="+(0x28)" size="2" />
+    <Register name="ECCTL2" start="+(0x2A)" size="2" />
+    <Register name="ECEINT" start="+(0x2C)" size="2" />
+    <Register name="ECFLG" start="+(0x2E)" size="2" />
+    <Register name="ECCLR" start="+(0x30)" size="2" />
+    <Register name="ECFRC" start="+(0x32)" size="2" />
+    <Register name="REVID" start="+(0x5C)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48302000)+0x180" name="PWMSSeQEP1">
+    <Register name="QPOSCNT" start="+(0x0)" />
+    <Register name="QPOSINIT" start="+(0x4)" />
+    <Register name="QPOSMAX" start="+(0x8)" />
+    <Register name="QPOSCMP" start="+(0xC)" />
+    <Register name="QPOSILAT" start="+(0x10)" />
+    <Register name="QPOSSLAT" start="+(0x14)" />
+    <Register name="QPOSLAT" start="+(0x18)" />
+    <Register name="QUTMR" start="+(0x1C)" />
+    <Register name="QUPRD" start="+(0x20)" />
+    <Register name="QWDTMR" start="+(0x24)" size="2" />
+    <Register name="QWDPRD" start="+(0x26)" size="2" />
+    <Register name="QDECCTL" start="+(0x28)" size="2" />
+    <Register name="QEPCTL" start="+(0x2A)" size="2" />
+    <Register name="QCAPCTL" start="+(0x2C)" size="2" />
+    <Register name="QPOSCTL" start="+(0x2E)" size="2" />
+    <Register name="QEINT" start="+(0x30)" size="2" />
+    <Register name="QFLG" start="+(0x32)" size="2" />
+    <Register name="QCLR" start="+(0x34)" size="2" />
+    <Register name="QFRC" start="+(0x36)" size="2" />
+    <Register name="QEPSTS" start="+(0x38)" size="2" />
+    <Register name="QCTMR" start="+(0x3A)" size="2" />
+    <Register name="QCPRD" start="+(0x3C)" size="2" />
+    <Register name="QCTMRLAT" start="+(0x3E)" size="2" />
+    <Register name="QCPRDLAT" start="+(0x40)" size="2" />
+    <Register name="REVID" start="+(0x5C)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48302000)+0x200" name="PWMSSePWM1">
+    <Register name="TBCTL" start="+(0x00)" size="2" />
+    <Register name="TBSTS" start="+(0x02)" size="2" />
+    <Register name="TBPHSHR" start="+(0x04)" size="2" />
+    <Register name="TBPHS" start="+(0x06)" size="2" />
+    <Register name="TBCNT" start="+(0x08)" size="2" />
+    <Register name="TBPRD" start="+(0x0A)" size="2" />
+    <Register name="CMPCTL" start="+(0x0E)" size="2" />
+    <Register name="CMPAHR" start="+(0x10)" size="2" />
+    <Register name="CMPA" start="+(0x12)" size="2" />
+    <Register name="CMPB" start="+(0x14)" size="2" />
+    <Register name="AQCTLA" start="+(0x16)" size="2" />
+    <Register name="AQCTLB" start="+(0x18)" size="2" />
+    <Register name="AQSFRC" start="+(0x1A)" size="2" />
+    <Register name="AQCSFRC" start="+(0x1C)" size="2" />
+    <Register name="DBCTL" start="+(0x1E)" size="2" />
+    <Register name="DBRED" start="+(0x20)" size="2" />
+    <Register name="DBFED" start="+(0x22)" size="2" />
+    <Register name="TZSEL" start="+(0x24)" size="2" />
+    <Register name="TZCTL" start="+(0x28)" size="2" />
+    <Register name="TZEINT" start="+(0x2A)" size="2" />
+    <Register name="TZFLG" start="+(0x2C)" size="2" />
+    <Register name="TZCLR" start="+(0x2E)" size="2" />
+    <Register name="TZFRC" start="+(0x30)" size="2" />
+    <Register name="ETSEL" start="+(0x32)" size="2" />
+    <Register name="ETPS" start="+(0x34)" size="2" />
+    <Register name="ETFLG" start="+(0x36)" size="2" />
+    <Register name="ETCLR" start="+(0x38)" size="2" />
+    <Register name="ETFRC" start="+(0x3A)" size="2" />
+    <Register name="PCCTL" start="+(0x3C)" size="2" />
+    <Register name="HRCTL" start="+(0x40)" size="2" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48304000)" name="PWMSS2">
+    <Register name="IDVER" start="+(0x0)" />
+    <Register name="SYSCONFIG" start="+(0x4)" />
+    <Register name="CLKCONFIG" start="+(0x8)" />
+    <Register name="CLKSTATUS" start="+(0xC)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48304000)+0x100" name="PWMSSeCAP2">
+    <Register name="TSCTR" start="+(0x0)" />
+    <Register name="CTRPHS" start="+(0x4)" />
+    <Register name="CAP1" start="+(0x8)" />
+    <Register name="CAP2" start="+(0xC)" />
+    <Register name="CAP3" start="+(0x10)" />
+    <Register name="CAP4" start="+(0x14)" />
+    <Register name="ECCTL1" start="+(0x28)" size="2" />
+    <Register name="ECCTL2" start="+(0x2A)" size="2" />
+    <Register name="ECEINT" start="+(0x2C)" size="2" />
+    <Register name="ECFLG" start="+(0x2E)" size="2" />
+    <Register name="ECCLR" start="+(0x30)" size="2" />
+    <Register name="ECFRC" start="+(0x32)" size="2" />
+    <Register name="REVID" start="+(0x5C)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48304000)+0x180" name="PWMSSeQEP2">
+    <Register name="QPOSCNT" start="+(0x0)" />
+    <Register name="QPOSINIT" start="+(0x4)" />
+    <Register name="QPOSMAX" start="+(0x8)" />
+    <Register name="QPOSCMP" start="+(0xC)" />
+    <Register name="QPOSILAT" start="+(0x10)" />
+    <Register name="QPOSSLAT" start="+(0x14)" />
+    <Register name="QPOSLAT" start="+(0x18)" />
+    <Register name="QUTMR" start="+(0x1C)" />
+    <Register name="QUPRD" start="+(0x20)" />
+    <Register name="QWDTMR" start="+(0x24)" size="2" />
+    <Register name="QWDPRD" start="+(0x26)" size="2" />
+    <Register name="QDECCTL" start="+(0x28)" size="2" />
+    <Register name="QEPCTL" start="+(0x2A)" size="2" />
+    <Register name="QCAPCTL" start="+(0x2C)" size="2" />
+    <Register name="QPOSCTL" start="+(0x2E)" size="2" />
+    <Register name="QEINT" start="+(0x30)" size="2" />
+    <Register name="QFLG" start="+(0x32)" size="2" />
+    <Register name="QCLR" start="+(0x34)" size="2" />
+    <Register name="QFRC" start="+(0x36)" size="2" />
+    <Register name="QEPSTS" start="+(0x38)" size="2" />
+    <Register name="QCTMR" start="+(0x3A)" size="2" />
+    <Register name="QCPRD" start="+(0x3C)" size="2" />
+    <Register name="QCTMRLAT" start="+(0x3E)" size="2" />
+    <Register name="QCPRDLAT" start="+(0x40)" size="2" />
+    <Register name="REVID" start="+(0x5C)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x48304000)+0x200" name="PWMSSePWM2">
+    <Register name="TBCTL" start="+(0x00)" size="2" />
+    <Register name="TBSTS" start="+(0x02)" size="2" />
+    <Register name="TBPHSHR" start="+(0x04)" size="2" />
+    <Register name="TBPHS" start="+(0x06)" size="2" />
+    <Register name="TBCNT" start="+(0x08)" size="2" />
+    <Register name="TBPRD" start="+(0x0A)" size="2" />
+    <Register name="CMPCTL" start="+(0x0E)" size="2" />
+    <Register name="CMPAHR" start="+(0x10)" size="2" />
+    <Register name="CMPA" start="+(0x12)" size="2" />
+    <Register name="CMPB" start="+(0x14)" size="2" />
+    <Register name="AQCTLA" start="+(0x16)" size="2" />
+    <Register name="AQCTLB" start="+(0x18)" size="2" />
+    <Register name="AQSFRC" start="+(0x1A)" size="2" />
+    <Register name="AQCSFRC" start="+(0x1C)" size="2" />
+    <Register name="DBCTL" start="+(0x1E)" size="2" />
+    <Register name="DBRED" start="+(0x20)" size="2" />
+    <Register name="DBFED" start="+(0x22)" size="2" />
+    <Register name="TZSEL" start="+(0x24)" size="2" />
+    <Register name="TZCTL" start="+(0x28)" size="2" />
+    <Register name="TZEINT" start="+(0x2A)" size="2" />
+    <Register name="TZFLG" start="+(0x2C)" size="2" />
+    <Register name="TZCLR" start="+(0x2E)" size="2" />
+    <Register name="TZFRC" start="+(0x30)" size="2" />
+    <Register name="ETSEL" start="+(0x32)" size="2" />
+    <Register name="ETPS" start="+(0x34)" size="2" />
+    <Register name="ETFLG" start="+(0x36)" size="2" />
+    <Register name="ETCLR" start="+(0x38)" size="2" />
+    <Register name="ETFRC" start="+(0x3A)" size="2" />
+    <Register name="PCCTL" start="+(0x3C)" size="2" />
+    <Register name="HRCTL" start="+(0x40)" size="2" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x4830E000)" name="LCD">
+    <Register name="PID" start="+(0x0)" />
+    <Register name="LCD_CTRL" start="+(0x4)" />
+    <Register name="LCD_STAT" start="+(0x8)" />
+    <Register name="LIDD_CTRL" start="+(0xC)" />
+    <Register name="LIDD_CS0_CONF" start="+(0x10)" />
+    <Register name="LIDD_CS0_ADDR" start="+(0x14)" />
+    <Register name="LIDD_CS0_DATA" start="+(0x18)" />
+    <Register name="LIDD_CS1_CONF" start="+(0x1C)" />
+    <Register name="LIDD_CS1_ADDR" start="+(0x20)" />
+    <Register name="LIDD_CS2_DATA" start="+(0x24)" />
+    <Register name="RASTER_CTRL" start="+(0x28)" />
+    <Register name="RASTER_TIMING_0" start="+(0x2C)" />
+    <Register name="RASTER_TIMING_1" start="+(0x30)" />
+    <Register name="RASTER_TIMING_2" start="+(0x34)" />
+    <Register name="RASTER_SUBPANEL" start="+(0x38)" />
+    <Register name="RASTER_SUBPANEL2" start="+(0x3C)" />
+    <Register name="LCDDMA_CTRL" start="+(0x40)" />
+    <Register name="LCDDMA_FB0_BASE" start="+(0x44)" />
+    <Register name="LCDDMA_FB0_CEILING" start="+(0x48)" />
+    <Register name="LCDDMA_FB1_BASE" start="+(0x4C)" />
+    <Register name="LCDDMA_FB1_CEILING" start="+(0x50)" />
+    <Register name="SYSCONFIG" start="+(0x54)" />
+    <Register name="IRQSTATUS_RAW" start="+(0x58)" />
+    <Register name="IRQSTATUS" start="+(0x5C)" />
+    <Register name="IRQENABLE_SET" start="+(0x60)" />
+    <Register name="IRQENABLE_CLEAR" start="+(0x64)" />
+    <Register name="IRQEOI_VECTOR" start="+(0x68)" />
+    <Register name="CLKC_ENABLE" start="+(0x6C)" />
+    <Register name="CLKC_RESET" start="+(0x70)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x49000000)" name="EDMA3">
+    <Register name="REVID" start="(0x0)" />
+    <Register name="CCCFG" start="(0x4)" />
+    <Register name="DCHMAP0" start="(0x100 + (0 * 4))" />
+    <Register name="DCHMAP1" start="(0x100 + (1 * 4))" />
+    <Register name="DCHMAP2" start="(0x100 + (2 * 4))" />
+    <Register name="DCHMAP3" start="(0x100 + (3 * 4))" />
+    <Register name="DCHMAP4" start="(0x100 + (4 * 4))" />
+    <Register name="DCHMAP5" start="(0x100 + (5 * 4))" />
+    <Register name="DCHMAP6" start="(0x100 + (6 * 4))" />
+    <Register name="DCHMAP7" start="(0x100 + (7 * 4))" />
+    <Register name="DCHMAP8" start="(0x100 + (8 * 4))" />
+    <Register name="DCHMAP9" start="(0x100 + (9 * 4))" />
+    <Register name="DCHMAP10" start="(0x100 + (10 * 4))" />
+    <Register name="DCHMAP11" start="(0x100 + (11 * 4))" />
+    <Register name="DCHMAP12" start="(0x100 + (12 * 4))" />
+    <Register name="DCHMAP13" start="(0x100 + (13 * 4))" />
+    <Register name="DCHMAP14" start="(0x100 + (14 * 4))" />
+    <Register name="DCHMAP15" start="(0x100 + (15 * 4))" />
+    <Register name="DCHMAP16" start="(0x100 + (16 * 4))" />
+    <Register name="DCHMAP17" start="(0x100 + (17 * 4))" />
+    <Register name="DCHMAP18" start="(0x100 + (18 * 4))" />
+    <Register name="DCHMAP19" start="(0x100 + (19 * 4))" />
+    <Register name="DCHMAP20" start="(0x100 + (20 * 4))" />
+    <Register name="DCHMAP21" start="(0x100 + (21 * 4))" />
+    <Register name="DCHMAP22" start="(0x100 + (22 * 4))" />
+    <Register name="DCHMAP23" start="(0x100 + (23 * 4))" />
+    <Register name="DCHMAP24" start="(0x100 + (24 * 4))" />
+    <Register name="DCHMAP25" start="(0x100 + (25 * 4))" />
+    <Register name="DCHMAP26" start="(0x100 + (26 * 4))" />
+    <Register name="DCHMAP27" start="(0x100 + (27 * 4))" />
+    <Register name="DCHMAP28" start="(0x100 + (28 * 4))" />
+    <Register name="DCHMAP29" start="(0x100 + (29 * 4))" />
+    <Register name="DCHMAP30" start="(0x100 + (30 * 4))" />
+    <Register name="DCHMAP31" start="(0x100 + (31 * 4))" />
+    <Register name="DCHMAP32" start="(0x100 + (32 * 4))" />
+    <Register name="DCHMAP33" start="(0x100 + (33 * 4))" />
+    <Register name="DCHMAP34" start="(0x100 + (34 * 4))" />
+    <Register name="DCHMAP35" start="(0x100 + (35 * 4))" />
+    <Register name="DCHMAP36" start="(0x100 + (36 * 4))" />
+    <Register name="DCHMAP37" start="(0x100 + (37 * 4))" />
+    <Register name="DCHMAP38" start="(0x100 + (38 * 4))" />
+    <Register name="DCHMAP39" start="(0x100 + (39 * 4))" />
+    <Register name="DCHMAP40" start="(0x100 + (40 * 4))" />
+    <Register name="DCHMAP41" start="(0x100 + (41 * 4))" />
+    <Register name="DCHMAP42" start="(0x100 + (42 * 4))" />
+    <Register name="DCHMAP43" start="(0x100 + (43 * 4))" />
+    <Register name="DCHMAP44" start="(0x100 + (44 * 4))" />
+    <Register name="DCHMAP45" start="(0x100 + (45 * 4))" />
+    <Register name="DCHMAP46" start="(0x100 + (46 * 4))" />
+    <Register name="DCHMAP47" start="(0x100 + (47 * 4))" />
+    <Register name="DCHMAP48" start="(0x100 + (48 * 4))" />
+    <Register name="DCHMAP49" start="(0x100 + (49 * 4))" />
+    <Register name="DCHMAP50" start="(0x100 + (50 * 4))" />
+    <Register name="DCHMAP51" start="(0x100 + (51 * 4))" />
+    <Register name="DCHMAP52" start="(0x100 + (52 * 4))" />
+    <Register name="DCHMAP53" start="(0x100 + (53 * 4))" />
+    <Register name="DCHMAP54" start="(0x100 + (54 * 4))" />
+    <Register name="DCHMAP55" start="(0x100 + (55 * 4))" />
+    <Register name="DCHMAP56" start="(0x100 + (56 * 4))" />
+    <Register name="DCHMAP57" start="(0x100 + (57 * 4))" />
+    <Register name="DCHMAP58" start="(0x100 + (58 * 4))" />
+    <Register name="DCHMAP59" start="(0x100 + (59 * 4))" />
+    <Register name="DCHMAP60" start="(0x100 + (60 * 4))" />
+    <Register name="DCHMAP61" start="(0x100 + (61 * 4))" />
+    <Register name="DCHMAP62" start="(0x100 + (62 * 4))" />
+    <Register name="DCHMAP63" start="(0x100 + (63 * 4))" />
+    <Register name="QCHMAP0" start="(0x200 + (0 * 4))" />
+    <Register name="QCHMAP1" start="(0x200 + (1 * 4))" />
+    <Register name="QCHMAP2" start="(0x200 + (2 * 4))" />
+    <Register name="QCHMAP3" start="(0x200 + (3 * 4))" />
+    <Register name="QCHMAP4" start="(0x200 + (4 * 4))" />
+    <Register name="QCHMAP5" start="(0x200 + (5 * 4))" />
+    <Register name="QCHMAP6" start="(0x200 + (6 * 4))" />
+    <Register name="QCHMAP7" start="(0x200 + (7 * 4))" />
+    <Register name="DMAQNUM0" start="(0x240 + (0 * 4))" />
+    <Register name="DMAQNUM1" start="(0x240 + (1 * 4))" />
+    <Register name="DMAQNUM2" start="(0x240 + (2 * 4))" />
+    <Register name="DMAQNUM3" start="(0x240 + (3 * 4))" />
+    <Register name="DMAQNUM4" start="(0x240 + (4 * 4))" />
+    <Register name="DMAQNUM5" start="(0x240 + (5 * 4))" />
+    <Register name="DMAQNUM6" start="(0x240 + (6 * 4))" />
+    <Register name="DMAQNUM7" start="(0x240 + (7 * 4))" />
+    <Register name="QDMAQNUM" start="(0x260)" />
+    <Register name="QUEPRI" start="(0x284)" />
+    <Register name="EMR" start="(0x300)" />
+    <Register name="EMRH" start="(0x304)" />
+    <Register name="EMCR" start="(0x308)" />
+    <Register name="EMCRH" start="(0x30C)" />
+    <Register name="QEMR" start="(0x310)" />
+    <Register name="QEMCR" start="(0x314)" />
+    <Register name="CCERR" start="(0x318)" />
+    <Register name="CCERRCLR" start="(0x31C)" />
+    <Register name="EEVAL" start="(0x320)" />
+    <Register name="DRAE0" start="(0x340 + (0 * 8))" />
+    <Register name="DRAEH0" start="(0x344 + (0 * 8))" />
+    <Register name="DRAE1" start="(0x340 + (1 * 8))" />
+    <Register name="DRAEH1" start="(0x344 + (1 * 8))" />
+    <Register name="DRAE2" start="(0x340 + (2 * 8))" />
+    <Register name="DRAEH2" start="(0x344 + (2 * 8))" />
+    <Register name="DRAE3" start="(0x340 + (3 * 8))" />
+    <Register name="DRAEH3" start="(0x344 + (3 * 8))" />
+    <Register name="DRAE4" start="(0x340 + (4 * 8))" />
+    <Register name="DRAEH4" start="(0x344 + (4 * 8))" />
+    <Register name="DRAE5" start="(0x340 + (5 * 8))" />
+    <Register name="DRAEH5" start="(0x344 + (5 * 8))" />
+    <Register name="DRAE6" start="(0x340 + (6 * 8))" />
+    <Register name="DRAEH6" start="(0x344 + (6 * 8))" />
+    <Register name="DRAE7" start="(0x340 + (7 * 8))" />
+    <Register name="DRAEH7" start="(0x344 + (7 * 8))" />
+    <Register name="QRAE0" start="(0x380 + (0 * 4))" />
+    <Register name="QRAE1" start="(0x380 + (1 * 4))" />
+    <Register name="QRAE2" start="(0x380 + (2 * 4))" />
+    <Register name="QRAE3" start="(0x380 + (3 * 4))" />
+    <Register name="QRAE4" start="(0x380 + (4 * 4))" />
+    <Register name="QRAE5" start="(0x380 + (5 * 4))" />
+    <Register name="QRAE6" start="(0x380 + (6 * 4))" />
+    <Register name="QRAE7" start="(0x380 + (7 * 4))" />
+    <Register name="Q0E0" start="(0x400 + (0x40 * 0) + (4 * 0))" />
+    <Register name="Q0E1" start="(0x400 + (0x40 * 0) + (4 * 1))" />
+    <Register name="Q0E2" start="(0x400 + (0x40 * 0) + (4 * 2))" />
+    <Register name="Q0E3" start="(0x400 + (0x40 * 0) + (4 * 3))" />
+    <Register name="Q0E4" start="(0x400 + (0x40 * 0) + (4 * 4))" />
+    <Register name="Q0E5" start="(0x400 + (0x40 * 0) + (4 * 5))" />
+    <Register name="Q0E6" start="(0x400 + (0x40 * 0) + (4 * 6))" />
+    <Register name="Q0E7" start="(0x400 + (0x40 * 0) + (4 * 7))" />
+    <Register name="Q0E8" start="(0x400 + (0x40 * 0) + (4 * 8))" />
+    <Register name="Q0E9" start="(0x400 + (0x40 * 0) + (4 * 9))" />
+    <Register name="Q0E10" start="(0x400 + (0x40 * 0) + (4 * 10))" />
+    <Register name="Q0E11" start="(0x400 + (0x40 * 0) + (4 * 11))" />
+    <Register name="Q0E12" start="(0x400 + (0x40 * 0) + (4 * 12))" />
+    <Register name="Q0E13" start="(0x400 + (0x40 * 0) + (4 * 13))" />
+    <Register name="Q0E14" start="(0x400 + (0x40 * 0) + (4 * 14))" />
+    <Register name="Q0E15" start="(0x400 + (0x40 * 0) + (4 * 15))" />
+    <Register name="Q1E0" start="(0x400 + (0x40 * 1) + (4 * 0))" />
+    <Register name="Q1E1" start="(0x400 + (0x40 * 1) + (4 * 1))" />
+    <Register name="Q1E2" start="(0x400 + (0x40 * 1) + (4 * 2))" />
+    <Register name="Q1E3" start="(0x400 + (0x40 * 1) + (4 * 3))" />
+    <Register name="Q1E4" start="(0x400 + (0x40 * 1) + (4 * 4))" />
+    <Register name="Q1E5" start="(0x400 + (0x40 * 1) + (4 * 5))" />
+    <Register name="Q1E6" start="(0x400 + (0x40 * 1) + (4 * 6))" />
+    <Register name="Q1E7" start="(0x400 + (0x40 * 1) + (4 * 7))" />
+    <Register name="Q1E8" start="(0x400 + (0x40 * 1) + (4 * 8))" />
+    <Register name="Q1E9" start="(0x400 + (0x40 * 1) + (4 * 9))" />
+    <Register name="Q1E10" start="(0x400 + (0x40 * 1) + (4 * 10))" />
+    <Register name="Q1E11" start="(0x400 + (0x40 * 1) + (4 * 11))" />
+    <Register name="Q1E12" start="(0x400 + (0x40 * 1) + (4 * 12))" />
+    <Register name="Q1E13" start="(0x400 + (0x40 * 1) + (4 * 13))" />
+    <Register name="Q1E14" start="(0x400 + (0x40 * 1) + (4 * 14))" />
+    <Register name="Q1E15" start="(0x400 + (0x40 * 1) + (4 * 15))" />
+    <Register name="Q2E0" start="(0x400 + (0x40 * 2) + (4 * 0))" />
+    <Register name="Q2E1" start="(0x400 + (0x40 * 2) + (4 * 1))" />
+    <Register name="Q2E2" start="(0x400 + (0x40 * 2) + (4 * 2))" />
+    <Register name="Q2E3" start="(0x400 + (0x40 * 2) + (4 * 3))" />
+    <Register name="Q2E4" start="(0x400 + (0x40 * 2) + (4 * 4))" />
+    <Register name="Q2E5" start="(0x400 + (0x40 * 2) + (4 * 5))" />
+    <Register name="Q2E6" start="(0x400 + (0x40 * 2) + (4 * 6))" />
+    <Register name="Q2E7" start="(0x400 + (0x40 * 2) + (4 * 7))" />
+    <Register name="Q2E8" start="(0x400 + (0x40 * 2) + (4 * 8))" />
+    <Register name="Q2E9" start="(0x400 + (0x40 * 2) + (4 * 9))" />
+    <Register name="Q2E10" start="(0x400 + (0x40 * 2) + (4 * 10))" />
+    <Register name="Q2E11" start="(0x400 + (0x40 * 2) + (4 * 11))" />
+    <Register name="Q2E12" start="(0x400 + (0x40 * 2) + (4 * 12))" />
+    <Register name="Q2E13" start="(0x400 + (0x40 * 2) + (4 * 13))" />
+    <Register name="Q2E14" start="(0x400 + (0x40 * 2) + (4 * 14))" />
+    <Register name="Q2E15" start="(0x400 + (0x40 * 2) + (4 * 15))" />
+    <Register name="Q3E0" start="(0x400 + (0x40 * 3) + (4 * 0))" />
+    <Register name="Q3E1" start="(0x400 + (0x40 * 3) + (4 * 1))" />
+    <Register name="Q3E2" start="(0x400 + (0x40 * 3) + (4 * 2))" />
+    <Register name="Q3E3" start="(0x400 + (0x40 * 3) + (4 * 3))" />
+    <Register name="Q3E4" start="(0x400 + (0x40 * 3) + (4 * 4))" />
+    <Register name="Q3E5" start="(0x400 + (0x40 * 3) + (4 * 5))" />
+    <Register name="Q3E6" start="(0x400 + (0x40 * 3) + (4 * 6))" />
+    <Register name="Q3E7" start="(0x400 + (0x40 * 3) + (4 * 7))" />
+    <Register name="Q3E8" start="(0x400 + (0x40 * 3) + (4 * 8))" />
+    <Register name="Q3E9" start="(0x400 + (0x40 * 3) + (4 * 9))" />
+    <Register name="Q3E10" start="(0x400 + (0x40 * 3) + (4 * 10))" />
+    <Register name="Q3E11" start="(0x400 + (0x40 * 3) + (4 * 11))" />
+    <Register name="Q3E12" start="(0x400 + (0x40 * 3) + (4 * 12))" />
+    <Register name="Q3E13" start="(0x400 + (0x40 * 3) + (4 * 13))" />
+    <Register name="Q3E14" start="(0x400 + (0x40 * 3) + (4 * 14))" />
+    <Register name="Q3E15" start="(0x400 + (0x40 * 3) + (4 * 15))" />
+    <Register name="QSTAT0" start="(0x600 + (0 * 4))" />
+    <Register name="QSTAT1" start="(0x600 + (1 * 4))" />
+    <Register name="QSTAT2" start="(0x600 + (2 * 4))" />
+    <Register name="QSTAT3" start="(0x600 + (3 * 4))" />
+    <Register name="QWMTHRA" start="(0x620)" />
+    <Register name="CCSTAT" start="(0x640)" />
+    <Register name="MPFAR" start="(0x800)" />
+    <Register name="MPFSR" start="(0x804)" />
+    <Register name="MPFCR" start="(0x808)" />
+    <Register name="MPPAG" start="(0x80C)" />
+    <Register name="MPPA0" start="(0x810 + (0 * 4))" />
+    <Register name="MPPA1" start="(0x810 + (1 * 4))" />
+    <Register name="MPPA2" start="(0x810 + (2 * 4))" />
+    <Register name="MPPA3" start="(0x810 + (3 * 4))" />
+    <Register name="MPPA4" start="(0x810 + (4 * 4))" />
+    <Register name="MPPA5" start="(0x810 + (5 * 4))" />
+    <Register name="MPPA6" start="(0x810 + (6 * 4))" />
+    <Register name="MPPA7" start="(0x810 + (7 * 4))" />
+    <Register name="ER" start="(0x1000)" />
+    <Register name="ERH" start="(0x1004)" />
+    <Register name="ECR" start="(0x1008)" />
+    <Register name="ECRH" start="(0x100C)" />
+    <Register name="ESR" start="(0x1010)" />
+    <Register name="ESRH" start="(0x1014)" />
+    <Register name="CER" start="(0x1018)" />
+    <Register name="CERH" start="(0x101C)" />
+    <Register name="EER" start="(0x1020)" />
+    <Register name="EERH" start="(0x1024)" />
+    <Register name="EECR" start="(0x1028)" />
+    <Register name="EECRH" start="(0x102C)" />
+    <Register name="EESR" start="(0x1030)" />
+    <Register name="EESRH" start="(0x1034)" />
+    <Register name="SER" start="(0x1038)" />
+    <Register name="SERH" start="(0x103C)" />
+    <Register name="SECR" start="(0x1040)" />
+    <Register name="SECRH" start="(0x1044)" />
+    <Register name="IER" start="(0x1050)" />
+    <Register name="IERH" start="(0x1054)" />
+    <Register name="IECR" start="(0x1058)" />
+    <Register name="IECRH" start="(0x105C)" />
+    <Register name="IESR" start="(0x1060)" />
+    <Register name="IESRH" start="(0x1064)" />
+    <Register name="IPR" start="(0x1068)" />
+    <Register name="IPRH" start="(0x106C)" />
+    <Register name="ICR" start="(0x1070)" />
+    <Register name="ICRH" start="(0x1074)" />
+    <Register name="IEVAL" start="(0x1078)" />
+    <Register name="QER" start="(0x1080)" />
+    <Register name="QEER" start="(0x1084)" />
+    <Register name="QEECR" start="(0x1088)" />
+    <Register name="QEESR" start="(0x108C)" />
+    <Register name="QSER" start="(0x1090)" />
+    <Register name="QSECR" start="(0x1094)" />
+    <Register name="S0_ER" start="(0x2000 + (0x200 * 0))" />
+    <Register name="S0_ERH" start="(0x2004 + (0x200 * 0))" />
+    <Register name="S0_ECR" start="(0x2008 + (0x200 * 0))" />
+    <Register name="S0_ECRH" start="(0x200C + (0x200 * 0))" />
+    <Register name="S0_ESR" start="(0x2010 + (0x200 * 0))" />
+    <Register name="S0_ESRH" start="(0x2014+ (0x200 * 0))" />
+    <Register name="S0_CER" start="(0x2018 + (0x200 * 0))" />
+    <Register name="S0_CERH" start="(0x201C + (0x200 * 0))" />
+    <Register name="S0_EER" start="(0x2020 + (0x200 * 0))" />
+    <Register name="S0_EERH" start="(0x2024 + (0x200 * 0))" />
+    <Register name="S0_EECR" start="(0x2028 + (0x200 * 0))" />
+    <Register name="S0_EECRH" start="(0x202C + (0x200 * 0))" />
+    <Register name="S0_EESR" start="(0x2030 + (0x200 * 0))" />
+    <Register name="S0_EESRH" start="(0x2034 + (0x200 * 0))" />
+    <Register name="S0_SER" start="(0x2038 + (0x200 * 0))" />
+    <Register name="S0_SERH" start="(0x203C + (0x200 * 0))" />
+    <Register name="S0_SECR" start="(0x2040 + (0x200 * 0))" />
+    <Register name="S0_SECRH" start="(0x2044 + (0x200 * 0))" />
+    <Register name="S0_IER" start="(0x2050 + (0x200 * 0))" />
+    <Register name="S0_IERH" start="(0x2054 + (0x200 * 0))" />
+    <Register name="S0_IECR" start="(0x2058 + (0x200 * 0))" />
+    <Register name="S0_IECRH" start="(0x205C + (0x200 * 0))" />
+    <Register name="S0_IESR" start="(0x2060 + (0x200 * 0))" />
+    <Register name="S0_IESRH" start="(0x2064 + (0x200 * 0))" />
+    <Register name="S0_IPR" start="(0x2068 + (0x200 * 0))" />
+    <Register name="S0_IPRH" start="(0x206C + (0x200 * 0))" />
+    <Register name="S0_ICR" start="(0x2070 + (0x200 * 0))" />
+    <Register name="S0_ICRH" start="(0x2074 + (0x200 * 0))" />
+    <Register name="S0_IEVAL" start="(0x2078 + (0x200 * 0))" />
+    <Register name="S0_QER" start="(0x2080 + (0x200 * 0))" />
+    <Register name="S0_QEER" start="(0x2084 + (0x200 * 0))" />
+    <Register name="S0_QEECR" start="(0x2088 + (0x200 * 0))" />
+    <Register name="S0_QEESR" start="(0x208C + (0x200 * 0))" />
+    <Register name="S0_QSER" start="(0x2090 + (0x200 * 0))" />
+    <Register name="S0_QSECR" start="(0x2094 + (0x200 * 0))" />
+    <Register name="S1_ER" start="(0x2000 + (0x200 * 1))" />
+    <Register name="S1_ERH" start="(0x2004 + (0x200 * 1))" />
+    <Register name="S1_ECR" start="(0x2008 + (0x200 * 1))" />
+    <Register name="S1_ECRH" start="(0x200C + (0x200 * 1))" />
+    <Register name="S1_ESR" start="(0x2010 + (0x200 * 1))" />
+    <Register name="S1_ESRH" start="(0x2014+ (0x200 * 1))" />
+    <Register name="S1_CER" start="(0x2018 + (0x200 * 1))" />
+    <Register name="S1_CERH" start="(0x201C + (0x200 * 1))" />
+    <Register name="S1_EER" start="(0x2020 + (0x200 * 1))" />
+    <Register name="S1_EERH" start="(0x2024 + (0x200 * 1))" />
+    <Register name="S1_EECR" start="(0x2028 + (0x200 * 1))" />
+    <Register name="S1_EECRH" start="(0x202C + (0x200 * 1))" />
+    <Register name="S1_EESR" start="(0x2030 + (0x200 * 1))" />
+    <Register name="S1_EESRH" start="(0x2034 + (0x200 * 1))" />
+    <Register name="S1_SER" start="(0x2038 + (0x200 * 1))" />
+    <Register name="S1_SERH" start="(0x203C + (0x200 * 1))" />
+    <Register name="S1_SECR" start="(0x2040 + (0x200 * 1))" />
+    <Register name="S1_SECRH" start="(0x2044 + (0x200 * 1))" />
+    <Register name="S1_IER" start="(0x2050 + (0x200 * 1))" />
+    <Register name="S1_IERH" start="(0x2054 + (0x200 * 1))" />
+    <Register name="S1_IECR" start="(0x2058 + (0x200 * 1))" />
+    <Register name="S1_IECRH" start="(0x205C + (0x200 * 1))" />
+    <Register name="S1_IESR" start="(0x2060 + (0x200 * 1))" />
+    <Register name="S1_IESRH" start="(0x2064 + (0x200 * 1))" />
+    <Register name="S1_IPR" start="(0x2068 + (0x200 * 1))" />
+    <Register name="S1_IPRH" start="(0x206C + (0x200 * 1))" />
+    <Register name="S1_ICR" start="(0x2070 + (0x200 * 1))" />
+    <Register name="S1_ICRH" start="(0x2074 + (0x200 * 1))" />
+    <Register name="S1_IEVAL" start="(0x2078 + (0x200 * 1))" />
+    <Register name="S1_QER" start="(0x2080 + (0x200 * 1))" />
+    <Register name="S1_QEER" start="(0x2084 + (0x200 * 1))" />
+    <Register name="S1_QEECR" start="(0x2088 + (0x200 * 1))" />
+    <Register name="S1_QEESR" start="(0x208C + (0x200 * 1))" />
+    <Register name="S1_QSER" start="(0x2090 + (0x200 * 1))" />
+    <Register name="S1_QSECR" start="(0x2094 + (0x200 * 1))" />
+    <Register name="S2_ER" start="(0x2000 + (0x200 * 2))" />
+    <Register name="S2_ERH" start="(0x2004 + (0x200 * 2))" />
+    <Register name="S2_ECR" start="(0x2008 + (0x200 * 2))" />
+    <Register name="S2_ECRH" start="(0x200C + (0x200 * 2))" />
+    <Register name="S2_ESR" start="(0x2010 + (0x200 * 2))" />
+    <Register name="S2_ESRH" start="(0x2014+ (0x200 * 2))" />
+    <Register name="S2_CER" start="(0x2018 + (0x200 * 2))" />
+    <Register name="S2_CERH" start="(0x201C + (0x200 * 2))" />
+    <Register name="S2_EER" start="(0x2020 + (0x200 * 2))" />
+    <Register name="S2_EERH" start="(0x2024 + (0x200 * 2))" />
+    <Register name="S2_EECR" start="(0x2028 + (0x200 * 2))" />
+    <Register name="S2_EECRH" start="(0x202C + (0x200 * 2))" />
+    <Register name="S2_EESR" start="(0x2030 + (0x200 * 2))" />
+    <Register name="S2_EESRH" start="(0x2034 + (0x200 * 2))" />
+    <Register name="S2_SER" start="(0x2038 + (0x200 * 2))" />
+    <Register name="S2_SERH" start="(0x203C + (0x200 * 2))" />
+    <Register name="S2_SECR" start="(0x2040 + (0x200 * 2))" />
+    <Register name="S2_SECRH" start="(0x2044 + (0x200 * 2))" />
+    <Register name="S2_IER" start="(0x2050 + (0x200 * 2))" />
+    <Register name="S2_IERH" start="(0x2054 + (0x200 * 2))" />
+    <Register name="S2_IECR" start="(0x2058 + (0x200 * 2))" />
+    <Register name="S2_IECRH" start="(0x205C + (0x200 * 2))" />
+    <Register name="S2_IESR" start="(0x2060 + (0x200 * 2))" />
+    <Register name="S2_IESRH" start="(0x2064 + (0x200 * 2))" />
+    <Register name="S2_IPR" start="(0x2068 + (0x200 * 2))" />
+    <Register name="S2_IPRH" start="(0x206C + (0x200 * 2))" />
+    <Register name="S2_ICR" start="(0x2070 + (0x200 * 2))" />
+    <Register name="S2_ICRH" start="(0x2074 + (0x200 * 2))" />
+    <Register name="S2_IEVAL" start="(0x2078 + (0x200 * 2))" />
+    <Register name="S2_QER" start="(0x2080 + (0x200 * 2))" />
+    <Register name="S2_QEER" start="(0x2084 + (0x200 * 2))" />
+    <Register name="S2_QEECR" start="(0x2088 + (0x200 * 2))" />
+    <Register name="S2_QEESR" start="(0x208C + (0x200 * 2))" />
+    <Register name="S2_QSER" start="(0x2090 + (0x200 * 2))" />
+    <Register name="S2_QSECR" start="(0x2094 + (0x200 * 2))" />
+    <Register name="S3_ER" start="(0x2000 + (0x200 * 3))" />
+    <Register name="S3_ERH" start="(0x2004 + (0x200 * 3))" />
+    <Register name="S3_ECR" start="(0x2008 + (0x200 * 3))" />
+    <Register name="S3_ECRH" start="(0x200C + (0x200 * 3))" />
+    <Register name="S3_ESR" start="(0x2010 + (0x200 * 3))" />
+    <Register name="S3_ESRH" start="(0x2014+ (0x200 * 3))" />
+    <Register name="S3_CER" start="(0x2018 + (0x200 * 3))" />
+    <Register name="S3_CERH" start="(0x201C + (0x200 * 3))" />
+    <Register name="S3_EER" start="(0x2020 + (0x200 * 3))" />
+    <Register name="S3_EERH" start="(0x2024 + (0x200 * 3))" />
+    <Register name="S3_EECR" start="(0x2028 + (0x200 * 3))" />
+    <Register name="S3_EECRH" start="(0x202C + (0x200 * 3))" />
+    <Register name="S3_EESR" start="(0x2030 + (0x200 * 3))" />
+    <Register name="S3_EESRH" start="(0x2034 + (0x200 * 3))" />
+    <Register name="S3_SER" start="(0x2038 + (0x200 * 3))" />
+    <Register name="S3_SERH" start="(0x203C + (0x200 * 3))" />
+    <Register name="S3_SECR" start="(0x2040 + (0x200 * 3))" />
+    <Register name="S3_SECRH" start="(0x2044 + (0x200 * 3))" />
+    <Register name="S3_IER" start="(0x2050 + (0x200 * 3))" />
+    <Register name="S3_IERH" start="(0x2054 + (0x200 * 3))" />
+    <Register name="S3_IECR" start="(0x2058 + (0x200 * 3))" />
+    <Register name="S3_IECRH" start="(0x205C + (0x200 * 3))" />
+    <Register name="S3_IESR" start="(0x2060 + (0x200 * 3))" />
+    <Register name="S3_IESRH" start="(0x2064 + (0x200 * 3))" />
+    <Register name="S3_IPR" start="(0x2068 + (0x200 * 3))" />
+    <Register name="S3_IPRH" start="(0x206C + (0x200 * 3))" />
+    <Register name="S3_ICR" start="(0x2070 + (0x200 * 3))" />
+    <Register name="S3_ICRH" start="(0x2074 + (0x200 * 3))" />
+    <Register name="S3_IEVAL" start="(0x2078 + (0x200 * 3))" />
+    <Register name="S3_QER" start="(0x2080 + (0x200 * 3))" />
+    <Register name="S3_QEER" start="(0x2084 + (0x200 * 3))" />
+    <Register name="S3_QEECR" start="(0x2088 + (0x200 * 3))" />
+    <Register name="S3_QEESR" start="(0x208C + (0x200 * 3))" />
+    <Register name="S3_QSER" start="(0x2090 + (0x200 * 3))" />
+    <Register name="S3_QSECR" start="(0x2094 + (0x200 * 3))" />
+    <Register name="S4_ER" start="(0x2000 + (0x200 * 4))" />
+    <Register name="S4_ERH" start="(0x2004 + (0x200 * 4))" />
+    <Register name="S4_ECR" start="(0x2008 + (0x200 * 4))" />
+    <Register name="S4_ECRH" start="(0x200C + (0x200 * 4))" />
+    <Register name="S4_ESR" start="(0x2010 + (0x200 * 4))" />
+    <Register name="S4_ESRH" start="(0x2014+ (0x200 * 4))" />
+    <Register name="S4_CER" start="(0x2018 + (0x200 * 4))" />
+    <Register name="S4_CERH" start="(0x201C + (0x200 * 4))" />
+    <Register name="S4_EER" start="(0x2020 + (0x200 * 4))" />
+    <Register name="S4_EERH" start="(0x2024 + (0x200 * 4))" />
+    <Register name="S4_EECR" start="(0x2028 + (0x200 * 4))" />
+    <Register name="S4_EECRH" start="(0x202C + (0x200 * 4))" />
+    <Register name="S4_EESR" start="(0x2030 + (0x200 * 4))" />
+    <Register name="S4_EESRH" start="(0x2034 + (0x200 * 4))" />
+    <Register name="S4_SER" start="(0x2038 + (0x200 * 4))" />
+    <Register name="S4_SERH" start="(0x203C + (0x200 * 4))" />
+    <Register name="S4_SECR" start="(0x2040 + (0x200 * 4))" />
+    <Register name="S4_SECRH" start="(0x2044 + (0x200 * 4))" />
+    <Register name="S4_IER" start="(0x2050 + (0x200 * 4))" />
+    <Register name="S4_IERH" start="(0x2054 + (0x200 * 4))" />
+    <Register name="S4_IECR" start="(0x2058 + (0x200 * 4))" />
+    <Register name="S4_IECRH" start="(0x205C + (0x200 * 4))" />
+    <Register name="S4_IESR" start="(0x2060 + (0x200 * 4))" />
+    <Register name="S4_IESRH" start="(0x2064 + (0x200 * 4))" />
+    <Register name="S4_IPR" start="(0x2068 + (0x200 * 4))" />
+    <Register name="S4_IPRH" start="(0x206C + (0x200 * 4))" />
+    <Register name="S4_ICR" start="(0x2070 + (0x200 * 4))" />
+    <Register name="S4_ICRH" start="(0x2074 + (0x200 * 4))" />
+    <Register name="S4_IEVAL" start="(0x2078 + (0x200 * 4))" />
+    <Register name="S4_QER" start="(0x2080 + (0x200 * 4))" />
+    <Register name="S4_QEER" start="(0x2084 + (0x200 * 4))" />
+    <Register name="S4_QEECR" start="(0x2088 + (0x200 * 4))" />
+    <Register name="S4_QEESR" start="(0x208C + (0x200 * 4))" />
+    <Register name="S4_QSER" start="(0x2090 + (0x200 * 4))" />
+    <Register name="S4_QSECR" start="(0x2094 + (0x200 * 4))" />
+    <Register name="S5_ER" start="(0x2000 + (0x200 * 5))" />
+    <Register name="S5_ERH" start="(0x2004 + (0x200 * 5))" />
+    <Register name="S5_ECR" start="(0x2008 + (0x200 * 5))" />
+    <Register name="S5_ECRH" start="(0x200C + (0x200 * 5))" />
+    <Register name="S5_ESR" start="(0x2010 + (0x200 * 5))" />
+    <Register name="S5_ESRH" start="(0x2014+ (0x200 * 5))" />
+    <Register name="S5_CER" start="(0x2018 + (0x200 * 5))" />
+    <Register name="S5_CERH" start="(0x201C + (0x200 * 5))" />
+    <Register name="S5_EER" start="(0x2020 + (0x200 * 5))" />
+    <Register name="S5_EERH" start="(0x2024 + (0x200 * 5))" />
+    <Register name="S5_EECR" start="(0x2028 + (0x200 * 5))" />
+    <Register name="S5_EECRH" start="(0x202C + (0x200 * 5))" />
+    <Register name="S5_EESR" start="(0x2030 + (0x200 * 5))" />
+    <Register name="S5_EESRH" start="(0x2034 + (0x200 * 5))" />
+    <Register name="S5_SER" start="(0x2038 + (0x200 * 5))" />
+    <Register name="S5_SERH" start="(0x203C + (0x200 * 5))" />
+    <Register name="S5_SECR" start="(0x2040 + (0x200 * 5))" />
+    <Register name="S5_SECRH" start="(0x2044 + (0x200 * 5))" />
+    <Register name="S5_IER" start="(0x2050 + (0x200 * 5))" />
+    <Register name="S5_IERH" start="(0x2054 + (0x200 * 5))" />
+    <Register name="S5_IECR" start="(0x2058 + (0x200 * 5))" />
+    <Register name="S5_IECRH" start="(0x205C + (0x200 * 5))" />
+    <Register name="S5_IESR" start="(0x2060 + (0x200 * 5))" />
+    <Register name="S5_IESRH" start="(0x2064 + (0x200 * 5))" />
+    <Register name="S5_IPR" start="(0x2068 + (0x200 * 5))" />
+    <Register name="S5_IPRH" start="(0x206C + (0x200 * 5))" />
+    <Register name="S5_ICR" start="(0x2070 + (0x200 * 5))" />
+    <Register name="S5_ICRH" start="(0x2074 + (0x200 * 5))" />
+    <Register name="S5_IEVAL" start="(0x2078 + (0x200 * 5))" />
+    <Register name="S5_QER" start="(0x2080 + (0x200 * 5))" />
+    <Register name="S5_QEER" start="(0x2084 + (0x200 * 5))" />
+    <Register name="S5_QEECR" start="(0x2088 + (0x200 * 5))" />
+    <Register name="S5_QEESR" start="(0x208C + (0x200 * 5))" />
+    <Register name="S5_QSER" start="(0x2090 + (0x200 * 5))" />
+    <Register name="S5_QSECR" start="(0x2094 + (0x200 * 5))" />
+    <Register name="S6_ER" start="(0x2000 + (0x200 * 6))" />
+    <Register name="S6_ERH" start="(0x2004 + (0x200 * 6))" />
+    <Register name="S6_ECR" start="(0x2008 + (0x200 * 6))" />
+    <Register name="S6_ECRH" start="(0x200C + (0x200 * 6))" />
+    <Register name="S6_ESR" start="(0x2010 + (0x200 * 6))" />
+    <Register name="S6_ESRH" start="(0x2014+ (0x200 * 6))" />
+    <Register name="S6_CER" start="(0x2018 + (0x200 * 6))" />
+    <Register name="S6_CERH" start="(0x201C + (0x200 * 6))" />
+    <Register name="S6_EER" start="(0x2020 + (0x200 * 6))" />
+    <Register name="S6_EERH" start="(0x2024 + (0x200 * 6))" />
+    <Register name="S6_EECR" start="(0x2028 + (0x200 * 6))" />
+    <Register name="S6_EECRH" start="(0x202C + (0x200 * 6))" />
+    <Register name="S6_EESR" start="(0x2030 + (0x200 * 6))" />
+    <Register name="S6_EESRH" start="(0x2034 + (0x200 * 6))" />
+    <Register name="S6_SER" start="(0x2038 + (0x200 * 6))" />
+    <Register name="S6_SERH" start="(0x203C + (0x200 * 6))" />
+    <Register name="S6_SECR" start="(0x2040 + (0x200 * 6))" />
+    <Register name="S6_SECRH" start="(0x2044 + (0x200 * 6))" />
+    <Register name="S6_IER" start="(0x2050 + (0x200 * 6))" />
+    <Register name="S6_IERH" start="(0x2054 + (0x200 * 6))" />
+    <Register name="S6_IECR" start="(0x2058 + (0x200 * 6))" />
+    <Register name="S6_IECRH" start="(0x205C + (0x200 * 6))" />
+    <Register name="S6_IESR" start="(0x2060 + (0x200 * 6))" />
+    <Register name="S6_IESRH" start="(0x2064 + (0x200 * 6))" />
+    <Register name="S6_IPR" start="(0x2068 + (0x200 * 6))" />
+    <Register name="S6_IPRH" start="(0x206C + (0x200 * 6))" />
+    <Register name="S6_ICR" start="(0x2070 + (0x200 * 6))" />
+    <Register name="S6_ICRH" start="(0x2074 + (0x200 * 6))" />
+    <Register name="S6_IEVAL" start="(0x2078 + (0x200 * 6))" />
+    <Register name="S6_QER" start="(0x2080 + (0x200 * 6))" />
+    <Register name="S6_QEER" start="(0x2084 + (0x200 * 6))" />
+    <Register name="S6_QEECR" start="(0x2088 + (0x200 * 6))" />
+    <Register name="S6_QEESR" start="(0x208C + (0x200 * 6))" />
+    <Register name="S6_QSER" start="(0x2090 + (0x200 * 6))" />
+    <Register name="S6_QSECR" start="(0x2094 + (0x200 * 6))" />
+    <Register name="S7_ER" start="(0x2000 + (0x200 * 7))" />
+    <Register name="S7_ERH" start="(0x2004 + (0x200 * 7))" />
+    <Register name="S7_ECR" start="(0x2008 + (0x200 * 7))" />
+    <Register name="S7_ECRH" start="(0x200C + (0x200 * 7))" />
+    <Register name="S7_ESR" start="(0x2010 + (0x200 * 7))" />
+    <Register name="S7_ESRH" start="(0x2014+ (0x200 * 7))" />
+    <Register name="S7_CER" start="(0x2018 + (0x200 * 7))" />
+    <Register name="S7_CERH" start="(0x201C + (0x200 * 7))" />
+    <Register name="S7_EER" start="(0x2020 + (0x200 * 7))" />
+    <Register name="S7_EERH" start="(0x2024 + (0x200 * 7))" />
+    <Register name="S7_EECR" start="(0x2028 + (0x200 * 7))" />
+    <Register name="S7_EECRH" start="(0x202C + (0x200 * 7))" />
+    <Register name="S7_EESR" start="(0x2030 + (0x200 * 7))" />
+    <Register name="S7_EESRH" start="(0x2034 + (0x200 * 7))" />
+    <Register name="S7_SER" start="(0x2038 + (0x200 * 7))" />
+    <Register name="S7_SERH" start="(0x203C + (0x200 * 7))" />
+    <Register name="S7_SECR" start="(0x2040 + (0x200 * 7))" />
+    <Register name="S7_SECRH" start="(0x2044 + (0x200 * 7))" />
+    <Register name="S7_IER" start="(0x2050 + (0x200 * 7))" />
+    <Register name="S7_IERH" start="(0x2054 + (0x200 * 7))" />
+    <Register name="S7_IECR" start="(0x2058 + (0x200 * 7))" />
+    <Register name="S7_IECRH" start="(0x205C + (0x200 * 7))" />
+    <Register name="S7_IESR" start="(0x2060 + (0x200 * 7))" />
+    <Register name="S7_IESRH" start="(0x2064 + (0x200 * 7))" />
+    <Register name="S7_IPR" start="(0x2068 + (0x200 * 7))" />
+    <Register name="S7_IPRH" start="(0x206C + (0x200 * 7))" />
+    <Register name="S7_ICR" start="(0x2070 + (0x200 * 7))" />
+    <Register name="S7_ICRH" start="(0x2074 + (0x200 * 7))" />
+    <Register name="S7_IEVAL" start="(0x2078 + (0x200 * 7))" />
+    <Register name="S7_QER" start="(0x2080 + (0x200 * 7))" />
+    <Register name="S7_QEER" start="(0x2084 + (0x200 * 7))" />
+    <Register name="S7_QEECR" start="(0x2088 + (0x200 * 7))" />
+    <Register name="S7_QEESR" start="(0x208C + (0x200 * 7))" />
+    <Register name="S7_QSER" start="(0x2090 + (0x200 * 7))" />
+    <Register name="S7_QSECR" start="(0x2094 + (0x200 * 7))" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x49800000)" name="EDMA3TC0">
+    <Register name="PID" start="+(0x0)" />
+    <Register name="TCCFG" start="+(0x4)" />
+    <Register name="TCSTAT" start="+(0x100)" />
+    <Register name="ERRSTAT" start="+(0x120)" />
+    <Register name="ERREN" start="+(0x124)" />
+    <Register name="ERRCLR" start="+(0x128)" />
+    <Register name="ERRDET" start="+(0x12C)" />
+    <Register name="ERRCMD" start="+(0x130)" />
+    <Register name="RDRATE" start="+(0x140)" />
+    <Register name="SAOPT" start="+(0x240)" />
+    <Register name="SASRC" start="+(0x244)" />
+    <Register name="SACNT" start="+(0x248)" />
+    <Register name="SADST" start="+(0x24C)" />
+    <Register name="SABIDX" start="+(0x250)" />
+    <Register name="SAMPPRXY" start="+(0x254)" />
+    <Register name="SACNTRLD" start="+(0x258)" />
+    <Register name="SASRCBREF" start="+(0x25C)" />
+    <Register name="SADSTBREF" start="+(0x260)" />
+    <Register name="DFCNTRLD" start="+(0x280)" />
+    <Register name="DFSRCBREF" start="+(0x284)" />
+    <Register name="DFDSTBREF" start="+(0x288)" />
+    <Register name="DFOPT0" start="+(0x300 + (0x40 * 0))" />
+    <Register name="DFSRC0" start="+(0x304 + (0x40 * 0))" />
+    <Register name="DFCNT0" start="+(0x308 + (0x40 * 0))" />
+    <Register name="DFDST0" start="+(0x30C + (0x40 * 0))" />
+    <Register name="DFBIDX0" start="+(0x310 + (0x40 * 0))" />
+    <Register name="DFMPPRXY0" start="+(0x314 + (0x40 * 0))" />
+    <Register name="DFOPT1" start="+(0x300 + (0x40 * 1))" />
+    <Register name="DFSRC1" start="+(0x304 + (0x40 * 1))" />
+    <Register name="DFCNT1" start="+(0x308 + (0x40 * 1))" />
+    <Register name="DFDST1" start="+(0x30C + (0x40 * 1))" />
+    <Register name="DFBIDX1" start="+(0x310 + (0x40 * 1))" />
+    <Register name="DFMPPRXY1" start="+(0x314 + (0x40 * 1))" />
+    <Register name="DFOPT2" start="+(0x300 + (0x40 * 2))" />
+    <Register name="DFSRC2" start="+(0x304 + (0x40 * 2))" />
+    <Register name="DFCNT2" start="+(0x308 + (0x40 * 2))" />
+    <Register name="DFDST2" start="+(0x30C + (0x40 * 2))" />
+    <Register name="DFBIDX2" start="+(0x310 + (0x40 * 2))" />
+    <Register name="DFMPPRXY2" start="+(0x314 + (0x40 * 2))" />
+    <Register name="DFOPT3" start="+(0x300 + (0x40 * 3))" />
+    <Register name="DFSRC3" start="+(0x304 + (0x40 * 3))" />
+    <Register name="DFCNT3" start="+(0x308 + (0x40 * 3))" />
+    <Register name="DFDST3" start="+(0x30C + (0x40 * 3))" />
+    <Register name="DFBIDX3" start="+(0x310 + (0x40 * 3))" />
+    <Register name="DFMPPRXY3" start="+(0x314 + (0x40 * 3))" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x49900000)" name="EDMA3TC1">
+    <Register name="PID" start="+(0x0)" />
+    <Register name="TCCFG" start="+(0x4)" />
+    <Register name="TCSTAT" start="+(0x100)" />
+    <Register name="ERRSTAT" start="+(0x120)" />
+    <Register name="ERREN" start="+(0x124)" />
+    <Register name="ERRCLR" start="+(0x128)" />
+    <Register name="ERRDET" start="+(0x12C)" />
+    <Register name="ERRCMD" start="+(0x130)" />
+    <Register name="RDRATE" start="+(0x140)" />
+    <Register name="SAOPT" start="+(0x240)" />
+    <Register name="SASRC" start="+(0x244)" />
+    <Register name="SACNT" start="+(0x248)" />
+    <Register name="SADST" start="+(0x24C)" />
+    <Register name="SABIDX" start="+(0x250)" />
+    <Register name="SAMPPRXY" start="+(0x254)" />
+    <Register name="SACNTRLD" start="+(0x258)" />
+    <Register name="SASRCBREF" start="+(0x25C)" />
+    <Register name="SADSTBREF" start="+(0x260)" />
+    <Register name="DFCNTRLD" start="+(0x280)" />
+    <Register name="DFSRCBREF" start="+(0x284)" />
+    <Register name="DFDSTBREF" start="+(0x288)" />
+    <Register name="DFOPT0" start="+(0x300 + (0x40 * 0))" />
+    <Register name="DFSRC0" start="+(0x304 + (0x40 * 0))" />
+    <Register name="DFCNT0" start="+(0x308 + (0x40 * 0))" />
+    <Register name="DFDST0" start="+(0x30C + (0x40 * 0))" />
+    <Register name="DFBIDX0" start="+(0x310 + (0x40 * 0))" />
+    <Register name="DFMPPRXY0" start="+(0x314 + (0x40 * 0))" />
+    <Register name="DFOPT1" start="+(0x300 + (0x40 * 1))" />
+    <Register name="DFSRC1" start="+(0x304 + (0x40 * 1))" />
+    <Register name="DFCNT1" start="+(0x308 + (0x40 * 1))" />
+    <Register name="DFDST1" start="+(0x30C + (0x40 * 1))" />
+    <Register name="DFBIDX1" start="+(0x310 + (0x40 * 1))" />
+    <Register name="DFMPPRXY1" start="+(0x314 + (0x40 * 1))" />
+    <Register name="DFOPT2" start="+(0x300 + (0x40 * 2))" />
+    <Register name="DFSRC2" start="+(0x304 + (0x40 * 2))" />
+    <Register name="DFCNT2" start="+(0x308 + (0x40 * 2))" />
+    <Register name="DFDST2" start="+(0x30C + (0x40 * 2))" />
+    <Register name="DFBIDX2" start="+(0x310 + (0x40 * 2))" />
+    <Register name="DFMPPRXY2" start="+(0x314 + (0x40 * 2))" />
+    <Register name="DFOPT3" start="+(0x300 + (0x40 * 3))" />
+    <Register name="DFSRC3" start="+(0x304 + (0x40 * 3))" />
+    <Register name="DFCNT3" start="+(0x308 + (0x40 * 3))" />
+    <Register name="DFDST3" start="+(0x30C + (0x40 * 3))" />
+    <Register name="DFBIDX3" start="+(0x310 + (0x40 * 3))" />
+    <Register name="DFMPPRXY3" start="+(0x314 + (0x40 * 3))" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x49A00000)" name="EDMA3TC2">
+    <Register name="PID" start="+(0x0)" />
+    <Register name="TCCFG" start="+(0x4)" />
+    <Register name="TCSTAT" start="+(0x100)" />
+    <Register name="ERRSTAT" start="+(0x120)" />
+    <Register name="ERREN" start="+(0x124)" />
+    <Register name="ERRCLR" start="+(0x128)" />
+    <Register name="ERRDET" start="+(0x12C)" />
+    <Register name="ERRCMD" start="+(0x130)" />
+    <Register name="RDRATE" start="+(0x140)" />
+    <Register name="SAOPT" start="+(0x240)" />
+    <Register name="SASRC" start="+(0x244)" />
+    <Register name="SACNT" start="+(0x248)" />
+    <Register name="SADST" start="+(0x24C)" />
+    <Register name="SABIDX" start="+(0x250)" />
+    <Register name="SAMPPRXY" start="+(0x254)" />
+    <Register name="SACNTRLD" start="+(0x258)" />
+    <Register name="SASRCBREF" start="+(0x25C)" />
+    <Register name="SADSTBREF" start="+(0x260)" />
+    <Register name="DFCNTRLD" start="+(0x280)" />
+    <Register name="DFSRCBREF" start="+(0x284)" />
+    <Register name="DFDSTBREF" start="+(0x288)" />
+    <Register name="DFOPT0" start="+(0x300 + (0x40 * 0))" />
+    <Register name="DFSRC0" start="+(0x304 + (0x40 * 0))" />
+    <Register name="DFCNT0" start="+(0x308 + (0x40 * 0))" />
+    <Register name="DFDST0" start="+(0x30C + (0x40 * 0))" />
+    <Register name="DFBIDX0" start="+(0x310 + (0x40 * 0))" />
+    <Register name="DFMPPRXY0" start="+(0x314 + (0x40 * 0))" />
+    <Register name="DFOPT1" start="+(0x300 + (0x40 * 1))" />
+    <Register name="DFSRC1" start="+(0x304 + (0x40 * 1))" />
+    <Register name="DFCNT1" start="+(0x308 + (0x40 * 1))" />
+    <Register name="DFDST1" start="+(0x30C + (0x40 * 1))" />
+    <Register name="DFBIDX1" start="+(0x310 + (0x40 * 1))" />
+    <Register name="DFMPPRXY1" start="+(0x314 + (0x40 * 1))" />
+    <Register name="DFOPT2" start="+(0x300 + (0x40 * 2))" />
+    <Register name="DFSRC2" start="+(0x304 + (0x40 * 2))" />
+    <Register name="DFCNT2" start="+(0x308 + (0x40 * 2))" />
+    <Register name="DFDST2" start="+(0x30C + (0x40 * 2))" />
+    <Register name="DFBIDX2" start="+(0x310 + (0x40 * 2))" />
+    <Register name="DFMPPRXY2" start="+(0x314 + (0x40 * 2))" />
+    <Register name="DFOPT3" start="+(0x300 + (0x40 * 3))" />
+    <Register name="DFSRC3" start="+(0x304 + (0x40 * 3))" />
+    <Register name="DFCNT3" start="+(0x308 + (0x40 * 3))" />
+    <Register name="DFDST3" start="+(0x30C + (0x40 * 3))" />
+    <Register name="DFBIDX3" start="+(0x310 + (0x40 * 3))" />
+    <Register name="DFMPPRXY3" start="+(0x314 + (0x40 * 3))" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x4A100000)" name="CPSW_SS">
+    <Register name="CPSW_SS_ID_VER" start="+(0x0)" />
+    <Register name="CPSW_SS_CONTROL" start="+(0x4)" />
+    <Register name="CPSW_SS_SOFT_RESET" start="+(0x8)" />
+    <Register name="CPSW_SS_STAT_PORT_EN" start="+(0xc)" />
+    <Register name="CPSW_SS_PTYPE" start="+(0x10)" />
+    <Register name="CPSW_SS_SOFT_IDLE" start="+(0x14)" />
+    <Register name="CPSW_SS_THRU_RATE" start="+(0x18)" />
+    <Register name="CPSW_SS_GAP_THRESH" start="+(0x1c)" />
+    <Register name="CPSW_SS_TX_START_WDS" start="+(0x20)" />
+    <Register name="CPSW_SS_FLOW_CONTRO" start="+(0x24)" />
+    <Register name="CPSW_SS_VLAN_LTYPE" start="+(0x28)" />
+    <Register name="CPSW_SS_TS_LTYPE" start="+(0x2c)" />
+    <Register name="CPSW_SS_DLR_LTYPE" start="+(0x30)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x4A100100)" name="CPSW_PORT">
+    <Register name="P0_CONTROL" start="+(0x0)+(0*0x100)" />
+    <Register name="P0_MAX_BLKS" start="+(0x8)+(0*0x100)" />
+    <Register name="P0_BLK_CNT" start="+(0xc)+(0*0x100)" />
+    <Register name="P0_TX_IN_CTL" start="+(0x10)+(0*0x100)" />
+    <Register name="P0_PORT_VLAN" start="+(0x14)+(0*0x100)" />
+    <Register name="P0_TX_PRI_MAP" start="+(0x18)+(0*0x100)" />
+    <Register name="P0_CPDMA_TX_PRI_MAP" start="+(0x1c)+(0*0x100)" />
+    <Register name="P0_CPDMA_RX_CH_MAP" start="+(0x20)+(0*0x100)" />
+    <Register name="P0_RX_DSCP_PRI_MAP0" start="+(0x30 + (0 * 4))+(0*0x100)" />
+    <Register name="P0_RX_DSCP_PRI_MAP1" start="+(0x30 + (1 * 4))+(0*0x100)" />
+    <Register name="P0_RX_DSCP_PRI_MAP2" start="+(0x30 + (2 * 4))+(0*0x100)" />
+    <Register name="P0_RX_DSCP_PRI_MAP3" start="+(0x30 + (3 * 4))+(0*0x100)" />
+    <Register name="P0_RX_DSCP_PRI_MAP4" start="+(0x30 + (4 * 4))+(0*0x100)" />
+    <Register name="P0_RX_DSCP_PRI_MAP5" start="+(0x30 + (5 * 4))+(0*0x100)" />
+    <Register name="P0_RX_DSCP_PRI_MAP6" start="+(0x30 + (6 * 4))+(0*0x100)" />
+    <Register name="P0_RX_DSCP_PRI_MAP7" start="+(0x30 + (7 * 4))+(0*0x100)" />
+    <Register name="P1_CONTROL" start="+(0x0)+(1*0x100)" />
+    <Register name="P1_MAX_BLKS" start="+(0x8)+(1*0x100)" />
+    <Register name="P1_BLK_CNT" start="+(0xc)+(1*0x100)" />
+    <Register name="P1_TX_IN_CTL" start="+(0x10)+(1*0x100)" />
+    <Register name="P1_PORT_VLAN" start="+(0x14)+(1*0x100)" />
+    <Register name="P1_TX_PRI_MAP" start="+(0x18)+(1*0x100)" />
+    <Register name="P1_CPDMA_TX_PRI_MAP" start="+(0x1c)+(1*0x100)" />
+    <Register name="P1_CPDMA_RX_CH_MAP" start="+(0x20)+(1*0x100)" />
+    <Register name="P1_RX_DSCP_PRI_MAP0" start="+(0x30 + (0 * 4))+(1*0x100)" />
+    <Register name="P1_RX_DSCP_PRI_MAP1" start="+(0x30 + (1 * 4))+(1*0x100)" />
+    <Register name="P1_RX_DSCP_PRI_MAP2" start="+(0x30 + (2 * 4))+(1*0x100)" />
+    <Register name="P1_RX_DSCP_PRI_MAP3" start="+(0x30 + (3 * 4))+(1*0x100)" />
+    <Register name="P1_RX_DSCP_PRI_MAP4" start="+(0x30 + (4 * 4))+(1*0x100)" />
+    <Register name="P1_RX_DSCP_PRI_MAP5" start="+(0x30 + (5 * 4))+(1*0x100)" />
+    <Register name="P1_RX_DSCP_PRI_MAP6" start="+(0x30 + (6 * 4))+(1*0x100)" />
+    <Register name="P1_RX_DSCP_PRI_MAP7" start="+(0x30 + (7 * 4))+(1*0x100)" />
+    <Register name="P2_CONTROL" start="+(0x0)+(2*0x100)" />
+    <Register name="P2_MAX_BLKS" start="+(0x8)+(2*0x100)" />
+    <Register name="P2_BLK_CNT" start="+(0xc)+(2*0x100)" />
+    <Register name="P2_TX_IN_CTL" start="+(0x10)+(2*0x100)" />
+    <Register name="P2_PORT_VLAN" start="+(0x14)+(2*0x100)" />
+    <Register name="P2_TX_PRI_MAP" start="+(0x18)+(2*0x100)" />
+    <Register name="P2_CPDMA_TX_PRI_MAP" start="+(0x1c)+(2*0x100)" />
+    <Register name="P2_CPDMA_RX_CH_MAP" start="+(0x20)+(2*0x100)" />
+    <Register name="P2_RX_DSCP_PRI_MAP0" start="+(0x30 + (0 * 4))+(2*0x100)" />
+    <Register name="P2_RX_DSCP_PRI_MAP1" start="+(0x30 + (1 * 4))+(2*0x100)" />
+    <Register name="P2_RX_DSCP_PRI_MAP2" start="+(0x30 + (2 * 4))+(2*0x100)" />
+    <Register name="P2_RX_DSCP_PRI_MAP3" start="+(0x30 + (3 * 4))+(2*0x100)" />
+    <Register name="P2_RX_DSCP_PRI_MAP4" start="+(0x30 + (4 * 4))+(2*0x100)" />
+    <Register name="P2_RX_DSCP_PRI_MAP5" start="+(0x30 + (5 * 4))+(2*0x100)" />
+    <Register name="P2_RX_DSCP_PRI_MAP6" start="+(0x30 + (6 * 4))+(2*0x100)" />
+    <Register name="P2_RX_DSCP_PRI_MAP7" start="+(0x30 + (7 * 4))+(2*0x100)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x4A100800)" name="CPSW_CPDMA">
+    <Register name="TX_IDVER" start="+(0x0)" />
+    <Register name="TX_CONTROL" start="+(0x4)" />
+    <Register name="TX_TEARDOWN" start="+(0x8)" />
+    <Register name="RX_IDVER" start="+(0x10)" />
+    <Register name="RX_CONTROL" start="+(0x14)" />
+    <Register name="RX_TEARDOWN" start="+(0x18)" />
+    <Register name="CPDMA_SOFT_RESET" start="+(0x1c)" />
+    <Register name="DMACONTROL" start="+(0x20)" />
+    <Register name="DMASTATUS" start="+(0x24)" />
+    <Register name="RX_BUFFER_OFFSET" start="+(0x28)" />
+    <Register name="EMCONTROL" start="+(0x2c)" />
+    <Register name="TX_PRI0_RATE" start="+(0x30 + (0 * 4))" />
+    <Register name="TX_PRI1_RATE" start="+(0x30 + (1 * 4))" />
+    <Register name="TX_PRI2_RATE" start="+(0x30 + (2 * 4))" />
+    <Register name="TX_PRI3_RATE" start="+(0x30 + (3 * 4))" />
+    <Register name="TX_PRI4_RATE" start="+(0x30 + (4 * 4))" />
+    <Register name="TX_PRI5_RATE" start="+(0x30 + (5 * 4))" />
+    <Register name="TX_PRI6_RATE" start="+(0x30 + (6 * 4))" />
+    <Register name="TX_PRI7_RATE" start="+(0x30 + (7 * 4))" />
+    <Register name="TX_INTSTAT_RAW" start="+(0x80)" />
+    <Register name="TX_INTSTAT_MASKED" start="+(0x84)" />
+    <Register name="TX_INTMASK_SET" start="+(0x88)" />
+    <Register name="TX_INTMASK_CLEAR" start="+(0x8c)" />
+    <Register name="CPDMA_IN_VECTOR" start="+(0x90)" />
+    <Register name="CPDMA_EOI_VECTOR" start="+(0x94)" />
+    <Register name="RX_INTSTAT_RAW" start="+(0xa0)" />
+    <Register name="RX_INTSTAT_MASKED" start="+(0xa4)" />
+    <Register name="RX_INTMASK_SET" start="+(0xa8)" />
+    <Register name="RX_INTMASK_CLEAR" start="+(0xac)" />
+    <Register name="DMA_INTSTAT_RAW" start="+(0xb0)" />
+    <Register name="DMA_INTSTAT_MASKED" start="+(0xb4)" />
+    <Register name="DMA_INTMASK_SET" start="+(0xb8)" />
+    <Register name="DMA_INTMASK_CLEAR" start="+(0xbc)" />
+    <Register name="RX0_PENDTHRESH" start="+(0xc0 + (0 * 4))" />
+    <Register name="RX0_FREEBUFFER" start="+(0xe0 + (0 * 4))" />
+    <Register name="TX0_HDP" start="+(0x200 + (0 * 4))" />
+    <Register name="RX0_HDP" start="+(0x220 + (0 * 4))" />
+    <Register name="TX0_CP" start="+(0x240 + (0 * 4))" />
+    <Register name="RX0_CP" start="+(0x260 + (0 * 4))" />
+    <Register name="RX1_PENDTHRESH" start="+(0xc0 + (1 * 4))" />
+    <Register name="RX1_FREEBUFFER" start="+(0xe0 + (1 * 4))" />
+    <Register name="TX1_HDP" start="+(0x200 + (1 * 4))" />
+    <Register name="RX1_HDP" start="+(0x220 + (1 * 4))" />
+    <Register name="TX1_CP" start="+(0x240 + (1 * 4))" />
+    <Register name="RX1_CP" start="+(0x260 + (1 * 4))" />
+    <Register name="RX2_PENDTHRESH" start="+(0xc0 + (2 * 4))" />
+    <Register name="RX2_FREEBUFFER" start="+(0xe0 + (2 * 4))" />
+    <Register name="TX2_HDP" start="+(0x200 + (2 * 4))" />
+    <Register name="RX2_HDP" start="+(0x220 + (2 * 4))" />
+    <Register name="TX2_CP" start="+(0x240 + (2 * 4))" />
+    <Register name="RX2_CP" start="+(0x260 + (2 * 4))" />
+    <Register name="RX3_PENDTHRESH" start="+(0xc0 + (3 * 4))" />
+    <Register name="RX3_FREEBUFFER" start="+(0xe0 + (3 * 4))" />
+    <Register name="TX3_HDP" start="+(0x200 + (3 * 4))" />
+    <Register name="RX3_HDP" start="+(0x220 + (3 * 4))" />
+    <Register name="TX3_CP" start="+(0x240 + (3 * 4))" />
+    <Register name="RX3_CP" start="+(0x260 + (3 * 4))" />
+    <Register name="RX4_PENDTHRESH" start="+(0xc0 + (4 * 4))" />
+    <Register name="RX4_FREEBUFFER" start="+(0xe0 + (4 * 4))" />
+    <Register name="TX4_HDP" start="+(0x200 + (4 * 4))" />
+    <Register name="RX4_HDP" start="+(0x220 + (4 * 4))" />
+    <Register name="TX4_CP" start="+(0x240 + (4 * 4))" />
+    <Register name="RX4_CP" start="+(0x260 + (4 * 4))" />
+    <Register name="RX5_PENDTHRESH" start="+(0xc0 + (5 * 4))" />
+    <Register name="RX5_FREEBUFFER" start="+(0xe0 + (5 * 4))" />
+    <Register name="TX5_HDP" start="+(0x200 + (5 * 4))" />
+    <Register name="RX5_HDP" start="+(0x220 + (5 * 4))" />
+    <Register name="TX5_CP" start="+(0x240 + (5 * 4))" />
+    <Register name="RX5_CP" start="+(0x260 + (5 * 4))" />
+    <Register name="RX6_PENDTHRESH" start="+(0xc0 + (6 * 4))" />
+    <Register name="RX6_FREEBUFFER" start="+(0xe0 + (6 * 4))" />
+    <Register name="TX6_HDP" start="+(0x200 + (6 * 4))" />
+    <Register name="RX6_HDP" start="+(0x220 + (6 * 4))" />
+    <Register name="TX6_CP" start="+(0x240 + (6 * 4))" />
+    <Register name="RX6_CP" start="+(0x260 + (6 * 4))" />
+    <Register name="RX7_PENDTHRESH" start="+(0xc0 + (7 * 4))" />
+    <Register name="RX7_FREEBUFFER" start="+(0xe0 + (7 * 4))" />
+    <Register name="TX7_HDP" start="+(0x200 + (7 * 4))" />
+    <Register name="RX7_HDP" start="+(0x220 + (7 * 4))" />
+    <Register name="TX7_CP" start="+(0x240 + (7 * 4))" />
+    <Register name="RX7_CP" start="+(0x260 + (7 * 4))" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x4A100D00)" name="CPSW_ALE">
+    <Register name="IDVER" start="+(0x0)" />
+    <Register name="CONTROL" start="+(0x8)" />
+    <Register name="PRESCALE" start="+(0x10)" />
+    <Register name="UNKNOWN_VLAN" start="+(0x18)" />
+    <Register name="TBLCTL" start="+(0x20)" />
+    <Register name="TBLW0" start="+(0x34 + ((2-0) * 4))" />
+    <Register name="TBLW1" start="+(0x34 + ((2-1) * 4))" />
+    <Register name="TBLW2" start="+(0x34 + ((2-2) * 4))" />
+    <Register name="PORTCTL0" start="+(0x40 + (0 * 4))" />
+    <Register name="PORTCTL1" start="+(0x40 + (1 * 4))" />
+    <Register name="PORTCTL2" start="+(0x40 + (2 * 4))" />
+    <Register name="PORTCTL3" start="+(0x40 + (3 * 4))" />
+    <Register name="PORTCTL4" start="+(0x40 + (4 * 4))" />
+    <Register name="PORTCTL5" start="+(0x40 + (5 * 4))" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x4A100D80)" name="CPSW_SL1">
+    <Register name="IDVER" start="+(0x0)" />
+    <Register name="MACCONTROL" start="+(0x4)" />
+    <Register name="MACSTATUS" start="+(0x8)" />
+    <Register name="SOFT_RESET" start="+(0xc)" />
+    <Register name="RX_MAXLEN" start="+(0x10)" />
+    <Register name="BOFFTEST" start="+(0x14)" />
+    <Register name="RX_PAUSE" start="+(0x18)" />
+    <Register name="TX_PAUSE" start="+(0x1c)" />
+    <Register name="EMCONTROL" start="+(0x20)" />
+    <Register name="RX_PRI_MAP" start="+(0x24)" />
+    <Register name="TX_GAP" start="+(0x28)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x4A100DC0)" name="CPSW_SL2">
+    <Register name="IDVER" start="+(0x0)" />
+    <Register name="MACCONTROL" start="+(0x4)" />
+    <Register name="MACSTATUS" start="+(0x8)" />
+    <Register name="SOFT_RESET" start="+(0xc)" />
+    <Register name="RX_MAXLEN" start="+(0x10)" />
+    <Register name="BOFFTEST" start="+(0x14)" />
+    <Register name="RX_PAUSE" start="+(0x18)" />
+    <Register name="TX_PAUSE" start="+(0x1c)" />
+    <Register name="EMCONTROL" start="+(0x20)" />
+    <Register name="RX_PRI_MAP" start="+(0x24)" />
+    <Register name="TX_GAP" start="+(0x28)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x4A101000)" name="MDIO">
+    <Register name="OVER" start="+(0x0)" />
+    <Register name="CONTROL" start="+(0x4)" />
+    <Register name="ALIVE" start="+(0x8)" />
+    <Register name="LINK" start="+(0xC)" />
+    <Register name="LINKINTRAW" start="+(0x10)" />
+    <Register name="LINKINTMASKED" start="+(0x14)" />
+    <Register name="USERINTRAW" start="+(0x20)" />
+    <Register name="USERINTMASKED" start="+(0x24)" />
+    <Register name="USERINTMASKSET" start="+(0x28)" />
+    <Register name="USERINTMASKCLEAR" start="+(0x2C)" />
+    <Register name="USERACCESS0" start="+(0x80)" />
+    <Register name="USERPHYSEL0" start="+(0x84)" />
+    <Register name="USERACCESS1" start="+(0x88)" />
+    <Register name="USERPHYSEL1" start="+(0x8C)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x4A101200)" name="CPSW_WR">
+    <Register name="IDVER" start="+(0x0)" />
+    <Register name="SOFT_RESET" start="+(0x04)" />
+    <Register name="CONTROL" start="+(0x08)" />
+    <Register name="INT_CONTROL" start="+(0x0c)" />
+    <Register name="C0_RX_THRESH_EN" start="+(0x10 + (0 * 16))" />
+    <Register name="C0_RX_EN" start="+(0x14 + (0 * 16))" />
+    <Register name="C0_TX_EN" start="+(0x18 + (0 * 16))" />
+    <Register name="C0_MISC_EN" start="+(0x1c + (0 * 16))" />
+    <Register name="C0_RX_THRESH_STAT" start="+(0x40 + (0 * 16))" />
+    <Register name="C0_RX_STAT" start="+(0x44 + (0 * 16))" />
+    <Register name="C0_TX_STAT" start="+(0x48 + (0 * 16))" />
+    <Register name="C0_MISC_STAT" start="+(0x4c + (0 * 16))" />
+    <Register name="C0_RX_IMAX" start="+(0x70 + (0 * 8))" />
+    <Register name="C0_TX_IMAX" start="+(0x74 + (0 * 8))" />
+    <Register name="C1_RX_THRESH_EN" start="+(0x10 + (1 * 16))" />
+    <Register name="C1_RX_EN" start="+(0x14 + (1 * 16))" />
+    <Register name="C1_TX_EN" start="+(0x18 + (1 * 16))" />
+    <Register name="C1_MISC_EN" start="+(0x1c + (1 * 16))" />
+    <Register name="C1_RX_THRESH_STAT" start="+(0x40 + (1 * 16))" />
+    <Register name="C1_RX_STAT" start="+(0x44 + (1 * 16))" />
+    <Register name="C1_TX_STAT" start="+(0x48 + (1 * 16))" />
+    <Register name="C1_MISC_STAT" start="+(0x4c + (1 * 16))" />
+    <Register name="C1_RX_IMAX" start="+(0x70 + (1 * 8))" />
+    <Register name="C1_TX_IMAX" start="+(0x74 + (1 * 8))" />
+    <Register name="C2_RX_THRESH_EN" start="+(0x10 + (2 * 16))" />
+    <Register name="C2_RX_EN" start="+(0x14 + (2 * 16))" />
+    <Register name="C2_TX_EN" start="+(0x18 + (2 * 16))" />
+    <Register name="C2_MISC_EN" start="+(0x1c + (2 * 16))" />
+    <Register name="C2_RX_THRESH_STAT" start="+(0x40 + (2 * 16))" />
+    <Register name="C2_RX_STAT" start="+(0x44 + (2 * 16))" />
+    <Register name="C2_TX_STAT" start="+(0x48 + (2 * 16))" />
+    <Register name="C2_MISC_STAT" start="+(0x4c + (2 * 16))" />
+    <Register name="C2_RX_IMAX" start="+(0x70 + (2 * 8))" />
+    <Register name="C2_TX_IMAX" start="+(0x74 + (2 * 8))" />
+    <Register name="RGMII_CTL" start="+(0x88)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x4C000000)" name="EMIF">
+    <Register name="EMIF_MOD_ID_REV" start="+(0x0)" />
+    <Register name="STATUS" start="+(0x4)" />
+    <Register name="SDRAM_CONFIG" start="+(0x8)" />
+    <Register name="SDRAM_CONFIG_2" start="+(0xC)" />
+    <Register name="SDRAM_REF_CTRL" start="+(0x10)" />
+    <Register name="SDRAM_REF_CTRL_SHDW" start="+(0x14)" />
+    <Register name="SDRAM_TIM_1" start="+(0x18)" />
+    <Register name="SDRAM_TIM_1_SHDW" start="+(0x1C)" />
+    <Register name="SDRAM_TIM_2" start="+(0x20)" />
+    <Register name="SDRAM_TIM_2_SHDW" start="+(0x24)" />
+    <Register name="SDRAM_TIM_3" start="+(0x28)" />
+    <Register name="SDRAM_TIM_3_SHDW" start="+(0x2C)" />
+    <Register name="LPDDR_NVM_TIM2" start="+(0x30)" />
+    <Register name="LPDDR_NVM_TIM_SHDW2" start="+(0x34)" />
+    <Register name="PWR_MGMT_CTRL" start="+(0x38)" />
+    <Register name="PWR_MGMT_CTRL_SHDW" start="+(0x3C)" />
+    <Register name="LPDDR_MODE_REG_DATA2" start="+(0x40)" />
+    <Register name="LPDDR_MODE_REG_CFG2" start="+(0x50)" />
+    <Register name="OCP_CONFIG" start="+(0x54)" />
+    <Register name="OCP_CFG_VAL_1" start="+(0x58)" />
+    <Register name="OCP_CFG_VAL_2" start="+(0x5C)" />
+    <Register name="IODFT_TLGC" start="+(0x60)" />
+    <Register name="IODFT_CTRL_MISR_RSLT" start="+(0x64)" />
+    <Register name="IODFT_ADDR_MISR_RSLT" start="+(0x68)" />
+    <Register name="IODFT_DATA_MISR_RSLT_1" start="+(0x6C)" />
+    <Register name="IODFT_DATA_MISR_RSLT_2" start="+(0x70)" />
+    <Register name="IODFT_DATA_MISR_RSLT_3" start="+(0x74)" />
+    <Register name="PERF_CNT_1" start="+(0x80)" />
+    <Register name="PERF_CNT_2" start="+(0x84)" />
+    <Register name="PERF_CNT_CFG" start="+(0x88)" />
+    <Register name="PERF_CNT_SEL" start="+(0x8C)" />
+    <Register name="PERF_CNT_TIM" start="+(0x90)" />
+    <Register name="READ_IDLE_CTRL" start="+(0x98)" />
+    <Register name="READ_IDLE_CTRL_SHDW" start="+(0x9C)" />
+    <Register name="IRQ_EOI" start="+(0xA0)" />
+    <Register name="IRQSTATUS_RAW_SYS" start="+(0xA4)" />
+    <Register name="IRQSTATUS_RAW_LL" start="+(0xA8)" />
+    <Register name="IRQSTATUS_SYS" start="+(0xAC)" />
+    <Register name="IRQSTATUS_LL" start="+(0xB0)" />
+    <Register name="IRQENABLE_SET_SYS" start="+(0xB4)" />
+    <Register name="IRQENABLE_SET_LL" start="+(0xB8)" />
+    <Register name="IRQENABLE_CLR_SYS" start="+(0xBC)" />
+    <Register name="IRQENABLE_CLR_LL" start="+(0xC0)" />
+    <Register name="ZQ_CONFIG" start="+(0xC8)" />
+    <Register name="TEMP_ALERT_CONFIG" start="+(0xCC)" />
+    <Register name="OCP_ERR_LOG" start="+(0xD0)" />
+    <Register name="DDR_PHY_CTRL_1" start="+(0xE4)" />
+    <Register name="DDR_PHY_CTRL_1_SHDW" start="+(0xE8)" />
+    <Register name="DDR_PHY_CTRL_2" start="+(0xEC)" />
+  </RegisterGroup>
+  <RegisterGroup start="(0x50000000)" name="GPMC">
+    <Register name="REVISION" start="+(0x0)" />
+    <Register name="SYSCONFIG" start="+(0x10)" />
+    <Register name="SYSSTATUS" start="+(0x14)" />
+    <Register name="IRQSTATUS" start="+(0x18)" />
+    <Register name="IRQENABLE" start="+(0x1C)" />
+    <Register name="TIMEOUT_CONTROL" start="+(0x40)" />
+    <Register name="ERR_ADDRESS" start="+(0x44)" />
+    <Register name="ERR_TYPE" start="+(0x48)" />
+    <Register name="CONFIG" start="+(0x50)" />
+    <Register name="STATUS" start="+(0x54)" />
+    <Register name="CONFIG1_0" start="+(0x60 + (0 * (0x30)))" />
+    <Register name="CONFIG2_0" start="+(0x64 + (0 * (0x30)))" />
+    <Register name="CONFIG3_0" start="+(0x68 + (0 * (0x30)))" />
+    <Register name="CONFIG4_0" start="+(0x6C + (0 * (0x30)))" />
+    <Register name="CONFIG5_0" start="+(0x70 + (0 * (0x30)))" />
+    <Register name="CONFIG6_0" start="+(0x74 + (0 * (0x30)))" />
+    <Register name="CONFIG7_0" start="+(0x78 + (0 * (0x30)))" />
+    <Register name="NAND_COMMAND_0" start="+(0x7C + (0 * (0x30)))" />
+    <Register name="NAND_ADDRESS_0" start="+(0x80 + (0 * (0x30)))" />
+    <Register name="NAND_DATA_0" start="+(0x84 + (0 * (0x30)))" />
+    <Register name="CONFIG1_1" start="+(0x60 + (1 * (0x30)))" />
+    <Register name="CONFIG2_1" start="+(0x64 + (1 * (0x30)))" />
+    <Register name="CONFIG3_1" start="+(0x68 + (1 * (0x30)))" />
+    <Register name="CONFIG4_1" start="+(0x6C + (1 * (0x30)))" />
+    <Register name="CONFIG5_1" start="+(0x70 + (1 * (0x30)))" />
+    <Register name="CONFIG6_1" start="+(0x74 + (1 * (0x30)))" />
+    <Register name="CONFIG7_1" start="+(0x78 + (1 * (0x30)))" />
+    <Register name="NAND_COMMAND_1" start="+(0x7C + (1 * (0x30)))" />
+    <Register name="NAND_ADDRESS_1" start="+(0x80 + (1 * (0x30)))" />
+    <Register name="NAND_DATA_1" start="+(0x84 + (1 * (0x30)))" />
+    <Register name="CONFIG1_2" start="+(0x60 + (2 * (0x30)))" />
+    <Register name="CONFIG2_2" start="+(0x64 + (2 * (0x30)))" />
+    <Register name="CONFIG3_2" start="+(0x68 + (2 * (0x30)))" />
+    <Register name="CONFIG4_2" start="+(0x6C + (2 * (0x30)))" />
+    <Register name="CONFIG5_2" start="+(0x70 + (2 * (0x30)))" />
+    <Register name="CONFIG6_2" start="+(0x74 + (2 * (0x30)))" />
+    <Register name="CONFIG7_2" start="+(0x78 + (2 * (0x30)))" />
+    <Register name="NAND_COMMAND_2" start="+(0x7C + (2 * (0x30)))" />
+    <Register name="NAND_ADDRESS_2" start="+(0x80 + (2 * (0x30)))" />
+    <Register name="NAND_DATA_2" start="+(0x84 + (2 * (0x30)))" />
+    <Register name="CONFIG1_3" start="+(0x60 + (3 * (0x30)))" />
+    <Register name="CONFIG2_3" start="+(0x64 + (3 * (0x30)))" />
+    <Register name="CONFIG3_3" start="+(0x68 + (3 * (0x30)))" />
+    <Register name="CONFIG4_3" start="+(0x6C + (3 * (0x30)))" />
+    <Register name="CONFIG5_3" start="+(0x70 + (3 * (0x30)))" />
+    <Register name="CONFIG6_3" start="+(0x74 + (3 * (0x30)))" />
+    <Register name="CONFIG7_3" start="+(0x78 + (3 * (0x30)))" />
+    <Register name="NAND_COMMAND_3" start="+(0x7C + (3 * (0x30)))" />
+    <Register name="NAND_ADDRESS_3" start="+(0x80 + (3 * (0x30)))" />
+    <Register name="NAND_DATA_3" start="+(0x84 + (3 * (0x30)))" />
+    <Register name="CONFIG1_4" start="+(0x60 + (4 * (0x30)))" />
+    <Register name="CONFIG2_4" start="+(0x64 + (4 * (0x30)))" />
+    <Register name="CONFIG3_4" start="+(0x68 + (4 * (0x30)))" />
+    <Register name="CONFIG4_4" start="+(0x6C + (4 * (0x30)))" />
+    <Register name="CONFIG5_4" start="+(0x70 + (4 * (0x30)))" />
+    <Register name="CONFIG6_4" start="+(0x74 + (4 * (0x30)))" />
+    <Register name="CONFIG7_4" start="+(0x78 + (4 * (0x30)))" />
+    <Register name="NAND_COMMAND_4" start="+(0x7C + (4 * (0x30)))" />
+    <Register name="NAND_ADDRESS_4" start="+(0x80 + (4 * (0x30)))" />
+    <Register name="NAND_DATA_4" start="+(0x84 + (4 * (0x30)))" />
+    <Register name="CONFIG1_5" start="+(0x60 + (5 * (0x30)))" />
+    <Register name="CONFIG2_5" start="+(0x64 + (5 * (0x30)))" />
+    <Register name="CONFIG3_5" start="+(0x68 + (5 * (0x30)))" />
+    <Register name="CONFIG4_5" start="+(0x6C + (5 * (0x30)))" />
+    <Register name="CONFIG5_5" start="+(0x70 + (5 * (0x30)))" />
+    <Register name="CONFIG6_5" start="+(0x74 + (5 * (0x30)))" />
+    <Register name="CONFIG7_5" start="+(0x78 + (5 * (0x30)))" />
+    <Register name="NAND_COMMAND_5" start="+(0x7C + (5 * (0x30)))" />
+    <Register name="NAND_ADDRESS_5" start="+(0x80 + (5 * (0x30)))" />
+    <Register name="NAND_DATA_5" start="+(0x84 + (5 * (0x30)))" />
+    <Register name="CONFIG1_6" start="+(0x60 + (6 * (0x30)))" />
+    <Register name="CONFIG2_6" start="+(0x64 + (6 * (0x30)))" />
+    <Register name="CONFIG3_6" start="+(0x68 + (6 * (0x30)))" />
+    <Register name="CONFIG4_6" start="+(0x6C + (6 * (0x30)))" />
+    <Register name="CONFIG5_6" start="+(0x70 + (6 * (0x30)))" />
+    <Register name="CONFIG6_6" start="+(0x74 + (6 * (0x30)))" />
+    <Register name="CONFIG7_6" start="+(0x78 + (6 * (0x30)))" />
+    <Register name="NAND_COMMAND_6" start="+(0x7C + (6 * (0x30)))" />
+    <Register name="NAND_ADDRESS_6" start="+(0x80 + (6 * (0x30)))" />
+    <Register name="NAND_DATA_6" start="+(0x84 + (6 * (0x30)))" />
+    <Register name="PREFETCH_CONFIG1" start="+(0x1E0)" />
+    <Register name="PREFETCH_CONFIG2" start="+(0x1E4)" />
+    <Register name="PREFETCH_CONTROL" start="+(0x1EC)" />
+    <Register name="PREFETCH_STATUS" start="+(0x1F0)" />
+    <Register name="ECC_CONFIG" start="+(0x1F4)" />
+    <Register name="ECC_CONTROL" start="+(0x1F8)" />
+    <Register name="ECC_SIZE_CONFIG" start="+(0x1FC)" />
+    <Register name="ECC_RESULT_1" start="+(0x200 + ((1-1) * (0x4)))" />
+    <Register name="ECC_RESULT_2" start="+(0x200 + ((2-1) * (0x4)))" />
+    <Register name="ECC_RESULT_3" start="+(0x200 + ((3-1) * (0x4)))" />
+    <Register name="ECC_RESULT_4" start="+(0x200 + ((4-1) * (0x4)))" />
+    <Register name="ECC_RESULT_5" start="+(0x200 + ((5-1) * (0x4)))" />
+    <Register name="ECC_RESULT_6" start="+(0x200 + ((6-1) * (0x4)))" />
+    <Register name="ECC_RESULT_7" start="+(0x200 + ((7-1) * (0x4)))" />
+    <Register name="ECC_RESULT_8" start="+(0x200 + ((8-1) * (0x4)))" />
+    <Register name="ECC_RESULT_9" start="+(0x200 + ((9-1) * (0x4)))" />
+    <Register name="BCH_RESULT0_0" start="+(0x240 + (0 * (0x10)))" />
+    <Register name="BCH_RESULT1_0" start="+(0x244 + (0 * (0x10)))" />
+    <Register name="BCH_RESULT2_0" start="+(0x248 + (0 * (0x10)))" />
+    <Register name="BCH_RESULT3_0" start="+(0x24C + (0 * (0x10)))" />
+    <Register name="BCH_RESULT4_0" start="+(0x300 + (0 * (0x10)))" />
+    <Register name="BCH_RESULT5_0" start="+(0x304 + (0 * (0x10)))" />
+    <Register name="BCH_RESULT6_0" start="+(0x308 + (0 * (0x10)))" />
+    <Register name="BCH_RESULT0_1" start="+(0x240 + (1 * (0x10)))" />
+    <Register name="BCH_RESULT1_1" start="+(0x244 + (1 * (0x10)))" />
+    <Register name="BCH_RESULT2_1" start="+(0x248 + (1 * (0x10)))" />
+    <Register name="BCH_RESULT3_1" start="+(0x24C + (1 * (0x10)))" />
+    <Register name="BCH_RESULT4_1" start="+(0x300 + (1 * (0x10)))" />
+    <Register name="BCH_RESULT5_1" start="+(0x304 + (1 * (0x10)))" />
+    <Register name="BCH_RESULT6_1" start="+(0x308 + (1 * (0x10)))" />
+    <Register name="BCH_RESULT0_2" start="+(0x240 + (2 * (0x10)))" />
+    <Register name="BCH_RESULT1_2" start="+(0x244 + (2 * (0x10)))" />
+    <Register name="BCH_RESULT2_2" start="+(0x248 + (2 * (0x10)))" />
+    <Register name="BCH_RESULT3_2" start="+(0x24C + (2 * (0x10)))" />
+    <Register name="BCH_RESULT4_2" start="+(0x300 + (2 * (0x10)))" />
+    <Register name="BCH_RESULT5_2" start="+(0x304 + (2 * (0x10)))" />
+    <Register name="BCH_RESULT6_2" start="+(0x308 + (2 * (0x10)))" />
+    <Register name="BCH_RESULT0_3" start="+(0x240 + (3 * (0x10)))" />
+    <Register name="BCH_RESULT1_3" start="+(0x244 + (3 * (0x10)))" />
+    <Register name="BCH_RESULT2_3" start="+(0x248 + (3 * (0x10)))" />
+    <Register name="BCH_RESULT3_3" start="+(0x24C + (3 * (0x10)))" />
+    <Register name="BCH_RESULT4_3" start="+(0x300 + (3 * (0x10)))" />
+    <Register name="BCH_RESULT5_3" start="+(0x304 + (3 * (0x10)))" />
+    <Register name="BCH_RESULT6_3" start="+(0x308 + (3 * (0x10)))" />
+    <Register name="BCH_RESULT0_4" start="+(0x240 + (4 * (0x10)))" />
+    <Register name="BCH_RESULT1_4" start="+(0x244 + (4 * (0x10)))" />
+    <Register name="BCH_RESULT2_4" start="+(0x248 + (4 * (0x10)))" />
+    <Register name="BCH_RESULT3_4" start="+(0x24C + (4 * (0x10)))" />
+    <Register name="BCH_RESULT4_4" start="+(0x300 + (4 * (0x10)))" />
+    <Register name="BCH_RESULT5_4" start="+(0x304 + (4 * (0x10)))" />
+    <Register name="BCH_RESULT6_4" start="+(0x308 + (4 * (0x10)))" />
+    <Register name="BCH_RESULT0_5" start="+(0x240 + (5 * (0x10)))" />
+    <Register name="BCH_RESULT1_5" start="+(0x244 + (5 * (0x10)))" />
+    <Register name="BCH_RESULT2_5" start="+(0x248 + (5 * (0x10)))" />
+    <Register name="BCH_RESULT3_5" start="+(0x24C + (5 * (0x10)))" />
+    <Register name="BCH_RESULT4_5" start="+(0x300 + (5 * (0x10)))" />
+    <Register name="BCH_RESULT5_5" start="+(0x304 + (5 * (0x10)))" />
+    <Register name="BCH_RESULT6_5" start="+(0x308 + (5 * (0x10)))" />
+    <Register name="BCH_RESULT0_6" start="+(0x240 + (6 * (0x10)))" />
+    <Register name="BCH_RESULT1_6" start="+(0x244 + (6 * (0x10)))" />
+    <Register name="BCH_RESULT2_6" start="+(0x248 + (6 * (0x10)))" />
+    <Register name="BCH_RESULT3_6" start="+(0x24C + (6 * (0x10)))" />
+    <Register name="BCH_RESULT4_6" start="+(0x300 + (6 * (0x10)))" />
+    <Register name="BCH_RESULT5_6" start="+(0x304 + (6 * (0x10)))" />
+    <Register name="BCH_RESULT6_6" start="+(0x308 + (6 * (0x10)))" />
+    <Register name="BCH_SWDATA" start="+(0x2D0)" />
+  </RegisterGroup>
+</Processor>

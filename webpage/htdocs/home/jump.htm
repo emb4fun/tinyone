@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="content-type"     content="text/html;charset=iso-8859-1"/>
+    <meta http-equiv="content-language" content="en"/>
+    <meta http-equiv="pragma"           content="no-cache"/>
+    <title><%sys_longname%></title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>          
+    <script type="text/javascript" src="../js/system.js"></script>
+  </head>        
+
+  <body bgcolor="#ffffff">
+    <table class="table_body">
+      <tr align="center">
+        <td> 
+        
+          <!-- Header -->
+          <div class="header">
+            <h1><%sys_longname%></h1>
+            <div class="div"></div>
+            <div class="login"><a href="../logout.htm">Logout</a></div>
+            <div class="logo"></div>
+          </div>
+          
+          <!-- Navigation #1 -->
+          <table class="table_navi1">
+            <tr>
+              <td>&nbsp;</td>
+              <td class="main">
+                <ul>
+                  <li class="ne"><a class="active" href="jump.htm">Home</a></li>
+                </ul>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+          </table>  
+
+          <!-- Navigation #2, #3 -->
+          <div class="navi2">
+            <p><%sys_shortname%></p>
+          </div> 
+          <div class="navi3"></div> 
+
+          <!-- table_row -->
+          <table class="table_row">
+            <tr align="center">
+              <td>
+                <p style="font-size:20px; font-weight:bold">Tiny Network Explorer:</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <table class="table_variable">
+                  <thead>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>MAC</td>
+                      <td width="10">&nbsp;</td>
+                      <td>IP</td>
+                      <td width="10">&nbsp;</td>
+                      <td>Name</td>
+                      <td width="10">&nbsp;</td>
+                      <td>Version</td>
+                      <td width="10">&nbsp;</td>
+                      <td>Location</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </thead>
+                  
+                  <tbody>
+                    <%sys_ip_tnp_jump_table%>
+                  </tbody>
+                  
+                  <tfoot>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td colspan="9">&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </tfoot>                            
+                </table>
+                
+                <!--[if lte IE 8]>
+                  <p>&nbsp;</p>
+                  <p>&nbsp;</p>
+                  <p style="font-weight:bold; font-family: Arial;color: #FF0000;">
+                    Sorry, your current version of Internet Explorer is not compatible with this project.
+                    <br/><br/>Please update your Internet Explorer or use an other browser.</p>
+                <![endif]-->                
+                                
+              </td>
+            </tr>
+          </table> 
+          <!-- table_row -->
+          
+        </td>
+      </tr>
+    </table> <!-- table_body -->
+  </body>
+</html>

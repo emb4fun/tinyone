@@ -1,0 +1,438 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="content-type"     content="text/html;charset=iso-8859-1"/>
+    <meta http-equiv="content-language" content="en"/>
+    <meta http-equiv="pragma"           content="no-cache"/>
+    <title><%sys_longname%></title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css"/>
+    <script type="text/javascript" src="./js/system.js"></script>
+    <script type="text/javascript">
+    <!--
+    
+      var Seconds = <%sys_login_blocked_time%>;
+      
+
+      /**************************************************************/
+      
+      function Error2Text(err)
+      {
+         switch(err) 
+         {
+            case -1: msg = "Incorrect username or password entered. Please try again."; break; 
+            default: msg = "An internal error has occurred: " + err;                    break;
+         }   
+         return(msg);
+      }
+
+      /**************************************************************/
+         
+      function CountDown()
+      {
+         document.getElementById("countdown").innerHTML = Seconds;
+         
+         if (Seconds != 0)
+         {
+            Seconds = Seconds - 1;
+            window.setTimeout("CountDown()", 999);
+         }
+         else
+         {
+            window.location.replace('/login.htm');
+         }
+      }  
+
+      /**************************************************************/
+      
+      function CheckPassRules(pass)
+      {
+         var rules =  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,32}$/;   
+         
+         if (pass.match(rules)) 
+         {
+            return(1);
+         }
+         else
+         {
+            return(0);
+         }
+      }         
+      
+      /**************************************************************/
+
+      function MyCancel1()
+      {
+         document.getElementById("tr1_err").style.display = "none";
+      }
+
+      function MySubmit1()
+      {
+         document.getElementById("tr1_err").style.display = "none";
+      
+         /* Check if a "user" and "password" is available */
+         if (document.formular1.user.value === "") return;
+         if (document.formular1.pass.value === "") return;
+
+         let ajax;
+         let data;
+         let user   = document.formular1.user.value;
+         let pass64 = btoa(document.formular1.pass.value);
+
+         data = JSON.stringify({ user: user, pass: pass64 });
+         ajax = GetAjaxObject();
+         ajax.open("POST", "/cgi-bin/login.cgi", true);  
+         ajax.onreadystatechange = function() 
+         {
+            if ((this.readyState == 4) && (this.status == 200))
+            {
+               let jdata = JSON.parse(this.responseText);
+               let err = jdata.err;
+               let msg = jdata.msg;
+               
+               /* Check for any error */   
+               if (err == -2 )
+               {
+                  /* Logib blocked, try again */
+                  window.location.replace('/login.htm');
+               }
+               else if (err != 0)
+               {
+                  /* Show error information */
+                  document.getElementById("tr1_msg").innerHTML = Error2Text(err);
+                  document.getElementById("tr1_err").style.display = "block";
+               } 
+               else
+               {
+                  window.location.replace('/index.htm');
+               }
+            } // if ((this.readyState == 4) && (this.status == 200))
+         } // end ajax.onreadystatechange
+         ajax.send(data);
+      }
+
+      /**************************************************************/
+
+      function Register0(pass)
+      {
+         let ajax;
+         let data;
+         let pass64 = btoa(pass);
+
+         data = JSON.stringify({ user: "init", pass: pass64 });
+         ajax = GetAjaxObject();
+         ajax.open("POST", "/cgi-bin/login.cgi", true);  
+         ajax.onreadystatechange = function() 
+         {
+            if ((this.readyState == 4) && (this.status == 200))
+            {
+               let jdata = JSON.parse(this.responseText);
+               let err = jdata.err;
+               let msg = jdata.msg;
+               
+               /* Check for any error */   
+               if (err != 0)
+               {
+                  /* Show error information */
+                  document.getElementById("tr0_msg").innerHTML = Error2Text(err);
+                  document.getElementById("tr0_err").style.display = "block";
+               } 
+               else
+               {
+                  document.getElementById("tr0").style.display = "none";
+                  document.getElementById("tr1").style.display = "block";
+               }
+            } // if ((this.readyState == 4) && (this.status == 200))
+         } // end ajax.onreadystatechange
+         ajax.send(data);
+      }
+
+      function MyCancel0()
+      {
+         document.getElementById("tr0_err").style.display = "none";
+      }
+
+      function MySubmit0()
+      {
+         /* Check if a "password1" and "password2" is available */
+         if (document.formular0.pass1.value === "") return;
+         if (document.formular0.pass2.value === "") return;
+         
+         /* Check for passwords error */ 
+         if (document.formular0.pass1.value != document.formular0.pass2.value)
+         {
+            /* Error, display error message password not equal */
+            document.getElementById("tr0_msg").innerHTML = "The Confirm Password does not match the Password.";
+            document.getElementById("tr0_err").style.display = "block";
+         }
+         else
+         {
+            if (1 == CheckPassRules(document.formular0.pass1.value))
+            {
+               Register0(document.formular0.pass1.value);
+            }
+            else
+            {
+               /* Error, display error password rule */
+               document.getElementById("tr0_msg").innerHTML = "The password does not meet the password policy requirements.";
+               document.getElementById("tr0_err").style.display = "block";
+            }   
+         }
+      }
+
+      /**************************************************************/
+    
+      function Ready()
+      {
+         var init    = parseInt('<%sys_login_init%>'); 
+         var blocked = parseInt('<%sys_login_blocked%>');
+         
+         if (1 == init)
+         {
+            document.getElementById("tr0").style.display = "block";
+         }
+         else
+         {
+            if (isNaN(blocked)) blocked = 1;
+            if (0 == blocked)
+            {
+               document.getElementById("tr1").style.display = "block";
+               document.getElementById("tr2").style.display = "none";
+            }
+            else
+            {
+               document.getElementById("tr1").style.display = "none";
+               document.getElementById("tr2").style.display = "block";
+               CountDown();
+            }
+         }            
+      }
+      
+    -->
+    </script>
+  </head>        
+
+  <body bgcolor="#ffffff" onload="Ready()">
+    <table class="table_body">
+      <tr align="center">
+        <td> 
+        
+          <!-- Header -->
+          <div class="header">
+            <h1><%sys_longname%></h1>
+            <div class="logo"></div>
+          </div>
+      
+          <!-- Navigation #1 -->
+          <table class="table_navi1">
+            <tr>
+              <td>&nbsp;</td>
+              <td class="main">
+                <ul>
+                  <li class="ne">&nbsp;</li>
+                </ul>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+          </table> 
+
+          <!-- Navigation #2, #3 -->
+          <div class="navi2">
+            <p><%sys_shortname%></p>
+          </div> 
+          <div class="navi3"></div>
+
+
+          <!-- table_row #0 -->
+          <div id="tr0" style="display:none">
+            <table class="table_row">
+              <tr align="center">
+                <td>
+               
+                  <table class="table_variable">
+                    <thead>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>The password must be changed</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </thead>
+                  
+                    <tbody>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                        
+                          <div class="content">
+                            <form name="formular0" method="post">
+                           
+                              <p style="text-align:center">
+                                <br><br>Password requirement: 8-32 characters, at least one uppercase letter,
+                                <br><br>one lowercase letter, one number and one symbol.
+                              </p>
+                           
+                              <div id="tr0_err" style="display:none">
+                                <p style="text-align:center; font-weight:bold">
+                                  <br><br><span id="tr0_msg">error</span>
+                                </p>
+                              </div>
+                              
+                              <fieldset>
+                                <label class="normal">&nbsp;</label>
+                                <br>
+                              
+                                <label class="normal">New Password</label>
+                                <input type="password" id="pass1" name="pass1" />
+                                <br>
+                                <label class="normal">Confirm Password</label>
+                                <input type="password" id="pass2" name="pass2"  />
+                                <br>
+                              
+                                <label class="normal">&nbsp;</label>
+                                <button class="play" type="button" name="button1" value="submit" onclick="javascript:MySubmit0()">
+                                  Submit
+                                </button>
+                                <button class="cancel" type="reset" name="button2" value="cancel" onclick="javascript:MyCancel0()">
+                                  Cancel
+                                </button>
+                              </fieldset>
+                              
+                            </form>
+                          </div>
+                        
+                        </td>
+                        <td>&nbsp;</td>
+                      </tr>
+                    </tbody>
+                  
+                    <tfoot>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </tfoot>                            
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>  
+          <!-- table_row --> 
+
+
+          <!-- table_row #1 -->
+          <div id="tr1" style="display:none">
+            <table class="table_row">
+              <tr align="center">
+                <td>
+               
+                  <table class="table_variable">
+                    <thead>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>Login</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </thead>
+                  
+                    <tbody>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                        
+                          <div class="content">
+                            <form name="formular1" method="post">
+                           
+                              <div id="tr1_err" style="display:none">
+                                <p style="text-align:center; font-weight:bold">
+                                  <br><br><span id="tr1_msg">error</span>
+                                </p>
+                              </div>
+                              
+                              <fieldset>
+                                <label class="normal">&nbsp;</label>
+                                <br>
+                              
+                                <label class="normal">Username</label>
+                                <input type="text" id="user" name="user" />
+                                <br>
+                                <label class="normal">Password</label>
+                                <input type="password" id="pass" name="pass"  />
+                                <br>
+
+                                <label class="normal">&nbsp;</label>
+                                <button class="play" type="button" name="button1" value="submit" onclick="javascript:MySubmit1()">
+                                  Login
+                                </button>
+                                <button class="cancel" type="reset" name="button2" value="cancel" onclick="javascript:MyCancel1()">
+                                  Cancel
+                                </button>
+                              </fieldset>
+                            </form>
+                          </div>
+                        </td>
+                        <td>&nbsp;</td>
+                      </tr>
+                    </tbody>
+                  
+                    <tfoot>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </tfoot>                            
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>  
+          <!-- table_row --> 
+          
+
+          <!-- table_row #2 -->
+          <div id="tr2" style="display:none">
+            <table class="table_row">
+              <tr align="center">
+                <td>
+               
+                  <table class="table_variable">
+                    <thead>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>Login</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </thead>
+                  
+                    <tbody>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                          <p>You are blocked for the next <span id="countdown" style="font-weight: bold">???</span> seconds. Please try again later.</p>
+                        </td>
+                        <td>&nbsp;</td>
+                      </tr>
+                    </tbody>
+                  
+                    <tfoot>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </tfoot>                            
+                  </table>
+                </td>
+                              
+              </tr>
+            </table>
+          </div>  
+          <!-- table_row --> 
+
+
+        </td>
+      </tr>
+    </table> <!-- table_body -->
+  </body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="content-type"     content="text/html;charset=iso-8859-1"/>
+    <meta http-equiv="content-language" content="en"/>
+    <meta http-equiv="pragma"           content="no-cache"/>
+    <title><%sys_longname%></title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>          
+
+    <script type="text/javascript" src="../js/system.js"></script>
+    <script type="text/javascript">
+    <!--
+
+      function ReloadTable()
+      {
+        var ajax = GetAjaxObject();
+        ajax.open("POST", "/cgi-bin/dhcps_table.cgi", true);  
+        ajax.onreadystatechange = function() 
+        {
+          if ((this.readyState == 4) && (this.status == 200))
+          {
+            ReplaceTBody("dhcps_table", this.responseText);
+            window.setTimeout("ReloadTable()", 5000);
+          }
+        }
+        ajax.send(null);
+      }    
+      
+      function Ready()
+      {
+        ReloadTable();
+      }
+      
+    -->
+    </script>
+  </head>        
+
+  <body bgcolor="#ffffff" onload="Ready()">
+    <table class="table_body">
+      <tr align="center">
+        <td> 
+        
+          <!-- Header -->
+          <div class="header">
+            <h1><%sys_longname%></h1>
+            <div class="div"></div>
+            <div class="login"><a href="../logout.htm">Logout</a></div>
+            <div class="logo"></div>
+          </div>
+      
+          <!-- Navigation #1 -->
+          <table class="table_navi1">
+            <tr>
+              <td>&nbsp;</td>
+              <td class="main">
+                <ul>
+                  <li class="nb"><a href="../home/index.htm">Home</a></li>
+                  <li class="nm"><a class="active" href="#">DHCP Server</a></li>
+                  <li class="nm"><a href="../sntp/index.htm">SNTP Server</a></li>
+                  <li class="ne"><a href="../main/index.htm">Maintenance</a></li>
+                </ul>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+          </table> 
+
+          <!-- Navigation #2, #3 -->
+          <div class="navi2">
+            <p><%sys_shortname%></p>
+          </div> 
+          <div class="navi3"></div>
+
+          <!-- table_row -->
+          <table class="table_row">
+            <tr align="center">
+              <td>
+                <table class="table_variable" width="900">
+                  <thead style="text-align: left">
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td width="25">ID</td>
+                      <td width="120">MAC Address</td>
+                      <td width="110">Assigned IP</td>
+                      <td width="100">Lease Time</td>
+                      <td width="270">Hostname</td>
+                      <td>Client Identifier (Option 61)</td>
+                      <td>&nbsp;</td>                      
+                    </tr>                            
+                  </thead>
+                  
+                  <tbody id="dhcps_table">
+                  </tbody>
+                  
+                  <tfoot>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td colspan="6">&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </tfoot>                            
+                </table>
+                
+              </td>
+            </tr>
+
+            <tr align="center">
+                <td style="font-size:12px;line-height:20px;">(Auto reload after 5 seconds)</td>
+            </tr>
+          </table> 
+          <!-- table_row -->
+
+        </td>
+      </tr>
+    </table> <!-- table_body -->
+  </body>
+</html>

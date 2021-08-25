@@ -1,0 +1,4 @@
+<!DOCTYPE Board_Memory_Definition_File>
+<root name="AM335x">
+  <MemorySegment name="SDRAM" start="0x80000000" size="0x20000000" access="Read/Write" />
+</root>

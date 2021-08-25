@@ -1,0 +1,30 @@
+
+[SYSTEM]
+Name = "TinyONE Server"
+
+
+[VERSION]
+Digit1 = 1
+Digit2 = 1
+Digit3 = 0
+
+
+[NETWORK]
+DHCP  = 1
+MDNS  = 1
+TNPES = 1
+IP    = 192.168.1.200
+MASK  = 255.255.255.0
+GW    = 0.0.0.0
+DNS   = 0.0.0.0
+
+
+[TIME]
+ZoneID     = 30
+ZoneOffset = 60
+ZoneDst    = 0
+NTPAddr    = 192.168.1.1
+NTPRefresh = 60
+
+
+/*** EOF ***/

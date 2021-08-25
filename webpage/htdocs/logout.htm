@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="content-type"     content="text/html;charset=iso-8859-1"/>
+    <meta http-equiv="content-language" content="en"/>
+    <meta http-equiv="pragma"           content="no-cache"/>
+    <title><%sys_longname%></title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css"/>
+    <script type="text/javascript" src="./js/system.js"></script>
+    <script type="text/javascript">
+    <!--
+
+      function MyCancel()
+      {
+         window.history.back();
+      }
+
+      function MySubmit()
+      {
+         document.formular.submit();
+      }
+
+      function Ready()
+      {
+      }
+    
+    -->
+    </script>
+  </head>        
+
+  <body bgcolor="#ffffff" onload="Ready()">
+    <table class="table_body">
+      <tr align="center">
+        <td> 
+        
+          <!-- Header -->
+          <div class="header">
+            <h1><%sys_longname%></h1>
+            <div class="logo"></div>
+          </div>
+      
+          <!-- Navigation #1 -->
+          <table class="table_navi1">
+            <tr>
+              <td>&nbsp;</td>
+              <td class="main">
+                <ul>
+                  <li><a href="./home/index.htm">Home</a></li>
+                </ul>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+          </table> 
+
+          <!-- Navigation #2, #3 -->
+          <div class="navi2">
+            <p><%sys_shortname%></p>
+          </div> 
+          <div class="navi3"></div>
+
+          <!-- table_row -->
+          <table class="table_row">
+            <tr align="center">
+              <td>
+              
+                <table class="table_variable" style="width:300px">
+                  <thead>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>Logout: <%sys_login_user%></td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </thead>
+                  
+                  <tbody>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>
+                      
+                        <div class="none" style="width:auto; text-align:center; padding-bottom: 10px">
+                          <form name="formular" method="post" action="/cgi-bin/logout.cgi">
+                            <fieldset style="width:auto">
+                              <label class="normal">&nbsp;</label>
+                              <p style="font-size:18px; padding-bottom: 10px">Are you sure to logout?</p>
+                              <label class="normal">&nbsp;</label>
+                              <button class="save" type="submit" name="button" value="submit" onclick="javascript:MySubmit()">
+                                Logout
+                              </button>
+                              <button class="cancel" type="reset" name="button2" value="cancel" onclick="javascript:MyCancel()">
+                                Cancel
+                              </button>
+                            </fieldset>
+                          </form>
+                        </div>
+                        
+                      </td>
+                      <td>&nbsp;</td>
+                    </tr>
+                  </tbody>
+                  
+                  <tfoot>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </tfoot>                            
+                </table>
+              </td>
+            </tr>
+          </table>
+          <!-- table_row --> 
+
+        </td>
+      </tr>
+    </table> <!-- table_body -->
+  </body>
+</html>

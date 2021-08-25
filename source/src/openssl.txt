@@ -1,0 +1,18 @@
+
+Generate
+=========
+
+openssl genrsa -out private.pem 2048
+openssl rsa -in private.pem -pubout > public.pem
+
+
+Sing a file
+============
+
+openssl dgst -sha256 -sign private.pem -out sign.sha256 <file>
+
+
+Verify the signature
+=====================
+
+openssl dgst -sha256 -verify public.pem -signature sign.sha256 <file>

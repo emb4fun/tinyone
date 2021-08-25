@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="content-type"     content="text/html;charset=iso-8859-1"/>
+    <meta http-equiv="content-language" content="en"/>
+    <meta http-equiv="pragma"           content="no-cache"/>
+    <title><%sys_longname%></title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <script type="text/javascript" src="../js/system.js"></script>
+    <script type="text/javascript">
+    <!--
+
+      function Ready()
+      {
+        var dhcps = parseInt('<%sys_dhcps_ip_chk%>');
+        var dhcp  = parseInt('<%sys_ip_dhcp_chk%>');
+        
+        if (1 == dhcp)
+        {
+          document.getElementById("id_dhcps_ena").checked  = false;
+          document.getElementById("id_dhcps_ena").disabled = true;
+          document.getElementById("ip_start").disabled     = true;
+          document.getElementById("ip_size").disabled      = true;
+          document.getElementById("ip_lease").disabled     = true;
+          document.getElementById("ip_gate").disabled      = true;
+          document.getElementById("ip_dns").disabled       = true;
+          document.getElementById("ip_dns2").disabled      = true;
+          document.getElementById("ip_ntp").disabled       = true;
+          document.getElementById("ip_sysl").disabled      = true;
+          document.getElementById("reboot").disabled       = true;
+          document.getElementById("cancel").disabled       = true;
+        } 
+        else
+        {
+          if (0 == dhcps)
+          {
+            document.getElementById("id_dhcps_ena").checked = false;
+          }
+          else
+          {
+            document.getElementById("id_dhcps_ena").checked = true;
+          }
+        }    
+      }
+    
+    -->
+    </script>
+  </head>        
+
+  <body bgcolor="#ffffff" onload="Ready()">
+    <table class="table_body">
+      <tr align="center">
+        <td> 
+        
+          <!-- Header -->
+          <div class="header">
+            <h1><%sys_longname%></h1>
+            <div class="div"></div>
+            <div class="login"><a href="../logout.htm">Logout</a></div>
+            <div class="logo"></div>
+          </div>
+      
+          <!-- Navigation #1 -->
+          <table class="table_navi1">
+            <tr>
+              <td>&nbsp;</td>
+              <td class="main">
+                <ul>
+                  <li class="nb"><a href="../home/index.htm">Home</a></li>
+                  <li class="nm"><a href="../dhcp/index.htm">DHCP Server</a></li>
+                  <li class="nm"><a href="../sntp/index.htm">SNTP Server</a></li>
+                  <li class="ne"><a class="active" href="index.htm">Maintenance</a></li>
+                </ul>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+          </table> 
+
+          <!-- Navigation #2, #3 -->
+          <div class="navi2">
+            <ul>
+              <li class="nb"><a href="index.htm">Overview</a></li>
+              <li class="nm"><a href="upweb.htm">Update</a></li>
+              <li class="nm"><a href="stattask.htm">Statistic</a></li>
+              <li class="nm"><a href="time.htm">Time</a></li>
+              <li class="nm"><a href="net.htm">Network</a></li>
+              <li class="nm"><a class="active" href="#">DHCP Server</a></li>
+              <li class="ne"><a href="users.htm">Users</a></li>
+            </ul>
+            <p><%sys_shortname%></p>
+          </div> 
+          <div class="navi3"></div>
+
+          <!-- table_row -->
+          <table class="table_row">
+            <tr align="center">
+              <td>
+              
+                <table class="table_variable">
+                  <thead>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>DHCP Server</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </thead>
+                  
+                  <tbody>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>
+                      
+                        <div class="content">
+                          <form name="formular" method="post" action="/cgi-bin/dhcps_set.cgi">
+                            <fieldset>
+                              <legend>Settings</legend>
+
+                              <label class="normal">DHCP Server</label>
+                              <input type="checkbox" name="dhcps_ena" id="id_dhcps_ena" checked />
+                              <label for="id_dhcps_ena">Enable</label>
+                              <br/>
+
+                              <label class="normal">IP pool start address</label>
+                              <input class="ipsmall" type="text" id="ip_start" name="ip_start" value="<%sys_dhcps_ip_start%>" maxlength="15" title="Valid IP address" pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$" />
+                              <br/>
+                              
+                              <label class="normal">Size of pool</label>
+                              <input class="small" type="text" id="ip_size" name="ip_size" value="<%sys_dhcps_ip_size%>"  maxlength="3" pattern="[0-9]+" />
+                              <br/>
+                              
+                              <label class="normal">Address Lease Time</label>
+                              <input class="small" type="text" id="ip_lease" name="ip_lease" value="<%sys_dhcps_ip_lease%>" maxlength="4" title="Lease Time in minutes" pattern="[0-9]+" />
+                              <label for="ip_lease">(1 to 2880 minutes)</label>
+                              <br/>
+                              
+                              
+                              <legend>Options</legend>
+                              
+                              <label class="normal">Default Gateway</label>
+                              <input class="ipsmall" type="text" id="ip_gate" name="ip_gate" value="<%sys_dhcps_ip_gate%>" maxlength="15" title="Valid IP address" pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$" />
+                              <label for="ip_gate">(optional)</label>
+                              <br/>                              
+                              
+                              <label class="normal">DNS Server</label>
+                              <input class="ipsmall" type="text" id="ip_dns" name="ip_dns" value="<%sys_dhcps_ip_dns%>" maxlength="15" title="Valid IP address" pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$" />
+                              <label for="ip_dns">(optional)</label>
+                              <br/>
+                              
+                              <label class="normal">Secondary DNS Server</label>
+                              <input class="ipsmall" type="text" id="ip_dns2" name="ip_dns2" value="<%sys_dhcps_ip_dns2%>" maxlength="15" title="Valid IP address" pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$" />
+                              <label for="ip_dns2">(optional)</label>
+                              <br/>
+                              
+                              <label class="normal">NTP Server</label>
+                              <input class="ipsmall" type="text" id="ip_ntp" name="ip_ntp" value="<%sys_dhcps_ip_ntp%>" maxlength="15" title="Valid IP address" pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$" />
+                              <label for="ip_ntp">(optional)</label>
+                              <br/>
+
+                              <label class="normal">Syslog Server</label>
+                              <input class="ipsmall" type="text" id="ip_sysl" name="ip_sysl" value="<%sys_dhcps_ip_sysl%>" maxlength="15" title="Valid IP address" pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$" />
+                              <label for="ip_sysl">(optional)</label>
+                              <br/>
+                              
+                              <input type="hidden" name="redir" value="/main/dhcpboot.htm"/>
+                              <label class="normal">&nbsp;</label>
+                              <button id="reboot" class="save" type="submit" name="btnapp" value="Submit">
+                                Reboot
+                              </button>
+                              <button id="cancel" class="cancel" type="reset">
+                                Cancel
+                              </button>
+                            </fieldset>
+                          </form>
+                          <br/>
+                                                    
+                        </div>
+                        
+                      </td>
+                      <td>&nbsp;</td>
+                    </tr>
+                  </tbody>
+                  
+                  <tfoot>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </tfoot>                            
+                </table>
+              </td>
+            </tr>
+          </table>
+          <!-- table_row --> 
+
+        </td>
+      </tr>
+    </table> <!-- table_body -->
+  </body>
+</html>

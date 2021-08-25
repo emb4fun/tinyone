@@ -1,0 +1,463 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="content-type"     content="text/html;charset=iso-8859-1"/>
+    <meta http-equiv="content-language" content="en"/>
+    <meta http-equiv="pragma"           content="no-cache"/>
+    <title><%sys_longname%></title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    
+    <script type="text/javascript" src="../js/system.js"></script>
+    <script type="text/javascript">
+    <!--
+          
+      function CPULoad()
+      {
+        var ajax = GetAjaxObject();
+        ajax.open("POST", "/cgi-bin/cpuload.cgi", true);  
+        ajax.onreadystatechange = function() 
+        {
+          if ((this.readyState == 4) && (this.status == 200))
+          {
+            var jdata = JSON.parse(this.responseText);
+            document.getElementById("cpuload").innerHTML = jdata.cpuload;
+              
+            window.setTimeout("CPULoad()", 5000);
+          }
+        }
+        ajax.send(null);
+      }    
+              
+      function TimeGet()
+      {
+        var ajax = GetAjaxObject();
+        ajax.open("POST", "/cgi-bin/time_get.cgi", true);  
+        ajax.onreadystatechange = function() 
+        {
+          if ((this.readyState == 4) && (this.status == 200))
+          {
+            var jdata = JSON.parse(this.responseText);
+
+            document.getElementById("date").innerHTML   = jdata.date;
+            document.getElementById("time").innerHTML   = jdata.time;
+            document.getElementById("uptime").innerHTML = jdata.uptime;
+            document.getElementById("ntpsync").innerHTML = jdata.ntpsync;
+            
+            window.setTimeout("TimeGet()", 1000);
+          }
+        }
+        ajax.send("date&time&dst&uptime&ntpsync");
+      }    
+
+      function Ready()
+      {
+        var tnpes       = parseInt('<%sys_ip_tnpes_chk%>');
+        var dhcp_client = parseInt('<%sys_ip_dhcp_chk%>');
+        var dhcp_server = parseInt('<%sys_dhcps_ip_chk%>');
+        var ntp_client  = parseInt('<%sys_ntp_chk%>');
+        var ntp_server  = parseInt('<%sys_ntps_chk%>');
+        var dst         = parseInt('<%sys_time_dst%>');
+        
+        if (isNaN(dhcp_client)) dhcp_client = 0;
+        if (isNaN(dhcp_server)) dhcp_server = 0;
+        if (isNaN(ntp_client))  ntp_client = 0;
+        if (isNaN(ntp_server))  ntp_server = 0;
+        if (isNaN(tnpes))       tnpes = 0;
+        if (isNaN(dst))         dst = 0;
+
+        if (0 == tnpes)
+        {
+          document.getElementById("tnpes").innerHTML = "disabled";
+        }
+        else
+        {
+          document.getElementById("tnpes").innerHTML = "running";
+        }
+        
+        if (0 == dhcp_client)
+        {
+          document.getElementById("dhcp_client").innerHTML = "disabled";
+        }
+        else
+        {
+          document.getElementById("dhcp_client").innerHTML = "running";
+        }
+
+        if (0 == dhcp_server)
+        {
+          document.getElementById("dhcp_server").innerHTML = "disabled";
+        }
+        else
+        {
+          document.getElementById("dhcp_server").innerHTML = "running";
+        }
+
+        if (0 == ntp_client)
+        {
+          document.getElementById("ntp_client").innerHTML = "disabled";
+        }
+        else
+        {
+          document.getElementById("ntp_client").innerHTML = "running";
+        }
+
+        if (0 == ntp_server)
+        {
+          document.getElementById("ntp_server").innerHTML = "disabled";
+        }
+        else
+        {
+          document.getElementById("ntp_server").innerHTML = "running";
+        }
+        
+        if (0 == dst)
+        {
+          document.getElementById("dst").innerHTML = "disabled";
+        }
+        else
+        {
+          document.getElementById("dst").innerHTML = "enabled";
+        }
+        
+        TimeGet();
+        CPULoad();
+      }
+      
+    -->
+    </script>
+  </head>        
+
+  <body bgcolor="#ffffff" onload="Ready()">
+    <table class="table_body">
+      <tr align="center">
+        <td> 
+        
+          <!-- Header -->
+          <div class="header">
+            <h1><%sys_longname%></h1>
+            <div class="div"></div>
+            <div class="login"><a href="../logout.htm">Logout</a></div>
+            <div class="logo"></div>
+          </div>
+      
+          <!-- Navigation #1 -->
+          <table class="table_navi1">
+            <tr>
+              <td>&nbsp;</td>
+              <td class="main">
+                <ul>
+                  <li class="nb"><a href="../home/index.htm">Home</a></li>
+                  <li class="nm"><a href="../dhcp/index.htm">DHCP Server</a></li>
+                  <li class="nm"><a href="../sntp/index.htm">SNTP Server</a></li>
+                  <li class="ne"><a class="active" href="#">Maintenance</a></li>
+                </ul>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+          </table> 
+
+          <!-- Navigation #2, #3 -->
+          <div class="navi2">
+            <ul>
+              <li class="nb"><a class="active" href="#">Overview</a></li>
+              <li class="nm"><a href="upweb.htm">Update</a></li>
+              <li class="nm"><a href="stattask.htm">Statistic</a></li>
+              <li class="nm"><a href="time.htm">Time</a></li>
+              <li class="nm"><a href="net.htm">Network</a></li>
+              <li class="nm"><a href="dhcp.htm">DHCP Server</a></li>
+              <li class="ne"><a href="users.htm">Users</a></li>
+            </ul>
+            <p><%sys_shortname%></p>
+          </div> 
+          <div class="navi3"></div>
+
+          <!-- table_row 1 -->
+          <table class="table_row">
+            <tr>
+              <td>
+              
+                <table class="table_variable"  width="440">
+                  <thead>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>General</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </thead>
+                  
+                  <tbody>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>
+                      
+                        <div class="content">
+                          <fieldset>
+                          
+                            <label class="normal">&nbsp;</label>
+                            <p>&nbsp;</p>
+
+                            <label class="normal">System name</label>
+                            <p><%sys_longname%></p>
+                          
+                            <label class="normal">System short name</label>
+                            <p><%sys_shortname%></p>
+                            
+                            <label class="normal">System version</label>
+                            <p><%sys_fw_ver%></p>
+                            
+                            <label class="normal">System location</label>
+                            <p><%sys_location%></p>
+                            
+                            <label class="normal">Webpage name</label>
+                            <p><%sys_web_name%></p>
+                            
+                            <label class="normal">Webpage version</label>
+                            <p><%sys_web_ver%></p>
+                            
+                            <label class="normal">&nbsp;</label>
+                            <p>&nbsp;</p>
+                            
+                            <label class="normal">CPU load</label>
+                            <p><span id="cpuload">???</span>&#37;</p>
+
+                            <label class="normal">Uptime</label>
+                            <p id="uptime"><%sys_uptime%></p>
+                            
+                          </fieldset>
+                        </div>
+                        
+                      </td>      
+                      <td>&nbsp;</td>
+                    </tr>
+                  </tbody>
+                  
+                  <tfoot>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </tfoot>                            
+                </table>
+              </td>
+              
+              <td width="20"></td>
+
+              <td>
+                <table class="table_variable"  width="440">
+                  <thead>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>Time</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </thead>
+                  
+                  <tbody>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>
+                      
+                        <div class="content">
+                          <fieldset>
+                          
+                            <label class="normal">&nbsp;</label>
+                            <p>&nbsp;</p>
+                          
+                            <label class="normal">Date</label>
+                            <p id="date"><%sys_time_date%></p>
+                            
+                            <label class="normal">Time</label>
+                            <p id="time"><%sys_time_time%></p>
+                            
+                            <label class="normal">Time zone</label>
+                            <p><%sys_time_zone%></p>
+                            
+                            <label class="normal">Daylight saving time</label>
+                            <p id="dst">???</p>
+
+                            <hr>  
+                            
+                            <label class="normal">NTP server</label>
+                            <p><%sys_ntp_ip%></p>
+                            
+                            <label class="normal">NTP refresh</label>
+                            <p><%sys_ntp_refresh%>&nbsp;minutes</p>
+
+                            <label class="normal">Next NTP sync</label>
+                            <p><span id="ntpsync">???</span>&nbsp;s</p>
+
+                            <form method="post" action="/cgi-bin/time_sync_sntp.cgi">
+                              <fieldset>
+                                <input type="hidden" name="redir" value="/main/index.htm"/>
+                                <label class="normal">&nbsp;</label>
+                                <button class="play" type="submit" name="sync" value="sync">
+                                  Sync NTP
+                                </button>
+                              </fieldset>
+                            </form>
+
+                          </fieldset>
+                        </div>
+                        
+                      </td>      
+                      <td>&nbsp;</td>
+                    </tr>
+                  </tbody>
+                  
+                  <tfoot>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </tfoot>                            
+                </table>
+              </td>
+              
+            </tr>
+          </table>
+          <!-- table_row 1 --> 
+          
+          <!-- table_row 2 --> 
+          <table class="table_row">
+            <tr>
+              <td>
+              
+                <table class="table_variable"  width="440">
+                  <thead>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>Network</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </thead>
+                  
+                  <tbody>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>
+                      
+                        <div class="content">
+                          <fieldset>
+
+                            <label class="normal">&nbsp;</label>
+                            <p>&nbsp;</p>
+                          
+                            <label class="normal">MAC</label>
+                            <p><%sys_ip_mac%></p>
+
+                            <label class="normal">Local IP address</label>
+                            <p><%sys_ip_addr%></p>
+                            
+                            <label class="normal">Network mask</label>
+                            <p><%sys_ip_mask%></p>
+                            
+                            <label class="normal">Gateway IP address</label>
+                            <p><%sys_ip_gate%></p>
+                            
+                            <label class="normal">DHCP server</label>
+                            <p><%sys_ip_dhcp%></p>
+                            
+                            <label class="normal">Preferred DNS server</label>
+                            <p><%sys_ip_dns%></p>
+                            
+                            <label class="normal">Alternate DNS server</label>
+                            <p><%sys_ip_dns_sec%></p>
+                            
+                            <label class="normal">Syslog server</label>
+                            <p><%sys_ip_syslog%></p>
+                            
+                          </fieldset>
+                        </div> 
+                        
+                      </td>
+                      <td>&nbsp;</td>
+                    </tr>
+                  </tbody>
+                  
+                  <tfoot>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </tfoot>                            
+                </table>
+              </td>
+
+              <td width="20"></td>
+
+              <td>
+                <table class="table_variable"  width="440">
+                  <thead>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>Services</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </thead>
+                  
+                  <tbody>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>
+                      
+                        <div class="content">
+                          <fieldset>
+
+                            <label class="normal">&nbsp;</label>
+                            <p>&nbsp;</p>
+
+                            <label class="normal">Enable TNE Setup</label>
+                            <p id="tnpes">???</p>
+                            
+                            <label class="normal">DHCP Client</label>
+                            <p id="dhcp_client">???</p>
+
+                            <label class="normal">DHCP Server</label>
+                            <p id="dhcp_server">???</p>
+
+                            <label class="normal">NTP Client</label>
+                            <p id="ntp_client">???</p>
+
+                            <label class="normal">NTP Server</label>
+                            <p id="ntp_server">???</p>
+
+                            <label class="normal">&nbsp;</label>
+                            <p>&nbsp;</p>
+
+                            <label class="normal">&nbsp;</label>
+                            <p>&nbsp;</p>
+
+                            <label class="normal">&nbsp;</label>
+                            <p>&nbsp;</p>
+
+                          </fieldset>
+                        </div> 
+                        
+                      </td>
+                      <td>&nbsp;</td>
+                    </tr>
+                  </tbody>
+                  
+                  <tfoot>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>                            
+                  </tfoot>                            
+                </table>
+              </td>
+              
+            </tr>
+          </table>
+          <!-- table_row 2 --> 
+
+        </td>
+      </tr>
+    </table> <!-- table_body -->
+  </body>
+</html>
