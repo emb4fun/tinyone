@@ -661,7 +661,7 @@ void TlsRedirHandler(HTTP_STREAM *sp)
          req = &hs->s_req;
          
          if (HttpParseHeader(hs) == 0) {
-            HttpSendRedirection(hs, 301, "https://", req->req_host, "/", req->req_url, NULL);
+            HttpSendRedirection(hs, 307, "https://", req->req_host, "/", req->req_url, NULL);
             s_flush(sp);
          }
          xfree(req->req_url);

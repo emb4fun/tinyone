@@ -97,9 +97,7 @@ typedef struct _sid_
 {
    int      nUserIndex;
    uint32_t dIPAddr;
-   //uint32_t dLastAccessTimeSec;
-   uint32_t dLastAccessHTTPTimeSec;
-   uint32_t dLastAccessCGITimeSec;
+   uint32_t dLastAccessTimeSec;
    int      nAccessGranted;
    uint32_t dPermission;
    char      StrSID[SID_LEN+1];           /* Add 1 for zero termination */    
@@ -149,16 +147,8 @@ static sid_t *FindSIDEntry (uint32_t dIPAddr, int *pIndex)
       /* check if entry is in use */
       if (SIDList[nIndex].dIPAddr != 0)
       {
-         /* Check HTTP timeout */
-         if (OS_TEST_TIMEOUT(dSecTime, SIDList[nIndex].dLastAccessHTTPTimeSec, _SID_TIMEOUT_SEC))
-         {
-            /* Timeout => not valid anymore */
-            SIDList[nIndex].dIPAddr        = 0;
-            SIDList[nIndex].nAccessGranted = 0;
-         }
-
-         /* Check CGI timeout */
-         if (OS_TEST_TIMEOUT(dSecTime, SIDList[nIndex].dLastAccessCGITimeSec, _SID_TIMEOUT_SEC))
+         /* Check timeout */
+         if (OS_TEST_TIMEOUT(dSecTime, SIDList[nIndex].dLastAccessTimeSec, _SID_TIMEOUT_SEC))
          {
             /* Timeout => not valid anymore */
             SIDList[nIndex].dIPAddr        = 0;
@@ -260,7 +250,6 @@ static char *CreateSID (uint32_t dIPAddr)
    int           nIndex;
    char           Hex[3];
    static uint8_t Nonce[(SID_LEN/2)];
-   uint32_t      dSecTime;
    
    pSIDEntry = FindSIDEntry(dIPAddr, &nIndex);
    if (pSIDEntry != NULL)
@@ -270,13 +259,9 @@ static char *CreateSID (uint32_t dIPAddr)
        */
       tal_CPURngHardwarePoll(Nonce, sizeof(Nonce));
       
-      dSecTime = OS_TimeGetSeconds();
-      
-      pSIDEntry->dIPAddr                = dIPAddr;
-      //pSIDEntry->dLastAccessTimeSec = OS_TimeGetSeconds();
-      pSIDEntry->dLastAccessHTTPTimeSec = dSecTime;
-      pSIDEntry->dLastAccessCGITimeSec  = dSecTime;
-      pSIDEntry->nAccessGranted         = 0;
+      pSIDEntry->dIPAddr            = dIPAddr;
+      pSIDEntry->dLastAccessTimeSec = OS_TimeGetSeconds();
+      pSIDEntry->nAccessGranted     = 0;
 
       /* Save index in the first 2 digits */
       sprintf(pSIDEntry->StrSID, "%02X", nIndex);
@@ -456,42 +441,24 @@ int WebSidCheck (HTTPD_SESSION *hs, char *pSessionID, int nIsHttp)
          if( (dIPAddr == pSIDEntry->dIPAddr)                    &&
              (0 == memcmp(pSIDEntry->StrSID, pSessionID, SID_LEN)) )
          {      
-            if (WEB_SID_HTTP == nIsHttp)
+            /* Check HTTP timeout */       
+            if (OS_TEST_TIMEOUT(OS_TimeGetSeconds(), pSIDEntry->dLastAccessTimeSec, _SID_TIMEOUT_SEC))
             {
-               /* Check HTTP timeout */       
-               if (OS_TEST_TIMEOUT(OS_TimeGetSeconds(), pSIDEntry->dLastAccessHTTPTimeSec, _SID_TIMEOUT_SEC))
-               {
-                  /* Timeout => not valid anymore */
-                  nSIDEntry = -1;
-                  pSIDEntry->dIPAddr        = 0;
-                  pSIDEntry->nAccessGranted = 0;
-               }
-               else
-               {
-                  /* Retrigger => valid */
-                  pSIDEntry->dLastAccessHTTPTimeSec = OS_TimeGetSeconds();
-               
-                  nSIDEntry = nIndex;
-               }
+               /* Timeout => not valid anymore */
+               nSIDEntry = -1;
+               pSIDEntry->dIPAddr        = 0;
+               pSIDEntry->nAccessGranted = 0;
             }
             else
             {
-               /* Check CGI timeout */       
-               if (OS_TEST_TIMEOUT(OS_TimeGetSeconds(), pSIDEntry->dLastAccessCGITimeSec, _SID_TIMEOUT_SEC))
+               /* Only HTTP calls retriggers => valid */
+               if (WEB_SID_HTTP == nIsHttp)
                {
-                  /* Timeout => not valid anymore */
-                  nSIDEntry = -1;
-                  pSIDEntry->dIPAddr        = 0;
-                  pSIDEntry->nAccessGranted = 0;
-               }
-               else
-               {
-                  /* Retrigger => valid */
-                  pSIDEntry->dLastAccessCGITimeSec = OS_TimeGetSeconds();
-               
-                  nSIDEntry = nIndex;
-               }
-            }               
+                  pSIDEntry->dLastAccessTimeSec = OS_TimeGetSeconds();
+               }   
+            
+               nSIDEntry = nIndex;
+            }
          }             
       }
    }
@@ -518,6 +485,8 @@ int WebSidCheckAccessGranted (HTTPD_SESSION *hs, char *pSessionID, int nIsHttp)
    uint32_t dIPAddr;
    char      Hex[3];
    
+   (void)nIsHttp;
+   
    /* Get source IP address */   
    dIPAddr = hs->s_stream->strm_caddr.sin_addr.s_addr;
    
@@ -535,33 +504,16 @@ int WebSidCheckAccessGranted (HTTPD_SESSION *hs, char *pSessionID, int nIsHttp)
          if( (dIPAddr == pSIDEntry->dIPAddr)                       &&
              (0 == memcmp(pSIDEntry->StrSID, pSessionID, SID_LEN)) &&
              (1 == pSIDEntry->nAccessGranted)                      )
-         {      
-            if (WEB_SID_HTTP == nIsHttp)
+         {     
+            if (OS_TEST_TIMEOUT(OS_TimeGetSeconds(), pSIDEntry->dLastAccessTimeSec, _SID_TIMEOUT_SEC))
             {
-               /* Check HTTP timeout */       
-               if (OS_TEST_TIMEOUT(OS_TimeGetSeconds(), pSIDEntry->dLastAccessHTTPTimeSec, _SID_TIMEOUT_SEC))
-               {
-                  /* Timeout => not valid anymore */
-                  pSIDEntry->nAccessGranted = 0;
-               }
-               else
-               {
-                  nGranted = 1;
-               }
+               /* Timeout => not valid anymore */
+               pSIDEntry->nAccessGranted = 0;
             }
             else
             {
-               /* Check CGI timeout */       
-               if (OS_TEST_TIMEOUT(OS_TimeGetSeconds(), pSIDEntry->dLastAccessCGITimeSec, _SID_TIMEOUT_SEC))
-               {
-                  /* Timeout => not valid anymore */
-                  pSIDEntry->nAccessGranted = 0;
-               }
-               else
-               {
-                  nGranted = 1;
-               }
-            }               
+               nGranted = 1;
+            }
          }             
       }
    }
@@ -818,6 +770,64 @@ uint32_t WebSidLoginBlockedTime (void)
    
    return(dBlockedTime);
 } /* WebSidLoginBlockedTime */
+
+/*************************************************************************/
+/*  WebSidLogoutTime                                                     */
+/*                                                                       */
+/*  Return the logout time in seconds.                                   */
+/*                                                                       */
+/*  In    : none                                                         */
+/*  Out   : none                                                         */
+/*  Return: nBlockedTime                                                 */
+/*************************************************************************/
+uint32_t WebSidLogoutTime (HTTPD_SESSION *hs)
+{
+   HTTP_REQUEST *req;
+   int32_t      nTime = 0;
+   sid_t       *pSIDEntry;
+   int          nIndex;
+   uint32_t     dIPAddr;
+   uint32_t     dSecTime;
+   char          Hex[3];
+   
+   if (hs != NULL)
+   {
+      req = &hs->s_req;
+
+      /* Get source IP address */   
+      dIPAddr = hs->s_stream->strm_caddr.sin_addr.s_addr;
+
+      Hex[0] = req->req_sid[0];
+      Hex[1] = req->req_sid[1];
+      Hex[2] = 0;
+      nIndex = atoi(Hex);
+
+      if (nIndex < SID_LIST_CNT)
+      {
+         pSIDEntry = &SIDList[nIndex];
+         
+         if ((dIPAddr == pSIDEntry->dIPAddr) && (1 == pSIDEntry->nAccessGranted))
+         {
+            /* Check timeout */       
+            dSecTime = OS_TimeGetSeconds();
+            if (OS_TEST_TIMEOUT(dSecTime, pSIDEntry->dLastAccessTimeSec, _SID_TIMEOUT_SEC))
+            {
+               nTime = 0;
+            }
+            else
+            {
+               nTime = (int32_t)(_SID_TIMEOUT_SEC - (dSecTime - pSIDEntry->dLastAccessTimeSec));
+               if (nTime < 0)
+               {
+                  nTime = 0;
+               }
+            }
+         }
+      }         
+   }
+   
+   return((uint32_t)nTime);
+} /* WebSidLogoutTime */
 
 #endif /* (_IP_WEB_SID_SUPPORT >= 1) */
 

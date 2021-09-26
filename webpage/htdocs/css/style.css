@@ -100,20 +100,20 @@ body
 
 }
 
-.header .login
+.header .logout
 {
    float: left;
    padding-top: 35px;
    font-size: 13px;
 }
 
-.header .login a
+.header .logout a
 {
    text-decoration: none;
    color: #A0A0A0;
 }
 
-.header .login a:hover
+.header .logout a:hover
 {
    text-decoration: underline;
    color: #000000;

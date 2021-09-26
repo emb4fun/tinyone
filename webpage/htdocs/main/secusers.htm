@@ -10,6 +10,7 @@
     <script type="text/javascript" src="../js/system.js"></script>
     <script type="text/javascript">
     <!--
+      var LogoutSec = <%sys_logout_sec%>;
 
       function MyCancel()
       {
@@ -54,6 +55,8 @@
             document.getElementById("tr0_msg").innerHTML = msg;
             document.getElementById("tr0_err").style.display  = "block";
          }
+         
+        LogoutCheck();
       }
 
     -->
@@ -69,7 +72,7 @@
           <div class="header">
             <h1><%sys_longname%></h1>
             <div class="div"></div>
-            <div class="login"><a href="../logout.htm">Logout</a></div>
+            <div class="logout"><a href="../logout.htm">Logout in <span id="lc"></span> s</a></div>
             <div class="logo"></div>
           </div>
       
@@ -98,7 +101,7 @@
               <li class="nm"><a href="time.htm">Time</a></li>
               <li class="nm"><a href="net.htm">Network</a></li>
               <li class="nm"><a href="dhcp.htm">DHCP Server</a></li>
-              <li class="ne"><a class="active" href="users.htm">Users</a></li>
+              <li class="ne"><a class="active" href="secusers.htm">Security</a></li>
             </ul>
             <p><%sys_shortname%></p>
           </div> 

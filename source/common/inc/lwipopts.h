@@ -162,7 +162,7 @@ extern void  lwip_free(void *ptr);
  * MEMP_NUM_NETCONN: the number of struct netconns.
  * (only needed if you use the sequential API, like api_lib.c)
  */
-#define MEMP_NUM_NETCONN            16
+#define MEMP_NUM_NETCONN            64    /* Used for NUM_SOCKETS too */
 
 /*
  * MEMP_NUM_UDP_PCB: the number of UDP protocol control blocks. One

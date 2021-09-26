@@ -92,4 +92,24 @@ function GetURLParameter(sParam)
    }
 }
 
+
+/*
+ * LogoutCheck
+ */
+function LogoutCheck()
+{
+   document.getElementById("lc").innerHTML = LogoutSec;
+   
+   if (LogoutSec != 0)
+   {
+      LogoutSec = LogoutSec - 1;
+      window.setTimeout("LogoutCheck()", 1000);
+   }
+   else
+   {
+      window.location.replace('/login.htm');
+   }
+} 
+
+
 /*** EOF ***/

@@ -216,6 +216,23 @@ static int sys_nonce (HTTPD_SESSION *hs)
 } /* sys_nonce */
 
 /*************************************************************************/
+/*  sys_logout_sec                                                       */
+/*                                                                       */
+/*  In    : hs                                                           */
+/*  Out   : none                                                         */
+/*  Return: 0 = OK / -1 = ERROR                                          */
+/*************************************************************************/
+static int sys_logout_sec (HTTPD_SESSION *hs)
+{
+   uint32_t dTime = WebSidLogoutTime(hs);
+   
+   s_printf(hs->s_stream, "%d", dTime);
+   s_flush(hs->s_stream);
+
+   return(0);
+} /* sys_logout_sec */
+
+/*************************************************************************/
 /*  Login                                                                */
 /*                                                                       */
 /*  In    : hs                                                           */
@@ -426,6 +443,7 @@ static const SSI_EXT_LIST_ENTRY SSIList[] =
    { "sys_login_blocked_time",   sys_login_blocked_time },
    { "sys_login_user",           sys_login_user         },
    { "sys_nonce",                sys_nonce              },
+   { "sys_logout_sec",           sys_logout_sec         },
    
    {NULL, NULL}
 };

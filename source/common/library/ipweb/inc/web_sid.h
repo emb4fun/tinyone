@@ -84,6 +84,7 @@ int      WebSidLoginInitSet (HTTPD_SESSION *hs, char *pNewPass);
 
 int      WebSidLoginBlocked (void);
 uint32_t WebSidLoginBlockedTime (void);
+uint32_t WebSidLogoutTime (HTTPD_SESSION *hs);
 
 #endif /* !__WEB_SID_H__ */
 

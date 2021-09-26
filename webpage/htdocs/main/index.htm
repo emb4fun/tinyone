@@ -7,10 +7,10 @@
     <meta http-equiv="pragma"           content="no-cache"/>
     <title><%sys_longname%></title>
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
-    
     <script type="text/javascript" src="../js/system.js"></script>
     <script type="text/javascript">
     <!--
+      var LogoutSec = <%sys_logout_sec%>;
           
       function CPULoad()
       {
@@ -122,6 +122,7 @@
         
         TimeGet();
         CPULoad();
+        LogoutCheck();
       }
       
     -->
@@ -137,7 +138,7 @@
           <div class="header">
             <h1><%sys_longname%></h1>
             <div class="div"></div>
-            <div class="login"><a href="../logout.htm">Logout</a></div>
+            <div class="logout"><a href="../logout.htm">Logout in <span id="lc"></span> s</a></div>
             <div class="logo"></div>
           </div>
       
@@ -166,7 +167,7 @@
               <li class="nm"><a href="time.htm">Time</a></li>
               <li class="nm"><a href="net.htm">Network</a></li>
               <li class="nm"><a href="dhcp.htm">DHCP Server</a></li>
-              <li class="ne"><a href="users.htm">Users</a></li>
+              <li class="ne"><a href="secusers.htm">Security</a></li>
             </ul>
             <p><%sys_shortname%></p>
           </div> 

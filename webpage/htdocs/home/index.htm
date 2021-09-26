@@ -8,9 +8,20 @@
     <title><%sys_longname%></title>
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>          
     <script type="text/javascript" src="../js/system.js"></script>
+    <script type="text/javascript">
+    <!--
+      var LogoutSec = <%sys_logout_sec%>;
+    
+      function Ready()
+      {
+        LogoutCheck();
+      }
+      
+    -->
+    </script>
   </head>        
 
-  <body bgcolor="#ffffff">
+  <body bgcolor="#ffffff" onload="Ready()">
     <table class="table_body">
       <tr align="center">
         <td> 
@@ -19,7 +30,7 @@
           <div class="header">
             <h1><%sys_longname%></h1>
             <div class="div"></div>
-            <div class="login"><a href="../logout.htm">Logout</a></div>
+            <div class="logout"><a href="../logout.htm">Logout in <span id="lc"></span> s</a></div>
             <div class="logo"></div>
           </div>
           
