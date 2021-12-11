@@ -494,11 +494,7 @@ char *WebUserGetUser (uint8_t bIndex)
 
    if (bIndex < USER_CNT)
    {
-      pUser = xmalloc(XM_ID_WEB, HASH_SIZE);
-      if (pUser != NULL)
-      {
-         pUser = xstrdup(XM_ID_WEB, UserDB.User[bIndex].User);
-      } 
+      pUser = xstrdup(XM_ID_WEB, UserDB.User[bIndex].User);
    }
 
    return(pUser);
