@@ -3,3 +3,6 @@ TinyONE ChangeLog
 
 = Version 1.10 / 1.10, 25.08.2021
    * First version for GitHub.
+
+= 15.05.2022
+   * New mbedTLS, v2.28.0, used.
