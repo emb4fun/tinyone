@@ -6,3 +6,7 @@ TinyONE ChangeLog
 
 = 15.05.2022
    * New mbedTLS, v2.28.0, used.
+
+= 24.07.2022
+   * New mbedTLS, v2.28.1, used.
+

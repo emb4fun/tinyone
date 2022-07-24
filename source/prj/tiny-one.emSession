@@ -24,9 +24,6 @@
   <ProjectSessionItem path="tiny-one"/>
   <ProjectSessionItem path="tiny-one;tiny-one"/>
   <ProjectSessionItem path="tiny-one;tiny-one;Source Files"/>
-  <ProjectSessionItem path="tiny-one;tiny-one;Source Files;common"/>
-  <ProjectSessionItem path="tiny-one;tiny-one;Source Files;common;library"/>
-  <ProjectSessionItem path="tiny-one;tiny-one;Source Files;common;library;mbedtls"/>
   <ProjectSessionItem path="tiny-one;tiny-one;Source Files;src"/>
  </Project>
  <Register1>
