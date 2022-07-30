@@ -1,4 +1,5 @@
 
+lwip-master_20211230
+(https://git.savannah.nongnu.org/cgit/lwip.git/snapshot/lwip-34e435c78611fbf21c49c5ddb6c395a097e24cc7.tar.gz)
 
-lwip-master_20210521
-(https://git.savannah.nongnu.org/cgit/lwip.git/snapshot/lwip-7ec4e9be304e7f8953740f10b2c810a292e89449.tar.gz)
+With some additional changes for DHCP and TLS.

@@ -1040,11 +1040,11 @@ tcp_enqueue_flags(struct tcp_pcb *pcb, u8_t flags)
   u8_t optflags = 0;
   u8_t optlen = 0;
 
-  LWIP_DEBUGF(TCP_QLEN_DEBUG, ("tcp_enqueue_flags: queuelen: %"U16_F"\n", (u16_t)pcb->snd_queuelen));
-
   LWIP_ASSERT("tcp_enqueue_flags: need either TCP_SYN or TCP_FIN in flags (programmer violates API)",
               (flags & (TCP_SYN | TCP_FIN)) != 0);
   LWIP_ASSERT("tcp_enqueue_flags: invalid pcb", pcb != NULL);
+
+  LWIP_DEBUGF(TCP_QLEN_DEBUG, ("tcp_enqueue_flags: queuelen: %"U16_F"\n", (u16_t)pcb->snd_queuelen));
 
   /* No need to check pcb->snd_queuelen if only SYN or FIN are allowed! */
 
@@ -1948,29 +1948,29 @@ tcp_output_control_segment_netif(const struct tcp_pcb *pcb, struct pbuf *p,
                                  struct netif *netif)
 {
   err_t err;
-    u8_t ttl, tos;
+  u8_t ttl, tos;
 
   LWIP_ASSERT("tcp_output_control_segment_netif: no netif given", netif != NULL);
 
 #if CHECKSUM_GEN_TCP
-    IF__NETIF_CHECKSUM_ENABLED(netif, NETIF_CHECKSUM_GEN_TCP) {
-      struct tcp_hdr *tcphdr = (struct tcp_hdr *)p->payload;
-      tcphdr->chksum = ip_chksum_pseudo(p, IP_PROTO_TCP, p->tot_len,
-                                        src, dst);
-    }
+  IF__NETIF_CHECKSUM_ENABLED(netif, NETIF_CHECKSUM_GEN_TCP) {
+    struct tcp_hdr *tcphdr = (struct tcp_hdr *)p->payload;
+    tcphdr->chksum = ip_chksum_pseudo(p, IP_PROTO_TCP, p->tot_len,
+                                      src, dst);
+  }
 #endif
-    if (pcb != NULL) {
-      NETIF_SET_HINTS(netif, LWIP_CONST_CAST(struct netif_hint*, &(pcb->netif_hints)));
-      ttl = pcb->ttl;
-      tos = pcb->tos;
-    } else {
-      /* Send output with hardcoded TTL/HL since we have no access to the pcb */
-      ttl = TCP_TTL;
-      tos = 0;
-    }
-    TCP_STATS_INC(tcp.xmit);
-    err = ip_output_if(p, src, dst, ttl, tos, IP_PROTO_TCP, netif);
-    NETIF_RESET_HINTS(netif);
+  if (pcb != NULL) {
+    NETIF_SET_HINTS(netif, LWIP_CONST_CAST(struct netif_hint*, &(pcb->netif_hints)));
+    ttl = pcb->ttl;
+    tos = pcb->tos;
+  } else {
+    /* Send output with hardcoded TTL/HL since we have no access to the pcb */
+    ttl = TCP_TTL;
+    tos = 0;
+  }
+  TCP_STATS_INC(tcp.xmit);
+  err = ip_output_if(p, src, dst, ttl, tos, IP_PROTO_TCP, netif);
+  NETIF_RESET_HINTS(netif);
 
   pbuf_free(p);
   return err;
@@ -1978,8 +1978,8 @@ tcp_output_control_segment_netif(const struct tcp_pcb *pcb, struct pbuf *p,
 
 static struct pbuf *
 tcp_rst_common(const struct tcp_pcb *pcb, u32_t seqno, u32_t ackno,
-        const ip_addr_t *local_ip, const ip_addr_t *remote_ip,
-        u16_t local_port, u16_t remote_port)
+               const ip_addr_t *local_ip, const ip_addr_t *remote_ip,
+               u16_t local_port, u16_t remote_port)
 {
   struct pbuf *p;
   u16_t wnd;

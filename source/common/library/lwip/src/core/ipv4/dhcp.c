@@ -160,16 +160,15 @@ enum dhcp_option_idx {
 
 /** Holds the decoded option values, only valid while in dhcp_recv.
     @todo: move this into struct dhcp? */
-u32_t dhcp_rx_options_val[DHCP_OPTION_IDX_MAX];
+static u32_t dhcp_rx_options_val[DHCP_OPTION_IDX_MAX];
 /** Holds a flag which option was received and is contained in dhcp_rx_options_val,
     only valid while in dhcp_recv.
     @todo: move this into struct dhcp? */
-u8_t  dhcp_rx_options_given[DHCP_OPTION_IDX_MAX];
+static u8_t  dhcp_rx_options_given[DHCP_OPTION_IDX_MAX];
 
 static u8_t dhcp_discover_request_options[] = {
   DHCP_OPTION_SUBNET_MASK,
-  DHCP_OPTION_ROUTER,
-  DHCP_OPTION_BROADCAST
+  DHCP_OPTION_ROUTER
 #if LWIP_DHCP_PROVIDE_DNS_SERVERS
   , DHCP_OPTION_DNS_SERVER
 #endif /* LWIP_DHCP_PROVIDE_DNS_SERVERS */
@@ -389,10 +388,21 @@ dhcp_handle_offer(struct netif *netif, struct dhcp_msg *msg_in)
     ip_addr_set_ip4_u32(&dhcp->server_ip_addr, lwip_htonl(dhcp_get_option_value(dhcp, DHCP_OPTION_IDX_SERVER_ID)));
     LWIP_DEBUGF(DHCP_DEBUG | LWIP_DBG_STATE, ("dhcp_handle_offer(): server 0x%08"X32_F"\n",
                 ip4_addr_get_u32(ip_2_ip4(&dhcp->server_ip_addr))));
+                
     /* remember offered address */
     ip4_addr_copy(dhcp->offered_ip_addr, msg_in->yiaddr);
     LWIP_DEBUGF(DHCP_DEBUG | LWIP_DBG_STATE, ("dhcp_handle_offer(): offer for 0x%08"X32_F"\n",
                 ip4_addr_get_u32(&dhcp->offered_ip_addr)));
+
+    /******* @@MF start *******/
+    dhcp->offered_t0_lease = 0;
+    
+    if (dhcp_option_given(dhcp, DHCP_OPTION_IDX_LEASE_TIME)) 
+    {
+       /* remember offered lease time */
+       dhcp->offered_t0_lease = dhcp_get_option_value(dhcp, DHCP_OPTION_IDX_LEASE_TIME);
+    }
+    /******* @@MF end *******/
 
     dhcp_select(netif);
   } else {
@@ -430,24 +440,32 @@ dhcp_select(struct netif *netif)
   p_out = dhcp_create_msg(netif, dhcp, DHCP_REQUEST, &options_out_len);
   if (p_out != NULL) {
     struct dhcp_msg *msg_out = (struct dhcp_msg *)p_out->payload;
-    options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_MAX_MSG_SIZE, DHCP_OPTION_MAX_MSG_SIZE_LEN);
-    options_out_len = dhcp_option_short(options_out_len, msg_out->options, DHCP_MAX_MSG_LEN(netif));
 
-    /* MUST request the offered IP address */
+#if LWIP_NETIF_HOSTNAME
+    /* 12 */
+    options_out_len = dhcp_option_hostname(options_out_len, msg_out->options, netif);
+#endif /* LWIP_NETIF_HOSTNAME */
+
+    /* 50 MUST request the offered IP address */
     options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_REQUESTED_IP, 4);
     options_out_len = dhcp_option_long(options_out_len, msg_out->options, lwip_ntohl(ip4_addr_get_u32(&dhcp->offered_ip_addr)));
 
+    /* 51 */
+    if (dhcp->offered_t0_lease != 0)
+    {
+       options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_LEASE_TIME, 4);
+       options_out_len = dhcp_option_long(options_out_len, msg_out->options, dhcp->offered_t0_lease);
+    }
+
+    /* 54 */
     options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_SERVER_ID, 4);
     options_out_len = dhcp_option_long(options_out_len, msg_out->options, lwip_ntohl(ip4_addr_get_u32(ip_2_ip4(&dhcp->server_ip_addr))));
 
+    /* 55 */
     options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_PARAMETER_REQUEST_LIST, LWIP_ARRAYSIZE(dhcp_discover_request_options));
     for (i = 0; i < LWIP_ARRAYSIZE(dhcp_discover_request_options); i++) {
       options_out_len = dhcp_option_byte(options_out_len, msg_out->options, dhcp_discover_request_options[i]);
     }
-
-#if LWIP_NETIF_HOSTNAME
-    options_out_len = dhcp_option_hostname(options_out_len, msg_out->options, netif);
-#endif /* LWIP_NETIF_HOSTNAME */
 
     options_out_len = dhcp_option_clientid(options_out_len, msg_out->options); /* @@MF */
 
@@ -880,8 +898,6 @@ dhcp_inform(struct netif *netif)
   p_out = dhcp_create_msg(netif, &dhcp, DHCP_INFORM, &options_out_len);
   if (p_out != NULL) {
     struct dhcp_msg *msg_out = (struct dhcp_msg *)p_out->payload;
-    options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_MAX_MSG_SIZE, DHCP_OPTION_MAX_MSG_SIZE_LEN);
-    options_out_len = dhcp_option_short(options_out_len, msg_out->options, DHCP_MAX_MSG_LEN(netif));
 
     LWIP_HOOK_DHCP_APPEND_OPTIONS(netif, &dhcp, DHCP_STATE_INFORMING, msg_out, DHCP_INFORM, &options_out_len);
     dhcp_option_trailer(options_out_len, msg_out->options, p_out);
@@ -1010,9 +1026,20 @@ dhcp_discover(struct netif *netif)
     struct dhcp_msg *msg_out = (struct dhcp_msg *)p_out->payload;
     LWIP_DEBUGF(DHCP_DEBUG | LWIP_DBG_TRACE, ("dhcp_discover: making request\n"));
 
-    options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_MAX_MSG_SIZE, DHCP_OPTION_MAX_MSG_SIZE_LEN);
-    options_out_len = dhcp_option_short(options_out_len, msg_out->options, DHCP_MAX_MSG_LEN(netif));
+#if LWIP_NETIF_HOSTNAME
+    /* 12 */
+    options_out_len = dhcp_option_hostname(options_out_len, msg_out->options, netif);
+#endif /* LWIP_NETIF_HOSTNAME */
 
+    /* 50 */
+    options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_REQUESTED_IP, 4);
+    options_out_len = dhcp_option_long(options_out_len, msg_out->options, lwip_ntohl(ip4_addr_get_u32(&netif->ip_addr)));
+
+    /* 51 */
+    options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_LEASE_TIME, 4);
+    options_out_len = dhcp_option_long(options_out_len, msg_out->options, DHCP_OPTION_LEASE_TIME_INFINITY);
+
+    /* 55 */
     options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_PARAMETER_REQUEST_LIST, LWIP_ARRAYSIZE(dhcp_discover_request_options));
     for (i = 0; i < LWIP_ARRAYSIZE(dhcp_discover_request_options); i++) {
       options_out_len = dhcp_option_byte(options_out_len, msg_out->options, dhcp_discover_request_options[i]);
@@ -1168,17 +1195,17 @@ dhcp_renew(struct netif *netif)
   p_out = dhcp_create_msg(netif, dhcp, DHCP_REQUEST, &options_out_len);
   if (p_out != NULL) {
     struct dhcp_msg *msg_out = (struct dhcp_msg *)p_out->payload;
-    options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_MAX_MSG_SIZE, DHCP_OPTION_MAX_MSG_SIZE_LEN);
-    options_out_len = dhcp_option_short(options_out_len, msg_out->options, DHCP_MAX_MSG_LEN(netif));
 
+#if LWIP_NETIF_HOSTNAME
+    /* 12 */
+    options_out_len = dhcp_option_hostname(options_out_len, msg_out->options, netif);
+#endif /* LWIP_NETIF_HOSTNAME */
+
+    /* 55 */
     options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_PARAMETER_REQUEST_LIST, LWIP_ARRAYSIZE(dhcp_discover_request_options));
     for (i = 0; i < LWIP_ARRAYSIZE(dhcp_discover_request_options); i++) {
       options_out_len = dhcp_option_byte(options_out_len, msg_out->options, dhcp_discover_request_options[i]);
     }
-
-#if LWIP_NETIF_HOSTNAME
-    options_out_len = dhcp_option_hostname(options_out_len, msg_out->options, netif);
-#endif /* LWIP_NETIF_HOSTNAME */
 
     LWIP_HOOK_DHCP_APPEND_OPTIONS(netif, dhcp, DHCP_STATE_RENEWING, msg_out, DHCP_REQUEST, &options_out_len);
     dhcp_option_trailer(options_out_len, msg_out->options, p_out);
@@ -1223,8 +1250,6 @@ dhcp_rebind(struct netif *netif)
   p_out = dhcp_create_msg(netif, dhcp, DHCP_REQUEST, &options_out_len);
   if (p_out != NULL) {
     struct dhcp_msg *msg_out = (struct dhcp_msg *)p_out->payload;
-    options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_MAX_MSG_SIZE, DHCP_OPTION_MAX_MSG_SIZE_LEN);
-    options_out_len = dhcp_option_short(options_out_len, msg_out->options, DHCP_MAX_MSG_LEN(netif));
 
     options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_PARAMETER_REQUEST_LIST, LWIP_ARRAYSIZE(dhcp_discover_request_options));
     for (i = 0; i < LWIP_ARRAYSIZE(dhcp_discover_request_options); i++) {
@@ -1277,8 +1302,6 @@ dhcp_reboot(struct netif *netif)
   p_out = dhcp_create_msg(netif, dhcp, DHCP_REQUEST, &options_out_len);
   if (p_out != NULL) {
     struct dhcp_msg *msg_out = (struct dhcp_msg *)p_out->payload;
-    options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_MAX_MSG_SIZE, DHCP_OPTION_MAX_MSG_SIZE_LEN);
-    options_out_len = dhcp_option_short(options_out_len, msg_out->options, DHCP_MAX_MSG_LEN_MIN_REQUIRED);
 
     options_out_len = dhcp_option(options_out_len, msg_out->options, DHCP_OPTION_REQUESTED_IP, 4);
     options_out_len = dhcp_option_long(options_out_len, msg_out->options, lwip_ntohl(ip4_addr_get_u32(&dhcp->offered_ip_addr)));
@@ -1374,7 +1397,7 @@ dhcp_release_and_stop(struct netif *netif)
     /* remove IP address from interface (prevents routing from selecting this interface) */
     netif_set_addr(netif, IP4_ADDR_ANY4, IP4_ADDR_ANY4, IP4_ADDR_ANY4);
   } else {
-    dhcp_set_state(dhcp, DHCP_STATE_OFF);
+     dhcp_set_state(dhcp, DHCP_STATE_OFF);
   }
 
 #if LWIP_DHCP_DOES_ACD_CHECK
@@ -1950,6 +1973,7 @@ dhcp_create_msg(struct netif *netif, struct dhcp *dhcp, u8_t message_type, u16_t
   msg_out->htype = LWIP_IANA_HWTYPE_ETHERNET;
   msg_out->hlen = netif->hwaddr_len;
   msg_out->xid = lwip_htonl(dhcp->xid);
+  msg_out->flags = lwip_htons(0x8000); /* @@MF */
   /* we don't need the broadcast flag since we can receive unicast traffic
      before being fully configured! */
   /* set ciaddr to netif->ip_addr based on message_type and state */
