@@ -49,7 +49,7 @@
 
 #include <time.h>
 
-extern int _timezone;
+//extern int _timezone;
 
 extern char *Rfc1123TimeString(struct tm *_tm);
 

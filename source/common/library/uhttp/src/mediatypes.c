@@ -61,7 +61,7 @@
 #include <string.h>
 #include <memdebug.h>
 
-#include "mod_vfs.h"
+#include "mod_api.h"
 
 ISC_LIST(MEDIA_TYPE_ENTRY) mediaTypeList = ISC_LIST_INITIAL_TYPE(MEDIA_TYPE_ENTRY);
 
@@ -111,12 +111,12 @@ int MediaTypeHandlerBinary(HTTPD_SESSION *hs, const MEDIA_TYPE_ENTRY *mt, const 
 
 #define READ_DATA_SIZE  1460
 
-#if defined(HTTP_SUPPORT_VFS)
-    /* Check for virtual file */
-    data = strstr(filepath, "/vfs/");
-    if (data != 0)
+#if (_IP_WEB_API_SUPPORT >= 1)
+    /* Check for api  */
+    data = strstr(filepath, ":api/");
+    if (data != NULL)
     {
-        HttpVfsHandler(hs, mt, data+5);
+        HttpApiFunctionHandler(hs, mt, data+5);
         return(0);
     }
 #endif

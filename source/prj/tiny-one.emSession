@@ -24,6 +24,9 @@
   <ProjectSessionItem path="tiny-one"/>
   <ProjectSessionItem path="tiny-one;tiny-one"/>
   <ProjectSessionItem path="tiny-one;tiny-one;Source Files"/>
+  <ProjectSessionItem path="tiny-one;tiny-one;Source Files;common"/>
+  <ProjectSessionItem path="tiny-one;tiny-one;Source Files;common;library"/>
+  <ProjectSessionItem path="tiny-one;tiny-one;Source Files;common;library;ipweb"/>
   <ProjectSessionItem path="tiny-one;tiny-one;Source Files;src"/>
  </Project>
  <Register1>
@@ -57,7 +60,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="586" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../src/main.c" selected="1" top="570" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="590" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../src/main.c" selected="1" top="574" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="tiny-one" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="J-Link" buildConfiguration="RAM Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="D:/Projekte/GitHub/tinyone/source/common/library/mbedtls/library" debugSearchPath="" autoConnectCapabilities="3199"/>
+ <ARMCrossStudioWindow activeProject="tiny-one" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="J-Link" buildConfiguration="RAM Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="D:/Projekte/GitHub/tinyone/source/common/library/ipweb/src" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

@@ -38,6 +38,7 @@
       <folder Name="src">
         <file file_name="../src/main.c" />
         <file file_name="../src/xmempool.c" />
+        <file file_name="../src/api_test.c" />
       </folder>
       <folder Name="common">
         <folder Name="library">
@@ -96,7 +97,7 @@
               <file file_name="../common/library/uhttp/src/modules/mod_cgi_func.c" />
               <file file_name="../common/library/uhttp/src/modules/mod_redir.c" />
               <file file_name="../common/library/uhttp/src/modules/mod_ssi.c" />
-              <file file_name="../common/library/uhttp/addon/src/mod_vfs.c" />
+              <file file_name="../common/library/uhttp/addon/src/mod_api.c" />
             </folder>
             <folder Name="os">
               <file file_name="../common/library/uhttp/src/os/tcts/rfctime.c" />
@@ -196,6 +197,7 @@
             <file file_name="../common/library/ipweb/src/web_ssi.c" />
             <file file_name="../common/library/ipweb/src/web_ssl.c" />
             <file file_name="../common/library/ipweb/src/web_user.c" />
+            <file file_name="../common/library/ipweb/src/web_api.c" />
           </folder>
           <folder Name="mbedtls">
             <file file_name="../common/library/mbedtls/library/aes.c" />

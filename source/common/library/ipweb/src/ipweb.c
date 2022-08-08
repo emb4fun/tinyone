@@ -394,6 +394,34 @@ void __attribute__((weak)) IP_WEBS_LoginInit (void)
    /* Only an empty function */
 } /* IP_WEBS_LoginInit */
 
+/*************************************************************************/
+/*  IP_WEBS_APIInit                                                      */
+/*                                                                       */
+/*  Initialize the API functionality of the web server.                  */
+/*                                                                       */
+/*  In    : none                                                         */
+/*  Out   : none                                                         */
+/*  Return: none                                                         */
+/*************************************************************************/
+void __attribute__((weak)) IP_WEBS_APIInit (void)
+{
+   /* Only an empty function */
+} /* IP_WEBS_APIInit */
+
+/*************************************************************************/
+/*  IP_WEBS_APIStart                                                     */
+/*                                                                       */
+/*  Start the API functionality of the web server.                       */
+/*                                                                       */
+/*  In    : none                                                         */
+/*  Out   : none                                                         */
+/*  Return: none                                                         */
+/*************************************************************************/
+void __attribute__((weak)) IP_WEBS_APIStart (void)
+{
+   /* Only an empty function */
+} /* IP_WEBS_APIStart */
+
 /*=======================================================================*/
 /*  All code exported                                                    */
 /*=======================================================================*/
@@ -430,6 +458,7 @@ int IP_WEBS_Init (void)
       HttpRegisterMediaType("htm",  "text", "html", HttpSsiHandler);
       HttpRegisterMediaType("cgi", NULL, NULL, HttpCgiFunctionHandler);
 
+      IP_WEBS_APIInit();
       IP_WEBS_CGIInit();
       IP_WEBS_SSIInit();
       
@@ -460,6 +489,7 @@ int IP_WEBS_Start (uint16_t wPort)
       nWebsRunning = 1;
       wServerPort  = wPort;
         
+      IP_WEBS_APIStart();
       IP_WEBS_CGIStart();
       IP_WEBS_SSIStart();
 

@@ -45,7 +45,7 @@
 
 #include <pro/rfctime.h>
 
-int _timezone = 0;
+//long _timezone = 0;
 
 static char rfc1123_buf[32];
 static char *wkdays[7] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };

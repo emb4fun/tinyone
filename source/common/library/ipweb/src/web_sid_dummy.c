@@ -138,6 +138,13 @@ int WebSidLoginInitSet (HTTPD_SESSION *hs, char *pNewPass)
    return(0);
 }
 
+uint32_t WebSidLogoutTime (HTTPD_SESSION *hs)
+{
+   (void)hs;
+   
+   return(-1);
+}
+
 #endif /* (_IP_WEB_SID_SUPPORT == 0) */
 
 /*** EOF ***/

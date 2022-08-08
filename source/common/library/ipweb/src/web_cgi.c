@@ -1368,6 +1368,8 @@ static int Upgrade (HTTPD_SESSION *hs)
 /*************************************************************************/
 /*  IP_WEBS_CGIInit                                                      */
 /*                                                                       */
+/*  Initialize the CGI functionality of the web server.                  */
+/*                                                                       */
 /*  In    : none                                                         */
 /*  Out   : none                                                         */
 /*  Return: none                                                         */
@@ -1384,6 +1386,8 @@ void IP_WEBS_CGIInit (void)
 
 /*************************************************************************/
 /*  IP_WEBS_CGIListAdd                                                   */
+/*                                                                       */
+/*  Add a CGI function list to the CGI core.                             */
 /*                                                                       */
 /*  In    : none                                                         */
 /*  Out   : none                                                         */
@@ -1406,6 +1410,8 @@ void IP_WEBS_CGIListAdd (CGI_LIST_ENTRY *pList)
 
 /*************************************************************************/
 /*  IP_WEBS_CGIStart                                                     */
+/*                                                                       */
+/*  Start the CGI functionality of the web server.                       */
 /*                                                                       */
 /*  In    : none                                                         */
 /*  Out   : none                                                         */
@@ -1440,6 +1446,8 @@ void IP_WEBS_CGIStart (void)
 /*************************************************************************/
 /*  IP_WEBS_CGISendHeader                                                */
 /*                                                                       */
+/*  Send a CGI web header.                                               */
+/*                                                                       */
 /*  In    : hs                                                           */
 /*  Out   : none                                                         */
 /*  Return: none                                                         */
@@ -1449,7 +1457,6 @@ void IP_WEBS_CGISendHeader (HTTPD_SESSION *hs)
    HttpSendHeaderTop(hs, 200);
    s_puts("Cache-Control: no-cache, must-revalidate\r\n", hs->s_stream);
    s_puts("Expires: Sat, 26 Jul 1997 05:00:00 GMT\r\n", hs->s_stream);   
-   //HttpSendHeaderBottom(hs, "application", "octet-stream", -1, 0);   
    HttpSendHeaderBottom(hs, NULL, NULL, -1, 0);   
    
    s_set_flags(hs->s_stream, S_FLG_CHUNKED);
@@ -1458,6 +1465,8 @@ void IP_WEBS_CGISendHeader (HTTPD_SESSION *hs)
 
 /*************************************************************************/
 /*  IP_WEBS_CGISendHeaderOctetStream                                     */
+/*                                                                       */
+/*  Send a CGI, octet-stream, web header.                                */
 /*                                                                       */
 /*  In    : hs                                                           */
 /*  Out   : none                                                         */

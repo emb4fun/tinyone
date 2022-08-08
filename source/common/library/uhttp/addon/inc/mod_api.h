@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2019 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2022 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -8,11 +8,9 @@
 *  
 *  1. Redistributions of source code must retain the above copyright 
 *     notice, this list of conditions and the following disclaimer.
-*
 *  2. Redistributions in binary form must reproduce the above copyright
 *     notice, this list of conditions and the following disclaimer in the 
 *     documentation and/or other materials provided with the distribution.
-*
 *  3. Neither the name of the author nor the names of its contributors may 
 *     be used to endorse or promote products derived from this software 
 *     without specific prior written permission.
@@ -33,28 +31,54 @@
 ***************************************************************************
 *  History:
 *
-*  14.07.2019  mifi  First version for the BeagleBone Black.
+*  06.08.2022  mifi  First Version.
 **************************************************************************/
-#if !defined(__IPWEB_CONF_H__)
-#define __IPWEB_CONF_H__
+#if !defined(__MOD_API_H__)
+#define __MOD_API_H__
 
 /**************************************************************************
 *  Includes
 **************************************************************************/
+#include <pro/uhttp/mediatypes.h>
+#include <pro/uhttp/uhttpd.h>
+#include "ipweb_conf.h"
+
+#if !defined(IP_WEB_API_SUPPORT)
+#define _IP_WEB_API_SUPPORT    0
+#else
+#define _IP_WEB_API_SUPPORT    IP_WEB_API_SUPPORT
+#endif 
 
 /**************************************************************************
 *  Global Definitions
 **************************************************************************/
 
-#define IP_WEB_MAX_HTTP_TASKS             32
-#define IP_WEB_TLS_MAX_HTTP_TASKS         32
+/*
+ * API function entry type.
+ */
+typedef struct _HTTP_API_FUNCTION HTTP_API_FUNCTION;
 
-#define IP_WEB_SID_SUPPORT                1
-#define IP_WEB_SID_LOGIN_ERROR_CNT_MAX    3
-#define IP_WEB_SID_LOGIN_TIMEOUT_SEC      60
-#define IP_WEB_SID_TIMEOUT_SEC            (10*60)
+typedef int (*HTTP_API_HANDLER) (HTTPD_SESSION*);
 
-#define IP_WEB_API_SUPPORT                1
+/*
+ * API function entry structure.
+ */
+struct _HTTP_API_FUNCTION 
+{
+   /* Chain link. */
+   HTTP_API_FUNCTION *api_link;
+   /* URI of the API function. */
+   char *api_uri;
+   /* Registered API function. */
+   HTTP_API_HANDLER api_handler;
+};
+
+
+typedef struct _api_list_entry_
+{
+   const char *Var;
+   int        (*pFunc)(HTTPD_SESSION *hs);
+} API_LIST_ENTRY;
 
 /**************************************************************************
 *  Macro Definitions
@@ -63,7 +87,11 @@
 /**************************************************************************
 *  Funtions Definitions
 **************************************************************************/
- 
-#endif /* !__IPWEB_CONF_H__ */
+
+int HttpRegisterApiFunction(const char *uri, HTTP_API_HANDLER handler);
+
+int HttpApiFunctionHandler(HTTPD_SESSION *hs, const MEDIA_TYPE_ENTRY *mt, const char *filepath);
+
+#endif /* !__MOD_API_H__ */
 
 /*** EOF ***/

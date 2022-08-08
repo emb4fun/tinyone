@@ -153,7 +153,6 @@ struct _HTTP_REQUEST {
     
     char    *req_sid;            /* Session ID */
     uint8_t *req_sid_user;       /* Session ID user */
-//    uint8_t *req_sid_user_hash;  /* Session ID user hash */
     uint32_t req_sid_perm;       /* Session ID permission */
 };
 

@@ -53,6 +53,7 @@
 #include <memdebug.h>
 
 #include "web_sid.h"
+#include "mod_api.h"
 
 #ifndef HTTP_MAX_REQUEST_SIZE
 #define HTTP_MAX_REQUEST_SIZE   64
@@ -590,18 +591,34 @@ void HttpdClientHandler(HTTP_STREAM *sp)
                }
                else
                {
-                  if (pCookie != NULL)
+#if (_IP_WEB_API_SUPPORT >= 1)               
+                  /* 
+                   * Special check for the API interface with SID support. Why for SID?
+                   * Becasue with SID the variable nMustRedir can be 1.
+                   */
+                  char *data = strstr(filename, ":api/");
+                  
+                  if (data != NULL)
                   {
-                     /* The NONCE was created with the cookie too */
-                     HttpSendRedirectionCookie(hs, pCookie, 303, "/login.htm", NULL);      
-                     xfree(pCookie);
-                  }    
+                     /* Make a direct API call */ 
+                     err = HttpApiFunctionHandler(hs, mt, data+5);
+                  }
                   else
+#endif                  
                   {
-                     /* A new NONCE must be created for a new login */
-                     WebSidCreateNonce(hs);  
-                     HttpSendRedirection(hs, 303, "/login.htm", NULL);
-                  }   
+                     if (pCookie != NULL)
+                     {
+                        /* The NONCE was created with the cookie too */
+                        HttpSendRedirectionCookie(hs, pCookie, 303, "/login.htm", NULL);      
+                        xfree(pCookie);
+                     }    
+                     else
+                     {
+                        /* A new NONCE must be created for a new login */
+                        WebSidCreateNonce(hs);  
+                        HttpSendRedirection(hs, 303, "/login.htm", NULL);
+                     }   
+                  }                     
                }
                
                xfree(filename);

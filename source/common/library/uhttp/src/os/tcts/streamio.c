@@ -59,8 +59,6 @@
 
 #include "pro\uhttp\streamio.h"
 
-static int send_chunked (SOCKET sock, const char *buf, int len);
-
 /*=======================================================================*/
 /*  All extern data                                                      */
 /*=======================================================================*/
@@ -435,7 +433,7 @@ int s_printf (HTTP_STREAM *sp, const char *fmt, ...)
 
 int s_flush (HTTP_STREAM *sp)
 {
-   int rc;
+   int rc = -1;
 
    if (sp->strm_olen != 0)
    {
@@ -482,5 +480,3 @@ void s_end (HTTP_STREAM *sp)
 } /* s_end */
 
 /*** EOF ***/
-
-     

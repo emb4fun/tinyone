@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2015 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2022 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -8,9 +8,11 @@
 *  
 *  1. Redistributions of source code must retain the above copyright 
 *     notice, this list of conditions and the following disclaimer.
+*
 *  2. Redistributions in binary form must reproduce the above copyright
 *     notice, this list of conditions and the following disclaimer in the 
 *     documentation and/or other materials provided with the distribution.
+*
 *  3. Neither the name of the author nor the names of its contributors may 
 *     be used to endorse or promote products derived from this software 
 *     without specific prior written permission.
@@ -31,40 +33,34 @@
 ***************************************************************************
 *  History:
 *
-*  25.01.2015  mifi  First Version.
+*  06.08.2022  mifi  First Version.
 **************************************************************************/
-#if !defined(__MOD_VFS_H__)
-#define __MOD_VFS_H__
+#if !defined(__WEB_API_H__)
+#define __WEB_API_H__
 
 /**************************************************************************
 *  Includes
 **************************************************************************/
-#include <pro/uhttp/mediatypes.h>
+
+#include "mod_api.h"
 
 /**************************************************************************
 *  Global Definitions
 **************************************************************************/
-
-typedef struct _vfs_list_entry_
-{
-   const char *Var;
-   int        (*pFunc)(HTTPD_SESSION *hs, char *arg, char *val);
-} VFS_LIST_ENTRY;
 
 /**************************************************************************
 *  Macro Definitions
 **************************************************************************/
 
 /**************************************************************************
-*  Funtions Definitions
+*  Functions Definitions
 **************************************************************************/
 
+void IP_WEBS_APIInit (void);
+void IP_WEBS_APIListAdd (const API_LIST_ENTRY *pList);
+void IP_WEBS_APIStart (void);
+void IP_WEBS_APISendHeader (HTTPD_SESSION *hs);
 
-/*!
- * \brief Default VFS handler.
- */
-extern int HttpVfsHandler(HTTPD_SESSION *hs, const MEDIA_TYPE_ENTRY *mt, const char *filepath);
-
-#endif /* !__MOD_VFS_H__ */
+#endif /* !__WEB_API_H__ */
 
 /*** EOF ***/

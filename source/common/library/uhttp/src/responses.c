@@ -165,7 +165,7 @@ const char *HttpResponseText(int code)
 
 void HttpSendStreamHeaderTop(HTTP_STREAM *stream, int status)
 {
-    static const char fmt_P[] = "HTTP/%d.%d %d %s\r\nServer: uHTTP 0.0\r\n";
+    static const char fmt_P[] = "HTTP/%d.%d %d %s\r\nServer: uHTTP\r\n";
 
     s_printf(stream, fmt_P, HTTP_MAJOR_VERSION, HTTP_MINOR_VERSION, status, HttpResponseText(status));
 
@@ -184,7 +184,7 @@ void HttpSendHeaderTop(HTTPD_SESSION *hs, int status)
 
 void HttpSendStreamHeaderSse(HTTP_STREAM *stream)
 {
-    static const char fmt[] = "HTTP/%d.%d %d %s\r\nServer: uHTTP 0.0\r\n";
+    static const char fmt[] = "HTTP/%d.%d %d %s\r\nServer: uHTTP\r\n";
 
     s_printf(stream, fmt, HTTP_MAJOR_VERSION, HTTP_MINOR_VERSION, 200, HttpResponseText(200));
     s_puts("Content-Type: text/event-stream\r\n", stream);

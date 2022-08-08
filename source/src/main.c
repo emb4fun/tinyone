@@ -53,6 +53,8 @@
 #include "mbedtls/version.h"
 #include "iperf.h"
 
+void ATInit(void);
+
 /*=======================================================================*/
 /*  All Structures and Common Constants                                  */
 /*=======================================================================*/
@@ -536,6 +538,8 @@ static void StartTask (void *p)
 
    IP_DHCP_ServerInit();  /* Initialize the DHCP server */
    IP_SNTP_ServerInit();  /* Initialize the SNTP server */
+
+   ATInit();
 
    IP_WEBS_Start(80);     /* Start the web server */
    IP_WEBS_SSLStart(443);

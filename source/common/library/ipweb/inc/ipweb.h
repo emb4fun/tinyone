@@ -47,6 +47,7 @@
 #include "web_json.h"
 #include "web_login.h"
 #include "web_user.h"
+#include "web_api.h"
 #include "web_cgi.h"
 #include "web_ssi.h"
 #include "web_sid.h"
