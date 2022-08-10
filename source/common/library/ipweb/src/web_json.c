@@ -158,49 +158,53 @@ int IP_JSON_ParseHS (HTTPD_SESSION *hs, json_t *pJSON, size_t Count)
    /* Clear first */   
    memset(pJSON, 0x00, sizeof(json_t));
    
+   wLen = (uint16_t)hs->s_req.req_length;
+
    pTokens = (jsmntok_t*)xmalloc(XM_ID_WEB, sizeof(jsmntok_t) * Count);
-   if (pTokens != NULL)
+   pData   = (char*)xmalloc(XM_ID_WEB, wLen);
+   
+   if ((pTokens != NULL) && (pData != NULL))
    {
       /* Store token list */
       pJSON->pTokens = pTokens;
       
       /* Update buffer */
-      rc = StreamUpdateBufferJson(hs->s_stream, hs->s_req.req_length);
-   
-      wLen = (uint16_t)hs->s_req.req_length;
+      rc = StreamUpdateBufferJson(hs->s_stream, hs->s_req.req_length, pData);
       if ((wLen != 0) && (rc != -1))
       {
-         pData = &hs->s_stream->strm_ibuf[hs->s_stream->strm_ipos];
-         if (*pData != 0)
-         {
-            jsmn_init(&p);
-            rc = jsmn_parse(&p, pData, wLen, pTokens, Count);      
+         jsmn_init(&p);
+         rc = jsmn_parse(&p, pData, wLen, pTokens, Count);      
       
-            /* Assume the top-level element is an object */
-            if ((rc < 1) || (pTokens[0].type != JSMN_OBJECT))
+         /* Assume the top-level element is an object */
+         if ((rc < 1) || (pTokens[0].type != JSMN_OBJECT))
+         {
+            /* Error */
+            rc = -1;
+            xfree(pTokens);
+            xfree(pData);
+         }
+         else
+         {  
+            pJSON->nNumTokens = rc;
+            pJSON->pData      = pData;
+         
+            for (int i = 0; i < rc; i++)
             {
-               /* Error */
-               rc = -1;
-               xfree(pTokens);
-            }
-            else
-            {  
-               pJSON->nNumTokens = rc;
-               pJSON->pData      = pData;
-            
-               for (int i = 0; i < rc; i++)
+               if (JSMN_STRING == pTokens[i].type)
                {
-                  if (JSMN_STRING == pTokens[i].type)
-                  {
-                     wLen   = (uint16_t)(pTokens[i].end - pTokens[i].start);
-                     pStart = pData + pTokens[i].start;
-                     pStart[wLen] = 0;
-                  }
+                  wLen   = (uint16_t)(pTokens[i].end - pTokens[i].start);
+                  pStart = pData + pTokens[i].start;
+                  pStart[wLen] = 0;
                }
             }
-         }            
+         }
       }
-   }      
+   }
+   else
+   {
+      xfree(pTokens);
+      xfree(pData);
+   }
    
    return(rc);
 } /* IP_JSON_ParseHS */
@@ -215,6 +219,7 @@ int IP_JSON_ParseHS (HTTPD_SESSION *hs, json_t *pJSON, size_t Count)
 int IP_JSON_Delete (json_t *pJSON)
 {   
    xfree(pJSON->pTokens);
+   xfree(pJSON->pData);
    
    return(0);
 } /* IP_JSON_Delete */

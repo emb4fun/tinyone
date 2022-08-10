@@ -165,40 +165,66 @@ int StreamInit (void)
 
 
 int StreamInitSsl (ssl_write_t *func_write, ssl_read_t *func_read)
-   {
+{
     ssl_write = func_write;
     ssl_read  = func_read;
 
     return 0;
 } /* StreamInitSsl */
 
-int StreamUpdateBufferJson (HTTP_STREAM *sp, int siz)
+int StreamUpdateBufferJson (HTTP_STREAM *sp, int siz, char *data)
 {
-   int  rc = 0;
+   int  rc = -1;
+   int  got;
+   int  strm_siz;
    
-   /* Check the current stream buffer. */
-   if (sp->strm_ipos == sp->strm_ilen)
+   while (siz > 0)
    {
-      /* No more buffered data, re-fill the buffer. */
-      int got = _recv(sp->strm_csock, sp->strm_ibuf, 1460, 0);
-      if (got <= 0)
+      /* Get size from the current stream buffer. */
+      strm_siz = sp->strm_ilen - sp->strm_ipos;
+      if (strm_siz != 0)
       {
-         /* Broken connection or timeout. */
-         if (got < 0) 
+         /* Read data from the actual buffer */
+         memcpy(data, &sp->strm_ibuf[sp->strm_ipos], strm_siz);
+         siz  -= strm_siz;
+         data += strm_siz;
+         
+         if (siz > 0)
          {
-            rc = -1;
+            /* No more buffered data, re-fill the buffer. */
+            got = _recv(sp->strm_csock, sp->strm_ibuf, 1460, 0);
+            if (got <= 0)
+            {
+               break;
+            }
+            else
+            {
+               sp->strm_ilen = got;
+               sp->strm_ipos = 0;
+            }
          }
       }
       else
       {
-         sp->strm_ilen = got;
-         sp->strm_ipos = 0;
+         /* No more buffered data, re-fill the buffer. */
+         got = _recv(sp->strm_csock, sp->strm_ibuf, 1460, 0);
+         if (got <= 0)
+         {
+            break;
+         }
+         else
+         {
+            sp->strm_ilen = got;
+            sp->strm_ipos = 0;
+         }
       }
-   }
-   /* Check if enough data is available */
-   else if ((sp->strm_ipos + siz) > sp->strm_ilen)
+   } 
+   
+   /* Check if we got all data */
+   if (0 == siz)
    {
-      rc = -1;
+      /* No error */
+      rc = 0;
    }
    
    return(rc);

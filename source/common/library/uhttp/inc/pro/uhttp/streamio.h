@@ -138,7 +138,7 @@ extern int StreamReadUntilString(HTTP_STREAM *sp, const char *delim, char *buf, 
 /*
  * Update stream buffer if needed, special function for IP_JSON_ParseHS.
  */
-extern int StreamUpdateBufferJson (HTTP_STREAM *sp, int siz);
+extern int StreamUpdateBufferJson (HTTP_STREAM *sp, int siz, char *data);
 
 /*!
  * \brief Write a variable number of strings to a stream.
