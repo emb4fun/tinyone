@@ -150,7 +150,7 @@ int IP_JSON_ParseHS (HTTPD_SESSION *hs, json_t *pJSON, size_t Count)
    char        *pStart;
    uint16_t     wLen;
    
-   if (NULL == pJSON)
+   if ((NULL == hs) || (NULL == pJSON))
    {
       return(-1);
    }
@@ -158,11 +158,14 @@ int IP_JSON_ParseHS (HTTPD_SESSION *hs, json_t *pJSON, size_t Count)
    /* Clear first */   
    memset(pJSON, 0x00, sizeof(json_t));
    
+   /* Get max length info */
    wLen = (uint16_t)hs->s_req.req_length;
 
+   /* Create token and data memory */
    pTokens = (jsmntok_t*)xmalloc(XM_ID_WEB, sizeof(jsmntok_t) * Count);
    pData   = (char*)xmalloc(XM_ID_WEB, wLen);
    
+   /* Check for valid memory */
    if ((pTokens != NULL) && (pData != NULL))
    {
       /* Store token list */

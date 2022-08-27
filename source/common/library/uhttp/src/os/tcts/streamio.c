@@ -195,10 +195,12 @@ int StreamUpdateBufferJson (HTTP_STREAM *sp, int siz, char *data)
             got = _recv(sp->strm_csock, sp->strm_ibuf, 1460, 0);
             if (got <= 0)
             {
+               /* Error */
                break;
             }
             else
             {
+               /* Store data size of the stream */
                sp->strm_ilen = got;
                sp->strm_ipos = 0;
             }
@@ -210,10 +212,12 @@ int StreamUpdateBufferJson (HTTP_STREAM *sp, int siz, char *data)
          got = _recv(sp->strm_csock, sp->strm_ibuf, 1460, 0);
          if (got <= 0)
          {
+            /* Error */
             break;
          }
          else
          {
+            /* Store data size of the stream */
             sp->strm_ilen = got;
             sp->strm_ipos = 0;
          }
