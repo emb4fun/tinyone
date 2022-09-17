@@ -282,6 +282,7 @@
     <folder Name="System Files">
       <file file_name="crt0.s" />
       <file file_name="Sitara_Startup.s" />
+      <file file_name="SEGGER_RTT_Syscalls_SES_none.c" />
     </folder>
     <configuration
       Name="Release"

@@ -46,7 +46,6 @@
 #include <stdarg.h>
 #include <limits.h>
 #include <time.h>
-#include <__vfprintf.h>
 #include "tal.h"
 #include "ipstack.h"
 

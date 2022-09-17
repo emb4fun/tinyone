@@ -266,7 +266,7 @@ int term_putchar (int ch)
 /*  Out   : none                                                         */
 /*  Return: none                                                         */
 /*************************************************************************/
-#if (__CROSSWORKS_MAJOR_VERSION == 4) || (__SES_ARM) 
+#if (__CROSSWORKS_MAJOR_VERSION == 4) || (defined(__SES_VERSION) && (__SES_VERSION < 60000))
 int __putchar (int ch, __printf_tag_ptr p)
 #else
 int __putchar (int ch)
@@ -274,10 +274,9 @@ int __putchar (int ch)
 {
    int rc;
    
-#if (__CROSSWORKS_MAJOR_VERSION == 4)
+#if (__CROSSWORKS_MAJOR_VERSION == 4) || (defined(__SES_VERSION) && (__SES_VERSION < 60000))
    (void)p;
 #endif   
-   
    
    rc = term_putchar(ch); 
 
