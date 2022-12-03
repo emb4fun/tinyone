@@ -29,7 +29,6 @@
   <ProjectSessionItem path="tiny-one;tiny-one"/>
   <ProjectSessionItem path="tiny-one;tiny-one;Source Files"/>
   <ProjectSessionItem path="tiny-one;tiny-one;Source Files;src"/>
-  <ProjectSessionItem path="tiny-one;tiny-one;System Files"/>
  </Project>
  <Register1>
   <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU - Current Context/cpsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/r13;CPU/r14;CPU/r15;CPU/cpsr;CPU/r8_fiq;CPU/r9_fiq;CPU/r10_fiq;CPU/r11_fiq;CPU/r12_fiq;CPU/r13_fiq;CPU/r14_fiq;CPU/spsr_fiq;CPU/r13_svc;CPU/r14_svc;CPU/spsr_svc;CPU/r13_abt;CPU/r14_abt;CPU/spsr_abt;CPU/r13_irq;CPU/r14_irq;CPU/spsr_irq;CPU/r13_und;CPU/r14_und;CPU/spsr_und;CPU/r13_mon;CPU/r14_mon;CPU/spsr_mon" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="tiny-one" decimalNodes="" octalNodes="" unsignedNodes=""/>
@@ -68,5 +67,5 @@
  <Files>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="590" useTextEdit="1" path="../src/main.c" left="0" selected="1" top="574" codecName="Default"/>
  </Files>
- <EMStudioWindow activeProject="tiny-one" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="RAM Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="D:/Projekte/GitHub/tinyone/source/prj" debugSearchPath="" autoConnectCapabilities="3199"/>
+ <EMStudioWindow activeProject="tiny-one" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="RAM Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="D:/Projekte/GitHub/tinyone/source/prj" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

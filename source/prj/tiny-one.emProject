@@ -1,5 +1,10 @@
 <!DOCTYPE CrossStudio_Project_File>
 <solution Name="tiny-one" target="8" version="2">
+  <configuration Name="Debug" hidden="Yes" />
+  <configuration Name="RAM" hidden="Yes" />
+  <configuration Name="RAM Debug" inherited_configurations="RAM;Debug" />
+  <configuration Name="RAM Release" inherited_configurations="Release;RAM" />
+  <configuration Name="Release" hidden="Yes" />
   <project Name="tiny-one">
     <configuration
       Name="Common"
@@ -33,84 +38,20 @@
       project_type="Executable"
       target_reset_script="Reset()"
       target_script_file="$(ProjectDir)/am335x_Target.js" />
+    <configuration
+      Name="RAM Debug"
+      debug_register_definition_file="$(ProjectDir)/AM335x_Register.xml" />
+    <configuration
+      Name="Release"
+      c_preprocessor_definitions="STARTUP_FROM_RESET"
+      gcc_optimization_level="Level 3"
+      linker_output_format="bin" />
     <folder Name="Source Files">
       <configuration Name="Common" filter="c;cpp;cxx;cc;h;s;asm;inc" />
-      <folder Name="src">
-        <file file_name="../src/main.c" />
-        <file file_name="../src/xmempool.c" />
-        <file file_name="../src/api_test.c" />
-      </folder>
       <folder Name="common">
         <folder Name="library">
-          <folder Name="tal">
-            <folder Name="board">
-              <file file_name="../common/library/tal_b3/board/b3/src/talboard.c" />
-              <file file_name="../common/library/tal_b3/board/b3/src/talled.c" />
-              <file file_name="../common/library/tal_b3/board/b3/src/fatfs_diskio.c" />
-              <file file_name="../common/library/tal_b3/board/b3/src/talgpio.c" />
-            </folder>
-            <folder Name="core">
-              <file file_name="../common/library/tal_b3/core/src/tal.c" />
-              <file file_name="../common/library/tal_b3/core/src/talcom.c" />
-              <file file_name="../common/library/tal_b3/core/src/taldebug.c" />
-              <file file_name="../common/library/tal_b3/core/src/talmisc.c" />
-              <file file_name="../common/library/tal_b3/core/src/talmem.c" />
-            </folder>
-            <folder Name="cpu">
-              <folder Name="StarterWare">
-                <folder Name="drivers">
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/cpsw.c" />
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/dmtimer.c" />
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/mdio.c" />
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/phy.c" />
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/uart_irda_cir.c" />
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/edma.c" />
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/hs_mmcsd.c" />
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/watchdog.c" />
-                </folder>
-                <folder Name="platform">
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/platform/beaglebone/platform_cpsw.c" />
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/platform/beaglebone/platform_edma.c" />
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/platform/beaglebone/platform_hs_mmcsd.c" />
-                </folder>
-                <folder Name="system_config">
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/system_config/armv7a/cache.c" />
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/system_config/armv7a/gcc/cp15.s" />
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/system_config/armv7a/gcc/cpu.c" />
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/system_config/armv7a/am335x/interrupt.c" />
-                </folder>
-                <folder Name="mmcsdlib">
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/mmcsdlib/hs_mmcsdlib.c" />
-                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/mmcsdlib/mmcsd_proto.c" />
-                </folder>
-              </folder>
-              <file file_name="../common/library/tal_b3/cpu/ti/am335x/src/talcpu.c" />
-              <file file_name="../common/library/tal_b3/cpu/ti/am335x/src/talcpu_com.c" />
-            </folder>
-          </folder>
-          <folder Name="tcts">
-            <file file_name="../common/library/tcts/src/tcts.c" />
-          </folder>
-          <folder Name="uhttp">
-            <folder Name="modules">
-              <file file_name="../common/library/uhttp/src/modules/mod_auth_basic.c" />
-              <file file_name="../common/library/uhttp/src/modules/mod_cgi_func.c" />
-              <file file_name="../common/library/uhttp/src/modules/mod_redir.c" />
-              <file file_name="../common/library/uhttp/src/modules/mod_ssi.c" />
-              <file file_name="../common/library/uhttp/addon/src/mod_api.c" />
-            </folder>
-            <folder Name="os">
-              <file file_name="../common/library/uhttp/src/os/tcts/rfctime.c" />
-              <file file_name="../common/library/uhttp/src/os/tcts/streamio.c" />
-            </folder>
-            <file file_name="../common/library/uhttp/src/envinit.c" />
-            <file file_name="../common/library/uhttp/src/envreg.c" />
-            <file file_name="../common/library/uhttp/src/envvars.c" />
-            <file file_name="../common/library/uhttp/src/mediatypes.c" />
-            <file file_name="../common/library/uhttp/src/mtreg.c" />
-            <file file_name="../common/library/uhttp/src/responses.c" />
-            <file file_name="../common/library/uhttp/src/uhttpd.c" />
-            <file file_name="../common/library/uhttp/src/utils.c" />
+          <folder Name="adler32">
+            <file file_name="../common/library/adler32/adler32.c" />
           </folder>
           <folder Name="fatfs">
             <file file_name="../common/library/fatfs/src/ff.c" />
@@ -123,15 +64,27 @@
             <file file_name="../common/library/fsapi/src/fsapi.c" />
           </folder>
           <folder Name="ipapi">
-            <file file_name="../common/library/ipapi/src/ip_dns.c" />
-            <file file_name="../common/library/ipapi/src/ip_sntp.c" />
-            <file file_name="../common/library/ipapi/src/ip_syslog.c" />
-            <file file_name="../common/library/ipapi/src/ipstack.c" />
             <file file_name="../common/library/ipapi/src/ip_dhcp.c" />
-            <file file_name="../common/library/ipapi/src/ip_mdns.c" />
-            <file file_name="../common/library/ipapi/src/ip_sntpserver.c" />
-            <file file_name="../common/library/ipapi/src/ip_tnp.c" />
             <file file_name="../common/library/ipapi/src/ip_dhcpserver.c" />
+            <file file_name="../common/library/ipapi/src/ip_dns.c" />
+            <file file_name="../common/library/ipapi/src/ip_mdns.c" />
+            <file file_name="../common/library/ipapi/src/ip_sntp.c" />
+            <file file_name="../common/library/ipapi/src/ip_sntpserver.c" />
+            <file file_name="../common/library/ipapi/src/ip_syslog.c" />
+            <file file_name="../common/library/ipapi/src/ip_tnp.c" />
+            <file file_name="../common/library/ipapi/src/ipstack.c" />
+          </folder>
+          <folder Name="ipweb">
+            <file file_name="../common/library/ipweb/src/ipweb.c" />
+            <file file_name="../common/library/ipweb/src/web_api.c" />
+            <file file_name="../common/library/ipweb/src/web_cgi.c" />
+            <file file_name="../common/library/ipweb/src/web_json.c" />
+            <file file_name="../common/library/ipweb/src/web_login.c" />
+            <file file_name="../common/library/ipweb/src/web_sid.c" />
+            <file file_name="../common/library/ipweb/src/web_sid_dummy.c" />
+            <file file_name="../common/library/ipweb/src/web_ssi.c" />
+            <file file_name="../common/library/ipweb/src/web_ssl.c" />
+            <file file_name="../common/library/ipweb/src/web_user.c" />
           </folder>
           <folder Name="lwip">
             <folder Name="api">
@@ -146,6 +99,7 @@
             </folder>
             <folder Name="core">
               <folder Name="ipv4">
+                <file file_name="../common/library/lwip/src/core/ipv4/acd.c" />
                 <file file_name="../common/library/lwip/src/core/ipv4/autoip.c" />
                 <file file_name="../common/library/lwip/src/core/ipv4/dhcp.c" />
                 <file file_name="../common/library/lwip/src/core/ipv4/etharp.c" />
@@ -154,7 +108,6 @@
                 <file file_name="../common/library/lwip/src/core/ipv4/ip4.c" />
                 <file file_name="../common/library/lwip/src/core/ipv4/ip4_addr.c" />
                 <file file_name="../common/library/lwip/src/core/ipv4/ip4_frag.c" />
-                <file file_name="../common/library/lwip/src/core/ipv4/acd.c" />
               </folder>
               <file file_name="../common/library/lwip/src/core/def.c" />
               <file file_name="../common/library/lwip/src/core/dns.c" />
@@ -176,9 +129,6 @@
               <file file_name="../common/library/lwip/src/netif/ethernet.c" />
             </folder>
           </folder>
-          <folder Name="adler32">
-            <file file_name="../common/library/adler32/adler32.c" />
-          </folder>
           <folder Name="lwip_port">
             <folder Name="dev">
               <file file_name="../common/library/lwip_port/dev/ethernetif.c" />
@@ -187,28 +137,22 @@
               <file file_name="../common/library/lwip_port/os/sys_arch.c" />
             </folder>
           </folder>
-          <folder Name="ipweb">
-            <file file_name="../common/library/ipweb/src/ipweb.c" />
-            <file file_name="../common/library/ipweb/src/web_cgi.c" />
-            <file file_name="../common/library/ipweb/src/web_json.c" />
-            <file file_name="../common/library/ipweb/src/web_login.c" />
-            <file file_name="../common/library/ipweb/src/web_sid.c" />
-            <file file_name="../common/library/ipweb/src/web_sid_dummy.c" />
-            <file file_name="../common/library/ipweb/src/web_ssi.c" />
-            <file file_name="../common/library/ipweb/src/web_ssl.c" />
-            <file file_name="../common/library/ipweb/src/web_user.c" />
-            <file file_name="../common/library/ipweb/src/web_api.c" />
-          </folder>
           <folder Name="mbedtls">
             <file file_name="../common/library/mbedtls/library/aes.c" />
             <file file_name="../common/library/mbedtls/library/asn1parse.c" />
+            <file file_name="../common/library/mbedtls/library/asn1write.c" />
             <file file_name="../common/library/mbedtls/library/base64.c" />
             <file file_name="../common/library/mbedtls/library/bignum.c" />
             <file file_name="../common/library/mbedtls/library/ccm.c" />
             <file file_name="../common/library/mbedtls/library/cipher.c" />
             <file file_name="../common/library/mbedtls/library/cipher_wrap.c" />
+            <file file_name="../common/library/mbedtls/library/constant_time.c" />
             <file file_name="../common/library/mbedtls/library/ctr_drbg.c" />
             <file file_name="../common/library/mbedtls/library/debug.c" />
+            <file file_name="../common/library/mbedtls/library/ecdh.c" />
+            <file file_name="../common/library/mbedtls/library/ecdsa.c" />
+            <file file_name="../common/library/mbedtls/library/ecp.c" />
+            <file file_name="../common/library/mbedtls/library/ecp_curves.c" />
             <file file_name="../common/library/mbedtls/library/entropy.c" />
             <file file_name="../common/library/mbedtls/library/gcm.c" />
             <file file_name="../common/library/mbedtls/library/hmac_drbg.c" />
@@ -218,39 +162,103 @@
             <file file_name="../common/library/mbedtls/library/pk.c" />
             <file file_name="../common/library/mbedtls/library/pk_wrap.c" />
             <file file_name="../common/library/mbedtls/library/pkcs12.c" />
+            <file file_name="../common/library/mbedtls/library/pkcs5.c" />
             <file file_name="../common/library/mbedtls/library/pkparse.c" />
+            <file file_name="../common/library/mbedtls/library/pkwrite.c" />
             <file file_name="../common/library/mbedtls/library/platform.c" />
+            <file file_name="../common/library/mbedtls/library/platform_util.c" />
             <file file_name="../common/library/mbedtls/library/sha256.c" />
             <file file_name="../common/library/mbedtls/library/ssl_cache.c" />
             <file file_name="../common/library/mbedtls/library/ssl_ciphersuites.c" />
             <file file_name="../common/library/mbedtls/library/ssl_cli.c" />
             <file file_name="../common/library/mbedtls/library/ssl_cookie.c" />
+            <file file_name="../common/library/mbedtls/library/ssl_msg.c" />
             <file file_name="../common/library/mbedtls/library/ssl_srv.c" />
             <file file_name="../common/library/mbedtls/library/ssl_ticket.c" />
             <file file_name="../common/library/mbedtls/library/ssl_tls.c" />
             <file file_name="../common/library/mbedtls/library/x509.c" />
+            <file file_name="../common/library/mbedtls/library/x509_create.c" />
             <file file_name="../common/library/mbedtls/library/x509_crl.c" />
             <file file_name="../common/library/mbedtls/library/x509_crt.c" />
             <file file_name="../common/library/mbedtls/library/x509_csr.c" />
-            <file file_name="../common/library/mbedtls/library/platform_util.c" />
-            <file file_name="../common/library/mbedtls/library/ecp.c" />
-            <file file_name="../common/library/mbedtls/library/ecdh.c" />
-            <file file_name="../common/library/mbedtls/library/ecp_curves.c" />
-            <file file_name="../common/library/mbedtls/library/ecdsa.c" />
-            <file file_name="../common/library/mbedtls/library/asn1write.c" />
             <file file_name="../common/library/mbedtls/library/x509write_csr.c" />
-            <file file_name="../common/library/mbedtls/library/pkcs5.c" />
-            <file file_name="../common/library/mbedtls/library/x509_create.c" />
-            <file file_name="../common/library/mbedtls/library/pkwrite.c" />
-            <file file_name="../common/library/mbedtls/library/constant_time.c" />
-            <file file_name="../common/library/mbedtls/library/ssl_msg.c" />
           </folder>
           <folder Name="minini">
             <file file_name="../common/library/minini/dev/minIni.c" />
           </folder>
+          <folder Name="tal">
+            <folder Name="board">
+              <file file_name="../common/library/tal_b3/board/b3/src/fatfs_diskio.c" />
+              <file file_name="../common/library/tal_b3/board/b3/src/talboard.c" />
+              <file file_name="../common/library/tal_b3/board/b3/src/talgpio.c" />
+              <file file_name="../common/library/tal_b3/board/b3/src/talled.c" />
+            </folder>
+            <folder Name="core">
+              <file file_name="../common/library/tal_b3/core/src/tal.c" />
+              <file file_name="../common/library/tal_b3/core/src/talcom.c" />
+              <file file_name="../common/library/tal_b3/core/src/taldebug.c" />
+              <file file_name="../common/library/tal_b3/core/src/talmem.c" />
+              <file file_name="../common/library/tal_b3/core/src/talmisc.c" />
+            </folder>
+            <folder Name="cpu">
+              <folder Name="StarterWare">
+                <folder Name="drivers">
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/cpsw.c" />
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/dmtimer.c" />
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/edma.c" />
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/hs_mmcsd.c" />
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/mdio.c" />
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/phy.c" />
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/uart_irda_cir.c" />
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/drivers/watchdog.c" />
+                </folder>
+                <folder Name="mmcsdlib">
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/mmcsdlib/hs_mmcsdlib.c" />
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/mmcsdlib/mmcsd_proto.c" />
+                </folder>
+                <folder Name="platform">
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/platform/beaglebone/platform_cpsw.c" />
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/platform/beaglebone/platform_edma.c" />
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/platform/beaglebone/platform_hs_mmcsd.c" />
+                </folder>
+                <folder Name="system_config">
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/system_config/armv7a/cache.c" />
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/system_config/armv7a/gcc/cp15.s" />
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/system_config/armv7a/gcc/cpu.c" />
+                  <file file_name="../common/library/tal_b3/cpu/ti/am335x/StarterWare/system_config/armv7a/am335x/interrupt.c" />
+                </folder>
+              </folder>
+              <file file_name="../common/library/tal_b3/cpu/ti/am335x/src/talcpu.c" />
+              <file file_name="../common/library/tal_b3/cpu/ti/am335x/src/talcpu_com.c" />
+            </folder>
+          </folder>
+          <folder Name="tcts">
+            <file file_name="../common/library/tcts/src/tcts.c" />
+          </folder>
           <folder Name="time">
             <file file_name="../common/library/time/time.c" />
             <file file_name="../common/library/time/time64.c" />
+          </folder>
+          <folder Name="uhttp">
+            <folder Name="modules">
+              <file file_name="../common/library/uhttp/addon/src/mod_api.c" />
+              <file file_name="../common/library/uhttp/src/modules/mod_auth_basic.c" />
+              <file file_name="../common/library/uhttp/src/modules/mod_cgi_func.c" />
+              <file file_name="../common/library/uhttp/src/modules/mod_redir.c" />
+              <file file_name="../common/library/uhttp/src/modules/mod_ssi.c" />
+            </folder>
+            <folder Name="os">
+              <file file_name="../common/library/uhttp/src/os/tcts/rfctime.c" />
+              <file file_name="../common/library/uhttp/src/os/tcts/streamio.c" />
+            </folder>
+            <file file_name="../common/library/uhttp/src/envinit.c" />
+            <file file_name="../common/library/uhttp/src/envreg.c" />
+            <file file_name="../common/library/uhttp/src/envvars.c" />
+            <file file_name="../common/library/uhttp/src/mediatypes.c" />
+            <file file_name="../common/library/uhttp/src/mtreg.c" />
+            <file file_name="../common/library/uhttp/src/responses.c" />
+            <file file_name="../common/library/uhttp/src/uhttpd.c" />
+            <file file_name="../common/library/uhttp/src/utils.c" />
           </folder>
           <folder Name="zlib">
             <file file_name="../common/library/zlib/compress.c" />
@@ -265,37 +273,29 @@
           </folder>
         </folder>
         <folder Name="src">
-          <file file_name="../common/src/iperf.c" />
-          <file file_name="../common/src/terminal.c" />
-          <file file_name="../common/src/minglue.c" />
+          <file file_name="../common/src/cert.c" />
           <file file_name="../common/src/etc.c" />
           <file file_name="../common/src/fs.c" />
+          <file file_name="../common/src/iperf.c" />
+          <file file_name="../common/src/minglue.c" />
           <file file_name="../common/src/nvm.c" />
+          <file file_name="../common/src/terminal.c" />
           <file file_name="../common/src/xbin.c" />
-          <file file_name="../common/src/cert.c" />
         </folder>
         <folder Name="webpage">
           <file file_name="../common/webpage/romfs_data.c" />
         </folder>
       </folder>
+      <folder Name="src">
+        <file file_name="../src/api_test.c" />
+        <file file_name="../src/main.c" />
+        <file file_name="../src/xmempool.c" />
+      </folder>
     </folder>
     <folder Name="System Files">
-      <file file_name="crt0.s" />
+      <file file_name="SEGGER_RTL_Syscalls_SES_none.c" />
       <file file_name="Sitara_Startup.s" />
-      <file file_name="SEGGER_RTT_Syscalls_SES_none.c" />
+      <file file_name="crt0.s" />
     </folder>
-    <configuration
-      Name="Release"
-      c_preprocessor_definitions="STARTUP_FROM_RESET"
-      gcc_optimization_level="Level 3"
-      linker_output_format="bin" />
-    <configuration
-      Name="RAM Debug"
-      debug_register_definition_file="$(ProjectDir)/AM335x_Register.xml" />
   </project>
-  <configuration Name="RAM" hidden="Yes" />
-  <configuration Name="RAM Debug" inherited_configurations="RAM;Debug" />
-  <configuration Name="Release" hidden="Yes" />
-  <configuration Name="RAM Release" inherited_configurations="Release;RAM" />
-  <configuration Name="Debug" hidden="Yes" />
 </solution>
