@@ -48,10 +48,10 @@
 /*  All Structures and Common Constants                                  */
 /*=======================================================================*/
 
-#define FS_MEMORY_SIZE     ( 16 * 1024)
-#define LWIP_MEMORY_SIZE   (128 * 1024)
-#define WEB_MEMORY_SIZE    (128 * 1024)
-#define TLS_MEMORY_SIZE    (384 * 1024)
+#define FS_MEMORY_SIZE     (  64 * 1024)
+#define LWIP_MEMORY_SIZE   ( 256 * 1024)
+#define WEB_MEMORY_SIZE    ( 256 * 1024)
+#define TLS_MEMORY_SIZE    (1024 * 1024)
 
 /*=======================================================================*/
 /*  Definition of all global Data                                        */
@@ -88,7 +88,7 @@ void xmem_Init (void)
 
    /*lint -save -e423 -e429 */
 
-   pBuffer = xmalloc(XM_ID_HEAP, LWIP_MEMORY_SIZE);
+   pBuffer = xmalloc(XM_ID_HEAP, FS_MEMORY_SIZE);
    tal_MEMAdd(XM_ID_FS, "FS", pBuffer, FS_MEMORY_SIZE);
 
    pBuffer = xmalloc(XM_ID_HEAP, LWIP_MEMORY_SIZE);
