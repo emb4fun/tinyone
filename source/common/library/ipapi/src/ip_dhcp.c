@@ -47,6 +47,7 @@
 #include "terminal.h"
 
 #include "lwip\prot\dhcp.h"
+#include "lwip\netif.h"
 #include "lwip\netifapi.h"
 #include "lwip\dns.h"
 
@@ -72,7 +73,7 @@ void dhcp_set_clientid (uint8_t *id, uint8_t len);
 
 static int DhcpInUse[2] = {0,0}; 
 
-static ip_dhcp_callback_t DhcpCallback = NULL;
+static ip_dhcp_callback_t DhcpCallback[ETH_MAX_IFACE];
 
 static uint32_t NTPServerList[ETH_MAX_IFACE][LWIP_DHCP_MAX_NTP_SERVERS];
 
@@ -89,13 +90,18 @@ static uint32_t NTPServerList[ETH_MAX_IFACE][LWIP_DHCP_MAX_NTP_SERVERS];
 /*  Out   : none                                                         */
 /*  Return: none                                                         */
 /*************************************************************************/
-void _IP_DHCP_CallbackBound (void)
+void _IP_DHCP_CallbackBound (void *p)
 {
-   TAL_DEBUG(TAL_DBG_DHCP, "DHCP is bound");
+   uint8_t       i;
+   struct netif *netif = (struct netif *)p;
       
-   if (DhcpCallback != NULL)
+   for(i=0; i<ETH_MAX_IFACE; i++)
    {
-      DhcpCallback();
+      if (netif == IP_IF_NetIfGet(i))
+      {
+         DhcpCallback[i]();
+         break;
+      }
    }
 
 } /* _IP_DHCP_CallbackBound */
@@ -202,7 +208,7 @@ void IP_DHCP_Stop (uint8_t iface)
          if (netif != NULL)
          {
             DhcpInUse[iface] = 0;
-            DhcpCallback     = NULL;
+            DhcpCallback[iface] = NULL;
             netifapi_dhcp_stop(netif);
          
             OS_TimeDly(100);
@@ -282,9 +288,10 @@ uint32_t IP_DHCP_ServerGet (uint8_t iface)
 /*************************************************************************/
 void IP_DHCP_CallbackSet (uint8_t iface, ip_dhcp_callback_t callback)
 {
-   (void)iface;
-
-   DhcpCallback = callback;
+   if (iface < ETH_MAX_IFACE)
+   {
+      DhcpCallback[iface] = callback;
+   }   
    
 } /* IP_DHCP_CallbackSet */
 

@@ -903,7 +903,7 @@ extern void  mbedtls_free(void *ptr);
  *       library may modify the way the ECDH context layout is configured
  *       and may modify the layout of the new context type.
  */
-#define MBEDTLS_ECDH_LEGACY_CONTEXT
+//#define MBEDTLS_ECDH_LEGACY_CONTEXT
 
 /**
  * \def MBEDTLS_ECDSA_DETERMINISTIC
@@ -1725,7 +1725,7 @@ extern void  mbedtls_free(void *ptr);
  * Comment this macro to disable storing the peer's certificate
  * after the handshake.
  */
-#define MBEDTLS_SSL_KEEP_PEER_CERTIFICATE
+//#define MBEDTLS_SSL_KEEP_PEER_CERTIFICATE
 
 /**
  * \def MBEDTLS_SSL_HW_RECORD_ACCEL
@@ -3347,7 +3347,7 @@ extern void  mbedtls_free(void *ptr);
  *            on it, and considering stronger message digests instead.
  *
  */
-//#define MBEDTLS_SHA1_C
+#define MBEDTLS_SHA1_C
 
 /**
  * \def MBEDTLS_SHA256_C

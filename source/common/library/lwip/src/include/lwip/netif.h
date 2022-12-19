@@ -375,6 +375,12 @@ struct netif {
   /** counters */
   struct stats_mib2_netif_ctrs mib2_counters;
 #endif /* MIB2_STATS */
+
+  /** (estimate) link speed */
+  u32_t link_speed;           /* @@MF */
+  /** full / half duplex */
+  u32_t link_duplex_full;     /* @@MF */
+
 #if LWIP_IPV4 && LWIP_IGMP
   /** This function could be called to add or delete an entry in the multicast
       filter table of the ethernet MAC.*/

@@ -35,7 +35,8 @@
 *
 *  03.01.2016  mifi  First Version.
 **************************************************************************/
-#define __SYS_ARCH_C__
+#if defined(RTOS_TCTS)
+#define __SYS_ARCH_TCTSC__
 
 /*
  * The operating system emulation layer is located in two files, cc.h
@@ -145,8 +146,6 @@ err_t sys_sem_new (sys_sem_t *sem, u8_t count)
  */
 void sys_sem_free (sys_sem_t *sem)
 {
-   sem->dValid = 0;
-   
    OS_SemaDelete(&sem->Sema);
 }
 
@@ -294,7 +293,7 @@ void sys_mbox_post (sys_mbox_t *mbox, void *msg)
       mbox->wInIndex = 0;
    }
    
-   OS_SemaSignalNoSched(&mbox->UsedCntSema);
+   OS_SemaSignal(&mbox->UsedCntSema);
 }
 
 /*
@@ -321,7 +320,7 @@ err_t sys_mbox_trypost (sys_mbox_t *mbox, void *msg)
          mbox->wInIndex = 0;
       }
    
-      OS_SemaSignalNoSched(&mbox->UsedCntSema);
+      OS_SemaSignal(&mbox->UsedCntSema);
       
       return(ERR_OK);
    }   
@@ -376,7 +375,7 @@ u32_t sys_arch_mbox_fetch (sys_mbox_t *mbox, void **msg, u32_t timeout)
          mbox->wOutIndex = 0;
       }
 
-      OS_SemaSignalNoSched(&mbox->FreeCntSema);
+      OS_SemaSignal(&mbox->FreeCntSema);
    }
    
    return(timeout);
@@ -413,7 +412,7 @@ u32_t sys_arch_mbox_tryfetch (sys_mbox_t *mbox, void **msg)
          mbox->wOutIndex = 0;
       }
 
-      OS_SemaSignalNoSched(&mbox->FreeCntSema);
+      OS_SemaSignal(&mbox->FreeCntSema);
    }
    
    return(0);
@@ -494,36 +493,6 @@ sys_thread_t sys_thread_new (const char *name, lwip_thread_fn thread,
 
 
 /*
- * Events
- */
-void sys_event_new (sys_event_t *event, uint32_t mask)
-{
-   (void)mask;
-   
-   OS_EventCreate(event);
-}
-
-void sys_event_signal (sys_event_t *event, uint32_t flags)
-{
-   OS_EventSet(event, flags);
-}
-
-void sys_event_signal_i (sys_event_t *event, uint32_t flags)
-{
-   OS_EventSetFromInt(event, flags);
-}
-
-uint32_t sys_event_wait (sys_event_t *event, uint32_t mask)
-{
-   uint32_t event_value = 0;
-   
-   OS_EventWait(event, mask, OS_EVENT_MODE_OR, &event_value, OS_WAIT_INFINITE); 
-
-   return(event_value);
-}
-
-
-/*
  * Misc
  */
  
@@ -601,6 +570,8 @@ void sys_arch_unprotect (sys_prot_t lev)
 }
 
 #endif /* (SYS_LIGHTWEIGHT_PROT) && defined(beaglebone) */
+
+#endif /* RTOS_TCTS */
 
 /*** EOF ***/
 

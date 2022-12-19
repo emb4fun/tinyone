@@ -101,6 +101,7 @@ void     IP_IF_MACGet (uint8_t iface, uint8_t *mac, uint8_t size);
 uint32_t IP_IF_AddrGet (uint8_t iface);
 uint32_t IP_IF_MaskGet (uint8_t iface);
 uint32_t IP_IF_GWGet (uint8_t iface);
+void     IP_IF_LinkSpeedDuplexGet (uint8_t iface, uint16_t *speed, uint8_t *duplex);
 
 int      IP_IF_Start (uint8_t iface);
 int      IP_IF_Stop (uint8_t iface);

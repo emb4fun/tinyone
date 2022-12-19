@@ -58,7 +58,7 @@ typedef void (*ip_dhcp_callback_t)(void);
 *  Functions Definitions
 **************************************************************************/
 
-void     _IP_DHCP_CallbackBound (void);
+void     _IP_DHCP_CallbackBound (void *p);
 
 void     IP_DHCP_Start (uint8_t iface);
 void     IP_DHCP_Stop (uint8_t iface); 

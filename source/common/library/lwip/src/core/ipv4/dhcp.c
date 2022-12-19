@@ -1159,7 +1159,7 @@ dhcp_bind(struct netif *netif)
   netif_set_addr(netif, &dhcp->offered_ip_addr, &sn_mask, &gw_addr);
   /* interface is used by routing now that an address is set */
 
-  _IP_DHCP_CallbackBound();  /* @@MF */
+  _IP_DHCP_CallbackBound(netif);  /* @@MF */
 }
 
 /**

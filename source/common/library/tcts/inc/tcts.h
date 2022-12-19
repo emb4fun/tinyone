@@ -115,6 +115,13 @@
 #define OS_WAIT_INFINITE   ((uint32_t)-1)
 
 
+/*
+ * Define highest priority value for a user task, 
+ * which is the lowest priority.
+ */
+#define OS_PRIO_MAX        253
+
+
 typedef void (*OS_TASK)(void *arg);
 
 typedef enum
@@ -309,6 +316,13 @@ typedef void (*OS_TIMER_FUNC)(void);
 #define OS_RES_LOCK_TIMED(_a,_b) OS_SemaWait(_a, _b)
 #define OS_RES_FREE(_a)          OS_SemaSignal(_a)
 
+
+/*
+ * Some task macros
+ */
+#define OS_TEST_STATE_NOT_IN_USED(_a)  (OS_TASK_STATE_NOT_IN_USE == ((OS_TCB*)_a)->State) 
+
+
 /**************************************************************************
 *  Functions Definitions
 **************************************************************************/
@@ -348,6 +362,7 @@ void      OS_TaskWakeup (OS_TCB *pTCB);
 uint8_t   OS_TaskIsSleeping (OS_TCB *pTCB);
 uint8_t   OS_TaskShouldTerminate (void);
 OS_TCB   *OS_TaskGetList (void);
+void      OS_TaskSetStateNotInUsed (OS_TCB *pTCB);
 
 
 /*
@@ -390,20 +405,15 @@ void      OS_SemaReset (OS_SEMA *pSema, int32_t nCounterStart);
 void      OS_SemaDelete (OS_SEMA *pSema);
 int       OS_SemaSignal (OS_SEMA *pSema);
 int       OS_SemaSignalFromInt (OS_SEMA *pSema);
-int       OS_SemaSignalNoSched (OS_SEMA *pSema);
 int       OS_SemaWait (OS_SEMA *pSema, uint32_t dTimeoutMs);
-
-/* Some functions needed by NutNET */
-int       OS_SemaBroadcast (OS_SEMA *pSema);
-int       OS_SemaBroadcastAsync (OS_SEMA *pSema);  
 
 
 /*
  * Mutex functionality
  */
 void      OS_MutexCreate (OS_MUTEX *pMutex);
-int       OS_MutexSignal (OS_MUTEX *pMutex);
-int       OS_MutexSignalFromInt (OS_MUTEX *pMutex);
+void      OS_MutexSignal (OS_MUTEX *pMutex);
+void      OS_MutexSignalFromInt (OS_MUTEX *pMutex);
 int       OS_MutexWait (OS_MUTEX *pMutex, uint32_t dTimeoutMs);
 
 
@@ -414,9 +424,9 @@ void      OS_EventCreate (OS_EVENT *pEvent);
 void      OS_EventDelete (OS_EVENT *pEvent);
 void      OS_EventSet (OS_EVENT *pEvent, uint32_t dPattern);
 void      OS_EventSetFromInt (OS_EVENT *pEvent, uint32_t dPattern);
-void      OS_EventSetNoSched (OS_EVENT *pEvent, uint32_t dPattern);
 int       OS_EventWait (OS_EVENT *pEvent, uint32_t dWaitPattern, 
                         os_event_mode_t Mode, uint32_t *pPattern, uint32_t dTimeoutMs);
+void      OS_EventClr (OS_EVENT *pEvent, uint32_t dPattern);
 
                        
 /*

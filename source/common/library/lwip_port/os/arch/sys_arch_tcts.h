@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2013 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2016 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -33,8 +33,7 @@
 ***************************************************************************
 *  History:
 *
-*  19.05.2013  mifi  First Version. This file is not RTOS dependent.
-*  21.08.2013  mifi  Some rework and cleanup.
+*  03.01.2016  mifi  First Version.
 **************************************************************************/
 
 /*
@@ -69,42 +68,48 @@
  *
  */
 
-#if !defined(__CC_H__)
-#define __CC_H__
+#if !defined(__SYS_ARCH_TCTS_H__)
+#define __SYS_ARCH_TCTS_H__
 
 #include <stdint.h>
-#include <stdio.h>
-#include "time.h"
+#include "tcts.h"
 
-#define U16_F "hu"
-#define S16_F "d"
-#define X16_F "hx"
-#define U32_F "u"
-#define S32_F "d"
-#define X32_F "x"
-#define SZT_F "zu" 
+typedef struct _sys_sem_t_
+{
+   uint32_t dValid;
+   OS_SEMA   Sema;
+} sys_sem_t;
 
-int  term_printf (const char *fmt, ...);
+#define MBOX_SIZE_MAX   32
+typedef struct _sys_mbox_t_
+{
+   uint32_t dValid;
+   uint16_t wInIndex;
+   uint16_t wOutIndex;
+   uint16_t wCount;
+   void     *Buffer[MBOX_SIZE_MAX];
+   OS_SEMA   UsedCntSema;
+   OS_SEMA   FreeCntSema;
+} sys_mbox_t;
 
-#define LWIP_PLATFORM_ASSERT(x)     { term_printf(x); while(1) { __asm("nop"); } }
-#define LWIP_PLATFORM_DIAG(x)       term_printf x
+typedef int    sys_thread_t;
 
-#define BYTE_ORDER LITTLE_ENDIAN
-#define LWIP_PROVIDE_ERRNO
+/* Use binary semaphores for a mutex */
+#define LWIP_COMPAT_MUTEX           1
 
-#define PACK_STRUCT_FIELD(x)        x
-#define PACK_STRUCT_STRUCT          __attribute__((packed))
-#define PACK_STRUCT_BEGIN
-#define PACK_STRUCT_END
+#if (SYS_LIGHTWEIGHT_PROT >= 1)
 
+typedef uint32_t  sys_prot_t;
 
-#if defined(LWIP_CACHE_ENABLED)
-/** 
- * Make the PBUF POOL cacheline aligned.
- */
-extern uint8_t memp_memory_PBUF_POOL_base[] __attribute__ ((aligned (LWIP_CACHELINE_SIZE_BYTES)));
+sys_prot_t sys_arch_protect (void);
+void sys_arch_unprotect (sys_prot_t mask);
+
+#define SYS_ARCH_DECL_PROTECT(_mask)  sys_prot_t _mask
+#define SYS_ARCH_PROTECT(_mask)       _mask = sys_arch_protect()
+#define SYS_ARCH_UNPROTECT(_mask)     sys_arch_unprotect(_mask)
+
 #endif
 
-#endif /* __CC_H__ */
+#endif /* __SYS_ARCH_TCTS_H__ */
 
 /*** EOF ***/

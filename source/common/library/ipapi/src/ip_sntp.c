@@ -214,7 +214,7 @@ static int TimeGet (uint32_t addr, uint32_t *unixtime, uint32_t timeout)
     */    
    
    /*
-    * Check for Kiss-o’-Death (KoD), RFC4330
+    * Check for Kiss-of-Death (KoD), RFC4330
     */
    if (0 == sntp->Stratum)
    {
@@ -332,6 +332,7 @@ static void SNTPClientTask (void *arg)
          dAddress = IP_SNTP_ServerGet();
          if (dAddress != 0)
          {
+            dUnixtime = 0; /* Remove compiler warning */
             nErr = TimeGet(dAddress, &dUnixtime, 3000);
             if (0 == nErr)
             {

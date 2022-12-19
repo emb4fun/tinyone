@@ -117,13 +117,19 @@ static void NetIfStatusCallback0 (struct netif *netif)
 {
    if(netif_is_up(netif))
    {
-      TAL_PRINTF("NetIf 0 is up\r\n");
-      NetIfIsUp[0] = 1;
+      if (0 == NetIfIsUp[0])
+      {
+         NetIfIsUp[0] = 1;
+         TAL_PRINTF("NetIf 0 is up\r\n");
+      }   
    }
    else
    {
-      TAL_PRINTF("NetIf 0 is down\r\n");
-      NetIfIsUp[0] = 0;
+      if (1 == NetIfIsUp[0])
+      {
+         NetIfIsUp[0] = 0;
+         TAL_PRINTF("NetIf 0 is down\r\n");
+      }   
    }
    
 } /* NetIfStatusCallback0 */
@@ -133,13 +139,19 @@ static void NetIfStatusCallback1 (struct netif *netif)
 {
    if(netif_is_up(netif))
    {
-      TAL_PRINTF("NetIf 1 is up\r\n");
-      NetIfIsUp[1] = 1;
+      if (0 == NetIfIsUp[1])
+      {
+         NetIfIsUp[1] = 1;
+         TAL_PRINTF("NetIf 1 is up\r\n");
+      }         
    }
    else
    {
-      TAL_PRINTF("NetIf 1 is down\r\n");
-      NetIfIsUp[1] = 0;
+      if (1 == NetIfIsUp[1])
+      {
+         NetIfIsUp[1] = 0;
+         TAL_PRINTF("NetIf 1 is down\r\n");
+      }         
    }
    
 } /* NetIfStatusCallback1 */
@@ -197,6 +209,18 @@ int __attribute__((weak)) IP_TNP_IsStarted (void)
 {
    return(0);
 } /* IP_TNP_IsStarted */
+
+/*************************************************************************/
+/*  IP_TNP_IsES                                                          */
+/*                                                                       */
+/*  In    : none                                                         */
+/*  Out   : none                                                         */
+/*  Return: 0 not started / 1 otherwise                                  */
+/*************************************************************************/
+int __attribute__((weak)) IP_TNP_IsES (void)
+{
+   return(0);
+} /* IP_TNP_IsES */
 
 /*************************************************************************/
 /*  IP_DHCP_ServerGet                                                    */
@@ -541,6 +565,28 @@ uint32_t IP_IF_GWGet (uint8_t iface)
 
    return(ntohl(addr));
 } /* IP_IF_GWGet */
+
+/*************************************************************************/
+/*  IP_IF_LinkSpeedDuplexGet                                             */
+/*                                                                       */
+/*  Get the gateway address of the network interface in host order.      */
+/*                                                                       */
+/*  In    : iface                                                        */
+/*  Out   : none                                                         */
+/*  Return: Address in host order                                        */
+/*************************************************************************/
+void IP_IF_LinkSpeedDuplexGet (uint8_t iface, uint16_t *speed, uint8_t *duplex)
+{
+   *speed  = 0;
+   *duplex = 0;
+   
+   if ((iface < ETH_MAX_IFACE) && (pNetIf[iface] != NULL))
+   {
+      *speed  = (uint16_t)pNetIf[iface]->link_speed;
+      *duplex = (uint8_t)pNetIf[iface]->link_duplex_full;
+   }
+
+} /* IP_IF_LinkSpeedDuplexGet */
 
 /*************************************************************************/
 /*  IP_IF_Start                                                          */

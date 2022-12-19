@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2020 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2020-2022 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -29,11 +29,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  11.03.2020  mifi  First Version.
 **************************************************************************/
 #define __XMEMPOOL_C__
 

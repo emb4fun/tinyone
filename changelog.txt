@@ -1,12 +1,24 @@
 
 TinyONE ChangeLog
 
-= Version 1.10 / 1.10, 25.08.2021
-   * First version for GitHub.
+= 19.12.2022
+   * SES v7.10a used.
+   * Corrected some file headers.
+   * Added functionality to get link speed and mode, IP_IF_LinkSpeedDuplexGet.
+   * Some changes to support more than one network interfaces. 
+   * Added login dummy in case no login is required (IP_WEB_SID_SUPPORT = 0).
+   * Added interrupt protection in memory management.
+   * Change statistic task priority from 2 to 254.
+   * Removed OS_SemaSignalNoSched, OS_SemaBroadcastAsync and OS_SemaBroadcast
 
-= 15.05.2022
-   * New mbedTLS, v2.28.0, used.
+= 17.12.2022
+   * New mbedTLS, v2.28.2, used.
 
 = 24.07.2022
    * New mbedTLS, v2.28.1, used.
-
+   
+= 15.05.2022
+   * New mbedTLS, v2.28.0, used.
+   
+= Version 1.10 / 1.10, 25.08.2021
+   * First version for GitHub.

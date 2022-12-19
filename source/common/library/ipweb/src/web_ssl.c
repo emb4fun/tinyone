@@ -272,7 +272,7 @@ static client_tls_info_t *FindFreeClient (void)
    
    for (int i=0; i<_MAX_WEB_TLS_CLIENT_TASKS; i++)
    {
-      if (OS_TASK_STATE_NOT_IN_USE == ClientArray[i].TCB.State)
+      if ( OS_TEST_STATE_NOT_IN_USED(&ClientArray[i].TCB) )
       {
          Client = &ClientArray[i];
          break;
@@ -371,6 +371,7 @@ static void WebServerTls (void *p)
    memset(ClientArray, 0x00, sizeof(ClientArray));
    for(int i=0; i<_MAX_WEB_TLS_CLIENT_TASKS; i++)
    {
+      OS_TaskSetStateNotInUsed(&ClientArray[i].TCB);
       ClientArray[i].Stack     = (uint8_t*)&ClientStack[i][0];
       ClientArray[i].StackSize = TASK_IP_WEB_TLS_CLIENT_STK_SIZE;
    }

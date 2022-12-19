@@ -51,8 +51,8 @@ gmtime64_r() is a 64-bit equivalent of gmtime_r().
 
 /* Spec says except for stftime() and the _r() functions, these
    all return static memory.  Stabbings! */
-static struct TM   Static_Return_Date;
-static char        Static_Return_String[35];
+//static struct TM   Static_Return_Date;
+//static char        Static_Return_String[35];
 
 static const char days_in_month[2][12] = {
     {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},

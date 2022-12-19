@@ -45,7 +45,25 @@
 #include "interrupt.h"
 #include "hw_types.h"
 #include "soc_AM335x.h"
-#include "cpu.h"
+
+
+/*****************************************************************************
+**                           FUNCTION PROTOTYPES
+*****************************************************************************/
+extern void CPUSwitchToUserMode(void);
+extern void CPUSwitchToPrivilegedMode(void);
+
+/****************************************************************************/
+/*
+** Functions used internally
+*/
+extern void CPUAbortHandler(void);
+extern void CPUirqd(void);
+extern void CPUirqe(void);
+extern void CPUfiqd(void);
+extern void CPUfiqe(void);
+extern unsigned int CPUIntStatus(void);
+
 
 /******************************************************************************
 **                INTERNAL MACRO DEFINITIONS

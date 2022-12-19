@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2018 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2018-2022 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 
 *  The source is partial based on the TI example.
@@ -11,9 +11,11 @@
 *  
 *  1. Redistributions of source code must retain the above copyright 
 *     notice, this list of conditions and the following disclaimer.
+*
 *  2. Redistributions in binary form must reproduce the above copyright
 *     notice, this list of conditions and the following disclaimer in the 
 *     documentation and/or other materials provided with the distribution.
+*
 *  3. Neither the name of the author nor the names of its contributors may 
 *     be used to endorse or promote products derived from this software 
 *     without specific prior written permission.
@@ -694,8 +696,8 @@ static int cpsw_port_init (struct netif *netif)
    IntRegister(SYS_INT_3PGSWTXINT0, CPSWCore0TxIsr);
    
    /* Set the priority */
-   IntPrioritySet(SYS_INT_3PGSWTXINT0, 0, AINTC_HOSTINT_ROUTE_IRQ);
-   IntPrioritySet(SYS_INT_3PGSWRXINT0, 0, AINTC_HOSTINT_ROUTE_IRQ);
+   IntPrioritySet(SYS_INT_3PGSWTXINT0, CPU_ENET_PRIO, AINTC_HOSTINT_ROUTE_IRQ);
+   IntPrioritySet(SYS_INT_3PGSWRXINT0, CPU_ENET_PRIO, AINTC_HOSTINT_ROUTE_IRQ);
    
    /**
     * Initialize an instance only once. Port initialization will be
@@ -825,9 +827,9 @@ static void cpsw_tx_inthandler (void)
 */
 static void CPSWCore0RxIsr (void)
 {
-   TAL_CPU_IRQ_ENTER();
+   TAL_CPU_IRQ_ENTER();    /*lint !e717*/
    cpsw_rx_inthandler();
-   TAL_CPU_IRQ_EXIT();
+   TAL_CPU_IRQ_EXIT();     /*lint !e717*/
 }
 
 /*
@@ -835,9 +837,9 @@ static void CPSWCore0RxIsr (void)
 */
 static void CPSWCore0TxIsr (void)
 {
-   TAL_CPU_IRQ_ENTER();
+   TAL_CPU_IRQ_ENTER();    /*lint !e717*/
    cpsw_tx_inthandler();
-   TAL_CPU_IRQ_EXIT();   
+   TAL_CPU_IRQ_EXIT();     /*lint !e717*/
 }
 
 
@@ -1247,7 +1249,7 @@ static err_t low_level_output (struct netif *netif, struct pbuf *p)
       sz = MIN_PKT_LEN;
    }
 
-   bd->bufoff_len   = sz; //ETH_MAX_BUFF_LEN;
+   bd->bufoff_len   = (uint32_t)sz; //ETH_MAX_BUFF_LEN;
    bd->flags_pktlen = sz & CPDMA_BD_PKTLEN_MASK;
 
    /*
@@ -1463,6 +1465,10 @@ err_t ethernetif_init (struct netif *netif)
    
    if (netif != NULL)
    {
+      /* Remove lint warning */
+      memset(RxBuf, 0x00, sizeof(RxBuf));
+      memset(TxBuf, 0x00, sizeof(TxBuf));
+   
       /* Descriptive abbreviation for this interface */
       netif->name[0] = IFNAME0;
       netif->name[1] = IFNAME1;

@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2013 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2022 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -31,11 +31,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  28.07.2013  mifi  First Version.
 **************************************************************************/
 #if !defined(__TALCPU_CM_H__)
 #define __TALCPU_CM_H__
@@ -52,12 +47,17 @@
 *  Macro Definitions
 **************************************************************************/
 
+#if defined(_lint)
+#define TAL_CPU_IRQ_ENTER()
+#define TAL_CPU_IRQ_EXIT()
+#else
+
 #if defined(RTOS_TCTS)
 #define TAL_CPU_IRQ_ENTER()   __disable_irq()  
 #define TAL_CPU_IRQ_EXIT()    __enable_irq()
 #endif
 
-#if defined(RTOS_UCOS)
+#if defined(RTOS_UCOS3)
 // See: https://weston-embedded.com/media-articles/20-cortex-m-migrate-to-new-armv7m-port
 #define TAL_CPU_IRQ_ENTER()   {                                                           \
                                  CPU_SR_ALLOC();                                          \
@@ -68,6 +68,7 @@
 #define TAL_CPU_IRQ_EXIT()    OSIntExit(); /* Tell OS that we are leaving the ISR */ }
 #endif
 
+#endif /* defined(_lint) */
 
 
 /*

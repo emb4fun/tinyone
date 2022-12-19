@@ -370,7 +370,7 @@ extern void  lwip_free(void *ptr);
 /*    Function prototypes                                                */    
 /*-----------------------------------------------------------------------*/
 
-void _IP_DHCP_CallbackBound (void);
+void _IP_DHCP_CallbackBound (void *p);
 
 #endif /* __LWIPOPT_H__ */
 /*** EOF ***/

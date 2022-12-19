@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2018 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2018-2022 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -31,13 +31,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  30.06.2018  mifi  First Version.
-*  02.04.2021  mifi  Rework MEMMalloc and MEMFree.
-*  03.04.2021  mifi  Added "object" check.
 **************************************************************************/
 #define __TALMEM_C__
 
@@ -132,6 +125,8 @@ static void *MEMMalloc (tal_mem_id ID, uint32_t dSize)
    mem_hdr_t *pPrev;
    mem_hdr_t *pMem = NULL;
    mem_hdr_t *pTmp;
+
+   TAL_CPU_DISABLE_ALL_INTS();
    
    if (pFreelist != NULL)
    {
@@ -217,6 +212,8 @@ static void *MEMMalloc (tal_mem_id ID, uint32_t dSize)
       pMem->dListID = (uint32_t)ID;
       pMem->dObject = OBJ_IN_USE;
    }
+
+   TAL_CPU_ENABLE_ALL_INTS();
    
    return(p);
 } /* MEMMalloc */
@@ -261,6 +258,8 @@ static void MEMFree (void *pBuffer)
    mem_hdr_t *pMem;
    uint32_t   dListID;
 
+   TAL_CPU_DISABLE_ALL_INTS();
+
    if (pBuffer != NULL)
    {
       /* Get memory header */
@@ -270,7 +269,8 @@ static void MEMFree (void *pBuffer)
       if (pMem->dObject != OBJ_IN_USE)
       {
          /* This is not a memory object which is in used */
-         return;
+         goto MEMFreeEnd;  /*lint !e801*/
+         //return;
       }
 
       /* Get list ID */
@@ -278,7 +278,8 @@ static void MEMFree (void *pBuffer)
       if (dListID >= MEM_LIST_COUNT)
       {
          /* Wrong list ID */
-         return;
+         goto MEMFreeEnd;  /*lint !e801*/
+         //return;
       }
 
       /* Set free marker */   
@@ -372,6 +373,10 @@ static void MEMFree (void *pBuffer)
       MemList[dListID].pFreelist = pFreelist;
 
    } /* end if (pBuffer != NULL) */
+   
+MEMFreeEnd:   
+   
+   TAL_CPU_ENABLE_ALL_INTS();
 
 } /* MEMFree */
 
@@ -436,8 +441,8 @@ static void MEMAdd (tal_mem_id ID, void *pBuffer, uint32_t dSize)
 /*************************************************************************/
 void tal_MEMInit (void)
 {
-   uint32_t dAddr;
-   uint32_t dSize;
+   uint32_t dAddr = 0;
+   uint32_t dSize = 0;
 
    /* 
     * Clear context list first 
@@ -481,6 +486,9 @@ void tal_MEMInit (void)
    MemList[XM_ID_HEAP].UsedRawMemory = 0;
 
    OS_SemaCreate(&Sema, 1, 1);
+   
+   (void)dAddr;
+   (void)dSize;
 
 } /* tal_MEMInit */
 

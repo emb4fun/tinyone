@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2019 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2019-2022 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -29,11 +29,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  14.07.2019  mifi  First version for the BeagleBone Black.
 **************************************************************************/
 #if !defined(__PROJECT_H__)
 #define __PROJECT_H__
@@ -73,8 +68,8 @@
  * from HIGHPRIO (1) ... (255) LOWPRIO.
  */
 
-#define TASK_START_PRIORITY               1     /* This is the start priority */
-#define TASK_START_PRIORITY_IDLE          253   /* The START thread is not needed later */
+#define TASK_START_PRIORITY               1           /* This is the start priority */
+#define TASK_START_PRIORITY_IDLE          OS_PRIO_MAX /* The START thread is not needed later */
 #define TASK_START_STK_SIZE               (4*1024)
 
 #define TASK_TERM_PRIORITY                64
@@ -115,14 +110,14 @@
 /**************************************************************/
 
 #define TASK_IP_PRIORITY                  (TASK_IP_RX_PRIORITY + 1)
-#define TASK_IP_STK_SIZE                  1536
+#define TASK_IP_STK_SIZE                  2048
 
 /*
  * The priority of the IP_RX task must be the highest one of
  * all IP tasks. Than comes the IP task and all IP application.
  */
 #define TASK_IP_RX_PRIORITY               32
-#define TASK_IP_RX_STK_SIZE               768
+#define TASK_IP_RX_STK_SIZE               2048
 
 /**************************************************************/
 
