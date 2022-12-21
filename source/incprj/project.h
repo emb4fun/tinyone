@@ -98,13 +98,16 @@
 #define TASK_IP_SNTP_SERVER_PRIORITY      41
 #define TASK_IP_SNTP_SERVER_STK_SIZE      1024
 
-#define TASK_IP_TNP_PRIORITY              40
+#define TASK_IP_ELCAC_PRIORITY            40
+#define TASK_IP_ELCAC_STK_SIZE            (4*1024)
+
+#define TASK_IP_TNP_PRIORITY              39
 #define TASK_IP_TNP_STK_SIZE              1536
 
-#define TASK_IP_MDNS_PRIORITY             39
+#define TASK_IP_MDNS_PRIORITY             38
 #define TASK_IP_MDNS_STK_SIZE             768
 
-#define TASK_IP_DHCP_SERVER_PRIORITY      38
+#define TASK_IP_DHCP_SERVER_PRIORITY      37
 #define TASK_IP_DHCP_SERVER_STK_SIZE      1024
 
 /**************************************************************/

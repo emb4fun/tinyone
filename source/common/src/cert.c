@@ -43,6 +43,8 @@
 #include <string.h>
 #include "fsapi.h"
 #include "cert.h"
+#include "ff.h"
+#include "elca_client.h"
 
 /*=======================================================================*/
 /*  All Structures and Common Constants                                  */
@@ -132,6 +134,119 @@ void cert_Init (void)
    }
    
 } /* cert_Init */
+
+/*************************************************************************/
+/*  cert_Check                                                           */
+/*                                                                       */
+/*  Check if the data for the cert system are available.                 */
+/*                                                                       */
+/*  In    : none                                                         */
+/*  Out   : none                                                         */
+/*  Return: 0 == OK / error cause                                        */
+/*************************************************************************/
+int cert_Check (void)
+{
+   int rc = 0;
+   int fd;
+
+   /* Check device key */
+   fd = _open("SD0:/certs/device.key", _O_BINARY | _O_RDONLY);
+   if (fd != -1)
+   {
+      _close(fd);
+   }
+   else
+   {
+      rc = -1;
+   }
+
+   /* Check device cert */
+   fd = _open("SD0:/certs/device.crt", _O_BINARY | _O_RDONLY);
+   if (fd != -1)
+   {
+      _close(fd);
+   }
+   else
+   {
+      rc = -1;
+   }
+
+   /* Check intermediate cert */
+   fd = _open("SD0:/certs/intermed.crt", _O_BINARY | _O_RDONLY);
+   if (fd != -1)
+   {
+      _close(fd);
+   }
+   else
+   {
+      rc = -1;
+   }
+   
+   return(rc);
+} /* cert_Check */
+
+/*************************************************************************/
+/*  cert_ELCACallback                                                    */
+/*                                                                       */
+/*  This is the ELCA callback.                                           */
+/*                                                                       */
+/*  In    : nError                                                       */
+/*  Out   : none                                                         */
+/*  Return: none                                                         */
+/*************************************************************************/
+void cert_ELCACallback (int nError)
+{
+   char *pData;
+   size_t Len;
+   int    fd;
+   
+   if (0 == nError)
+   {
+      /* Create directory if not available */
+      f_mkdir("/certs");
+
+      /*
+       * Write device key 
+       */
+      pData = IP_ELCAC_KeyGet();
+      Len   = strlen(pData);
+
+      fd = _open("SD0:/certs/device.key", _O_BINARY | _O_WRONLY | _O_CREATE_ALWAYS);
+      if (fd != -1)
+      {
+         _write(fd, pData, Len);
+         _close(fd);
+      }
+      
+      /* 
+       * Write device cert 
+       */
+      pData = IP_ELCAC_DevCRTGet();
+      Len   = strlen(pData);
+       
+      fd = _open("SD0:/certs/device.crt", _O_BINARY | _O_WRONLY | _O_CREATE_ALWAYS);
+      if (fd != -1)
+      {
+         _write(fd, pData, Len);
+         _close(fd);
+      }
+      
+      /* 
+       * Write intermediate cert 
+       */
+      pData = IP_ELCAC_InterCRTGet();
+      Len   = strlen(pData);
+       
+      fd = _open("SD0:/certs/intermed.crt", _O_BINARY | _O_WRONLY | _O_CREATE_ALWAYS);
+      if (fd != -1)
+      {
+         _write(fd, pData, Len);
+         _close(fd);
+      }
+      
+   }
+   
+} /* cert_ELCACallback */
 
 /*************************************************************************/
 /*  cert_Get_DeviceKey                                                   */

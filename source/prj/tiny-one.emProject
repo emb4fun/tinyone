@@ -297,6 +297,7 @@
       </folder>
       <folder Name="src">
         <file file_name="../src/api_test.c" />
+        <file file_name="../src/elca_client.c" />
         <file file_name="../src/main.c" />
         <file file_name="../src/xmempool.c" />
       </folder>

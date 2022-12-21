@@ -24,6 +24,8 @@
   <ProjectSessionItem path="tiny-one"/>
   <ProjectSessionItem path="tiny-one;tiny-one"/>
   <ProjectSessionItem path="tiny-one;tiny-one;Source Files"/>
+  <ProjectSessionItem path="tiny-one;tiny-one;Source Files;common"/>
+  <ProjectSessionItem path="tiny-one;tiny-one;Source Files;common;src"/>
   <ProjectSessionItem path="tiny-one;tiny-one;Source Files;src"/>
  </Project>
  <Register1>
@@ -57,7 +59,8 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="588" useTextEdit="1" path="../src/main.c" left="0" selected="1" top="569" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="598" useTextEdit="1" path="../src/main.c" left="0" selected="1" top="569" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="9" y="46" useTextEdit="1" path="../common/src/cert.c" left="0" top="8" codecName="Default"/>
  </Files>
  <EMStudioWindow activeProject="tiny-one" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="RAM Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

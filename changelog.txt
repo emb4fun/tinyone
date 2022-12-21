@@ -1,6 +1,10 @@
 
 TinyONE ChangeLog
 
+= 21.12.2022
+   * ELCA: Added functionality to automatically request a certificate from
+     a TinyELCA server if needed.
+
 = 19.12.2022
    * SES v7.10a used.
    * Corrected some file headers.

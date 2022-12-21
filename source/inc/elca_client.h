@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2020 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2021-2022 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -29,23 +29,21 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  05.03.2020  mifi  First Version.
 **************************************************************************/
-#if !defined(__CERT_H__)
-#define __CERT_H__
+#if !defined(__ELCA_CLIENT_H__)
+#define __ELCA_CLIENT_H__
 
 /**************************************************************************
 *  Includes
 **************************************************************************/
-#include <stdint.h>
+
+#include "elca_rpc.h"
 
 /**************************************************************************
 *  Global Definitions
 **************************************************************************/
+
+typedef void (*ip_elcac_cb_ready_t)(int nError);
 
 /**************************************************************************
 *  Macro Definitions
@@ -55,14 +53,13 @@
 *  Functions Definitions
 **************************************************************************/
 
-void cert_Init (void);
-int  cert_Check (void);
-void cert_ELCACallback (int nError);
+void  IP_ELCAC_Start (ip_elcac_cb_ready_t callback);
 
-int  cert_Get_DeviceKey(char **buf, size_t *buflen);
-int  cert_Get_DeviceCert(char **buf, size_t *buflen);
-int  cert_Get_IntermediateCert(char **buf, size_t *buflen);
+char *IP_ELCAC_KeyGet (void);
+char *IP_ELCAC_CSRGet (void);
+char *IP_ELCAC_DevCRTGet (void);
+char *IP_ELCAC_InterCRTGet (void);
 
-#endif /* !__CERT_H__ */
+#endif /* !__ELCA_CLIENT_H__ */
 
 /*** EOF ***/

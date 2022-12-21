@@ -46,6 +46,8 @@
 #include "cert.h"
 #include "xmempool.h"
 #include "mbedtls/version.h"
+#include "elca_client.h"
+
 #include "iperf.h"
 
 void ATInit(void);
@@ -563,6 +565,14 @@ static void StartTask (void *p)
    
    iperf_Start();       /* Start the IPerf service */
 
+   /*
+    * Check if the ELCA client must be started
+    */
+   if (-1 == cert_Check())
+   {
+      IP_ELCAC_Start(cert_ELCACallback);
+   }      
+                   
    OS_TaskChangePriority(TASK_START_PRIORITY_IDLE);
 
    while (1)
