@@ -48,6 +48,9 @@
 *  Global Definitions
 **************************************************************************/
 
+#define USER_MODE_NORMAL   0
+#define USER_MODE_TOTP     1
+
 /**************************************************************************
 *  Macro Definitions
 **************************************************************************/
@@ -64,6 +67,17 @@ void  WebUserFirstUserSet (char *pPassword);
 int   WebUserCheckUserPassword (char *pUser, char *pPassword, uint32_t *pPermission);
 char *WebUserGetUser (uint8_t bIndex);
 int   WebUserSetNewPass (char *pUser, char *pPassUser, char *pPassNew);
+
+int   WebUserIsValid (char *pUser, uint8_t *pMode);
+
+int   WebUserGetResetRequestCode (char *pUser, char *pBuffer, size_t Size);
+int   WebUserGetResetCode (char *pRequestCode, size_t RequestSize, char *pReset, size_t ResetSize);
+int   WebUserPasswordReset (char *pUser, char *pPassNew, char *pResetCode);
+
+int   WebUserIsTOTP (char *pUser);
+int   WebUserGetTOTPSecretBase32 (char *pUser, char *pBase32, size_t Base32Size);
+int   WebUserTOTPEnable (char *pUser, uint32_t dValue);
+int   WebUserCheckTOTP (char *pUser, uint32_t dValue);
 
 #endif /* !__WEB_USER_H__ */
 

@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="content-type"     content="text/html;charset=iso-8859-1"/>
+    <meta http-equiv="content-language" content="en"/>
+    <meta http-equiv="pragma"           content="no-cache"/>
+    <title><%sys_longname%></title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>          
+    <script type="text/javascript" src="../js/system.js"></script>
+    <script type="text/javascript" src="../js/qrcode.min.js"></script>
+    <script type="text/javascript">
+    <!--
+      var LogoutSec = <%sys_logout_sec%>;
+
+      /**************************************************************/
+      
+      function Error2Text(err)
+      {
+         switch(err) 
+         {
+            case -1: msg = "Incorrect authentication code entered. Please try again."; break; 
+            default: msg = "An internal error has occurred: " + err;                   break;
+         }   
+         return(msg);
+      }
+
+      /**************************************************************/
+
+      function MyCancel1()
+      {
+         document.getElementById("tr1_err").style.display = "none";
+      }
+
+      function MySubmit1()
+      {
+         document.getElementById("tr1_err").style.display = "none";
+      
+         /* Check if a "code" is available */
+         if (document.formular1.code.value === "") return;
+
+         let ajax;
+         let data;
+         let code = document.formular1.code.value;
+
+         data = JSON.stringify({ code: code });
+         ajax = GetAjaxObject();
+         ajax.open("POST", "/cgi-bin/totp.cgi", true);  
+         ajax.onreadystatechange = function() 
+         {
+            if ((this.readyState == 4) && (this.status == 200))
+            {
+               let jdata = JSON.parse(this.responseText);
+               let err = jdata.err;
+               let msg = jdata.msg;
+
+               /* Check for blocked error */   
+               if (err == -2 )
+               {
+                  /* Login blocked, try again */
+                  window.location.replace('/login.htm');
+               }
+               /* Check for any error */   
+               else if (err != 0)
+               {
+                  /* Show error information */
+                  document.getElementById("tr1_msg").innerHTML = Error2Text(err);
+                  document.getElementById("tr1_err").style.display = "block";
+               } 
+               else
+               {
+                  /* No error */
+                  window.location.replace('/index.htm');
+               }
+            } // if ((this.readyState == 4) && (this.status == 200))
+         } // end ajax.onreadystatechange
+         ajax.send(data);
+      }
+
+      /**************************************************************/
+    
+      function Ready()
+      {
+        let totp_msg;
+        let totp_issuer = <%sys_login_totp_issuer%>;
+        let totp_label  = <%sys_login_totp_label%>;
+        let totp_ena    = parseInt('<%sys_login_totp_ena%>');
+        let totp_secret = <%sys_login_totp%>;
+        
+        if (0 == totp_ena)
+        {
+          document.getElementById("tr1").style.display = "block";
+          document.getElementById("tr2").style.display = "none";
+        
+          totp_msg = "otpauth://totp/" + totp_label + "?secret=" + totp_secret +"&issuer=" + totp_issuer;
+        
+          let qr_totp = new QRCode(document.getElementById("qr_totp"), {
+	         width  : 200,
+	         height : 200
+          });
+        
+          qr_totp.makeCode(totp_msg);
+          document.getElementById("qr_totp_sec").innerHTML = totp_secret;
+        }
+        else
+        {
+          document.getElementById("tr1").style.display = "none";
+          document.getElementById("tr2").style.display = "block";
+        } 
+        
+        LogoutCheck();
+      }
+
+    -->
+    </script>
+  </head>        
+
+  <body bgcolor="#ffffff" onload="Ready()">
+    <table class="table_body">
+      <tr align="center">
+        <td> 
+        
+          <!-- Header -->
+          <div class="header">
+            <h1><%sys_longname%></h1>
+            <div id="logout" style="display:none">
+              <div class="div"></div>
+              <div class="loglink"><a href="../logout.htm">Logout in <span id="lc"></span> s</a></div>
+            </div>
+            <div class="logo"></div>
+          </div>
+      
+          <!-- Navigation #1 -->
+          <table class="table_navi1">
+            <tr>
+              <td>&nbsp;</td>
+              <td class="main">
+                <ul>
+                  <li class="nb"><a href="../home/index.htm">Home</a></li>
+                  <li class="nm"><a href="../dhcp/index.htm">DHCP Server</a></li>
+                  <li class="nm"><a href="../sntp/index.htm">SNTP Server</a></li>
+                  <li class="ne"><a class="active" href="index.htm">Maintenance</a></li>
+                </ul>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+          </table> 
+
+          <!-- Navigation #2, #3 -->
+          <div class="navi2">
+            <ul>
+              <li class="nb"><a href="index.htm">Overview</a></li>
+              <li class="nm"><a href="upweb.htm">Update</a></li>
+              <li class="nm"><a href="stattask.htm">Statistic</a></li>
+              <li class="nm"><a href="time.htm">Time</a></li>
+              <li class="nm"><a href="net.htm">Network</a></li>
+              <li class="nm"><a href="dhcp.htm">DHCP Server</a></li>
+              <li class="ne"><a class="active" href="secusers.htm">Security</a></li>
+            </ul>
+            <p><%sys_shortname%></p>
+          </div> 
+          <div class="navi3">
+            <ul>
+              <li class="nb"><a href="secusers.htm">Change password</a></li>
+              <li class="ne"><a class="active" href="#">Enable TOTP</a></li>
+            </ul>
+          </div>
+
+          <!-- table_row #1 -->
+          <div id="tr1" style="display:none">
+            <table class="table_row">
+              <tr align="center">
+                <td>
+               
+                  <table class="table_variable">
+                    <thead>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>Enable two-factor authentication using TOTP</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </thead>
+
+                    <tbody>
+                      <tr align="center">
+                        <td>&nbsp;</td>
+                        <td>
+                          <div id="qr_totp" style="margin: 20px 0 10px 0"></div>
+                          <div>
+                            <p style="font-size:16px">Secret: <span id="qr_totp_sec"></span></p>   
+                          </div> 
+                        </td>
+                        <td>&nbsp;</td>
+                      </tr>
+
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                     
+                          <div class="content">
+                            <form name="formular1" method="post">
+                           
+                              <div id="tr1_err" style="display:none">
+                                <p style="text-align:center; font-weight:bold">
+                                  <br><br><span id="tr1_msg">error</span>
+                                </p>
+                              </div>
+
+                              <p style="text-align:center; font-weight:bold">
+                                <br><br>Two factor authentication is not enabled yet.
+                              </p>
+
+                              <p style="text-align:center">
+                                <br>Scan the QR code with your TOTP authenticator app. After scanning, the app
+                                <br><br>displays a six-digit authentication code that you must enter here to enable 
+                                <br><br>the two-factor authentication based on the TOTP functionality.
+                              </p>
+                              
+                              <fieldset>
+                                <label class="normal">&nbsp;</label>
+                                <br>
+                              
+                                <label class="normal" style="font-weight:bold">Authentication code</label>
+                                <input class="small" type="text" id="code" name="code" maxlength="6" size="6"/>
+                                <br>
+
+                                <label class="normal">&nbsp;</label>
+                                <button class="play" type="button" name="button1" value="submit" onclick="javascript:MySubmit1()">
+                                  Enable
+                                </button>
+                                <button class="cancel" type="reset" name="button2" value="cancel" onclick="javascript:MyCancel1()">
+                                  Cancel
+                                </button>
+                              </fieldset>
+                            </form>
+                          </div>
+                     
+                        </td>
+                        <td>&nbsp;</td>
+                      </tr>
+                    </tbody>
+                  
+                    <tfoot>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </tfoot>                            
+                  </table>
+                </td>
+              </tr>
+            </table>
+         </div>   
+          <!-- table_row #1 --> 
+
+
+          <!-- table_row #2 -->
+          <div id="tr2" style="display:none">
+            <table class="table_row">
+              <tr align="center">
+                <td>
+               
+                  <table class="table_variable">
+                    <thead>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>Enable two-factor authentication using TOTP</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </thead>
+
+                    <tbody>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                          <p>The two-factor authentication is already enabled.</p>
+                        </td>
+                        <td>&nbsp;</td>
+                      </tr>
+                    </tbody>
+                    
+                    <tfoot>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </tfoot>                            
+                  </table>
+                </td>
+              </tr>
+            </table>
+         </div>   
+          <!-- table_row #2 --> 
+
+        </td>
+      </tr>
+    </table> <!-- table_body -->
+  </body>
+</html>

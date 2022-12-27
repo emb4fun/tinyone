@@ -336,30 +336,6 @@ void IP_DHCP_TimeoutSet (uint8_t iface, uint32_t timeout_msec)
 } /* IP_DHCP_TimeoutSet */
 
 /*************************************************************************/
-/*  TP_DHCP_HostnameSet                                                  */
-/*                                                                       */
-/*  Set the given hostname.                                              */
-/*                                                                       */
-/*  In    : iface, hostname                                              */
-/*  Out   : none                                                         */
-/*  Return: none                                                         */
-/*************************************************************************/
-void IP_DHCP_HostnameSet (uint8_t iface, char *hostname)
-{
-   struct netif *netif;
-   
-   if ((iface < ETH_MAX_IFACE) && (hostname != NULL))
-   {
-      netif = IP_IF_NetIfGet(iface);
-      if (netif != NULL)
-      {
-         netif->hostname = hostname;
-      }
-   }      
-
-} /* TP_DHCP_HostnameSet */
-
-/*************************************************************************/
 /*  IP_DHCP_ClientIDSet                                                  */
 /*                                                                       */
 /*  Set the given clientid.                                              */

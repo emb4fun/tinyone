@@ -242,6 +242,9 @@ static void EthernetInit (void)
    /* Start the IP stack */
    IP_IF_Start(0);
 
+   /* Set the hostname */
+   IP_IF_HostnameSet(0, MDNSName2); 
+
    /* Start the DHCP service */   
    if (etc_IPDhcpIsUsed() != 0)
    {

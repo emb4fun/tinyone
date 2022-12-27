@@ -86,6 +86,8 @@ int      WebSidLoginBlocked (void);
 uint32_t WebSidLoginBlockedTime (void);
 uint32_t WebSidLogoutTime (HTTPD_SESSION *hs);
 
+void     WebSidErrorCntSet (int nError);
+
 #endif /* !__WEB_SID_H__ */
 
 /*** EOF ***/

@@ -528,7 +528,7 @@ int WebSidCheckAccessGranted (HTTPD_SESSION *hs, char *pSessionID, int nIsHttp)
 /*                                                                       */
 /*  In    : hs, pUser, pPass                                             */
 /*  Out   : none                                                         */
-/*  Return: 0 = blocked / 1 = not blocked                                */
+/*  Return: 0 = not valid / 1 = valid                                    */
 /*************************************************************************/
 int WebSidCheckUserPass (HTTPD_SESSION *hs, char *pUser, char *pPass)
 {
@@ -828,6 +828,39 @@ uint32_t WebSidLogoutTime (HTTPD_SESSION *hs)
    
    return((uint32_t)nTime);
 } /* WebSidLogoutTime */
+
+/*************************************************************************/
+/*  WebSidErrorCntSet                                                    */
+/*                                                                       */
+/*  Change the error counter.                                            */
+/*                                                                       */
+/*  In    : nError                                                       */
+/*  Out   : none                                                         */
+/*  Return: none                                                         */
+/*************************************************************************/
+void WebSidErrorCntSet (int nError)
+{
+   /* If no error, clear error count */
+   if (0 == nError)
+   {
+      nLoginErrorCnt = 0;
+   }
+   else
+   {
+      /* In case of an error increase the error counter */   
+      if ((0 == nLoginBlocked) && (nLoginErrorCnt < _LOGIN_ERROR_CNT_MAX))
+      {
+         nLoginErrorCnt++;
+         if (_LOGIN_ERROR_CNT_MAX == nLoginErrorCnt)
+         {
+            /* To many login error, block login for the next _LOGIN_TIMEOUT_SEC */
+            nLoginBlocked = 1;
+            dLoginBlockedStartTime = OS_TimeGetSeconds();
+         }
+      }
+   }      
+
+} /* WebSidErrorCntSet */
 
 #endif /* (_IP_WEB_SID_SUPPORT >= 1) */
 

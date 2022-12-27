@@ -12,6 +12,7 @@
     <!--
     
       var Seconds = <%sys_login_blocked_time%>;
+      var ResetUser = "";
       
 
       /**************************************************************/
@@ -20,8 +21,12 @@
       {
          switch(err) 
          {
-            case -1: msg = "Incorrect username or password entered. Please try again."; break; 
-            default: msg = "An internal error has occurred: " + err;                    break;
+            case -1: msg = "Incorrect username or password entered. Please try again.";    break; 
+            case -4: msg = "Incorrect username. Please try again.";                        break; 
+            case -5: msg = "The password does not meet the password policy requirements."; break;
+            case -6: msg = "Incorrect reset code. Please try again.";                      break; 
+            case -7: msg = "Incorrect password or code entered. Please try again.";        break; 
+            default: msg = "An internal error has occurred: " + err;                       break;
          }   
          return(msg);
       }
@@ -58,8 +63,218 @@
             return(0);
          }
       }         
+
+      /**************************************************************/
+
+      function MyCancel5()
+      {
+         document.getElementById("tr5_err").style.display = "none";
+      }
+      
+      function MySubmit5RP()
+      {
+         document.getElementById("tr5").style.display = "none";
+         document.getElementById("tr2").style.display = "block";
+      }
+
+      function MySubmit5()
+      {
+         document.getElementById("tr5_err").style.display = "none";
+      
+         /* Check if a "user", "password" and "code" is available */
+         if (document.formular5.user.value === "") return;
+         if (document.formular5.pass.value === "") return;
+         if (document.formular5.code.value === "") return;
+
+         let ajax;
+         let data;
+         let user   = document.formular5.user.value;
+         let pass64 = btoa(document.formular5.pass.value);
+         let code   = document.formular5.code.value;
+
+         data = JSON.stringify({ mode: "totp", user: user, pass: pass64, code: code });
+         ajax = GetAjaxObject();
+         ajax.open("POST", "/cgi-bin/login.cgi", true);  
+         ajax.onreadystatechange = function() 
+         {
+            if ((this.readyState == 4) && (this.status == 200))
+            {
+               let jdata = JSON.parse(this.responseText);
+               let err = jdata.err;
+               let msg = jdata.msg;
+               
+               /* Check for blocked error */   
+               if (err == -2 )
+               {
+                  /* Login blocked, try again */
+                  window.location.replace('/login.htm');
+               }
+               /* Check for any error */   
+               else if (err != 0)
+               {
+                  /* Show error information */
+                  document.getElementById("tr5_msg").innerHTML = Error2Text(err);
+                  document.getElementById("tr5_err").style.display = "block";
+               } 
+               else
+               {
+                  /* No error */
+                  window.location.replace('/index.htm');
+               }
+            } // if ((this.readyState == 4) && (this.status == 200))
+         } // end ajax.onreadystatechange
+         ajax.send(data);
+      }
+
+      /**************************************************************/
+
+      function MyCancel3()
+      {
+         document.getElementById("tr3_err").style.display = "none";
+      }
+
+      function MyLogin3()
+      {
+         window.location.replace('/login.htm');
+      }
+
+      function MySubmit3()
+      {
+         document.getElementById("tr3_err").style.display = "none";
+
+         /* Check if "new_pass" and "new_pass2" are equal */
+         let new_pass;
+         let new_pass2;
+
+         new_pass  = document.formular3.new_pass.value;
+         new_pass2 = document.formular3.new_pass2.value;
+
+         if (new_pass != new_pass2)
+         {
+            document.getElementById("tr3_err").style.display = "block";
+            document.getElementById("tr3_msg").innerHTML = "The Confirm Password does not match the New Password.";
+            return;
+         }
+         
+         if (0 == CheckPassRules(new_pass))
+         {
+            /* Error, display error password rule */
+            document.getElementById("tr3_msg").innerHTML = "The password does not meet the password policy requirements.";
+            document.getElementById("tr3_err").style.display = "block";
+            return;
+         }   
+      
+         /* Check if a "code" is available */
+         if (document.formular3.code.value === "") 
+         {
+            document.getElementById("tr3_msg").innerHTML = "Incorrect reset code. Please try again.";
+            document.getElementById("tr3_err").style.display = "block";
+            return;
+         }
+
+         let ajax;
+         let data;
+         let code   = document.formular3.code.value;
+         let pass64 = btoa(new_pass);
+
+         data = JSON.stringify({ mode: "reset2", user: ResetUser, pass: pass64, code: code });
+         ajax = GetAjaxObject();
+         ajax.open("POST", "/cgi-bin/login.cgi", true);  
+         ajax.onreadystatechange = function() 
+         {
+            if ((this.readyState == 4) && (this.status == 200))
+            {
+               let jdata = JSON.parse(this.responseText);
+               let err = jdata.err;
+               let msg = jdata.msg;
+               
+               /* Check for any error */   
+               if (err == -2 )
+               {
+                  /* Login blocked, try again */
+                  window.location.replace('/login.htm');
+               }
+               else if (err != 0)
+               {
+                  /* Show error information */
+                  document.getElementById("tr3_msg").innerHTML = Error2Text(err);
+                  document.getElementById("tr3_err").style.display = "block";
+               } 
+               else
+               {
+                  window.location.replace('/index.htm');
+               }
+            } // if ((this.readyState == 4) && (this.status == 200))
+         } // end ajax.onreadystatechange
+         ajax.send(data);
+      }
       
       /**************************************************************/
+
+      function MyCancel2()
+      {
+         document.getElementById("tr2_err").style.display = "none";
+      }
+      
+      function MyLogin2()
+      {
+         window.location.replace('/login.htm');
+      }
+
+      function MySubmit2()
+      {      
+         document.getElementById("tr2_err").style.display = "none";
+      
+         /* Check if a "user" is available */
+         if (document.formular2.user.value === "") return;
+
+         let ajax;
+         let data;
+
+         ResetUser = document.formular2.user.value;
+
+         data = JSON.stringify({ mode: "reset1", user: ResetUser });
+         ajax = GetAjaxObject();
+         ajax.open("POST", "/cgi-bin/login.cgi", true);  
+         ajax.onreadystatechange = function() 
+         {
+            if ((this.readyState == 4) && (this.status == 200))
+            {
+               let jdata = JSON.parse(this.responseText);
+               let err = jdata.err;
+               let msg = jdata.msg;
+               
+               /* Check for any error */   
+               if (err == -2 )
+               {
+                  /* Login blocked, try again */
+                  window.location.replace('/login.htm');
+               }
+               else if (err != 0)
+               {
+                  /* Show error information */
+                  document.getElementById("tr2_msg").innerHTML = Error2Text(err);
+                  document.getElementById("tr2_err").style.display = "block";
+               } 
+               else
+               {
+                  document.getElementById("tr2").style.display = "none";
+                  document.getElementById("tr3").style.display = "block";
+                  document.getElementById("tr3_rc").innerHTML = jdata.code;;
+                  document.getElementById("tr3_user").innerHTML = ResetUser;;
+               }
+            } // if ((this.readyState == 4) && (this.status == 200))
+         } // end ajax.onreadystatechange
+         ajax.send(data);
+      }
+      
+      /**************************************************************/
+
+      function MySubmit1RP()
+      {
+         document.getElementById("tr1").style.display = "none";
+         document.getElementById("tr2").style.display = "block";
+      }
 
       function MyCancel1()
       {
@@ -90,12 +305,22 @@
                let err = jdata.err;
                let msg = jdata.msg;
                
-               /* Check for any error */   
-               if (err == -2 )
+               /* Check for TOTP */
+               if (1 == err)
                {
-                  /* Logib blocked, try again */
+                  document.getElementById("tr1").style.display = "none";
+                  document.getElementById("tr5").style.display = "block";
+                  
+                  document.formular5.user.value = document.formular1.user.value;
+                  document.formular5.pass.value = document.formular1.pass.value;
+               }
+               /* Check for blocked error */   
+               else if (err == -2 )
+               {
+                  /* Login blocked, try again */
                   window.location.replace('/login.htm');
                }
+               /* Check for any error */   
                else if (err != 0)
                {
                   /* Show error information */
@@ -104,6 +329,7 @@
                } 
                else
                {
+                  /* No error */
                   window.location.replace('/index.htm');
                }
             } // if ((this.readyState == 4) && (this.status == 200))
@@ -198,11 +424,17 @@
             {
                document.getElementById("tr1").style.display = "block";
                document.getElementById("tr2").style.display = "none";
+               document.getElementById("tr3").style.display = "none";
+               document.getElementById("tr4").style.display = "none";
+               document.getElementById("tr5").style.display = "none";
             }
             else
             {
                document.getElementById("tr1").style.display = "none";
-               document.getElementById("tr2").style.display = "block";
+               document.getElementById("tr2").style.display = "none";
+               document.getElementById("tr3").style.display = "none";
+               document.getElementById("tr4").style.display = "block";
+               document.getElementById("tr5").style.display = "none";
                CountDown();
             }
          }            
@@ -317,7 +549,7 @@
               </tr>
             </table>
           </div>  
-          <!-- table_row --> 
+          <!-- table_row #0 --> 
 
 
           <!-- table_row #1 -->
@@ -367,6 +599,9 @@
                                 <button class="cancel" type="reset" name="button2" value="cancel" onclick="javascript:MyCancel1()">
                                   Cancel
                                 </button>
+                                <button class="play" type="button" name="button3" value="submit" onclick="javascript:MySubmit1RP()">
+                                  Password reset
+                                </button>
                               </fieldset>
                             </form>
                           </div>
@@ -387,11 +622,173 @@
               </tr>
             </table>
           </div>  
-          <!-- table_row --> 
+          <!-- table_row #1 --> 
           
-
+          
           <!-- table_row #2 -->
           <div id="tr2" style="display:none">
+            <table class="table_row">
+              <tr align="center">
+                <td>
+               
+                  <table class="table_variable">
+                    <thead>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>Password reset (1/2)</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </thead>
+                  
+                    <tbody>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                        
+                          <div class="content">
+                            <form name="formular2" method="post">
+                           
+                              <div id="tr2_err" style="display:none">
+                                <p style="text-align:center; font-weight:bold">
+                                  <br><br><span id="tr2_msg">error</span>
+                                </p>
+                              </div>
+                              
+                              <fieldset>
+                                <label class="normal">&nbsp;</label>
+                                <br>
+
+                                <label class="normal">Username</label>
+                                <input type="text" id="user" name="user" />
+                                <br>
+
+                                <label class="normal">&nbsp;</label>
+                                <button class="play" type="button" name="button1" value="submit" onclick="javascript:MySubmit2()">
+                                  Password reset
+                                </button>
+                                <button class="cancel" type="reset" name="button2" value="cancel" onclick="javascript:MyCancel2()">
+                                  Cancel
+                                </button>
+                                <button class="play" type="button" name="button3" value="submit" onclick="javascript:MyLogin2()">
+                                  Login
+                                </button>
+                              </fieldset>
+                            </form>
+                          </div>
+                        </td>
+                        <td>&nbsp;</td>
+                      </tr>
+                    </tbody>
+                  
+                    <tfoot>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </tfoot>                            
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>  
+          <!-- table_row #2 --> 
+          
+
+          <!-- table_row #3 -->
+          <div id="tr3" style="display:none">
+            <table class="table_row">
+              <tr align="center">
+                <td>
+               
+                  <table class="table_variable">
+                    <thead>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>Password reset (2/2)</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </thead>
+                  
+                    <tbody>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                        
+                          <div class="content">
+                            <form name="formular3" method="post">
+
+                              <div id="tr3_err" style="display:none">
+                                <p style="text-align:center; font-weight:bold">
+                                  <br><br><span id="tr3_msg">error</span>
+                                </p>
+                              </div>
+                              
+                              <p style="text-align:center">
+                                <br><br>Password requirement: 8-32 characters, at least one uppercase letter,
+                                <br><br>one lowercase letter, one number and one symbol.
+                              </p>
+
+                              <p style="text-align:center">
+                                <br><br>Use the following password reset request code to calculate the reset code:
+                                <br><br><span id="tr3_rc" style="font-weight:bold">code</span>
+                              </p>
+                              
+                              <fieldset>
+                                <label class="normal">&nbsp;</label>
+                                <br>
+
+                                <label class="normal">User</label>
+                                <p><span id="tr3_user">user</span></p>
+                                <br/>
+
+                                <label class="normal">New Password</label>
+                                <input type="password" id="new_pass" name="new_pass"  />
+                                <br/>
+                                
+                                <label class="normal">Confirm Password</label>
+                                <input type="password" id="new_pass2" name="new_pass2"  />
+                                <br/>
+
+                                <label class="normal">Reset code</label>
+                                <input type="text" id="code" name="code" />
+                                <br>
+
+                                <label class="normal">&nbsp;</label>
+                                <button class="play" type="button" name="button1" value="submit" onclick="javascript:MySubmit3()">
+                                  Password reset
+                                </button>
+                                <button class="cancel" type="reset" name="button2" value="cancel" onclick="javascript:MyCancel3()">
+                                  Cancel
+                                </button>
+                                <button class="play" type="button" name="button3" value="submit" onclick="javascript:MyLogin3()">
+                                  Login
+                                </button>
+                              </fieldset>
+                            </form>
+                          </div>
+                        </td>
+                        <td>&nbsp;</td>
+                      </tr>
+                    </tbody>
+                  
+                    <tfoot>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </tfoot>                            
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>  
+          <!-- table_row #3 --> 
+
+
+          <!-- table_row #4 -->
+          <div id="tr4" style="display:none">
             <table class="table_row">
               <tr align="center">
                 <td>
@@ -428,8 +825,89 @@
               </tr>
             </table>
           </div>  
-          <!-- table_row --> 
+          <!-- table_row #4 --> 
 
+
+          <!-- table_row #5 -->
+          <div id="tr5" style="display:none">
+            <table class="table_row">
+              <tr align="center">
+                <td>
+               
+                  <table class="table_variable">
+                    <thead>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>Login with two-factor authentication (TOTP)</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </thead>
+                  
+                    <tbody>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                        
+                          <div class="content">
+                            <form name="formular5" method="post">
+                           
+                              <div id="tr5_err" style="display:none">
+                                <p style="text-align:center; font-weight:bold">
+                                  <br><br><span id="tr5_msg">error</span>
+                                </p>
+                              </div>
+
+                              <p style="text-align:center">
+                                <br><br>Use your two-factor authentication application
+                                <br><br>to enter the authentication code here.
+                              </p>
+                              
+                              <fieldset>
+                                <label class="normal">&nbsp;</label>
+                                <br>
+                              
+                                <label class="normal">Username</label>
+                                <input type="text" id="user" name="user" />
+                                <br>
+                                <label class="normal">Password</label>
+                                <input type="password" id="pass" name="pass"  />
+                                <br>
+                                <label class="normal">Authentication code</label>
+                                <input class="small" type="text" id="code" name="code" maxlength="6" size="6"/>
+                                <br>
+
+                                <label class="normal">&nbsp;</label>
+                                <button class="play" type="button" name="button1" value="submit" onclick="javascript:MySubmit5()">
+                                  Login
+                                </button>
+                                <button class="cancel" type="reset" name="button2" value="cancel" onclick="javascript:MyCancel5()">
+                                  Cancel
+                                </button>
+                                <button class="play" type="button" name="button3" value="submit" onclick="javascript:MySubmit5RP()">
+                                  Password reset
+                                </button>
+                              </fieldset>
+                            </form>
+                          </div>
+                        </td>
+                        <td>&nbsp;</td>
+                      </tr>
+                    </tbody>
+                  
+                    <tfoot>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </tfoot>                            
+                  </table>
+                </td>
+                              
+              </tr>
+            </table>
+          </div>  
+          <!-- table_row #5 --> 
 
         </td>
       </tr>

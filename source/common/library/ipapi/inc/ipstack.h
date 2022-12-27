@@ -107,10 +107,12 @@ int      IP_IF_Start (uint8_t iface);
 int      IP_IF_Stop (uint8_t iface);
 int      IP_IF_IsReady (uint8_t iface);
 
+void     IP_IF_HostnameSet (uint8_t iface, char *hostname);
+char    *IP_IF_HostnameGet (uint8_t iface);
+
 void     IP_IF_OutputConfig (uint8_t iface);
 
 void     IP_IF_StartupValuesGet (uint8_t iface, uint32_t *ipaddr, uint32_t *netmask, uint32_t *gw);
-
 
 #endif /* !__IPSTACK_H__ */
 

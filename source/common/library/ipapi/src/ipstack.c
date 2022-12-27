@@ -751,6 +751,45 @@ int IP_IF_IsReady (uint8_t iface)
 } /* IP_IF_IsReady */
 
 /*************************************************************************/
+/*  IP_IF_HostnameSet                                                    */
+/*                                                                       */
+/*  Set the given hostname.                                              */
+/*                                                                       */
+/*  In    : iface, hostname                                              */
+/*  Out   : none                                                         */
+/*  Return: none                                                         */
+/*************************************************************************/
+void IP_IF_HostnameSet (uint8_t iface, char *hostname)
+{
+   if ((iface < ETH_MAX_IFACE) && (pNetIf[iface] != NULL) && (hostname != NULL))
+   {
+      pNetIf[iface]->hostname = hostname;
+   }      
+
+} /* IP_IF_HostnameSet */
+
+/*************************************************************************/
+/*  IP_IF_HostnameGet                                                    */
+/*                                                                       */
+/*  Return the hostname.                                                 */
+/*                                                                       */
+/*  In    : iface                                                        */
+/*  Out   : none                                                         */
+/*  Return: hostname / NULL                                              */
+/*************************************************************************/
+char *IP_IF_HostnameGet (uint8_t iface)
+{
+   char *name = NULL;
+
+   if ((iface < ETH_MAX_IFACE) && (pNetIf[iface] != NULL))
+   {
+      name = (char*)pNetIf[iface]->hostname;
+   }      
+   
+   return(name);
+} /* IP_IF_HostnameGet */
+
+/*************************************************************************/
 /*  IP_IF_StartupValuesGet                                               */
 /*                                                                       */
 /*  In    : iface, ipaddr, netmask, gw                                   */

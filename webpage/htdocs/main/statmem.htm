@@ -6,7 +6,7 @@
     <meta http-equiv="content-language" content="en"/>
     <meta http-equiv="pragma"           content="no-cache"/>
     <title><%sys_longname%></title>
-    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>    
     <script type="text/javascript" src="../js/system.js"></script>
     <script type="text/javascript">
     <!--
@@ -45,8 +45,10 @@
           <!-- Header -->
           <div class="header">
             <h1><%sys_longname%></h1>
-            <div class="div"></div>
-            <div class="logout"><a href="../logout.htm">Logout in <span id="lc"></span> s</a></div>
+            <div id="logout" style="display:none">
+              <div class="div"></div>
+              <div class="loglink"><a href="../logout.htm">Logout in <span id="lc"></span> s</a></div>
+            </div>
             <div class="logo"></div>
           </div>
       

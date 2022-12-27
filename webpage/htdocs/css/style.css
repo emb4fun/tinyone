@@ -100,20 +100,20 @@ body
 
 }
 
-.header .logout
+.header .loglink
 {
    float: left;
    padding-top: 35px;
    font-size: 13px;
 }
 
-.header .logout a
+.header .loglink a
 {
    text-decoration: none;
    color: #A0A0A0;
 }
 
-.header .logout a:hover
+.header .loglink a:hover
 {
    text-decoration: underline;
    color: #000000;
