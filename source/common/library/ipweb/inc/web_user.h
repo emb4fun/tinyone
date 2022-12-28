@@ -79,6 +79,7 @@ int   WebUserPasswordReset (char *pUser, char *pPassNew, char *pResetCode);
 int   WebUserIsTOTP (char *pUser);
 int   WebUserGetTOTPSecretBase32 (char *pUser, char *pBase32, size_t Base32Size);
 int   WebUserTOTPEnable (char *pUser, uint32_t dValue);
+int   WebUserTOTPDisable (char *pUser, char *pPassword);
 int   WebUserCheckTOTP (char *pUser, uint32_t dValue);
 
 #endif /* !__WEB_USER_H__ */

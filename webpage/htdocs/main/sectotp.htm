@@ -20,11 +20,64 @@
          switch(err) 
          {
             case -1: msg = "Incorrect authentication code entered. Please try again."; break; 
+            case -8: msg = "Incorrect password. Please try again.";                    break; 
             default: msg = "An internal error has occurred: " + err;                   break;
          }   
          return(msg);
       }
 
+      /**************************************************************/
+
+      function MyCancel2()
+      {
+         document.getElementById("tr2_err").style.display = "none";
+      }
+
+      function MySubmit2()
+      {
+         document.getElementById("tr2_err").style.display = "none";
+      
+         /* Check if a "pass" is available */
+         if (document.formular2.pass.value === "") return;
+
+         let ajax;
+         let data;
+         let pass64 = btoa(document.formular2.pass.value);
+         
+         data = JSON.stringify({ mode: "disable", pass: pass64 });
+         ajax = GetAjaxObject();
+         ajax.open("POST", "/cgi-bin/totp.cgi", true);  
+         ajax.onreadystatechange = function() 
+         {
+            if ((this.readyState == 4) && (this.status == 200))
+            {
+               let jdata = JSON.parse(this.responseText);
+               let err = jdata.err;
+               let msg = jdata.msg;
+
+               /* Check for blocked error */   
+               if (err == -2 )
+               {
+                  /* Login blocked, try again */
+                  window.location.replace('/login.htm');
+               }
+               /* Check for any error */   
+               else if (err != 0)
+               {
+                  /* Show error information */
+                  document.getElementById("tr2_msg").innerHTML = Error2Text(err);
+                  document.getElementById("tr2_err").style.display = "block";
+               } 
+               else
+               {
+                  /* No error */
+                  window.location.replace('sectotp.htm');
+               }
+            } // if ((this.readyState == 4) && (this.status == 200))
+         } // end ajax.onreadystatechange
+         ajax.send(data);
+      }
+      
       /**************************************************************/
 
       function MyCancel1()
@@ -43,7 +96,7 @@
          let data;
          let code = document.formular1.code.value;
 
-         data = JSON.stringify({ code: code });
+         data = JSON.stringify({ mode: "enable", code: code });
          ajax = GetAjaxObject();
          ajax.open("POST", "/cgi-bin/totp.cgi", true);  
          ajax.onreadystatechange = function() 
@@ -162,7 +215,7 @@
           <div class="navi3">
             <ul>
               <li class="nb"><a href="secusers.htm">Change password</a></li>
-              <li class="ne"><a class="active" href="#">Enable TOTP</a></li>
+              <li class="ne"><a class="active" href="#">Manage TOTP</a></li>
             </ul>
           </div>
 
@@ -206,10 +259,6 @@
                                 </p>
                               </div>
 
-                              <p style="text-align:center; font-weight:bold">
-                                <br><br>Two factor authentication is not enabled yet.
-                              </p>
-
                               <p style="text-align:center">
                                 <br>Scan the QR code with your TOTP authenticator app. After scanning, the app
                                 <br><br>displays a six-digit authentication code that you must enter here to enable 
@@ -220,7 +269,7 @@
                                 <label class="normal">&nbsp;</label>
                                 <br>
                               
-                                <label class="normal" style="font-weight:bold">Authentication code</label>
+                                <label class="normal">Authentication code</label>
                                 <input class="small" type="text" id="code" name="code" maxlength="6" size="6"/>
                                 <br>
 
@@ -265,7 +314,7 @@
                     <thead>
                       <tr>
                         <td>&nbsp;</td>
-                        <td>Enable two-factor authentication using TOTP</td>
+                        <td>Disable two-factor authentication using TOTP</td>
                         <td>&nbsp;</td>
                       </tr>                            
                     </thead>
@@ -274,12 +323,44 @@
                       <tr>
                         <td>&nbsp;</td>
                         <td>
-                          <p>The two-factor authentication is already enabled.</p>
+                     
+                          <div class="content">
+                            <form name="formular2" method="post">
+                           
+                              <div id="tr2_err" style="display:none">
+                                <p style="text-align:center; font-weight:bold">
+                                  <br><br><span id="tr2_msg">error</span>
+                                </p>
+                              </div>
+                              
+                              <p style="text-align:center">
+                                <br><br>To disable the two-factor authentication enter your current password. 
+                              </p>
+                              
+                              <fieldset>
+                                <label class="normal">&nbsp;</label>
+                                <br>
+
+                                <label class="normal">Current password</label>
+                                <input type="password" id="pass" name="pass"  />
+                                <br>
+
+                                <label class="normal">&nbsp;</label>
+                                <button class="play" type="button" name="button1" value="submit" onclick="javascript:MySubmit2()">
+                                  Disable
+                                </button>
+                                <button class="cancel" type="reset" name="button2" value="cancel" onclick="javascript:MyCancel2()">
+                                  Cancel
+                                </button>
+                              </fieldset>
+                            </form>
+                          </div>
+                     
                         </td>
                         <td>&nbsp;</td>
                       </tr>
                     </tbody>
-                    
+                  
                     <tfoot>
                       <tr>
                         <td>&nbsp;</td>

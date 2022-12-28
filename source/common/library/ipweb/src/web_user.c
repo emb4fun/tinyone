@@ -639,6 +639,7 @@ int WebUserCheckUserPassword (char *pUser, char *pPassword, uint32_t *pPermissio
                /* Create hash from password */
                CreateHashBySalt(UserDB.User[nIndex].Salt, pPassword, strlen(pPassword), Hash);
       
+               /* Check "password" */   
                if (0 == memcmp(UserDB.User[nIndex].PassHash, Hash, HASH_SIZE))
                {
                   nValid       = nIndex;
@@ -1105,7 +1106,7 @@ int WebUserTOTPEnable (char *pUser, uint32_t dValueIn)
             dValue = CalcTOTPValue(pDBUser->TOTP, TOTP_SIZE, OS_UnixtimeGet());
             if (dValue == dValueIn)
             {
-               /* Enable code is valid */
+               /* Enable, code is valid */
                rc = 0;
                
                /* Update user info and DB */
@@ -1123,6 +1124,57 @@ int WebUserTOTPEnable (char *pUser, uint32_t dValueIn)
 
    return(rc);
 } /* WebUserTOTPEnable */
+
+/*************************************************************************/
+/*  WebUserTOTPDisable                                                   */
+/*                                                                       */
+/*  Disable the TOTP for the given user.                                 */
+/*                                                                       */
+/*  In    : pUser, pPass                                                 */
+/*  Out   : none                                                         */
+/*  Return: 0 = OK / -1 = ERROR                                          */
+/*************************************************************************/
+int WebUserTOTPDisable (char *pUser, char *pPassword)
+{
+   int            rc = -1;
+   user_t       *pDBUser = NULL;
+   static uint8_t Hash[HASH_SIZE];
+
+   /* Check parameters */
+   if ((pUser != NULL) && (pPassword != NULL))
+   {      
+      /* Check if the given user exist */
+      pDBUser = CheckDBUser(pUser);
+      if (pDBUser != NULL)
+      {
+         /* Check If TOTP is enabled */
+         if (pDBUser->Mode & USER_MODE_TOTP)
+         {
+            /* Create hash from password */
+            CreateHashBySalt(pDBUser->Salt, pPassword, strlen(pPassword), Hash);
+
+            /* Check "password" */   
+            if (0 == memcmp(pDBUser->PassHash, Hash, HASH_SIZE))
+            {
+               /* Disable, password is valid */
+               rc = 0;
+               
+               /* Update user info and DB */
+               memset(pDBUser->TOTP, 0x00, TOTP_SIZE);
+               pDBUser->Mode &= ~USER_MODE_TOTP;
+               UserDBWrite();
+            }
+         }
+         else
+         {
+            /* Error, TOTP is disabled */
+            rc = -1;
+         }
+      }
+   }
+
+   return(rc);
+} /* WebUserTOTPDisable */
 
 /*************************************************************************/
 /*  WebUserCheckTOTP                                                     */

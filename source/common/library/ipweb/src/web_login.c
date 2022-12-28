@@ -70,6 +70,7 @@
 #define LOGIN_ERR_PASS_RULE   -5
 #define LOGIN_ERR_RESET       -6
 #define LOGIN_ERR_PASS_OTP    -7
+#define LOGIN_ERR_PASS        -8
 
 #define LOGIN_MODE_TOTP       1
 
@@ -611,7 +612,7 @@ static int Login (HTTPD_SESSION *hs)
       {
          /* User and password are ok */
          rc = LOGIN_OK;
-      }        
+      }
    } /* ((pMode != NULL) && (0 == strcmp(pMode == "totp")) */
    
 
@@ -667,17 +668,20 @@ static int Logout (HTTPD_SESSION *hs)
 
 
 /*************************************************************************/
-/*  EnableTOTP                                                           */
+/*  ManageTOTP                                                           */
 /*                                                                       */
 /*  In    : hs                                                           */
 /*  Out   : none                                                         */
 /*  Return: 0 = OK / -1 = ERROR                                          */
 /*************************************************************************/
-static int EnableTOTP (HTTPD_SESSION *hs)
+static int ManageTOTP (HTTPD_SESSION *hs)
 {
    int      rc;
+   size_t   olen;
    json_t  JSON;  
+   char   *pMode;
    char   *pCode; 
+   char   *pPass;
 
    IP_WEBS_CGISendHeader(hs);
 
@@ -688,22 +692,67 @@ static int EnableTOTP (HTTPD_SESSION *hs)
    rc = WebSidLoginBlocked();
    if (1 == rc) GOTO_END(LOGIN_ERR_BLOCKED);
    
-   pCode = IP_JSON_GetString(&JSON, "code");
-   if (NULL == pCode) GOTO_END(LOGIN_ERR);
+   /* The mode can be "enable" or "disable" */
+   pMode = IP_JSON_GetString(&JSON, "mode");
 
-   /* Check if the user is valid, and get the mode */
-   rc = WebUserTOTPEnable((char*)hs->s_req.req_sid_user, (uint32_t)atol(pCode));
-   if (-1 == rc)
+   /*
+    * "enable"
+    */
+   if ((pMode != NULL) && (0 == strcmp(pMode, "enable")))
    {
-      /* Invalid user */
-      rc = LOGIN_ERR_USER_PASS;
+      pCode = IP_JSON_GetString(&JSON, "code");
+      if (NULL == pCode) GOTO_END(LOGIN_ERR);
+
+      /* Enable TOTP if the code is valid */
+      rc = WebUserTOTPEnable((char*)hs->s_req.req_sid_user, (uint32_t)atol(pCode));
+      if (-1 == rc)
+      {
+         /* Invalid user */
+         rc = LOGIN_ERR_USER_PASS;
+      }
+      else
+      {
+         /* Invalidate session, to force a new login with the new password */
+         WebSidInvalidate(hs);
+      
+      } /* end if WebUserTOTPIsValid */
    }
+   
+   /*
+    * "disable"
+    */
+   else if ((pMode != NULL) && (0 == strcmp(pMode, "disable")))
+   {
+      pPass = IP_JSON_GetString(&JSON, "pass");
+      if (NULL == pPass) GOTO_END(LOGIN_ERR);
+
+      rc = mbedtls_base64_decode(pPass, strlen(pPass), &olen, pPass, strlen(pPass)); /*lint !e64*/
+      if (rc != 0) GOTO_END(LOGIN_ERR);
+      pPass[olen] = 0;
+
+      /* Disable TOTP if the pass is valid */
+      rc = WebUserTOTPDisable((char*)hs->s_req.req_sid_user, pPass);
+      if (-1 == rc)
+      {
+         /* Invalid pass */
+         rc = LOGIN_ERR_PASS;
+         
+         /* Set SID error */
+         WebSidErrorCntSet(1);
+         if (1 == WebSidLoginBlocked())
+         {
+            rc = LOGIN_ERR_BLOCKED;
+         }
+      }
+   }
+   
+   /*
+    * Invalid mode
+    */
    else
    {
-      /* Invalidate session, to force a new login with the new password */
-      WebSidInvalidate(hs);
-      
-   } /* end if WebUserTOTPIsValid */
+      rc = LOGIN_ERR;
+   }
    
 
 end:  
@@ -713,7 +762,7 @@ end:
    JSONSendError(hs, rc);
    
    return(0);
-} /* EnableTOTP */
+} /* ManageTOTP */
 
 /*************************************************************************/
 /*  ChangePass                                                           */
@@ -834,7 +883,7 @@ static const CGI_LIST_ENTRY CGIList[] =
 {
    { "cgi-bin/login.cgi",        Login      },
    { "cgi-bin/logout.cgi",       Logout     },
-   { "cgi-bin/totp.cgi",         EnableTOTP },   
+   { "cgi-bin/totp.cgi",         ManageTOTP },   
    { "cgi-bin/change_pass.cgi",  ChangePass },   
 
    {NULL, NULL}
