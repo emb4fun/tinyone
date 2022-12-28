@@ -633,26 +633,112 @@ int WebUserCheckUserPassword (char *pUser, char *pPassword, uint32_t *pPermissio
          /* Check if user match with our "database" */
          if (0 == strcasecmp(UserDB.User[nIndex].User, pUser))
          {
-            /* Create hash from password */
-            CreateHashBySalt(UserDB.User[nIndex].Salt, pPassword, strlen(pPassword), Hash);
-      
-            if (0 == memcmp(UserDB.User[nIndex].PassHash, Hash, HASH_SIZE))
+            /* Check If TOTP is disabled, must be disabled */
+            if (0 == (USER_MODE_TOTP & UserDB.User[nIndex].Mode))
             {
-               nValid       = nIndex;
-               *pPermission = UserDB.User[nIndex].dPermission;
-               break;
+               /* Create hash from password */
+               CreateHashBySalt(UserDB.User[nIndex].Salt, pPassword, strlen(pPassword), Hash);
+      
+               if (0 == memcmp(UserDB.User[nIndex].PassHash, Hash, HASH_SIZE))
+               {
+                  nValid       = nIndex;
+                  *pPermission = UserDB.User[nIndex].dPermission;
+               }
+               else
+               {
+                  /* Wrong password */
+                  nValid = -1;
+               }
             }
             else
             {
-               /* Wrong password */
-               break;
+               /* Error, TOTP is enabled, must used WebUserCheckUserPasswordTOTP instead */
+               nValid = -1;
             }
-         }
-      }
-   }      
+            break;
+         } /* end if (0 == strcasecmp(UserDB.User[nIndex].User, pUser)) */
+      } /* end for(nIndex = 0; nIndex < USER_CNT; nIndex++) */
+   } /* end if ( (pUser != NULL) && (pPassword != NULL) && (pPermission != NULL) ) */      
    
    return(nValid);   
 } /* WebUserCheckUserPassword */
+
+/*************************************************************************/
+/*  WebUserCheckUserPasswordTOTP                                         */
+/*                                                                       */
+/*  Check if User/Password/Code is valid.                                */
+/*                                                                       */
+/*  In    : pUser, pPassword, pPermission                                */
+/*  Out   : pPermission                                                  */
+/*  Return: -1 == invalid / user index                                   */
+/*************************************************************************/
+int WebUserCheckUserPasswordTOTP (char *pUser, char *pPassword, uint32_t *pPermission, uint32_t dCode)
+{
+   int           nValid = -1;
+   int           nIndex;
+   uint32_t      dValue;
+   static uint8_t Hash[HASH_SIZE];
+
+   /* Check parameters */
+   if ( (pUser != NULL) && (pPassword != NULL) && (pPermission != NULL) )
+   {   
+      *pPermission = 0;
+      
+      /* Check for valid user/password combination */
+      for(nIndex = 0; nIndex < USER_CNT; nIndex++)
+      {
+         /* Check if user match with our "database" */
+         if (0 == strcasecmp(UserDB.User[nIndex].User, pUser))
+         {
+            /* Check If TOTP is enabled. must be enabled */
+            if (USER_MODE_TOTP & UserDB.User[nIndex].Mode)
+            {
+               /* Create hash from password */
+               CreateHashBySalt(UserDB.User[nIndex].Salt, pPassword, strlen(pPassword), Hash);
+
+               /* Check user/password */      
+               if (0 == memcmp(UserDB.User[nIndex].PassHash, Hash, HASH_SIZE))
+               {
+                  /* User and password are valid, check TOTP now */
+               
+                  /* Check actual time */               
+                  dValue = CalcTOTPValue(UserDB.User[nIndex].TOTP, TOTP_SIZE, OS_UnixtimeGet());
+                  if (dValue == dCode)
+                  {
+                     /* Code is valid */
+                     nValid       = nIndex;
+                     *pPermission = UserDB.User[nIndex].dPermission;
+                  }
+                  else
+                  {
+                     /* Ups not valid, check 30 seconds before */
+                     dValue = CalcTOTPValue(UserDB.User[nIndex].TOTP, TOTP_SIZE, OS_UnixtimeGet()-30);
+                     if (dValue == dCode)
+                     {
+                        /* Code is valid */
+                        nValid       = nIndex;
+                        *pPermission = UserDB.User[nIndex].dPermission;
+                     }
+                  }
+               }
+               else
+               {
+                  /* Error, wrong password */
+                  nValid = -1;
+               }
+            }
+            else
+            {
+               /* Error, TOTP is disabled, must used WebUserCheckUserPassword instead */
+               nValid = -1;
+            }
+            break;
+         } /* end if (0 == strcasecmp(UserDB.User[nIndex].User, pUser)) */
+      } /* end for(nIndex = 0; nIndex < USER_CNT; nIndex++) */
+   } /* end if ( (pUser != NULL) && (pPassword != NULL) && (pPermission != NULL) ) */
+   
+   return(nValid);   
+} /* WebUserCheckUserPasswordTOTP */
 
 /*************************************************************************/
 /*  WebUserGetUser                                                       */

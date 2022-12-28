@@ -198,12 +198,10 @@ static sid_t *FindSIDEntry (uint32_t dIPAddr, int *pIndex)
 /*  Out   : pPermission                                                  */
 /*  Return: -1 == invalid / all other = valid                            */
 /*************************************************************************/
-static int CheckUserPassword (sid_t *pSIDEntry, char *pUser, char *pPassword, uint32_t *pPermission)
+static int CheckUserPassword (char *pUser, char *pPassword, uint32_t *pPermission)
 {
    int   nValid;
    
-   (void)pSIDEntry;
-
    /* Check for valid user/password combination */
    nValid = WebUserCheckUserPassword(pUser, pPassword, pPermission);
    
@@ -233,6 +231,49 @@ static int CheckUserPassword (sid_t *pSIDEntry, char *pUser, char *pPassword, ui
    
    return(nValid);
 } /* CheckUserPassword */
+
+/*************************************************************************/
+/*  CheckUserPasswordTOTP                                                */
+/*                                                                       */
+/*  Check if User/Password/Code is valid.                                */
+/*                                                                       */
+/*  In    : pSIDEntry, pUser, pPassword, pPermission, dCode              */
+/*  Out   : pPermission                                                  */
+/*  Return: -1 == invalid / all other = valid                            */
+/*************************************************************************/
+static int CheckUserPasswordTOTP (char *pUser, char *pPassword, uint32_t *pPermission, uint32_t dCode)
+{
+   int nValid;
+   
+   /* Check for valid user/password combination */
+   nValid = WebUserCheckUserPasswordTOTP(pUser, pPassword, pPermission, dCode);
+   
+   /* In case of an error increase the error counter */   
+   if ((-1 == nValid) && (0 == nLoginBlocked) && (nLoginErrorCnt < _LOGIN_ERROR_CNT_MAX))
+   {
+      nLoginErrorCnt++;
+      if (_LOGIN_ERROR_CNT_MAX == nLoginErrorCnt)
+      {
+         /* To many login error, block login for the next _LOGIN_TIMEOUT_SEC */
+         nLoginBlocked = 1;
+         dLoginBlockedStartTime = OS_TimeGetSeconds();
+      }
+   }
+   
+   /* For security, if login is blocked, invalidate the result again */
+   if (1 == nLoginBlocked)
+   {
+      nValid = -1;
+   }
+   
+   /* If no login error, clear error count */
+   if (nValid != -1)
+   {
+      nLoginErrorCnt = 0;
+   }
+   
+   return(nValid);
+} /* CheckUserPasswordTOTP */
 
 /*************************************************************************/
 /*  CreateSID                                                            */
@@ -546,7 +587,7 @@ int WebSidCheckUserPass (HTTPD_SESSION *hs, char *pUser, char *pPass)
       pSIDEntry = &SIDList[nSIDEntry];
    
       /* Check if User and Password are valid */
-      nUserPassValid = CheckUserPassword(pSIDEntry, pUser, pPass, &dPermission);
+      nUserPassValid = CheckUserPassword(pUser, pPass, &dPermission);
       if (nUserPassValid != -1)
       {
          nValid = 1;
@@ -565,6 +606,51 @@ int WebSidCheckUserPass (HTTPD_SESSION *hs, char *pUser, char *pPass)
    
    return(nValid);
 } /* WebSidCheckUserPass */
+
+/*************************************************************************/
+/*  WebSidCheckUserPassTOTP                                              */
+/*                                                                       */
+/*  Check if User/Password/Code combination is valid.                    */
+/*                                                                       */
+/*  In    : hs, pUser, pPass, dCode                                      */
+/*  Out   : none                                                         */
+/*  Return: 0 = not valid / 1 = valid                                    */
+/*************************************************************************/
+int WebSidCheckUserPassTOTP (HTTPD_SESSION *hs, char *pUser, char *pPass, uint32_t dCode)
+{
+   int          nValid = 0;
+   int          nUserPassValid;
+   uint32_t     dPermission;
+   int          nSIDEntry;
+   sid_t       *pSIDEntry;   
+   HTTP_REQUEST *req = &hs->s_req;
+   
+   /* Check first if the SID is valid */
+   nSIDEntry = WebSidCheck(hs, req->req_sid, FALSE); 
+   if (nSIDEntry != -1)
+   {
+      pSIDEntry = &SIDList[nSIDEntry];
+   
+      /* Check if User and Password are valid */
+      nUserPassValid = CheckUserPasswordTOTP(pUser, pPass, &dPermission, dCode);
+      if (nUserPassValid != -1)
+      {
+         nValid = 1;
+         pSIDEntry->nUserIndex     = nUserPassValid;
+         pSIDEntry->nAccessGranted = 1;
+         pSIDEntry->dPermission    = dPermission;
+      }
+      else
+      {
+         /* Not valid */
+         pSIDEntry->nUserIndex     = 0;
+         pSIDEntry->nAccessGranted = 0;
+         pSIDEntry->dPermission    = 0;
+      }
+   }
+   
+   return(nValid);
+} /* WebSidCheckUserPassTOTP */
 
 /*************************************************************************/
 /*  WebSidInvalidate                                                     */

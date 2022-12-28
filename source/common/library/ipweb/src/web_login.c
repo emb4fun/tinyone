@@ -465,6 +465,7 @@ static int Login (HTTPD_SESSION *hs)
             
             if (USER_MODE_TOTP == UserMode)
             {
+               /* This is the login for "normal" mode, but must switch for TOTP mode */
                rc = LOGIN_MODE_TOTP;
             }
                            
@@ -517,7 +518,6 @@ static int Login (HTTPD_SESSION *hs)
             rc = LOGIN_ERR_BLOCKED;
          }
       }
-   
    } /* ((pMode != NULL) && (0 == strcmp(pMode == "reset1")) */
 
 
@@ -542,11 +542,13 @@ static int Login (HTTPD_SESSION *hs)
       rc = WebUserPasswordReset(pUser, pPass, pResetCode); 
       if (0 == rc)
       {
+         /* No error */
          WebSidErrorCntSet(0);
          WebSidInvalidate(hs);
       }
       else
       {
+         /* Error */
          switch (rc)
          {
             case -1:  rc = LOGIN_ERR_USER;      break;
@@ -566,7 +568,6 @@ static int Login (HTTPD_SESSION *hs)
             }
          }
       }
-   
    } /* ((pMode != NULL) && (0 == strcmp(pMode == "reset1")) */
    
 
@@ -588,45 +589,29 @@ static int Login (HTTPD_SESSION *hs)
       pCode = IP_JSON_GetString(&JSON, "code");
       if (NULL == pCode) GOTO_END(LOGIN_ERR);
       
-      /*
-       * The first thing to verify is TOTP because if the user/pass is
-       * verified first then if you entered the correct information you
-       * are already logged in. Without even considering the TOTP code.
-       */
-      rc = WebUserCheckTOTP(pUser, (uint32_t)atol(pCode));
-      if (rc != 0)
+      /* Check user, password and code */
+      if (0 == WebSidCheckUserPassTOTP(hs, pUser, pPass, (uint32_t)atol(pCode)))
       {
-         /* Error */
-         rc = LOGIN_ERR_PASS_OTP;
-            
-         WebSidErrorCntSet(1);
-         if (1 == WebSidLoginBlocked())
+         /* Login not valid, check if it is blocked */
+         if (0 == WebSidLoginBlocked())
          {
+            /* Not valid, but must not blocked */
+            rc = LOGIN_ERR_PASS_OTP;
+         }
+         else
+         {
+            /* Error, must be blocked */
             rc = LOGIN_ERR_BLOCKED;
+      
+            /* A new NONCE must be created for a new login */
+            WebSidCreateNonce(hs);  
          }
       }
       else
       {
-         /* TOTP is correct, check user/pass now */
-         if (0 == WebSidCheckUserPass(hs, pUser, pPass))
-         {
-            /* Login not valid, check if it is blocked */
-            if (0 == WebSidLoginBlocked())
-            {
-               /* Not valid, but must not blocked */
-               rc = LOGIN_ERR_PASS_OTP;
-            }
-            else
-            {
-               /* Error, must be blocked */
-               rc = LOGIN_ERR_BLOCKED;
-      
-               /* A new NONCE must be created for a new login */
-               WebSidCreateNonce(hs);  
-            }
-         }
-      }            
-      
+         /* User and password are ok */
+         rc = LOGIN_OK;
+      }        
    } /* ((pMode != NULL) && (0 == strcmp(pMode == "totp")) */
    
 

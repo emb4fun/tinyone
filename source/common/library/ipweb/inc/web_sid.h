@@ -73,7 +73,10 @@ char    *WebSidCreateCookie (HTTPD_SESSION *hs);
 char    *WebSidCreateNonce (HTTPD_SESSION *hs);
 int      WebSidCheck (HTTPD_SESSION *hs, char *pSessionID, int nIsHttp);
 int      WebSidCheckAccessGranted (HTTPD_SESSION *hs, char *pSessionID, int nIsHttp);
+
 int      WebSidCheckUserPass (HTTPD_SESSION *hs, char *pUser, char *pPass);
+int      WebSidCheckUserPassTOTP (HTTPD_SESSION *hs, char *pUser, char *pPass, uint32_t dCode);
+
 void     WebSidInvalidate (HTTPD_SESSION *hs);
 uint32_t WebSidGetPermission (int nSIDEntry);
 char    *WebSidGetUser (int nSIDEntry);

@@ -1,6 +1,10 @@
 
 TinyONE ChangeLog
 
+= 28.12.2022
+   * Reworked TOTP functionality. 
+     Added own check function, WebUserCheckUserPasswordTOTP.
+
 = 27.12.2022
    * Added support for two-factor authentication using TOTP.
    * Added support for password reset. In case a password should be reseted,

@@ -65,6 +65,8 @@ int   WebUserIsFirstUser (void);
 void  WebUserFirstUserSet (char *pPassword);
 
 int   WebUserCheckUserPassword (char *pUser, char *pPassword, uint32_t *pPermission);
+int   WebUserCheckUserPasswordTOTP (char *pUser, char *pPassword, uint32_t *pPermission, uint32_t dCode);
+
 char *WebUserGetUser (uint8_t bIndex);
 int   WebUserSetNewPass (char *pUser, char *pPassUser, char *pPassNew);
 
