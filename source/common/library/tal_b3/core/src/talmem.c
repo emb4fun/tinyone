@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2018-2022 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2018-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -441,8 +441,8 @@ static void MEMAdd (tal_mem_id ID, void *pBuffer, uint32_t dSize)
 /*************************************************************************/
 void tal_MEMInit (void)
 {
-   uint32_t dAddr = 0;
-   uint32_t dSize = 0;
+   uint32_t dAddr;
+   uint32_t dSize;
 
    /* 
     * Clear context list first 

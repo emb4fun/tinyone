@@ -679,6 +679,37 @@ static void st_qword (BYTE* ptr, QWORD val)	/* Store an 8-byte word in little-en
 #endif	/* !FF_FS_READONLY */
 
 
+/* Fill memory block */
+static void mem_set (void* dst, int val, UINT cnt)
+{
+	BYTE *d = (BYTE*)dst;
+
+	do {
+		*d++ = (BYTE)val;
+	} while (--cnt);
+}
+
+
+/* Compare memory block */
+static int mem_cmp (const void* dst, const void* src, UINT cnt)	/* ZR:same, NZ:different */
+{
+	const BYTE *d = (const BYTE *)dst, *s = (const BYTE *)src;
+	int r = 0;
+
+	do {
+		r = *d++ - *s++;
+	} while (--cnt && r == 0);
+
+	return r;
+}
+
+
+/* Check if chr is contained in the string */
+static int chk_chr (const char* str, int chr)	/* NZ:contained, ZR:not contained */
+{
+	while (*str && *str != chr) str++;
+	return *str;
+}
 
 /*-----------------------------------------------------------------------*/
 /* String functions                                                      */
@@ -2409,13 +2440,13 @@ static FRESULT dir_find (	/* FR_OK(0):succeeded, !=0:error */
 				}
 			} else {					/* An SFN entry is found */
 				if (ord == 0 && sum == sum_sfn(dp->dir)) break;	/* LFN matched? */
-				if (!(dp->fn[NSFLAG] & NS_LOSS) && !memcmp(dp->dir, dp->fn, 11)) break;	/* SFN matched? */
+				if (!(dp->fn[NSFLAG] & NS_LOSS) && !mem_cmp(dp->dir, dp->fn, 11)) break;	/* SFN matched? */
 				ord = 0xFF; dp->blk_ofs = 0xFFFFFFFF;	/* Reset LFN sequence */
 			}
 		}
 #else		/* Non LFN configuration */
 		dp->obj.attr = dp->dir[DIR_Attr] & AM_MASK;
-		if (!(dp->dir[DIR_Attr] & AM_VOL) && !memcmp(dp->dir, dp->fn, 11)) break;	/* Is it a valid entry? */
+		if (!(dp->dir[DIR_Attr] & AM_VOL) && !mem_cmp(dp->dir, dp->fn, 11)) break;	/* Is it a valid entry? */
 #endif
 		res = dir_next(dp, 0);	/* Next entry */
 	} while (res == FR_OK);
@@ -3193,7 +3224,7 @@ static int test_gpt_header (	/* 0:Invalid, 1:Valid */
 	DWORD bcc;
 
 
-	if (memcmp(gpth + GPTH_Sign, "EFI PART" "\0\0\1\0" "\x5C\0\0", 16)) return 0;	/* Check sign, version (1.0) and length (92) */
+	if (mem_cmp(gpth + GPTH_Sign, "EFI PART" "\0\0\1\0" "\x5C\0\0", 16)) return 0;	/* Check sign, version (1.0) and length (92) */
 	for (i = 0, bcc = 0xFFFFFFFF; i < 92; i++) {		/* Check header BCC */
 		bcc = crc32(bcc, i - GPTH_Bcc < 4 ? 0 : gpth[i]);
 	}
@@ -3248,11 +3279,11 @@ static UINT check_fs (	/* 0:FAT/FAT32 VBR, 1:exFAT VBR, 2:Not FAT and valid BS, 
 	if (move_window(fs, sect) != FR_OK) return 4;	/* Load the boot sector */
 	sign = ld_word(fs->win + BS_55AA);
 #if FF_FS_EXFAT
-	if (sign == 0xAA55 && !memcmp(fs->win + BS_JmpBoot, "\xEB\x76\x90" "EXFAT   ", 11)) return 1;	/* It is an exFAT VBR */
+	if (sign == 0xAA55 && !mem_cmp(fs->win + BS_JmpBoot, "\xEB\x76\x90" "EXFAT   ", 11)) return 1;	/* It is an exFAT VBR */
 #endif
 	b = fs->win[BS_JmpBoot];
 	if (b == 0xEB || b == 0xE9 || b == 0xE8) {	/* Valid JumpBoot code? (short jump, near jump or near call) */
-		if (sign == 0xAA55 && !memcmp(fs->win + BS_FilSysType32, "FAT32   ", 8)) {
+		if (sign == 0xAA55 && !mem_cmp(fs->win + BS_FilSysType32, "FAT32   ", 8)) {
 			return 0;	/* It is an FAT32 VBR */
 		}
 		/* FAT volumes formatted with early MS-DOS lack BS_55AA and BS_FilSysType, so FAT VBR needs to be identified without them. */
@@ -3301,7 +3332,7 @@ static UINT find_volume (	/* Returns BS status found in the hosting drive */
 		for (v_ent = i = 0; i < n_ent; i++) {		/* Find FAT partition */
 			if (move_window(fs, pt_lba + i * SZ_GPTE / SS(fs)) != FR_OK) return 4;	/* PT sector */
 			ofs = i * SZ_GPTE % SS(fs);												/* Offset in the sector */
-			if (!memcmp(fs->win + ofs + GPTE_PtGuid, GUID_MS_Basic, 16)) {	/* MS basic data partition? */
+			if (!mem_cmp(fs->win + ofs + GPTE_PtGuid, GUID_MS_Basic, 16)) {	/* MS basic data partition? */
 				v_ent++;
 				fmt = check_fs(fs, ld_qword(fs->win + ofs + GPTE_FstLba));	/* Load VBR and check status */
 				if (part == 0 && fmt <= 1) return fmt;			/* Auto search (valid FAT volume found first) */
@@ -5877,7 +5908,7 @@ FRESULT f_mkfs (
 			ofs = i = 0;
 			while (n_ent) {		/* Find MS Basic partition with order of ipart */
 				if (ofs == 0 && disk_read(pdrv, buf, pt_lba++, 1) != RES_OK) LEAVE_MKFS(FR_DISK_ERR);	/* Get PT sector */
-				if (!memcmp(buf + ofs + GPTE_PtGuid, GUID_MS_Basic, 16) && ++i == ipart) {	/* MS basic data partition? */
+				if (!mem_cmp(buf + ofs + GPTE_PtGuid, GUID_MS_Basic, 16) && ++i == ipart) {	/* MS basic data partition? */
 					b_vol = ld_qword(buf + ofs + GPTE_FstLba);
 					sz_vol = ld_qword(buf + ofs + GPTE_LstLba) - b_vol + 1;
 					break;

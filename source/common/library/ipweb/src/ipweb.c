@@ -186,7 +186,7 @@ static client_info_t *FindFreeClient (void)
    
    for (int i=0; i<_MAX_WEB_CLIENT_TASKS; i++)
    {
-      if ( OS_TEST_STATE_NOT_IN_USED(&ClientArray[i].TCB) )
+      if ( OS_TaskTestStateNotInUsed(&ClientArray[i].TCB) )
       {
          Client = &ClientArray[i];
          break;
@@ -244,6 +244,7 @@ static void WebClient (void *p)
       gWebIdleStartTime = OS_TimeGet();
    }      
    
+  OS_TaskExit();
 } /* WebClient */
 
 /*************************************************************************/

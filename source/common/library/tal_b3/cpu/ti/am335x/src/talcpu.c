@@ -77,6 +77,14 @@ typedef struct _rng_
 #define RNG_STATUS_ERR  (1u <<  1)  /* FRO shutdown alarm */
 #define RNG_STATUS_CLK  (1u << 31)  /* module functional clock active (no irq) */
 
+
+#define DEBUG_WAIT()    TAL_CPU_DISABLE_ALL_INTS();   \
+                        while(1)                      \
+                        {                             \
+                            __asm("nop");             \
+                        }                             \
+                        TAL_CPU_ENABLE_ALL_INTS(); /*lint !e527*/
+
 /*=======================================================================*/
 /*  Definition of all local Data                                         */
 /*=======================================================================*/

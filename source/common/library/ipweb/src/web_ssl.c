@@ -272,7 +272,7 @@ static client_tls_info_t *FindFreeClient (void)
    
    for (int i=0; i<_MAX_WEB_TLS_CLIENT_TASKS; i++)
    {
-      if ( OS_TEST_STATE_NOT_IN_USED(&ClientArray[i].TCB) )
+      if ( OS_TaskTestStateNotInUsed(&ClientArray[i].TCB) )
       {
          Client = &ClientArray[i];
          break;
@@ -342,6 +342,7 @@ exit:
 
    nNumThreads--;
    
+   OS_TaskExit();
 } /* WebClientTls */
 
 /*************************************************************************/

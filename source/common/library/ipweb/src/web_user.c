@@ -535,28 +535,31 @@ void WebUserInit (void)
       /*
        * Setup guest
        */
-      CreateReset(UserDB.User[1].Reset);
+      CreateReset(UserDB.User[1].ResetNonce);
       CreateSalt(UserDB.User[1].Salt);
       sprintf(UserDB.User[1].User, "guest");
       CreateHashBySalt(UserDB.User[1].Salt, "guest", 5, UserDB.User[1].PassHash);
+      UserDB.User[1].Mode = USER_MODE_NORMAL;
       UserDB.User[1].dPermission = 0;
 
       /*
        * Setup user1
        */
-      CreateReset(UserDB.User[2].Reset);
+      CreateReset(UserDB.User[2].ResetNonce);
       CreateSalt(UserDB.User[2].Salt);
       sprintf(UserDB.User[2].User, "user1");
       CreateHashBySalt(UserDB.User[2].Salt, "user1", 5, UserDB.User[2].PassHash);
+      UserDB.User[2].Mode = USER_MODE_NORMAL;
       UserDB.User[2].dPermission = 0x00000001;
    
       /*
        * Setup user2
        */
-      CreateReset(UserDB.User[3].Reset);
+      CreateReset(UserDB.User[3].ResetNonce);
       CreateSalt(UserDB.User[3].Salt);
       sprintf(UserDB.User[3].User, "user2");
       CreateHashBySalt(UserDB.User[3].Salt, "user2", 5, UserDB.User[3].PassHash);
+      UserDB.User[3].Mode = USER_MODE_NORMAL;
       UserDB.User[3].dPermission = 0x00000002;
 #endif      
       

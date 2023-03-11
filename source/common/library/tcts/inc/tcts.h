@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TCTS project (Tiny Cooperative Task Scheduler)
 *
-*  Copyright (c) 2014 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2014-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -76,6 +76,8 @@
 #if !defined(__TCTS_H__)
 #define __TCTS_H__
 
+#if defined(RTOS_TCTS)
+
 /**************************************************************************
 *  Includes
 **************************************************************************/
@@ -86,12 +88,15 @@
 *  All Structures and Common Constants
 **************************************************************************/
 
+#define OS_Init   OS_TCTS_Init
+
 /*
  * Default ticks per second
  */
 #if !defined(OS_TICKS_PER_SECOND)
 #define OS_TICKS_PER_SECOND   1000
 #endif 
+
 
 /*
  * OS version information
@@ -183,7 +188,6 @@ struct _os_sema_
 /*
  * Mutex
  */
-#define OS_MUTEX_COUNTER_MAX   INT32_MAX
 struct _os_mutex_
 {
    os_tcb_fifo_t  Fifo;       /* Used for the tasks which are waiting for the mutex */
@@ -283,7 +287,14 @@ typedef void (*OS_TIMER_FUNC)(void);
  *
  * The stack will be 8 byte aligned and the size 4 byte.
  */
+#if !defined(__ARCH_RISCV__) 
 #define OS_STACK(_n,_s)       uint8_t _n[((_s+3)& ~3)] __attribute__((aligned(0x8)))
+#else
+/*
+ * In case of RISC-V, we need an alignment of 16 bytes and size too.
+ */
+#define OS_STACK(_n,_s)       uint8_t _n[((_s+15)& ~15)] __attribute__((aligned(0x10)))
+#endif
 
 
 /*
@@ -317,12 +328,6 @@ typedef void (*OS_TIMER_FUNC)(void);
 #define OS_RES_FREE(_a)          OS_SemaSignal(_a)
 
 
-/*
- * Some task macros
- */
-#define OS_TEST_STATE_NOT_IN_USED(_a)  (OS_TASK_STATE_NOT_IN_USE == ((OS_TCB*)_a)->State) 
-
-
 /**************************************************************************
 *  Functions Definitions
 **************************************************************************/
@@ -330,7 +335,7 @@ typedef void (*OS_TIMER_FUNC)(void);
 /*
  * General functionality
  */
-void      OS_Init (void);
+void      OS_TCTS_Init (void); 
 void      OS_Start (void);
 void      OS_SysTickStart (void);
 
@@ -362,6 +367,8 @@ void      OS_TaskWakeup (OS_TCB *pTCB);
 uint8_t   OS_TaskIsSleeping (OS_TCB *pTCB);
 uint8_t   OS_TaskShouldTerminate (void);
 OS_TCB   *OS_TaskGetList (void);
+
+int       OS_TaskTestStateNotInUsed (OS_TCB *pTCB);
 void      OS_TaskSetStateNotInUsed (OS_TCB *pTCB);
 
 
@@ -401,7 +408,7 @@ void      OS_SWDogTaskSetTime (uint32_t dTimeoutMs);
  * Semaphore functionality
  */
 void      OS_SemaCreate (OS_SEMA *pSema, int32_t nCounterStart, int32_t nCounterMax);
-void      OS_SemaReset (OS_SEMA *pSema, int32_t nCounterStart);
+//void      OS_SemaReset (OS_SEMA *pSema, int32_t nCounterStart);
 void      OS_SemaDelete (OS_SEMA *pSema);
 int       OS_SemaSignal (OS_SEMA *pSema);
 int       OS_SemaSignalFromInt (OS_SEMA *pSema);
@@ -413,7 +420,6 @@ int       OS_SemaWait (OS_SEMA *pSema, uint32_t dTimeoutMs);
  */
 void      OS_MutexCreate (OS_MUTEX *pMutex);
 void      OS_MutexSignal (OS_MUTEX *pMutex);
-void      OS_MutexSignalFromInt (OS_MUTEX *pMutex);
 int       OS_MutexWait (OS_MUTEX *pMutex, uint32_t dTimeoutMs);
 
 
@@ -437,6 +443,8 @@ void      OS_MboxDelete (OS_MBOX *pMbox);
 int       OS_MboxPost (OS_MBOX *pMbox, void *pMsg);
 int       OS_MboxPostFromInt (OS_MBOX *pMbox, void *pMsg);
 int       OS_MboxWait (OS_MBOX *pMbox, void **pMsg, uint32_t dTimeoutMs);
+
+#endif /* defined(RTOS_TCTS) */
 
 #endif /* !__TCTS_H__ */
 

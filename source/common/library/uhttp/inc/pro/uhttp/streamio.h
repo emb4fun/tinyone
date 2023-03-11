@@ -48,8 +48,6 @@
 #include <unistd.h>
 #elif defined(RTOS_TCTS) /* @@MF */
 #include <pro/uhttp/os/lwip/streamio.h>
-#elif defined(RTOS_UCOS3) /* @@MF */
-#include <pro/uhttp/os/lwip/streamio.h>
 #elif defined(HTTP_PLATFORM_STREAMS)
 #include <pro/uhttp/os/nut/streamio.h>
 #endif

@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2013-2022 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -35,7 +35,7 @@
 #if !defined(__TAL_H__)
 #define __TAL_H__
 
-#if !defined(__CROSSWORKS_ARM) && !defined(__SES_ARM)
+#if !defined(__CROSSWORKS_ARM) && !defined(__SES_ARM) && !defined(__SES_RISCV)
    Error: Wrong compiler ist used;
 #endif 
 

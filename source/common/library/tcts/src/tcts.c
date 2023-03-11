@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TCTS project (Tiny Cooperative Task Scheduler)
 *
-*  Copyright (c) 2014 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2014-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -79,6 +79,8 @@
 *  16.05.2021  mifi  Change version to v0.22.0.
 **************************************************************************/
 #define __TCTS_C__
+
+#if defined(RTOS_TCTS)
 
 /*=======================================================================*/
 /*  Include                                                              */
@@ -279,6 +281,14 @@ static uint8_t bSWDogEnabled = 0;
 #if defined(__NIOS__)
 #include "tcts_nios.c"
 #endif
+
+/*
+ * Check for RISC-V style CPU
+ */
+#if defined(__ARCH_RISCV__)
+#include "tcts_riscv.c"
+#endif
+
 
 /*************************************************************************/
 /*  GetStackFreeCount                                                    */
@@ -1075,7 +1085,7 @@ static void StatTask (void *pParam)
          /* Get total task time */
          dStatTotalTaskTime = 0;
       
-         /* Collect tota task time first */
+         /* Collect total task time first */
          pTask = pTaskList;
          while (pTask != NULL)
          {
@@ -1161,7 +1171,7 @@ static void IdleTask (void *pParam)
 /*=======================================================================*/
 
 /*************************************************************************/
-/*  OS_Init                                                              */
+/*  OS_TCTS_Init                                                         */
 /*                                                                       */
 /*  Init the "Cooperative Task Scheduler".                               */
 /*                                                                       */
@@ -1169,7 +1179,7 @@ static void IdleTask (void *pParam)
 /*  Out   : none                                                         */
 /*  Return: none                                                         */
 /*************************************************************************/
-void OS_Init (void)
+void OS_TCTS_Init (void)
 {
    /* Init the Ready and Wait List */
    memset(&ReadyList, 0x00, sizeof(ReadyList));
@@ -1188,7 +1198,7 @@ void OS_Init (void)
    dStatTotalTaskTime = 1;                
                 
    (void)bIsSchedLocked;   /* Prevent lint warning */
-} /* OS_Init */
+} /* OS_TCTS_Init */
 
 /*************************************************************************/
 /*  OS_SysTickStart                                                      */
@@ -1247,10 +1257,13 @@ void OS_OutputTaskInfo (void)
    pStart = GetIRQStackStart();
    pEnd   = GetIRQStackEnd();
    dSize  = (uint32_t)pEnd - (uint32_t)pStart;
-   dFree  = GetStackFreeCount(pStart, pEnd);
+   if (dSize != 0)
+   {
+      dFree  = GetStackFreeCount(pStart, pEnd);
    
-   TAL_PRINTF("%-16s  ", "- IRQ -");
-   TAL_PRINTF("  --   %4d   %4d   %4d    -   -----\n", dSize, (dSize - dFree), dFree);
+      TAL_PRINTF("%-16s  ", "- IRQ -");
+      TAL_PRINTF("  --   %4d   %4d   %4d    -   -----\n", dSize, (dSize - dFree), dFree);
+   }        
 
 
    /* Get start of list */
@@ -1684,6 +1697,20 @@ OS_TCB *OS_TaskGetList (void)
 {
    return(pTaskList);
 } /* OS_TaskGetList */
+
+/*************************************************************************/
+/*  OS_TaskTestStateNotInUsed                                            */
+/*                                                                       */
+/*  Check if task is in used.                                            */
+/*                                                                       */
+/*  In    : pTCB                                                         */
+/*  Out   : none                                                         */
+/*  Return: 0 / 1                                                        */
+/*************************************************************************/
+int OS_TaskTestStateNotInUsed (OS_TCB *pTCB)
+{
+   return( (OS_TASK_STATE_NOT_IN_USE == pTCB->State) );
+} /* OS_TaskTestStateNotInUsed */
 
 /*************************************************************************/
 /*  OS_TaskSetStateNotInUsed                                             */
@@ -2175,6 +2202,7 @@ void OS_SemaCreate (OS_SEMA *pSema, int32_t nCounterStart, int32_t nCounterMax)
    pSema->nCounterMax = nCounterMax;   
 } /* OS_SemaCreate */
 
+#if 0
 /*************************************************************************/
 /*  OS_SemaReset                                                         */
 /*                                                                       */
@@ -2233,6 +2261,7 @@ void OS_SemaReset (OS_SEMA *pSema, int32_t nCounterStart)
 
    ExitCritical();   
 } /* OS_SemaReset */
+#endif
 
 /*************************************************************************/
 /*  OS_SemaDelete                                                        */
@@ -2540,6 +2569,7 @@ static __inline__ int _OSMutexSignalFromInt (OS_MUTEX *pMutex)
    return(rc);
 } /* _OSMutexSignalFromInt */
 
+#if 0
 /*************************************************************************/
 /*  OS_MutexSignalFromInt                                                */
 /*                                                                       */
@@ -2558,6 +2588,7 @@ void OS_MutexSignalFromInt (OS_MUTEX *pMutex)
    _OSMutexSignalFromInt(pMutex);
    
 } /* OS_MutexSignalFromInt */
+#endif
 
 /*************************************************************************/
 /*  OS_MutexSignal                                                       */
@@ -3125,5 +3156,7 @@ int OS_MboxWait (OS_MBOX *pMbox, void **pMsg, uint32_t dTimeoutMs)
    
    return(rc);
 } /* OS_MboxWait*/
+
+#endif /* defined(RTOS_TCTS) */
 
 /*** EOF ***/

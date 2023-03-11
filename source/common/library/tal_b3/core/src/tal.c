@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2013-2022 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -58,6 +58,20 @@
 /*=======================================================================*/
 
 /*************************************************************************/
+/*  OS_TCTS_Init                                                         */
+/*                                                                       */
+/*  If TinyCTS is not used, this function makes the linker happy.        */
+/*                                                                       */
+/*  In    : none                                                         */
+/*  Out   : none                                                         */
+/*  Return: none                                                         */
+/*************************************************************************/
+void __attribute__((weak)) OS_TCTS_Init (void)
+{
+   /* Only an empty function */
+} /* OS_TCTS_Init */
+
+/*************************************************************************/
 /*  tal_CANInit                                                          */
 /*                                                                       */
 /*  If the CPU does not support CAN, talcan.c will not included in the   */
@@ -102,7 +116,7 @@ void tal_Init (void)
    TAL_CPU_DISABLE_ALL_INTS();
 
    tal_CPUInit();    /* Init the CPU module */
-   _OS_Init();       /* Init the OS module  */
+   OS_TCTS_Init();   /* Init the OS module  */
    tal_GPIOInit();   /* Init the GPIO module  */
    tal_LEDInit();    /* Init the LED module */
    tal_COMInit();    /* Init the COM module */

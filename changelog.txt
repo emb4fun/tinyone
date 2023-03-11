@@ -1,8 +1,24 @@
+***************************************************************************
+* Project: tinyone
+* Name   : "A small embedded DHCP and SNTP server"
+* Target : BeagleBone Black
+* Version: 20230311
+***************************************************************************
+* Tools  : SEGGER Embedded Studio for ARM v7.12
+***************************************************************************
+* URL    : https://www.emb4fun.de/projects/tone/index.html
+***************************************************************************
 
-TinyONE ChangeLog
+= 11.03.2023
+   * Changed changelog format.
+   * Used SEGGER Embedded Studio for ARM v7.12.
+   * Removed uC/OS-III support.
+   * Updated tal and tcts headers.
+   * Updated tcts functionality.
+   * Added and used old FatFs function mem_set, mem_cmp and chk_chr.
 
 = 28.12.2022
-   * Reworked TOTP functionality. 
+   * Reworked TOTP functionality.
      Added own check function, WebUserCheckUserPasswordTOTP.
      Added functionality to disable two-factor authentication using TOTP.
 
@@ -25,7 +41,7 @@ TinyONE ChangeLog
    * SES v7.10a used.
    * Corrected some file headers.
    * Added functionality to get link speed and mode, IP_IF_LinkSpeedDuplexGet.
-   * Some changes to support more than one network interfaces. 
+   * Some changes to support more than one network interfaces.
    * Added login dummy in case no login is required (IP_WEB_SID_SUPPORT = 0).
    * Added interrupt protection in memory management.
    * Change statistic task priority from 2 to 254.
@@ -36,9 +52,11 @@ TinyONE ChangeLog
 
 = 24.07.2022
    * New mbedTLS, v2.28.1, used.
-   
+
 = 15.05.2022
    * New mbedTLS, v2.28.0, used.
-   
+
 = Version 1.10 / 1.10, 25.08.2021
    * First version for GitHub.
+
+***************************************************************************

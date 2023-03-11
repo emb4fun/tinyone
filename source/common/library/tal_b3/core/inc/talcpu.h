@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2013-2022 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -55,6 +55,13 @@
 #include "talcpu_cm.h"
 #endif
 
+/*
+ * Check for RISC-V CPU
+ */
+#if defined(__ARCH_RISCV__)
+#include "talcpu_riscv.h"
+#endif
+
 /**************************************************************************
 *  Global Definitions
 **************************************************************************/
@@ -75,6 +82,9 @@ typedef void (*tal_irq_fnt)(uint32_t IRQ, void *Context);
 
 void       tal_CPUInit (void);
 void       tal_CPUSysTickStart (void);
+
+void       tal_CPUStatDWTInit (void);
+uint32_t   tal_CPUStatDWTGetCnt (void);
 
 void       tal_CPUIrqEnable (int IRQ);
 void       tal_CPUIrqDisable (int IRQ);
