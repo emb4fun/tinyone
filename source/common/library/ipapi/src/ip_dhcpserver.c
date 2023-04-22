@@ -982,10 +982,10 @@ static void BuildResponseMsg (struct dhcp_msg *MsgRx, uint16_t  MsgRxSize,
    MsgTx->flags  = MsgRx->flags;
    MsgTx->cookie = htonl(DHCP_MAGIC_COOKIE);
    
-   ip4_addr_set_u32(ip_2_ip4(&MsgTx->ciaddr), 0);
-   ip4_addr_set_u32(ip_2_ip4(&MsgTx->yiaddr), htonl(YourIP));
-   ip4_addr_set_u32(ip_2_ip4(&MsgTx->siaddr), 0);
-   ip4_addr_set_u32(ip_2_ip4(&MsgTx->giaddr), 0);
+   MsgTx->ciaddr.addr = 0;
+   MsgTx->yiaddr.addr = htonl(YourIP);
+   MsgTx->siaddr.addr = 0;
+   MsgTx->giaddr.addr = 0;
    
    Options = &MsgTx->options[0];
    

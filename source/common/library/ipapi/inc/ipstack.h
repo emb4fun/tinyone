@@ -70,6 +70,9 @@ typedef void (*ip_iface_link_callback_t)(int link);
 
 #define IFACE_ANY       0xff
 
+/* This variable is initialized by the system to contain the wildcard IPv4 address. */
+extern const struct in_addr inaddr_any;
+
 /**************************************************************************
 *  Macro Definitions
 **************************************************************************/
@@ -112,7 +115,7 @@ char    *IP_IF_HostnameGet (uint8_t iface);
 
 void     IP_IF_OutputConfig (uint8_t iface);
 
-void     IP_IF_StartupValuesGet (uint8_t iface, uint32_t *ipaddr, uint32_t *netmask, uint32_t *gw);
+void     IP_IF_StartupValuesGet (uint8_t iface, ip_addr_t *ipaddr, ip_addr_t *netmask, ip_addr_t *gw);
 
 #endif /* !__IPSTACK_H__ */
 

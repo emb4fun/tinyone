@@ -265,8 +265,6 @@ void IP_WEBS_LoginInit (void)
 {
    IP_WEBS_SSIListAdd((SSI_EXT_LIST_ENTRY*)SSIList);
    
-   WebUserInit();
-
 } /* IP_WEBS_LoginInit */
 
 /*lint -restore*/

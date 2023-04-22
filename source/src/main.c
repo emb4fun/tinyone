@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2019-2022 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2019-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -49,8 +49,6 @@
 #include "elca_client.h"
 
 #include "iperf.h"
-
-void ATInit(void);
 
 /*=======================================================================*/
 /*  All Structures and Common Constants                                  */
@@ -513,6 +511,8 @@ static void StartTask (void *p)
    OS_SysTickStart();   /* Start the System ticker */
    OS_StatEnable();     /* Enable the statistic function */
 
+   /*******************************************************************/
+
    term_Start();        /* Start the Terminal functionality */
    
    /*
@@ -541,8 +541,6 @@ static void StartTask (void *p)
 
    IP_DHCP_ServerInit();  /* Initialize the DHCP server */
    IP_SNTP_ServerInit();  /* Initialize the SNTP server */
-
-   ATInit();
 
    IP_WEBS_Start(80);     /* Start the web server */
    IP_WEBS_SSLStart(443);

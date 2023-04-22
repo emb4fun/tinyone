@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2019-2022 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2019-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -48,8 +48,6 @@
 #define IP_WEB_SID_LOGIN_ERROR_CNT_MAX    3
 #define IP_WEB_SID_LOGIN_TIMEOUT_SEC      60
 #define IP_WEB_SID_TIMEOUT_SEC            (10*60)
-
-#define IP_WEB_API_SUPPORT                1
 
 /**************************************************************************
 *  Macro Definitions

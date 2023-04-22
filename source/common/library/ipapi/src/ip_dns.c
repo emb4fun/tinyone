@@ -84,13 +84,13 @@ void IP_DNS_ServerSet (uint8_t index, uint32_t addr)
    {
       case 0:
       {
-         ipaddr.addr = htonl(addr);
+         ip_2_ip4(&ipaddr)->addr = htonl(addr);
          dns_setserver(0, &ipaddr); 
          break;
       }   
       case 1:
       {
-         ipaddr.addr = htonl(addr);
+         ip_2_ip4(&ipaddr)->addr = htonl(addr);
          dns_setserver(1, &ipaddr); 
          break;
       }   
@@ -122,13 +122,13 @@ uint32_t IP_DNS_ServerGet (uint8_t index)
       case 0:
       {
          ipaddr = dns_getserver(0);
-         addr = ntohl(ipaddr->addr);
+         addr = ntohl(ip_2_ip4(ipaddr)->addr);
          break;
       }
       case 1:
       {
          ipaddr = dns_getserver(1);
-         addr = ntohl(ipaddr->addr);
+         addr = ntohl(ip_2_ip4(ipaddr)->addr);
          break;
       }
       default:

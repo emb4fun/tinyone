@@ -68,6 +68,11 @@
 
 int errno = 0; /* Needed by lwIP */
 
+/*
+ * This variable is initialized by the system to contain the wildcard IPv4 address.
+ */
+const struct in_addr inaddr_any = {INADDR_ANY};
+
 /*=======================================================================*/
 /*  All Structures and Common Constants                                  */
 /*=======================================================================*/
@@ -409,7 +414,7 @@ char *htoa (uint32_t Addr, char *pBuf, int BufLen)
 {
    ip_addr_t ipaddr;
 
-   ipaddr.addr = htonl(Addr);
+   ip_2_ip4(&ipaddr)->addr = htonl(Addr);
 
    return( ipaddr_ntoa_r(&ipaddr, pBuf, BufLen) );
 } /* htoa */
@@ -518,7 +523,7 @@ uint32_t IP_IF_AddrGet (uint8_t iface)
 
    if ((iface < ETH_MAX_IFACE) && (pNetIf[iface] != NULL))
    {
-      addr = pNetIf[iface]->ip_addr.addr;
+      addr = ip_2_ip4(&pNetIf[iface]->ip_addr)->addr;
    }
 
    return(ntohl(addr));
@@ -539,7 +544,7 @@ uint32_t IP_IF_MaskGet (uint8_t iface)
 
    if ((iface < ETH_MAX_IFACE) && (pNetIf[iface] != NULL))
    {
-      addr = pNetIf[iface]->netmask.addr;
+      addr = ip_2_ip4(&pNetIf[iface]->netmask)->addr;
    }
 
    return(ntohl(addr));
@@ -560,7 +565,7 @@ uint32_t IP_IF_GWGet (uint8_t iface)
 
    if ((iface < ETH_MAX_IFACE) && (pNetIf[iface] != NULL))
    {
-      addr = pNetIf[iface]->gw.addr;
+      addr = ip_2_ip4(&pNetIf[iface]->gw)->addr;
    }
 
    return(ntohl(addr));
@@ -630,13 +635,13 @@ int IP_IF_Start (uint8_t iface)
    }
    
    /* IP address setting */
-   ipaddr.addr  = IPAddr[iface];
-   netmask.addr = NETMask[iface];
-   gw.addr      = GWAddr[iface];
+   ip_2_ip4(&ipaddr)->addr  = IPAddr[iface];
+   ip_2_ip4(&netmask)->addr = NETMask[iface];
+   ip_2_ip4(&gw)->addr      = GWAddr[iface];
 
-   StartupIPAddr[iface]  = ipaddr.addr; 
-   StartupNETMask[iface] = netmask.addr;
-   StartupGWAddr[iface]  = gw.addr;
+   StartupIPAddr[iface]  = ip_2_ip4(&ipaddr)->addr;
+   StartupNETMask[iface] = ip_2_ip4(&netmask)->addr;
+   StartupGWAddr[iface]  = ip_2_ip4(&gw)->addr;
    
    /* Add the network interface to the list of lwIP netifs. */
    if (0 == iface)
@@ -654,12 +659,20 @@ int IP_IF_Start (uint8_t iface)
    }
 #endif   
    
-   pNetIf[iface] = netif_add(&NetIf[iface], &ipaddr, &netmask, &gw, &MACAddr[iface][0], init, tcpip_input); /*lint !e644*/
+   pNetIf[iface] = netif_add(&NetIf[iface], ip_2_ip4(&ipaddr), ip_2_ip4(&netmask), ip_2_ip4(&gw), &MACAddr[iface][0], init, tcpip_input); /*lint !e644*/
 
    if (pNetIf[iface] != NULL)
    {
       if (0 == iface)
       {
+
+#if defined(LWIP_IPV6) && (LWIP_IPV6 >= 1)
+         netif_set_ip6_autoconfig_enabled(pNetIf[iface], 0);
+         netif_create_ip6_linklocal_address(pNetIf[iface], 1);
+         netif_ip6_addr_set_state(pNetIf[iface], 0, IP6_ADDR_VALID);
+         term_printf("\r\nIPv6 Address: %s\r\n\r\n", ip6addr_ntoa(netif_ip6_addr(pNetIf[iface], 0)));
+#endif /* LWIP_IPV6 */
+
          /* Set the network interface as the default network interface. */
          netif_set_default(pNetIf[iface]);
       }         
@@ -796,13 +809,13 @@ char *IP_IF_HostnameGet (uint8_t iface)
 /*  Out   : ipaddr, netmask, gw                                          */
 /*  Return: none                                                         */
 /*************************************************************************/
-void IP_IF_StartupValuesGet (uint8_t iface, uint32_t *ipaddr, uint32_t *netmask, uint32_t *gw)
+void IP_IF_StartupValuesGet (uint8_t iface, ip_addr_t *ipaddr, ip_addr_t *netmask, ip_addr_t *gw)
 {
    if ((iface < ETH_MAX_IFACE) && (ipaddr != NULL) && (netmask != NULL) && (gw != NULL))
    {
-      *ipaddr  = StartupIPAddr[iface];
-      *netmask = StartupNETMask[iface];
-      *gw      = StartupGWAddr[iface]; 
+      ip_2_ip4(ipaddr)->addr  = StartupIPAddr[iface];
+      ip_2_ip4(netmask)->addr = StartupNETMask[iface];
+      ip_2_ip4(gw)->addr      = StartupGWAddr[iface];
    }
          
 } /* IP_IF_StartupValuesGet */

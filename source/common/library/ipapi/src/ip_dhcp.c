@@ -94,7 +94,7 @@ void _IP_DHCP_CallbackBound (void *p)
 {
    uint8_t       i;
    struct netif *netif = (struct netif *)p;
-      
+   
    for(i=0; i<ETH_MAX_IFACE; i++)
    {
       if (netif == IP_IF_NetIfGet(i))
@@ -102,7 +102,7 @@ void _IP_DHCP_CallbackBound (void *p)
          DhcpCallback[i]();
          break;
       }
-   }
+   } 
 
 } /* _IP_DHCP_CallbackBound */
 
@@ -192,9 +192,9 @@ void IP_DHCP_Stop (uint8_t iface)
 {
    struct netif *netif;
    char          name[] = "enx";
-   ip4_addr_t    ipaddr;
-   ip4_addr_t    netmask;
-   ip4_addr_t    gw;
+   ip_addr_t     ipaddr;
+   ip_addr_t     netmask;
+   ip_addr_t     gw;
 
    (void)iface;
 
@@ -207,17 +207,17 @@ void IP_DHCP_Stop (uint8_t iface)
          netif = netif_find(name);
          if (netif != NULL)
          {
-            DhcpInUse[iface] = 0;
+            DhcpInUse[iface]    = 0;
             DhcpCallback[iface] = NULL;
             netifapi_dhcp_stop(netif);
          
             OS_TimeDly(100);
          
             /* Set startup values */
-            IP_IF_StartupValuesGet(0, &ipaddr.addr, &netmask.addr, &gw.addr);
-            netif_set_addr(netif, &ipaddr, &netmask, &gw);         
+            IP_IF_StartupValuesGet(0, &ipaddr, &netmask, &gw);
+            netif_set_addr(netif, ip_2_ip4(&ipaddr), ip_2_ip4(&netmask), ip_2_ip4(&gw));         
          
-            ipaddr.addr = 0;
+            ip_2_ip4(&ipaddr)->addr = 0;
             dns_setserver(0, &ipaddr); 
             dns_setserver(1, &ipaddr); 
          }   
@@ -271,7 +271,7 @@ uint32_t IP_DHCP_ServerGet (uint8_t iface)
          if (netif != NULL)
          {
             dhcp = netif_dhcp_data(netif);
-            addr = dhcp->server_ip_addr.addr;
+            addr = ip_2_ip4(&dhcp->server_ip_addr)->addr;
          }
       }
    }      

@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2019-2022 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2019-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -99,7 +99,7 @@
 #define TASK_IP_SNTP_SERVER_STK_SIZE      1024
 
 #define TASK_IP_ELCAC_PRIORITY            40
-#define TASK_IP_ELCAC_STK_SIZE            (4*1024)
+#define TASK_IP_ELCAC_STK_SIZE            (8*1024)
 
 #define TASK_IP_TNP_PRIORITY              39
 #define TASK_IP_TNP_STK_SIZE              1536

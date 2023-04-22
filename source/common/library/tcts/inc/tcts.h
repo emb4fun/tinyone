@@ -97,7 +97,6 @@
 #define OS_TICKS_PER_SECOND   1000
 #endif 
 
-
 /*
  * OS version information
  */
