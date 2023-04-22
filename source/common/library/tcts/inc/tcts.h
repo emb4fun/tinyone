@@ -407,7 +407,7 @@ void      OS_SWDogTaskSetTime (uint32_t dTimeoutMs);
  * Semaphore functionality
  */
 void      OS_SemaCreate (OS_SEMA *pSema, int32_t nCounterStart, int32_t nCounterMax);
-//void      OS_SemaReset (OS_SEMA *pSema, int32_t nCounterStart);
+void      OS_SemaReset (OS_SEMA *pSema, int32_t nCounterStart);
 void      OS_SemaDelete (OS_SEMA *pSema);
 int       OS_SemaSignal (OS_SEMA *pSema);
 int       OS_SemaSignalFromInt (OS_SEMA *pSema);

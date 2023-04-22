@@ -2202,7 +2202,7 @@ void OS_SemaCreate (OS_SEMA *pSema, int32_t nCounterStart, int32_t nCounterMax)
    pSema->nCounterMax = nCounterMax;   
 } /* OS_SemaCreate */
 
-#if 0
+#if 1 // TODO
 /*************************************************************************/
 /*  OS_SemaReset                                                         */
 /*                                                                       */

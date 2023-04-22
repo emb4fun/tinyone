@@ -373,6 +373,10 @@ TAL_RESULT tal_COMClose (TAL_COM_DCB *pDCB)
 /*                                                                       */
 /*  Send a block of data.                                                */
 /*                                                                       */
+/*  There is currently an issue with the NEORV32. If the data is output  */
+/*  under interrupt control, it could be possible that some data are     */
+/*  lost.                                                                */
+/*                                                                       */
 /*  In    : pDCB, pData, wSize                                           */
 /*  Out   : none                                                         */
 /*  Return: TAL_OK / error cause                                         */
@@ -380,7 +384,7 @@ TAL_RESULT tal_COMClose (TAL_COM_DCB *pDCB)
 TAL_RESULT tal_COMSendBlock (TAL_COM_DCB *pDCB, uint8_t *pData, uint16_t wSize)
 {
    TAL_RESULT Error = TAL_ERR_PARAMETER;
-   
+
    /* Check for valid conditions */
    if ( (pDCB          != NULL)               &&
         (pData         != NULL)               &&
@@ -391,17 +395,31 @@ TAL_RESULT tal_COMSendBlock (TAL_COM_DCB *pDCB, uint8_t *pData, uint16_t wSize)
       if (TAL_TRUE == pDCB->bIsOpen)
       {
          OS_RES_LOCK(&pDCB->TxSema);
-      
+
+#if defined(__NEORV32_FAMILY)
+         /*
+          * Use polling instead of interrupt control
+          */
+         neorv32_uart_t *UARTx;
+         UARTx = (neorv32_uart_t*)pDCB->HW.dBaseAddress;
+         while (wSize)
+         {
+            neorv32_uart_putc(UARTx, *pData);
+            pData++;
+            wSize--;
+         }
+#else
+#if 0
          do
          {
             /* Add data to the ring buffer */
             Error = tal_MISCRingAdd(&pDCB->TxRing, pData);
             if (Error != TAL_OK)
             {
-               /* 
+               /*
                 * The data was not added to the ring buffer!
                 *
-                * Ring buffer is full, wait for an free entry. 
+                * Ring buffer is full, wait for an free entry.
                 */
                while ( 0 == tal_MISCRingGetFreeCount(&pDCB->TxRing) )
                {
@@ -410,18 +428,18 @@ TAL_RESULT tal_COMSendBlock (TAL_COM_DCB *pDCB, uint8_t *pData, uint16_t wSize)
                   {
                      /* No, start the transmitter */
                      cpu_COMStartTx(pDCB);
-                  }                     
+                  }
                   OS_TimeDly(1);
                }
-               
+
                /*
                 * A free entry is available, we can add
                 * the data to the ring buffer now.
                 */
                tal_MISCRingAdd(&pDCB->TxRing, pData);
             }
-            
-            /* 
+
+            /*
              * The data was added, switch to the next one
              * and start the transmitter.
              */
@@ -431,9 +449,71 @@ TAL_RESULT tal_COMSendBlock (TAL_COM_DCB *pDCB, uint8_t *pData, uint16_t wSize)
             cpu_COMStartTx(pDCB);
          }
          while (wSize != 0);
-         
+#else
+         uint16_t wFreeCount = tal_MISCRingGetFreeCount(&pDCB->TxRing);
+
+         /* Check if we can put all data in the ring buffer */
+         if (wFreeCount >= wSize)
+         {
+            /* Put all data to send into the ring buffer */
+            while (wSize)
+            {
+               tal_MISCRingAdd(&pDCB->TxRing, pData);
+               pData++;
+               wSize--;
+            }
+            /* Start Tx if needed */
+            cpu_COMStartTx(pDCB);
+         }
+         else
+         {
+            /* Ups, no space for all data, add byte by byte into the ring buffer */
+            do
+            {
+               /* Add data to the ring buffer */
+               Error = tal_MISCRingAdd(&pDCB->TxRing, pData);
+               if (Error != TAL_OK)
+               {
+                  /*
+                   * The data was not added to the ring buffer!
+                   *
+                   * Ring buffer is full, wait for an free entry.
+                   */
+                  while ( 0 == tal_MISCRingGetFreeCount(&pDCB->TxRing) )
+                  {
+                     /* Check if the transmitter is still runing */
+                     if (TAL_ERROR == cpu_COMTxIsRunning(pDCB))
+                     {
+                        /* No, start the transmitter */
+                        cpu_COMStartTx(pDCB);
+                     }
+                     OS_TimeDly(1);
+                  }
+
+                  /*
+                   * A free entry is available, we can add
+                   * the data to the ring buffer now.
+                   */
+                  tal_MISCRingAdd(&pDCB->TxRing, pData);
+               }
+
+               /*
+                * The data was added, switch to the next one
+                * and start the transmitter.
+                */
+               pData++;
+               wSize--;
+
+               /* Start Tx if needed */
+               cpu_COMStartTx(pDCB);
+            }
+            while (wSize != 0);
+         } /* end if (wFreeCount >= wSize) */
+#endif
+#endif /* #if defined(__NEORV32_FAMILY) */
+
          OS_RES_FREE(&pDCB->TxSema);
-         
+
          Error = TAL_OK;
       }
       else
@@ -441,8 +521,8 @@ TAL_RESULT tal_COMSendBlock (TAL_COM_DCB *pDCB, uint8_t *pData, uint16_t wSize)
          Error = TAL_ERR_COM_NOT_OPEN;
       }
    }
-   
-   return(Error);        
+
+   return(Error);
 } /* tal_COMSendBlock */
 
 /*************************************************************************/

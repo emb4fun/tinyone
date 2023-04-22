@@ -119,6 +119,7 @@ void TAL_FATAL (const char *func, const char *file, int line, const char *expect
    {
       term_printf("%s:%d: Failed: in %s\n", file, line, func);
    }   
+   
    while (1)
    {
       __asm__ ("nop");

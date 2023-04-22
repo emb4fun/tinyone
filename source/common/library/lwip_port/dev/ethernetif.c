@@ -89,6 +89,7 @@
 #include "lwip\opt.h"
 #include "lwip\tcpip.h"
 #include "netif\etharp.h"
+#include "lwip\ethip6.h"
 #include "lwip\stats.h"
 #include "lwip\igmp.h"
 
@@ -669,13 +670,25 @@ static int cpsw_port_init (struct netif *netif)
    (void)netif;
    
    /* Get the MAC address */
-   EVMMACAddrGet(0, MACAddress);    
+#if !defined(USE_IP_DEFAULT_MAC_ADDR)
+   EVMMACAddrGet(0, MACAddress);
+
    cpswif->eth_addr[0] = MACAddress[5];
    cpswif->eth_addr[1] = MACAddress[4];
    cpswif->eth_addr[2] = MACAddress[3];
    cpswif->eth_addr[3] = MACAddress[2];
    cpswif->eth_addr[4] = MACAddress[1];
    cpswif->eth_addr[5] = MACAddress[0];
+#else
+   memcpy(MACAddress, netif->hwaddr, 6);
+
+   cpswif->eth_addr[0] = MACAddress[0];
+   cpswif->eth_addr[1] = MACAddress[1];
+   cpswif->eth_addr[2] = MACAddress[2];
+   cpswif->eth_addr[3] = MACAddress[3];
+   cpswif->eth_addr[4] = MACAddress[4];
+   cpswif->eth_addr[5] = MACAddress[5];
+#endif
    
    /* 
     * Initialize the hardware
@@ -1180,6 +1193,11 @@ static err_t low_level_init (struct netif *netif)
    /* Accept broadcast address, ARP traffic and Multicast */
    netif->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_ETHERNET;
    
+#if defined(LWIP_IPV6) && (LWIP_IPV6 != 0)
+   netif->flags |= NETIF_FLAG_MLD6;
+#endif
+
+
 #if (LWIP_IGMP >= 1)   
    /* Add IGMP support */   
    netif->flags |= NETIF_FLAG_IGMP;
@@ -1399,8 +1417,11 @@ static void ethernetif_input (void *arg)
             
             switch (htons(ethhdr->type)) 
             {
-               /* IP or ARP packet? */
+               /* IP, IPv6 or ARP packet? */
                case ETHTYPE_IP:
+#if defined(LWIP_IPV6) && (LWIP_IPV6 != 0)
+               case ETHTYPE_IPV6:
+#endif
                case ETHTYPE_ARP:
                
                   /* full packet send to tcpip_thread to process */
@@ -1473,6 +1494,9 @@ err_t ethernetif_init (struct netif *netif)
       netif->name[0] = IFNAME0;
       netif->name[1] = IFNAME1;
   
+      /* Copy MAC address */
+      memcpy(netif->hwaddr, netif->state, ETHARP_HWADDR_LEN);
+
       /* 
        * We directly use etharp_output() here to save a function call.
        * You can instead declare your own function an call etharp_output()
@@ -1482,6 +1506,10 @@ err_t ethernetif_init (struct netif *netif)
       netif->output     = etharp_output;
       netif->linkoutput = low_level_output;
   
+#if defined(LWIP_IPV6) && (LWIP_IPV6 != 0)
+      netif->output_ip6 = ethip6_output;
+#endif
+
       /* Initialize the hardware */
       error = low_level_init(netif);
       
