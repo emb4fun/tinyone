@@ -63,8 +63,8 @@ struct _fs_fs_
    
    int  (*Open)  (const char *name, int mode);
    int  (*Close) (int fd);
-   int  (*Read)  (int fd, void *buffer, uint32_t count);
-   int  (*Write) (int fd, const void *buffer, uint32_t count);
+   int  (*Read)  (int fd, void *buffer, size_t count);
+   int  (*Write) (int fd, const void *buffer, size_t count);
    int  (*Seek)  (int fd, long offset, int origin);
    int  (*Stat)  (int fd, struct _stat *pStat);
    long (*Filelength)(int fd);

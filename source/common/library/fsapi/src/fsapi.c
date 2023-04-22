@@ -275,7 +275,7 @@ int _close (int fd)
 /*  Out   : none                                                         */
 /*  Return: Number of bytes read                                         */
 /*************************************************************************/
-int _read (int fd, void *buffer, uint32_t count)
+int _read (int fd, void *buffer, size_t count)
 {
    int     BytesRead = -1;
    int     Handle;

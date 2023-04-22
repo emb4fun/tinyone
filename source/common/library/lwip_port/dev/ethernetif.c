@@ -396,7 +396,7 @@ static void cpsw_inst_config (struct cpswportif *cpswif)
  */
 static int cpsw_ale_entry_match_free (cpswinst_t *cpswinst)
 {
-   uint32_t ale_entry[ALE_ENTRY_NUM_WORDS];
+   unsigned int ale_entry[ALE_ENTRY_NUM_WORDS];
    int32_t  idx;
 
    /* Check which ALE entry is free starting from 0th entry */
@@ -426,7 +426,7 @@ static void cpsw_ale_unicastentry_set (cpswinst_t *cpswinst, uint32_t port_num, 
 {
    volatile uint32_t cnt;
    volatile int32_t idx;
-   uint32_t ale_entry[ALE_ENTRY_NUM_WORDS] = {0, 0, 0};
+   unsigned int     ale_entry[ALE_ENTRY_NUM_WORDS] = {0, 0, 0};
 
    for(cnt = 0; cnt < ETHARP_HWADDR_LEN; cnt++) 
    {
@@ -457,7 +457,7 @@ static void cpsw_ale_multicastentry_set (cpswinst_t *cpswinst, uint32_t portmask
 {
    volatile uint32_t cnt;
    volatile int32_t  idx;
-   uint32_t ale_entry[ALE_ENTRY_NUM_WORDS] = {0, 0, 0};
+   unsigned int      ale_entry[ALE_ENTRY_NUM_WORDS] = {0, 0, 0};
 
    idx = cpsw_ale_entry_match_free(cpswinst);
    if (idx < MAX_ALE_ENTRIES )
@@ -477,7 +477,7 @@ static void cpsw_ale_multicastentry_set (cpswinst_t *cpswinst, uint32_t portmask
 static void cpsw_ale_remove_all_entries (cpswinst_t *cpswinst, uint32_t start)
 {
    uint32_t idx;
-   uint32_t ale_entry[ALE_ENTRY_NUM_WORDS] = {0, 0, 0};
+   unsigned int ale_entry[ALE_ENTRY_NUM_WORDS] = {0, 0, 0};
 
    for (idx=start; idx<MAX_ALE_ENTRIES; idx++)
    {
@@ -1362,7 +1362,7 @@ static void ethernetif_input (void *arg)
    struct pbuf    *p;
    struct netif   *netif = (struct netif*)arg;
    struct eth_hdr *ethhdr;
-   unsigned        Event;
+   uint32_t        Event;
    uint32_t        Checktime = OS_TimeGet();
 
    /* 
