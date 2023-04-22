@@ -28,9 +28,6 @@
   <ProjectSessionItem path="tiny-one"/>
   <ProjectSessionItem path="tiny-one;tiny-one"/>
   <ProjectSessionItem path="tiny-one;tiny-one;Source Files"/>
-  <ProjectSessionItem path="tiny-one;tiny-one;Source Files;common"/>
-  <ProjectSessionItem path="tiny-one;tiny-one;Source Files;common;library"/>
-  <ProjectSessionItem path="tiny-one;tiny-one;Source Files;common;library;fsapi"/>
   <ProjectSessionItem path="tiny-one;tiny-one;Source Files;src"/>
  </Project>
  <Register1>
@@ -68,8 +65,8 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="605" useTextEdit="1" path="../src/main.c" left="0" top="569" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="3" y="360" useTextEdit="1" path="../common/library/fsapi/src/fs_fatfs.c" left="0" selected="1" top="325" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="605" useTextEdit="1" path="../src/main.c" left="0" selected="1" top="569" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="3" y="360" useTextEdit="1" path="../common/library/fsapi/src/fs_fatfs.c" left="0" top="325" codecName="Default"/>
  </Files>
  <EMStudioWindow activeProject="tiny-one" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="RAM Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>
