@@ -2,12 +2,16 @@
 * Project: tinyone
 * Name   : "A small embedded DHCP and SNTP server"
 * Target : BeagleBone Black
-* Version: 20230422
+* Version: 20230918
 ***************************************************************************
-* Tools  : SEGGER Embedded Studio for ARM v7.12
+* Tools  : SEGGER Embedded Studio for ARM v7.32
 ***************************************************************************
 * URL    : https://www.emb4fun.de/projects/tone/index.html
 ***************************************************************************
+
+= 18.09.2023
+   * Updated MbedTLS to v2.28.4
+   * Used SEGGER Embedded Studio for ARM v7.32.
 
 = 22.04.2023
    * Updated MbedTLS to v2.28.3
