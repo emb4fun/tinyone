@@ -220,10 +220,10 @@ struct netconn {
   enum netconn_type type;
   /** current state of the netconn */
   enum netconn_state state;
-  
+
   /** SSL/TLS state @@MF */   
   void *ssl;
-  
+
   /** the lwIP internal protocol control block */
   union {
     struct ip_pcb  *ip;

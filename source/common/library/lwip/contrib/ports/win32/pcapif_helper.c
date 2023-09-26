@@ -102,7 +102,6 @@ pcapifh_alloc_readonly_copy(void *data, size_t len)
     lwip_win32_platform_diag("VirtualProtect failed: %d\n", GetLastError());
     while(1);
   }
-  printf("pcapifh_alloc_readonly_copy(%d): 0x%08x\n", len, ret);
   return ret;
 }
 
@@ -112,6 +111,33 @@ pcapifh_free_readonly_mem(void *data)
   if (!VirtualFree(data, 0, MEM_RELEASE)) {
     lwip_win32_platform_diag("VirtualFree(0x%08x) failed: %d\n", data, GetLastError());
     while(1);
+  }
+}
+
+/**
+ * Npcap keeps its DLLs in a different directory for compatiblity with winpcap.
+ * Make sure they get found by adding that directory to the DLL search path.
+ */
+void pcapifh_init_npcap(void)
+{
+  char npcap_dir[512];
+  unsigned int len;
+  static char npcap_initialized = 0;
+
+  if (!npcap_initialized)
+  {
+    npcap_initialized = 1;
+
+    len = GetSystemDirectory(npcap_dir, 480);
+    if (!len) {
+      lwip_win32_platform_diag("Error in GetSystemDirectory: %x", GetLastError());
+      return;
+    }
+    strcat_s(npcap_dir, 512, "\\Npcap");
+    if (SetDllDirectory(npcap_dir) == 0) {
+      lwip_win32_platform_diag("Error in SetDllDirectory: %x", GetLastError());
+      return;
+    }
   }
 }
 
@@ -137,6 +163,10 @@ enum pcapifh_link_event pcapifh_linkstate_get(struct pcapifh_linkstate* state)
 void pcapifh_linkstate_close(struct pcapifh_linkstate* state)
 {
   LWIP_UNUSED_ARG(state);
+}
+
+void pcapifh_init_npcap(void)
+{
 }
 
 #endif /* WIN32 */

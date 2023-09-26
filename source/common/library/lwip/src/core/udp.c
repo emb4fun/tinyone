@@ -1240,6 +1240,7 @@ udp_new(void)
 #if LWIP_MULTICAST_TX_OPTIONS
     udp_set_multicast_ttl(pcb, mcast_ttl);
 #endif /* LWIP_MULTICAST_TX_OPTIONS */
+    pcb_tci_init(pcb);
   }
   return pcb;
 }

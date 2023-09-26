@@ -720,7 +720,7 @@ netconn_alloc(enum netconn_type t, netconn_callback callback)
   conn->type = t;
   conn->pcb.tcp = NULL;
   conn->ssl = NULL; /* @@MF */
-
+  
 #if LWIP_NETCONN_FULLDUPLEX
   conn->mbox_threads_waiting = 0;
 #endif

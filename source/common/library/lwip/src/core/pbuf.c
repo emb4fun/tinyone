@@ -1011,7 +1011,7 @@ pbuf_copy_partial_pbuf(struct pbuf *p_to, const struct pbuf *p_from, u16_t copy_
     MEMCPY((u8_t *)p_to->payload + offset_to, (u8_t *)p_from->payload + offset_from, len);
     offset_to += len;
     offset_from += len;
-    copy_len -= len;
+    copy_len = (u16_t)(copy_len - len);
     LWIP_ASSERT("offset_to <= p_to->len", offset_to <= p_to->len);
     LWIP_ASSERT("offset_from <= p_from->len", offset_from <= p_from->len);
     if (offset_from >= p_from->len) {
@@ -1203,7 +1203,7 @@ pbuf_skip_const(const struct pbuf *in, u16_t in_offset, u16_t *out_offset)
  * @param in input pbuf
  * @param in_offset offset to skip
  * @param out_offset resulting offset in the returned pbuf
- * @return the pbuf in the queue where the offset is
+ * @return the pbuf in the queue where the offset is or NULL when the offset is too high
  */
 struct pbuf *
 pbuf_skip(struct pbuf *in, u16_t in_offset, u16_t *out_offset)
