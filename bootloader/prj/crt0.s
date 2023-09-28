@@ -1,12 +1,45 @@
-// Rowley CrossWorks, runtime support.
-//
-//  Copyright (c) 2001-2015 Rowley Associates Limited.
-//
-// This file may be distributed under the terms of the License Agreement
-// provided with this software.
-//
-// THIS FILE IS PROVIDED AS IS WITH NO WARRANTY OF ANY KIND, INCLUDING THE
-// WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+// **********************************************************************
+// *                    SEGGER Microcontroller GmbH                     *
+// *                        The Embedded Experts                        *
+// **********************************************************************
+// *                                                                    *
+// *            (c) 2014 - 2018 SEGGER Microcontroller GmbH             *
+// *            (c) 2001 - 2018 Rowley Associates Limited               *
+// *                                                                    *
+// *           www.segger.com     Support: support@segger.com           *
+// *                                                                    *
+// **********************************************************************
+// *                                                                    *
+// * All rights reserved.                                               *
+// *                                                                    *
+// * Redistribution and use in source and binary forms, with or         *
+// * without modification, are permitted provided that the following    *
+// * conditions are met:                                                *
+// *                                                                    *
+// * - Redistributions of source code must retain the above copyright   *
+// *   notice, this list of conditions and the following disclaimer.    *
+// *                                                                    *
+// * - Neither the name of SEGGER Microcontroller GmbH                  *
+// *   nor the names of its contributors may be used to endorse or      *
+// *   promote products derived from this software without specific     *
+// *   prior written permission.                                        *
+// *                                                                    *
+// * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND             *
+// * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,        *
+// * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF           *
+// * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE           *
+// * DISCLAIMED.                                                        *
+// * IN NO EVENT SHALL SEGGER Microcontroller GmbH BE LIABLE FOR        *
+// * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR           *
+// * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT  *
+// * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;    *
+// * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF      *
+// * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT          *
+// * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE  *
+// * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH   *
+// * DAMAGE.                                                            *
+// *                                                                    *
+// **********************************************************************
 //
 //
 //                           Preprocessor Definitions
@@ -24,6 +57,12 @@
 // INITIALIZE_SECONDARY_SECTIONS
 //
 //   If defined, the .text2, .data2 and .bss2 sections will be initialized.
+//
+// INITIALIZE_USER_SECTIONS
+//
+//   If defined, the function InitializeUserMemorySections will be called prior
+//   to entering main in order to allow the user to initialize any user defined
+//   memory sections.
 //
 // SUPERVISOR_START
 //
@@ -44,7 +83,7 @@
 
   .section .init, "ax"
   .code 32
-  .align 4
+  .balign 4
 
 #ifndef APP_ENTRY_POINT
 #define APP_ENTRY_POINT main
@@ -58,6 +97,11 @@
   .global __start  
   .extern APP_ENTRY_POINT
   .global exit
+  .weak exit
+
+#ifdef INITIALIZE_USER_SECTIONS
+  .extern InitializeUserMemorySections
+#endif
 
 /*****************************************************************************
  * Function    : _start                                                      *
@@ -145,7 +189,7 @@ __start:
   bl memory_set  
 #endif
 
-  /* Copy initialised memory sections into RAM (if necessary). */
+  /* Copy initialized memory sections into RAM (if necessary). */
   ldr r0, =__data_load_start__
   ldr r1, =__data_start__
   ldr r2, =__data_end__
@@ -205,7 +249,7 @@ __start:
   bl memory_set
 #endif /* #ifdef INITIALIZE_SECONDARY_SECTIONS */
 
-  /* Initialise the heap */
+  /* Initialize the heap */
   ldr r0, = __heap_start__
   ldr r1, = __heap_end__
   sub r1, r1, r0
@@ -213,6 +257,16 @@ __start:
   movge r2, #0
   strge r2, [r0], #+4
   strge r1, [r0]
+
+#ifdef INITIALIZE_USER_SECTIONS
+  ldr r2, =InitializeUserMemorySections
+  mov lr, pc
+#ifdef __ARM_ARCH_3__
+  mov pc, r2
+#else
+  bx r2
+#endif
+#endif
 
   /* Call constructors */
   ldr r0, =__ctors_start__
@@ -341,6 +395,7 @@ memory_set:
 
 .macro HELPER helper_name
   .section .text.\helper_name, "ax", %progbits
+  .balign 4
   .type \helper_name, function
   .global \helper_name
   .weak \helper_name  
@@ -350,48 +405,45 @@ memory_set:
 HELPER __aeabi_read_tp
   ldr r0, =__tbss_start__-8
   bx lr
-HELPER __heap_lock
-  bx lr
-HELPER __heap_unlock
-  bx lr
-HELPER __printf_lock
-  bx lr
-HELPER __printf_unlock
-  bx lr
-HELPER __scanf_lock
-  bx lr
-HELPER __scanf_unlock
-  bx lr
-HELPER __debug_io_lock
-  bx lr
-HELPER __debug_io_unlock
-  bx lr
 HELPER abort
   b .
 HELPER __assert
   b .
-HELPER __cxa_pure_virtual
+HELPER __aeabi_assert
   b .
-HELPER __cxa_guard_acquire
-  ldr r3, [r0]
-  tst r3, #1
-  beq 1f
-  movs r0, #0
-  bx lr
-1:
-  movs r0, #1
-  bx lr
-HELPER __cxa_guard_release
-  movs r3, #1
-  str r3, [r0]
-  bx lr
-HELPER __cxa_guard_abort
+HELPER __sync_synchronize
   bx lr
 HELPER __getchar
-  ldr r0, =-1 // EOF
-  bx lr
+  b debug_getchar
 HELPER __putchar
-  ldr r0, =-1 // EOF
+  b debug_putchar
+HELPER __open
+  b debug_fopen
+HELPER __close
+  b debug_fclose
+HELPER __write   
+  mov r3, r0
+  mov r0, r1
+  mov r1, #1  
+  b debug_fwrite
+HELPER __read  
+  mov r3, r0
+  mov r0, r1
+  mov r1, #1 
+  b debug_fread
+HELPER __seek
+  push {r4, lr}
+  mov r4, r0
+  bl debug_fseek
+  cmp r0, #0
+  bne 1f
+  mov r0, r4
+  bl debug_ftell
+  b 2f
+1:
+  ldr r0, =-1
+2:
+  pop {r4, lr}
   bx lr
   // char __user_locale_name_buffer[];
   .section .bss.__user_locale_name_buffer, "aw", %nobits

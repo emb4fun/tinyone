@@ -62,7 +62,7 @@ void EnableGPIOClocks (void);
 /*  Definition of all global Data                                        */
 /*=======================================================================*/
 
-uint32_t entryPoint = 0;
+unsigned int entryPoint = 0;
 
 /*=======================================================================*/
 /*  Definition of all local Data                                         */

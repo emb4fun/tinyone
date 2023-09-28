@@ -1,6 +1,6 @@
 <!DOCTYPE Linker_Placement_File>
 <Root name="SRAM Section Placement">
-  <MemorySegment name="$(ISRAM_NAME:Internal SRAM);SRAM;SDRAM;DRAM;RAM">
+  <MemorySegment name="$(ISRAM_NAME:BOOT_RAM)">
     <ProgramSection load="Yes" name=".vectors" start="$(ISRAM_START:)" />
     <ProgramSection alignment="4" load="Yes" name=".fast" />
     <ProgramSection alignment="4" load="Yes" name=".init" />

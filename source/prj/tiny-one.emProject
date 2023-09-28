@@ -23,6 +23,7 @@
       arm_linker_und_stack_size="512"
       arm_linker_variant="GNU"
       arm_simulator_memory_simulation_parameter="RWX 40300000,00010000,CDCDCDCD"
+      arm_supply_absolute_file_path="No"
       arm_target_device_name="AM3359"
       arm_target_interface_type="JTAG"
       build_intermediate_directory="$(Configuration)"

@@ -269,3 +269,12 @@ libarm_mmu_flat_set_level_1_cacheable_write_back_region:
   bne 1b
   bx lr
 
+libarm_mmu_flat_initialise_level_1_table:
+  mov r1, #0x1000
+  mov r2, #18
+1:
+  str r2, [r0], #4
+  add r2, r2, #0x100000
+  subs r1, r1, #1
+  bne 1b
+  bx lr
