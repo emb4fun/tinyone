@@ -43,10 +43,10 @@
 /*  All Structures and Common Constants                                  */
 /*=======================================================================*/
 
-#define FS_MEMORY_SIZE     (  64 * 1024)
-#define LWIP_MEMORY_SIZE   ( 256 * 1024)
-#define WEB_MEMORY_SIZE    ( 256 * 1024)
-#define TLS_MEMORY_SIZE    (1024 * 1024)
+#define FS_MEMORY_SIZE     (      64 * 1024)
+#define LWIP_MEMORY_SIZE   (     256 * 1024)
+#define WEB_MEMORY_SIZE    (     256 * 1024)
+#define TLS_MEMORY_SIZE    (2 * 1024 * 1024)
 
 /*=======================================================================*/
 /*  Definition of all global Data                                        */
