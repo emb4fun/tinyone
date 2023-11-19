@@ -208,9 +208,9 @@ static int InitTls (void)
    mbedtls_ssl_cache_init(&cache);
    
    /*
-    * 1. Load the certificates and private RSA key
+    * 1. Load the certificates and private key
     */
-    
+#if 1    
    /* Device certificate */ 
    cert_Get_DeviceCert(&buf, &buflen);
    rc = mbedtls_x509_crt_parse(&srvcert, (const unsigned char *) buf, buflen);
@@ -220,6 +220,12 @@ static int InitTls (void)
    cert_Get_IntermediateCert(&buf, &buflen);
    rc = mbedtls_x509_crt_parse(&srvcert, (const unsigned char *) buf, buflen);
    if(rc != 0) goto exit; /*lint !e801*/
+#else
+   /* Device + Intermediate certificate */
+   cert_Get_ChainCert(&buf, &buflen);
+   rc = mbedtls_x509_crt_parse(&srvcert, (const unsigned char *) buf, buflen);
+   if(rc != 0) goto exit; /*lint !e801*/
+#endif   
 
    /* Device private key */
    cert_Get_DeviceKey(&buf, &buflen);

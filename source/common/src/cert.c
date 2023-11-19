@@ -61,10 +61,12 @@
 static char DeviceKey[2048];
 static char DeviceCert[2048];
 static char IntermediateCert[2048];
+static char ChainCert[2048];
 
 static size_t DeviceKeySize = 0;
 static size_t DeviceCertSize = 0;
 static size_t IntermediateCertSize = 0;
+static size_t ChainCertSize = 0;
 
 /*=======================================================================*/
 /*  Definition of all local Procedures                                   */
@@ -90,6 +92,7 @@ void cert_Init (void)
    memset(DeviceKey, 0x00, sizeof(DeviceKey));
    memset(DeviceCert, 0x00, sizeof(DeviceCert));
    memset(IntermediateCert, 0x00, sizeof(IntermediateCert));
+   memset(ChainCert, 0x00, sizeof(ChainCert));
    
    /* Read device key  */
    fd = _open("SD0:/certs/device.key", _O_BINARY | _O_RDONLY);
@@ -133,6 +136,20 @@ void cert_Init (void)
       _close(fd);
    }
    
+   /* Read chain cert  */
+   fd = _open("SD0:/certs/chain.crt", _O_BINARY | _O_RDONLY);
+   if (fd != -1)
+   {
+      Length = (size_t)_filelength(fd);
+      if (Length < sizeof(ChainCert))
+      {
+         ReadCount = _read(fd, ChainCert, Length); 
+         ChainCert[ReadCount++] = 0;
+         ChainCertSize = (size_t)ReadCount;
+      }
+      _close(fd);
+   }
+      
 } /* cert_Init */
 
 /*************************************************************************/
@@ -316,5 +333,28 @@ int cert_Get_IntermediateCert (char **buf, size_t *buflen)
    
    return(nErr);
 } /* cert_Get_IntermediateCert */
+
+/*************************************************************************/
+/*  cert_Get_ChainCert                                                   */
+/*                                                                       */
+/*  Get the chain cert data, device + intermediate.                      */
+/*                                                                       */
+/*  In    : buf, buflen                                                  */
+/*  Out   : none                                                         */
+/*  Return: 0 == OK / error cause                                        */
+/*************************************************************************/
+int cert_Get_ChainCert (char **buf, size_t *buflen)
+{
+   int nErr = -1;
+   
+   if ((buf != NULL) && (buflen != NULL))
+   {
+      nErr    = 0;
+      *buf    = ChainCert;
+      *buflen = ChainCertSize;
+   }
+   
+   return(nErr);
+} /* cert_Get_ChainCert */
 
 /*** EOF ***/
