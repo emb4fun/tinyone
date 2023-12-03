@@ -59,13 +59,9 @@
 /*=======================================================================*/
 
 static char DeviceKey[2048];
-static char DeviceCert[2048];
-static char IntermediateCert[2048];
 static char ChainCert[2048];
 
 static size_t DeviceKeySize = 0;
-static size_t DeviceCertSize = 0;
-static size_t IntermediateCertSize = 0;
 static size_t ChainCertSize = 0;
 
 /*=======================================================================*/
@@ -90,8 +86,6 @@ void cert_Init (void)
    int    ReadCount;   
    
    memset(DeviceKey, 0x00, sizeof(DeviceKey));
-   memset(DeviceCert, 0x00, sizeof(DeviceCert));
-   memset(IntermediateCert, 0x00, sizeof(IntermediateCert));
    memset(ChainCert, 0x00, sizeof(ChainCert));
    
    /* Read device key  */
@@ -104,34 +98,6 @@ void cert_Init (void)
          ReadCount = _read(fd, DeviceKey, Length); 
          DeviceKey[ReadCount++] = 0;
          DeviceKeySize = (size_t)ReadCount;
-      }
-      _close(fd);
-   }
-   
-   /* Read device cert  */
-   fd = _open("SD0:/certs/device.crt", _O_BINARY | _O_RDONLY);
-   if (fd != -1)
-   {
-      Length = (size_t)_filelength(fd);
-      if (Length < sizeof(DeviceCert))
-      {
-         ReadCount = _read(fd, DeviceCert, Length); 
-         DeviceCert[ReadCount++] = 0;
-         DeviceCertSize = (size_t)ReadCount;
-      }
-      _close(fd);
-   }
-   
-   /* Read intermediate cert  */
-   fd = _open("SD0:/certs/intermed.crt", _O_BINARY | _O_RDONLY);
-   if (fd != -1)
-   {
-      Length = (size_t)_filelength(fd);
-      if (Length < sizeof(IntermediateCert))
-      {
-         ReadCount = _read(fd, IntermediateCert, Length); 
-         IntermediateCert[ReadCount++] = 0;
-         IntermediateCertSize = (size_t)ReadCount;
       }
       _close(fd);
    }
@@ -177,19 +143,8 @@ int cert_Check (void)
       rc = -1;
    }
 
-   /* Check device cert */
-   fd = _open("SD0:/certs/device.crt", _O_BINARY | _O_RDONLY);
-   if (fd != -1)
-   {
-      _close(fd);
-   }
-   else
-   {
-      rc = -1;
-   }
-
-   /* Check intermediate cert */
-   fd = _open("SD0:/certs/intermed.crt", _O_BINARY | _O_RDONLY);
+   /* Check chain cert */
+   fd = _open("SD0:/certs/chain.crt", _O_BINARY | _O_RDONLY);
    if (fd != -1)
    {
       _close(fd);
@@ -234,30 +189,21 @@ void cert_ELCACallback (int nError)
          _write(fd, pData, Len);
          _close(fd);
       }
-      
-      /* 
-       * Write device cert 
+
+      /*
+       * Write chain cert
        */
       pData = IP_ELCAC_DevCRTGet();
       Len   = strlen(pData);
-       
-      fd = _open("SD0:/certs/device.crt", _O_BINARY | _O_WRONLY | _O_CREATE_ALWAYS);
+      fd = _open("SD0:/certs/chain.crt", _O_BINARY | _O_WRONLY | _O_CREATE_ALWAYS);
       if (fd != -1)
       {
          _write(fd, pData, Len);
-         _close(fd);
-      }
-      
-      /* 
-       * Write intermediate cert 
-       */
-      pData = IP_ELCAC_InterCRTGet();
-      Len   = strlen(pData);
-       
-      fd = _open("SD0:/certs/intermed.crt", _O_BINARY | _O_WRONLY | _O_CREATE_ALWAYS);
-      if (fd != -1)
-      {
+
+         pData = IP_ELCAC_InterCRTGet();
+         Len   = strlen(pData);
          _write(fd, pData, Len);
+         
          _close(fd);
       }
       
@@ -289,52 +235,6 @@ int cert_Get_DeviceKey (char **buf, size_t *buflen)
 } /* cert_Get_DeviceKey */
 
 /*************************************************************************/
-/*  cert_Get_DeviceCert                                                  */
-/*                                                                       */
-/*  Get the device cert data.                                            */
-/*                                                                       */
-/*  In    : buf, buflen                                                  */
-/*  Out   : none                                                         */
-/*  Return: 0 == OK / error cause                                        */
-/*************************************************************************/
-int cert_Get_DeviceCert (char **buf, size_t *buflen)
-{
-   int nErr = -1;
-   
-   if ((buf != NULL) && (buflen != NULL))
-   {
-      nErr    = 0;
-      *buf    = DeviceCert;
-      *buflen = DeviceCertSize;
-   }
-   
-   return(nErr);
-} /* cert_Get_DeviceCert */
-
-/*************************************************************************/
-/*  cert_Get_IntermediateCert                                            */
-/*                                                                       */
-/*  Get the intermediate cert data.                                      */
-/*                                                                       */
-/*  In    : buf, buflen                                                  */
-/*  Out   : none                                                         */
-/*  Return: 0 == OK / error cause                                        */
-/*************************************************************************/
-int cert_Get_IntermediateCert (char **buf, size_t *buflen)
-{
-   int nErr = -1;
-   
-   if ((buf != NULL) && (buflen != NULL))
-   {
-      nErr    = 0;
-      *buf    = IntermediateCert;
-      *buflen = IntermediateCertSize;
-   }
-   
-   return(nErr);
-} /* cert_Get_IntermediateCert */
-
-/*************************************************************************/
 /*  cert_Get_ChainCert                                                   */
 /*                                                                       */
 /*  Get the chain cert data, device + intermediate.                      */
@@ -356,5 +256,31 @@ int cert_Get_ChainCert (char **buf, size_t *buflen)
    
    return(nErr);
 } /* cert_Get_ChainCert */
+
+/*************************************************************************/
+/*  cert_Write_ChainCert                                                 */
+/*                                                                       */
+/*  Write the chain cert data, device + intermediate.                    */
+/*                                                                       */
+/*  In    : buf, buflen                                                  */
+/*  Out   : none                                                         */
+/*  Return: 0 == OK / error cause                                        */
+/*************************************************************************/
+int cert_Write_ChainCert (char *buf, size_t buflen)
+{
+   int rc = -1;  
+   int fd;
+
+   fd = _open("SD0:/certs/chain.crt", _O_BINARY | _O_WRONLY | _O_CREATE_ALWAYS);
+   if (fd != -1)
+   {
+      _write(fd, buf, buflen);
+      _close(fd);
+      
+      rc = 0;
+   }
+
+   return(rc);
+} /* cert_Write_ChainCert */
 
 /*** EOF ***/

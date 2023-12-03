@@ -56,6 +56,9 @@
 
 void romfs_Init (void);
 
+char    *romfs_GetName (void);
+uint32_t romfs_GetVersion (void);
+
 #endif /* !__FS_ROMFS_H__ */
 
 /*** EOF ***/

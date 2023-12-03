@@ -44,13 +44,167 @@
 /*  All Structures and Common Constants                                  */
 /*=======================================================================*/
 
+/*
+ * If virtual com port support is not needed
+ */
+#if !defined(TAL_COM_PORT_VIRTUAL)
+#define COMInit            cpu_COMInit
+#define COMIoctl           cpu_COMIoctl
+#define COMOpen            cpu_COMOpen
+#define COMClose           cpu_COMClose
+#define COMStartTx         cpu_COMStartTx
+#define COMTxIsRunning     cpu_COMTxIsRunning
+#define COMSendStringASS   cpu_COMSendStringASS
+#endif 
+
 /*=======================================================================*/
 /*  Definition of all local Data                                         */
 /*=======================================================================*/
 
+#if defined(TAL_COM_PORT_VIRTUAL)
+static TAL_COM_FUNC FuncTable[TAL_COM_PORT_MAX];
+#endif
+
 /*=======================================================================*/
 /*  Definition of all local Procedures                                   */
 /*=======================================================================*/
+
+#if defined(TAL_COM_PORT_VIRTUAL)
+
+/*************************************************************************/
+/*  Virtual com port support                                             */
+/*************************************************************************/
+static TAL_RESULT COMInit (TAL_COM_DCB *pDCB)
+{
+   TAL_RESULT Error = TAL_ERR_NULL_POINTER;
+   
+   if ((int)pDCB->ePort < (int)TAL_COM_PORT_V1)
+   {
+      Error = cpu_COMInit(pDCB);
+   }
+   else
+   {
+      if ((pDCB->ePort < TAL_COM_PORT_MAX) && (FuncTable[pDCB->ePort].COMInit != NULL))
+      {
+         Error = FuncTable[pDCB->ePort].COMInit(pDCB);
+      }   
+   }
+
+   return(Error);   
+} /* COMInit */
+
+static TAL_RESULT COMIoctl (TAL_COM_DCB *pDCB, TAL_COM_IOCTL eFunc, uint32_t *pParam)
+{
+   TAL_RESULT Error = TAL_ERR_NULL_POINTER;
+   
+   if ((int)pDCB->ePort < (int)TAL_COM_PORT_V1)
+   {
+      Error = cpu_COMIoctl(pDCB, eFunc, pParam);
+   }
+   else
+   {
+      if ((pDCB->ePort < TAL_COM_PORT_MAX) && (FuncTable[pDCB->ePort].COMIoctl != NULL))
+      {
+         Error = FuncTable[pDCB->ePort].COMIoctl(pDCB, eFunc, pParam);
+      }         
+   }
+
+   return(Error);   
+} /* COMIoctl */
+
+static TAL_RESULT COMOpen (TAL_COM_DCB *pDCB)
+{
+   TAL_RESULT Error = TAL_ERR_NULL_POINTER;
+   
+   if ((int)pDCB->ePort < (int)TAL_COM_PORT_V1)
+   {
+      Error = cpu_COMOpen(pDCB);
+   }
+   else
+   {
+      if ((pDCB->ePort < TAL_COM_PORT_MAX) && (FuncTable[pDCB->ePort].COMOpen != NULL))
+      {
+         Error = FuncTable[pDCB->ePort].COMOpen(pDCB);
+      }   
+   }
+
+   return(Error);   
+} /* COMOpen */
+
+static TAL_RESULT COMClose (TAL_COM_DCB *pDCB)
+{
+   TAL_RESULT Error = TAL_ERR_NULL_POINTER;
+   
+   if ((int)pDCB->ePort < (int)TAL_COM_PORT_V1)
+   {
+      Error = cpu_COMClose(pDCB);
+   }
+   else
+   {
+      if ((pDCB->ePort < TAL_COM_PORT_MAX) && (FuncTable[pDCB->ePort].COMClose != NULL))
+      {
+         Error = FuncTable[pDCB->ePort].COMClose(pDCB);
+      }         
+   }
+
+   return(Error);   
+} /* COMClose */
+
+static TAL_RESULT COMStartTx (TAL_COM_DCB *pDCB)
+{
+   TAL_RESULT Error = TAL_ERR_NULL_POINTER;
+   
+   if ((int)pDCB->ePort < (int)TAL_COM_PORT_V1)
+   {
+      Error = cpu_COMStartTx(pDCB);
+   }
+   else
+   {
+      if ((pDCB->ePort < TAL_COM_PORT_MAX) && (FuncTable[pDCB->ePort].COMStartTx != NULL))
+      {
+         Error = FuncTable[pDCB->ePort].COMStartTx(pDCB);
+      }         
+   }
+
+   return(Error);   
+} /* COMStartTx */
+
+static TAL_RESULT COMTxIsRunning (TAL_COM_DCB *pDCB)
+{
+   TAL_RESULT Error = TAL_ERR_NULL_POINTER;
+   
+   if ((int)pDCB->ePort < (int)TAL_COM_PORT_V1)
+   {
+      Error = cpu_COMTxIsRunning(pDCB);
+   }
+   else
+   {
+      if ((pDCB->ePort < TAL_COM_PORT_MAX) && (FuncTable[pDCB->ePort].COMTxIsRunning != NULL))
+      {
+         Error = FuncTable[pDCB->ePort].COMTxIsRunning(pDCB);
+      }         
+   }
+
+   return(Error);   
+} /* COMTxIsRunning */
+
+static void COMSendStringASS (TAL_COM_DCB *pDCB, char *pString)
+{
+   if ((int)pDCB->ePort < (int)TAL_COM_PORT_V1)
+   {
+      cpu_COMSendStringASS(pDCB, pString);
+   }
+   else
+   {
+      if ((pDCB->ePort < TAL_COM_PORT_MAX) && (FuncTable[pDCB->ePort].COMSendStringASS != NULL))
+      {
+         FuncTable[pDCB->ePort].COMSendStringASS(pDCB, pString);
+      }         
+   }
+
+} /* COMSendStringASS */ 
+
+#endif /* TAL_COM_PORT_VIRTUAL */
 
 /*************************************************************************/
 /*  GetRxData                                                            */
@@ -107,8 +261,51 @@ static TAL_RESULT GetRxData (TAL_COM_DCB *pDCB, uint8_t *pData)
 /*************************************************************************/
 void tal_COMInit (void)
 {
-   /* Nothing to do here */
+#if defined(TAL_COM_PORT_VIRTUAL)
+   memset(FuncTable, 0, sizeof(FuncTable));
+#endif
+
 } /* tal_COMInit */
+
+#if defined(TAL_COM_PORT_VIRTUAL)
+/*************************************************************************/
+/*  tal_COMAdd                                                           */
+/*                                                                       */
+/*  Add the COM functionality for the given port.                        */
+/*                                                                       */
+/*  In    : ePort, pFunc                                                 */
+/*  Out   : none                                                         */
+/*  Return: TAL_OK / error cause                                         */
+/*************************************************************************/
+TAL_RESULT tal_COMAdd (TAL_COM_PORT ePort, TAL_COM_FUNC *pFunc)
+{
+   TAL_RESULT Error = TAL_ERROR;
+   
+   if ((ePort < TAL_COM_PORT_MAX) && (pFunc != NULL))
+   {
+      if( (NULL != pFunc->COMInit)          &&
+          (NULL != pFunc->COMIoctl)         &&
+          (NULL != pFunc->COMOpen)          &&
+          (NULL != pFunc->COMClose)         &&
+          (NULL != pFunc->COMStartTx)       &&
+          (NULL != pFunc->COMTxIsRunning)   &&
+          (NULL != pFunc->COMSendStringASS) )
+      {
+         Error = TAL_OK;
+         
+         FuncTable[ePort].COMInit          = pFunc->COMInit;
+         FuncTable[ePort].COMIoctl         = pFunc->COMIoctl;
+         FuncTable[ePort].COMOpen          = pFunc->COMOpen;
+         FuncTable[ePort].COMClose         = pFunc->COMClose;
+         FuncTable[ePort].COMStartTx       = pFunc->COMStartTx;
+         FuncTable[ePort].COMTxIsRunning   = pFunc->COMTxIsRunning;
+         FuncTable[ePort].COMSendStringASS = pFunc->COMSendStringASS;
+      }          
+   }
+
+   return(Error);
+} /* tal_COMAdd */
+#endif /* defined(TAL_COM_PORT_VIRTUAL) */
 
 /*************************************************************************/
 /*  tal_COMInitDCB                                                       */
@@ -133,7 +330,7 @@ TAL_RESULT tal_COMInitDCB (TAL_COM_DCB *pDCB, TAL_COM_PORT ePort)
       pDCB->ePort  = ePort;
       
       /* Init the COM hardware layer */
-      Error = cpu_COMInit(pDCB);
+      Error = COMInit(pDCB);
       if (TAL_OK == Error)
       {
          OS_RES_CREATE(&pDCB->Sema);
@@ -169,7 +366,7 @@ TAL_RESULT tal_COMIoctl (TAL_COM_DCB *pDCB, TAL_COM_IOCTL eFunc, uint32_t *pPara
    {
       OS_RES_LOCK(&pDCB->Sema);
       
-      Error = cpu_COMIoctl(pDCB, eFunc, pParam);
+      Error = COMIoctl(pDCB, eFunc, pParam);
    
       OS_RES_FREE(&pDCB->Sema);
    }
@@ -311,7 +508,7 @@ TAL_RESULT tal_COMOpen (TAL_COM_DCB *pDCB, TAL_COM_SETTINGS *pSettings)
          /* Copy settings */
          pDCB->Settings = *pSettings;
          
-         Error = cpu_COMOpen(pDCB);
+         Error = COMOpen(pDCB);
          if (TAL_OK == Error)
          {
             pDCB->bIsOpen = TAL_TRUE;
@@ -351,7 +548,7 @@ TAL_RESULT tal_COMClose (TAL_COM_DCB *pDCB)
       {
          OS_RES_LOCK(&pDCB->Sema);
          
-         Error = cpu_COMClose(pDCB);
+         Error = COMClose(pDCB);
          if (TAL_OK == Error)
          {
             pDCB->bIsOpen = TAL_FALSE;
@@ -424,10 +621,10 @@ TAL_RESULT tal_COMSendBlock (TAL_COM_DCB *pDCB, uint8_t *pData, uint16_t wSize)
                while ( 0 == tal_MISCRingGetFreeCount(&pDCB->TxRing) )
                {
                   /* Check if the transmitter is still runing */
-                  if (TAL_ERROR == cpu_COMTxIsRunning(pDCB))
+                  if (TAL_ERROR == COMTxIsRunning(pDCB))
                   {
                      /* No, start the transmitter */
-                     cpu_COMStartTx(pDCB);
+                     COMStartTx(pDCB);
                   }
                   OS_TimeDly(1);
                }
@@ -446,7 +643,7 @@ TAL_RESULT tal_COMSendBlock (TAL_COM_DCB *pDCB, uint8_t *pData, uint16_t wSize)
             pData++;
             wSize--;
 
-            cpu_COMStartTx(pDCB);
+            COMStartTx(pDCB);
          }
          while (wSize != 0);
 #else
@@ -463,7 +660,7 @@ TAL_RESULT tal_COMSendBlock (TAL_COM_DCB *pDCB, uint8_t *pData, uint16_t wSize)
                wSize--;
             }
             /* Start Tx if needed */
-            cpu_COMStartTx(pDCB);
+            COMStartTx(pDCB);
          }
          else
          {
@@ -482,10 +679,10 @@ TAL_RESULT tal_COMSendBlock (TAL_COM_DCB *pDCB, uint8_t *pData, uint16_t wSize)
                   while ( 0 == tal_MISCRingGetFreeCount(&pDCB->TxRing) )
                   {
                      /* Check if the transmitter is still runing */
-                     if (TAL_ERROR == cpu_COMTxIsRunning(pDCB))
+                     if (TAL_ERROR == COMTxIsRunning(pDCB))
                      {
                         /* No, start the transmitter */
-                        cpu_COMStartTx(pDCB);
+                        COMStartTx(pDCB);
                      }
                      OS_TimeDly(1);
                   }
@@ -505,7 +702,7 @@ TAL_RESULT tal_COMSendBlock (TAL_COM_DCB *pDCB, uint8_t *pData, uint16_t wSize)
                wSize--;
 
                /* Start Tx if needed */
-               cpu_COMStartTx(pDCB);
+               COMStartTx(pDCB);
             }
             while (wSize != 0);
          } /* end if (wFreeCount >= wSize) */
@@ -754,7 +951,6 @@ TAL_RESULT tal_COMReceiveCharTestWait (TAL_COM_DCB *pDCB, uint32_t dTimeoutMs)
    return(Error);        
 } /* tal_COMReceiveCharTestWait */
 
-
 /*************************************************************************/
 /*  tal_COMSendStringASS                                                 */
 /*                                                                       */
@@ -766,7 +962,7 @@ TAL_RESULT tal_COMReceiveCharTestWait (TAL_COM_DCB *pDCB, uint32_t dTimeoutMs)
 /*************************************************************************/
 void tal_COMSendStringASS (TAL_COM_DCB *pDCB, char *pString)
 {
-   cpu_COMSendStringASS(pDCB, pString);
+   COMSendStringASS(pDCB, pString);
 } /* tal_COMSendString */
 
 /*** EOF ***/

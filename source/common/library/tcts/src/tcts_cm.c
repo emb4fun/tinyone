@@ -350,7 +350,7 @@ void OS_Start (void)
     * or Embedded Studio Linker properties. The Main Stack is used
     * for the IRQ and the Process Stack to start the system.
     */
-   if (__stack_process_start__ == __stack_process_end__)
+   if ((uint32_t)__stack_process_start__ == (uint32_t)__stack_process_end__)
    {
       while(1)
       {

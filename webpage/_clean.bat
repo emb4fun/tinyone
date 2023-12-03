@@ -1,2 +1,2 @@
 del *.bak /S
-del build\*.bin
+rmdir build /S /Q 

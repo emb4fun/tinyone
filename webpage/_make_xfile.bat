@@ -19,7 +19,7 @@ del build\*.bin >NUL 2>&1
 :: Create file system
 ::
 cd build
-..\tools\xfile -i:..\htdocs -c:etc\config.txt -z
+..\tools\xfile -i:..\htdocs -c:etc\config.txt -z -a:4096
 
 ::
 :: Rename file system to "project" files

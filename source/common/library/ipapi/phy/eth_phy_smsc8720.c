@@ -58,6 +58,7 @@
 #define PHY_ANAR        0x04  /* Auto-Negotiation Advertisement Register */
 #define PHY_ANLPAR      0x05  /* Auto-Negotiation Link Partner Ability Register */
 #define PHY_ANER        0x06  /* Auto-Negotiation Expansion Register */
+#define PHY_ANER        0x06  /* Auto-Negotiation Expansion Register */
 
 /*
  * Extended register

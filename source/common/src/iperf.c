@@ -58,7 +58,7 @@
 
 #define IPERF_TCP_PORT     5001
 
-#define MAX_IPERF_CLIENT   8
+#define MAX_IPERF_CLIENT   4
 
 typedef struct _client_info_
 {

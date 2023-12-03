@@ -122,6 +122,17 @@
                 <file file_name="../common/library/lwip/src/core/ipv4/ip4_addr.c" />
                 <file file_name="../common/library/lwip/src/core/ipv4/ip4_frag.c" />
               </folder>
+              <folder Name="ipv6">
+                <file file_name="../common/library/lwip/src/core/ipv6/dhcp6.c" />
+                <file file_name="../common/library/lwip/src/core/ipv6/ethip6.c" />
+                <file file_name="../common/library/lwip/src/core/ipv6/icmp6.c" />
+                <file file_name="../common/library/lwip/src/core/ipv6/inet6.c" />
+                <file file_name="../common/library/lwip/src/core/ipv6/ip6.c" />
+                <file file_name="../common/library/lwip/src/core/ipv6/ip6_addr.c" />
+                <file file_name="../common/library/lwip/src/core/ipv6/ip6_frag.c" />
+                <file file_name="../common/library/lwip/src/core/ipv6/mld6.c" />
+                <file file_name="../common/library/lwip/src/core/ipv6/nd6.c" />
+              </folder>
               <file file_name="../common/library/lwip/src/core/def.c" />
               <file file_name="../common/library/lwip/src/core/dns.c" />
               <file file_name="../common/library/lwip/src/core/inet_chksum.c" />
@@ -285,6 +296,7 @@
         </folder>
         <folder Name="src">
           <file file_name="../common/src/cert.c" />
+          <file file_name="../common/src/elca_client.c" />
           <file file_name="../common/src/etc.c" />
           <file file_name="../common/src/fs.c" />
           <file file_name="../common/src/iperf.c" />
@@ -298,16 +310,14 @@
         </folder>
       </folder>
       <folder Name="src">
-        <file file_name="../src/api_test.c" />
-        <file file_name="../src/elca_client.c" />
         <file file_name="../src/main.c" />
         <file file_name="../src/xmempool.c" />
       </folder>
     </folder>
     <folder Name="System Files">
+      <file file_name="crt0.s" />
       <file file_name="SEGGER_RTL_Syscalls_SES_none.c" />
       <file file_name="Sitara_Startup.s" />
-      <file file_name="crt0.s" />
     </folder>
   </project>
 </solution>

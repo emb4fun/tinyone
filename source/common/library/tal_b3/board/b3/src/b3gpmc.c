@@ -39,7 +39,7 @@
 /*=======================================================================*/
 #include <stdint.h>
 #include "tal.h"
-#include "cpu_avm.h"
+//#include "cpu_avm.h"
 
 #include "soc_AM335x.h"
 #include "hw_control_AM335x.h"

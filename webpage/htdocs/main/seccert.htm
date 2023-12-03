@@ -1,0 +1,786 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="content-type"     content="text/html;charset=iso-8859-1"/>
+    <meta http-equiv="content-language" content="en"/>
+    <meta http-equiv="pragma"           content="no-cache"/>
+    <title><%sys_longname%></title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>          
+    <script type="text/javascript" src="../js/system.js"></script>
+    <script type="text/javascript" src="../js/qrcode.min.js"></script>
+    <script type="text/javascript">
+    <!--
+      var LogoutSec = <%sys_logout_sec%>;
+
+      /**************************************************************/
+      
+      function Error2Text(err)
+      {
+         switch(err) 
+         {
+            case  -6: msg = "Error, no chained certificate.";                       break;
+            case  -7: msg = "Error, no valid certificate.";                         break;
+            case  -8: msg = "Error, only one certificate.";                         break;
+            case  -9: msg = "Error, first CRT is not a server certificate.";        break;
+            case -10: msg = "Error, second CRT is not a intermediate certificate."; break;
+            case -11: msg = "Error, updating new certificate.";                     break;
+            default:  msg = "An internal error has occurred: " + err;               break;
+         }   
+         
+         return(msg);
+      }
+
+      /**************************************************************/
+
+      function WaitUpdateReady()
+      {
+         let ajax;
+         let data;
+         
+         data = JSON.stringify({ mode: "result" });
+         ajax = GetAjaxObject();
+         ajax.open("POST", "/cgi-bin/cert.cgi", true);  
+         ajax.onreadystatechange = function() 
+         {
+            if ((this.readyState == 4) && (this.status == 200))
+            {
+               let jdata = JSON.parse(this.responseText);
+               let err = jdata.err;
+
+               /* Check for error */   
+               if (err === undefined)               
+               {
+                  if (1 == jdata.result)
+                  {
+                     /* Waiting */
+                     document.getElementById("result").innerHTML = "...";
+                     window.setTimeout("WaitUpdateReady()", 999);
+                  }
+                  else if (0 == jdata.result)
+                  {
+                     /* Ready */
+                     window.location.replace('/main/upboot.htm');
+                  }
+                  else if (-1 == jdata.result) 
+                  {
+                     document.getElementById("result").innerHTML = ", error.";
+                  }
+               }
+               else
+               {
+                  /* Check for blocked error */   
+                  if (err == -2 )
+                  {
+                     /* Login blocked, try again */
+                     window.location.replace('/login.htm');
+                  }
+                  else if (err != 0)
+                  {
+                     /* Show error information */
+                     document.getElementById("tr4_msg").innerHTML = Error2Text(err);
+                     document.getElementById("tr4_err").style.display = "block";
+                  } 
+               }               
+            } // if ((this.readyState == 4) && (this.status == 200))
+         } // end ajax.onreadystatechange
+         ajax.send(data);
+      }  
+
+      /**************************************************************/
+      
+      function MyCancel3()
+      {
+         window.location.replace('./index.htm');
+      }
+
+      function MySubmit3()
+      {
+         let ajax;
+         let data;
+         
+         data = JSON.stringify({ mode: "update" });
+         ajax = GetAjaxObject();
+         ajax.open("POST", "/cgi-bin/cert.cgi", true);  
+         ajax.onreadystatechange = function() 
+         {
+            if ((this.readyState == 4) && (this.status == 200))
+            {
+               let jdata = JSON.parse(this.responseText);
+               let err = jdata.err;
+               
+               if (0 == err)
+               {
+                  /* No error */
+                  document.getElementById("tr3").style.display = "none";
+                  document.getElementById("tr4").style.display = "block";
+                  
+                  WaitUpdateReady();  
+               }
+               else if (err == -2 )
+               {
+                  /* Login blocked, try again */
+                  window.location.replace('/login.htm');
+               }
+               else   
+               {
+                  /* Show error information */
+                  document.getElementById("tr3_msg").innerHTML = Error2Text(err);
+                  document.getElementById("tr3_err").style.display = "block";
+               }                  
+            } // if ((this.readyState == 4) && (this.status == 200))
+         } // end ajax.onreadystatechange
+         ajax.send(data);
+      }
+
+      /**************************************************************/
+
+      function MyCancel2()
+      {
+         document.getElementById("tr2_err").style.display = "none";
+      }
+      
+      function MySubmit2()
+      {
+         let ajax;
+         let data;
+
+         document.getElementById("tr2_err").style.display = "none";
+      
+         data = JSON.stringify({ mode: "newcrt", crt : document.formular2.text.value });
+         ajax = GetAjaxObject();
+         ajax.open("POST", "/cgi-bin/cert.cgi", true);  
+         ajax.onreadystatechange = function() 
+         {
+            if ((this.readyState == 4) && (this.status == 200))
+            {
+               let jdata = JSON.parse(this.responseText);
+               let err = jdata.err;
+
+               /* Check for error */   
+               if (err === undefined)               
+               {
+                  /* No error */
+                  document.getElementById("tr2").style.display = "none";
+                  document.getElementById("tr3").style.display = "block";
+                  
+                  /* Server certificate */
+                  document.getElementById("srv_id_cn").innerHTML = jdata.srv_id_cn;
+                  document.getElementById("srv_id_an").innerHTML = jdata.srv_id_an;
+                  document.getElementById("srv_id_o").innerHTML  = jdata.srv_id_o;
+                  document.getElementById("srv_id_ou").innerHTML = jdata.srv_id_ou;
+                  document.getElementById("srv_id_c").innerHTML  = jdata.srv_id_c;
+                  document.getElementById("srv_id_nb").innerHTML = jdata.srv_id_nb;
+                  document.getElementById("srv_id_na").innerHTML = jdata.srv_id_na;
+                  document.getElementById("srv_id_i").innerHTML  = jdata.srv_id_i;
+                  document.getElementById("srv_id_s").innerHTML  = jdata.srv_id_s;
+                  
+                  /* Intermediate certificate */
+                  document.getElementById("int_id_cn").innerHTML = jdata.int_id_cn;
+                  document.getElementById("int_id_an").innerHTML = jdata.int_id_an;
+                  document.getElementById("int_id_o").innerHTML  = jdata.int_id_o;
+                  document.getElementById("int_id_ou").innerHTML = jdata.int_id_ou;
+                  document.getElementById("int_id_c").innerHTML  = jdata.int_id_c;
+                  document.getElementById("int_id_nb").innerHTML = jdata.int_id_nb;
+                  document.getElementById("int_id_na").innerHTML = jdata.int_id_na;
+                  document.getElementById("int_id_i").innerHTML  = jdata.int_id_i;
+                  document.getElementById("int_id_s").innerHTML  = jdata.int_id_s;
+               }
+               else
+               {
+                  /* Check for blocked error */   
+                  if (err == -2 )
+                  {
+                     /* Login blocked, try again */
+                     window.location.replace('/login.htm');
+                  }
+                  else if (err != 0)
+                  {
+                     /* Show error information */
+                     document.getElementById("tr2_msg").innerHTML = Error2Text(err);
+                     document.getElementById("tr2_err").style.display = "block";
+                  } 
+               }               
+            } // if ((this.readyState == 4) && (this.status == 200))
+         } // end ajax.onreadystatechange
+         ajax.send(data);
+      }
+      
+      /**************************************************************/
+
+      function MyCancel1()
+      {
+         window.location.replace('./index.htm');
+      }
+
+      function MySubmit1()
+      {
+         document.getElementById("tr1").style.display = "none";
+         document.getElementById("tr2").style.display = "block";
+      }
+      
+      /**************************************************************/
+
+      function MyCancel0()
+      {
+         window.location.replace('./index.htm');
+      }
+      
+      function MySubmit0()
+      {
+         let ajax;
+         let data;
+
+         data = JSON.stringify({ mode: "reqcsr" });
+         ajax = GetAjaxObject();
+         ajax.open("POST", "/cgi-bin/cert.cgi", true);  
+         ajax.onreadystatechange = function() 
+         {
+            if ((this.readyState == 4) && (this.status == 200))
+            {
+               let jdata = JSON.parse(this.responseText);
+               let err = jdata.err;
+               
+               /* Check for error */   
+               if (err === undefined)               
+               {
+                  /* No error */
+                  document.getElementById("tr0").style.display = "none";
+                  document.getElementById("tr1").style.display = "block";
+                  
+                  let csr = atob(jdata.csr);
+                  document.getElementById("tr1_csr").innerHTML = csr;
+                  document.getElementById("id_cn").innerHTML   = jdata.cn;
+                  document.getElementById("id_an").innerHTML   = jdata.an;
+                  document.getElementById("id_o").innerHTML    = jdata.o;
+                  document.getElementById("id_ou").innerHTML   = jdata.ou;
+                  document.getElementById("id_c").innerHTML    = jdata.c;
+               }
+               else
+               {
+                  /* Check for blocked error */   
+                  if (err == -2 )
+                  {
+                     /* Login blocked, try again */
+                     window.location.replace('/login.htm');
+                  }
+                  else if (err != 0)
+                  {
+                     /* Show error information */
+                     document.getElementById("tr0_msg").innerHTML = Error2Text(err);
+                     document.getElementById("tr0_err").style.display = "block";
+                  } 
+               }                  
+            } // if ((this.readyState == 4) && (this.status == 200))
+         } // end ajax.onreadystatechange
+         ajax.send(data);
+      }
+
+      /**************************************************************/      
+    
+      function Ready()
+      {
+        document.getElementById("tr0").style.display = "block";
+        document.getElementById("tr1").style.display = "none";
+        document.getElementById("tr2").style.display = "none";
+        document.getElementById("tr3").style.display = "none";
+        document.getElementById("tr4").style.display = "none";
+      
+        LogoutCheck();
+      }
+
+    -->
+    </script>
+  </head>        
+
+  <body bgcolor="#ffffff" onload="Ready()">
+    <table class="table_body">
+      <tr align="center">
+        <td> 
+        
+          <!-- Header -->
+          <div class="header">
+            <h1><%sys_longname%></h1>
+            <div id="logout" style="display:none">
+              <div class="div"></div>
+              <div class="loglink"><a href="../logout.htm">Logout in <span id="lc"></span> s</a></div>
+            </div>
+            <div class="logo"></div>
+          </div>
+      
+          <!-- Navigation #1 -->
+          <table class="table_navi1">
+            <tr>
+              <td>&nbsp;</td>
+              <td class="main">
+                <ul>
+                  <li class="nb"><a href="../home/index.htm">Home</a></li>
+                  <li class="nm"><a href="../dhcp/index.htm">DHCP Server</a></li>
+                  <li class="nm"><a href="../sntp/index.htm">SNTP Server</a></li>
+                  <li class="ne"><a class="active" href="index.htm">Maintenance</a></li>
+                </ul>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+          </table> 
+
+          <!-- Navigation #2, #3 -->
+          <div class="navi2">
+            <ul>
+              <li class="nb"><a href="index.htm">Overview</a></li>
+              <li class="nm"><a href="upweb.htm">Update</a></li>
+              <li class="nm"><a href="stattask.htm">Statistic</a></li>
+              <li class="nm"><a href="time.htm">Time</a></li>
+              <li class="nm"><a href="net.htm">Network</a></li>
+              <li class="nm"><a href="dhcp.htm">DHCP Server</a></li>
+              <li class="ne"><a class="active" href="secusers.htm">Security</a></li>
+            </ul>
+            <p><%sys_shortname%></p>
+          </div> 
+          <div class="navi3">
+            <ul>
+              <li class="nb"><a href="secusers.htm">Change Password</a></li>
+              <li class="nm"><a href="sectotp.htm">Manage TOTP</a></li>
+              <li class="ne"><a class="active" href="#">Update Certificates</a></li>
+            </ul>
+          </div>
+
+
+          <!-- table_row #0 -->
+          <div id="tr0" style="display:block">
+            <table class="table_row">
+              <tr align="center">
+                <td>
+               
+                  <table class="table_variable">
+                    <thead>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>Update Certificates (ECC only, 1/5)</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </thead>
+                  
+                    <tbody>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                        
+                          <div class="content" style="text-align:center">
+                            <form name="formular0" method="post">
+                            
+                              <div id="tr0_err" style="display:none">
+                                <p style="text-align:center; font-weight:bold">
+                                  <br><br><span id="tr0_msg">error</span>
+                                </p>
+                              </div>
+
+                              <p style="text-align:left; line-height:1.3em">
+                                <br>A Certificate Signing Request (CSR) is required to renew the certificates.
+                                This CSR is generated next. Your network administrator needs this CSR to create the
+                                new certificates for this server. With this CSR the administrator then creates a new
+                                chained certificate which is then inserted here in the next steps. Finally, the
+                                server must be rebooted to activate the new certificates.
+                              </p>
+                              <br>
+                              <button class="play" type="button" name="button1" value="submit" onclick="javascript:MySubmit0()">
+                                Next
+                              </button>
+                              <button class="cancel" type="reset" name="button2" value="cancel" onclick="javascript:MyCancel0()">
+                                Cancel
+                              </button>
+                            </form>
+                            <br>
+                          </div>
+                        
+                        </td>
+                        <td>&nbsp;</td>
+                      </tr>
+                    </tbody>
+                  
+                    <tfoot>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </tfoot>                            
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>  
+          <!-- table_row #0 --> 
+
+
+          <!-- table_row #1 -->
+          <div id="tr1" style="display:none">
+            <table class="table_row">
+              <tr align="center">
+                <td>
+               
+                  <table class="table_variable">
+                    <thead>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>Update Certificates (ECC only, 2/5)</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </thead>
+                  
+                    <tbody>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                        
+                          <div class="content" style="text-align:center">
+                          
+                            <form name="formular1" method="post">
+                              <p style="text-align:center">
+                                <br><br>Use this Certificate Signing Request (CSR) for requesting the new certificate.
+                                <br><br>
+                              </p>
+                            
+                              <p style="text-align:center">
+                                <textarea readonly style="resize:none; width:500px" id="tr1_csr" class="textarea monospace" name="text" rows="12" autofocus=""></textarea>
+                              </p>
+
+                              <button class="play" type="button" name="button1" value="submit" onclick="javascript:MySubmit1()">
+                                Insert the new Certificate in the next step
+                              </button>
+                              <button class="cancel" type="reset" name="button2" value="cancel" onclick="javascript:MyCancel1()">
+                                Cancel
+                              </button>
+                            </form>
+                            
+                            <div style="text-align:left;display:block">
+                              <br><br>
+                              <table>
+                                <tr>
+                                  <td>Common Name:&nbsp;</td>
+                                  <td id="id_cn">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Alternative Names:&nbsp;</td>
+                                  <td id="id_an">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Organization:&nbsp;</td>
+                                  <td id="id_o">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Organization Unit:&nbsp;</td>
+                                  <td id="id_ou">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Country:&nbsp;</td>
+                                  <td id="id_c">???</td>
+                                </tr>
+                              </table>
+                            </div>
+                            <br>
+                            
+                          </div>
+                        
+                        </td>
+                        <td>&nbsp;</td>
+                      </tr>
+                    </tbody>
+                  
+                    <tfoot>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </tfoot>                            
+                  </table>
+                  
+                </td>                            
+              </tr>
+            </table>
+          </div>  
+          <!-- table_row #1 -->
+
+          
+          <!-- table_row #2 -->
+          <div id="tr2" style="display:none">
+            <table class="table_row">
+              <tr align="center">
+                <td>
+               
+                  <table class="table_variable">
+                    <thead>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>Update Certificates (ECC only, 3/5)</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </thead>
+                  
+                    <tbody>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                        
+                          <div class="content" style="text-align:center">
+                          
+                            <div id="tr2_err" style="display:none">
+                              <p style="text-align:center; font-weight:bold">
+                                <br><br><br><span id="tr2_msg">error</span><br><br>
+                              </p>
+                            </div>
+
+                            <form name="formular2" method="post">
+                              <p style="text-align:center">
+                                <br><br>Paste the new chained (server + intermediate) certificate here:
+                                <br><br>
+                              </p>
+                            
+                              <p style="text-align:center">
+                                <textarea style="resize:none; width:500px" id="tr0_key" class="textarea monospace" name="text" rows="15" autofocus=""></textarea>
+                              </p>
+
+                              <button class="play" type="button" name="button1" value="submit" onclick="javascript:MySubmit2()">
+                                Next
+                              </button>
+                              <button class="cancel" type="reset" name="button2" value="cancel" onclick="javascript:MyCancel2()">
+                                Cancel
+                              </button>
+                            </form>
+                            <br>
+                            
+                          </div>
+                        
+                        </td>
+                        <td>&nbsp;</td>
+                      </tr>
+                    </tbody>
+                  
+                    <tfoot>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </tfoot>                            
+                  </table>
+                  
+                </td>                            
+              </tr>
+            </table>
+          </div>  
+          <!-- table_row #2 -->
+          
+          
+          <!-- table_row #3 -->
+          <div id="tr3" style="display:none">
+            <table class="table_row">
+              <tr align="center">
+                <td>
+               
+                  <table class="table_variable">
+                    <thead>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>Update Certificates (ECC only, 4/5)</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </thead>
+                  
+                    <tbody>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                        
+                          <div class="content" style="text-align:center">
+
+                            <div id="tr3_err" style="display:none">
+                              <p style="text-align:center; font-weight:bold">
+                                <br><br><br><span id="tr3_msg">error</span><br><br>
+                              </p>
+                            </div>
+                          
+                            <fieldset>
+                              <legend>Server Certificate</legend>
+                            </fieldset>
+                            
+                            <div style="text-align:left;display:block">
+                              <table>
+                                <tr>
+                                  <td>Common Name:&nbsp;</td>
+                                  <td id="srv_id_cn">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Alternative Names:&nbsp;</td>
+                                  <td id="srv_id_an">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Organization:&nbsp;</td>
+                                  <td id="srv_id_o">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Organization Unit:&nbsp;</td>
+                                  <td id="srv_id_ou">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Country:&nbsp;</td>
+                                  <td id="srv_id_c">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Not Before:&nbsp;</td>
+                                  <td id="srv_id_nb">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Not After:&nbsp;</td>
+                                  <td id="srv_id_na">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Issuer:&nbsp;</td>
+                                  <td id="srv_id_i">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Serial Number:&nbsp;</td>
+                                  <td id="srv_id_s">???</td>
+                                </tr>
+                              </table>
+                            </div>
+                            
+                            
+                            <fieldset>
+                              <legend>Intermediate Certificate</legend>
+                            </fieldset>
+                            
+                            <div style="text-align:left;display:block">
+                              <table>
+                                <tr>
+                                  <td>Common Name:&nbsp;</td>
+                                  <td id="int_id_cn">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Alternative Names:&nbsp;</td>
+                                  <td id="int_id_an">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Organization:&nbsp;</td>
+                                  <td id="int_id_o">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Organization Unit:&nbsp;</td>
+                                  <td id="int_id_ou">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Country:&nbsp;</td>
+                                  <td id="int_id_c">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Not Before:&nbsp;</td>
+                                  <td id="int_id_nb">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Not After:&nbsp;</td>
+                                  <td id="int_id_na">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Issuer:&nbsp;</td>
+                                  <td id="int_id_i">???</td>
+                                </tr>
+                                <tr>
+                                  <td>Serial Number:&nbsp;</td>
+                                  <td id="int_id_s">???</td>
+                                </tr>
+                              </table>
+                            </div>
+
+                            <form name="formular3" method="post">
+                              <button class="play" type="button" name="button1" value="submit" onclick="javascript:MySubmit3()">
+                                Install the new Certificates
+                              </button>
+                              <button class="cancel" type="reset" name="button2" value="cancel" onclick="javascript:MyCancel3()">
+                                Cancel
+                              </button>
+                            </form>
+                            <br>
+                            
+                          </div>
+                        
+                        </td>
+                        <td>&nbsp;</td>
+                      </tr>
+                    </tbody>
+                  
+                    <tfoot>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </tfoot>                            
+                  </table>
+                  
+                </td>                            
+              </tr>
+            </table>
+          </div>  
+          <!-- table_row #3 -->
+
+
+          <!-- table_row #4 -->
+          <div id="tr4" style="display:none">
+            <table class="table_row">
+              <tr align="center">
+                <td>
+               
+                  <table class="table_variable">
+                    <thead>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>Update Certificates (ECC only, 5/5)</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </thead>
+                  
+                    <tbody>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                        
+                          <div class="content" style="text-align:center">
+                            
+                            <div id="tr4_err" style="display:none">
+                              <p style="text-align:center; font-weight:bold">
+                                <br><br><span id="tr4_msg">error</span>
+                              </p>
+                            </div>
+                            
+                            <p style="line-height:1.3em">
+                              <br>Please wait while the certificates are updated<span id="result" style="font-weight: bold">...</span>
+                            </p>  
+                          </div>
+                        
+                        </td>
+                        <td>&nbsp;</td>
+                      </tr>
+                    </tbody>
+                  
+                    <tfoot>
+                      <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>                            
+                    </tfoot>                            
+                  </table>
+                  
+                </td>                            
+              </tr>
+            </table>
+          </div>  
+          <!-- table_row #4 -->
+          
+
+        </td>
+      </tr>
+    </table> <!-- table_body -->
+  </body>
+</html>

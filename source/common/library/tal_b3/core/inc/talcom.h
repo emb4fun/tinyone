@@ -116,7 +116,24 @@ typedef struct _tal_com_dcb_
    
    /* HW information from talcpu_com.h */
    TAL_COM_HW        HW;
+   
+#if defined(TAL_COM_PORT_VIRTUAL)   
+   void            *pVCOM;
+#endif
+   
 } TAL_COM_DCB;
+
+typedef struct _tal_com_func_
+{
+   TAL_RESULT (*COMInit) (TAL_COM_DCB *pDCB);
+   TAL_RESULT (*COMIoctl) (TAL_COM_DCB *pDCB, TAL_COM_IOCTL eFunc, uint32_t *pParam);
+   TAL_RESULT (*COMOpen) (TAL_COM_DCB *pDCB);
+   TAL_RESULT (*COMClose) (TAL_COM_DCB *pDCB);
+   TAL_RESULT (*COMStartTx) (TAL_COM_DCB *pDCB);
+   TAL_RESULT (*COMTxIsRunning) (TAL_COM_DCB *pDCB);
+   void       (*COMSendStringASS) (TAL_COM_DCB *pDCB, char *pString);
+
+} TAL_COM_FUNC;
 
 /**************************************************************************
 *  Macro Definitions
@@ -129,6 +146,8 @@ typedef struct _tal_com_dcb_
 **************************************************************************/
 
 void       tal_COMInit (void);
+
+TAL_RESULT tal_COMAdd (TAL_COM_PORT ePort, TAL_COM_FUNC *pFunc);
 
 TAL_RESULT tal_COMInitDCB (TAL_COM_DCB *pDCB, TAL_COM_PORT ePort);
 TAL_RESULT tal_COMIoctl (TAL_COM_DCB *pDCB, TAL_COM_IOCTL eFunc, uint32_t *pParam);
@@ -161,7 +180,6 @@ TAL_RESULT cpu_COMOpen (TAL_COM_DCB *pDCB);
 TAL_RESULT cpu_COMClose (TAL_COM_DCB *pDCB);
 TAL_RESULT cpu_COMStartTx (TAL_COM_DCB *pDCB);
 TAL_RESULT cpu_COMTxIsRunning (TAL_COM_DCB *pDCB);
-
 void       cpu_COMSendStringASS (TAL_COM_DCB *pDCB, char *pString);
 
 #endif /* !__TALCOM_H__ */

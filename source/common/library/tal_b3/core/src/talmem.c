@@ -412,6 +412,9 @@ static void MEMAdd (tal_mem_id ID, void *pBuffer, uint32_t dSize)
       dRest  = dSize % MEM_ALIGN;
       dSize -= dRest;
 
+      /* Clear data first */
+      memset((void*)dAddress, 0x00, dSize);
+
       MemList[ID].dSize += dSize;
    
       pMem = (mem_hdr_t*)dAddress;

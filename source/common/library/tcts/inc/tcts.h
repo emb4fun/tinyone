@@ -147,6 +147,7 @@ typedef struct _os_sema_      OS_SEMA;
 typedef struct _os_mutex_     OS_MUTEX; 
 typedef struct _os_event_     OS_EVENT;
 typedef struct _os_mbox_      OS_MBOX;
+typedef struct _os_mq_        OS_MQ;
 
 
 /*
@@ -228,6 +229,22 @@ struct _os_mbox_
 
 
 /*
+ * Message queue
+ */
+struct _os_mq_
+{
+   OS_SEMA      UsedCntSema;
+   OS_SEMA      FreeCntSema;
+   uint16_t    wCountMax;
+   uint16_t    wCount;
+   uint16_t    wSize;
+   uint16_t    wInIndex;
+   uint16_t    wOutIndex;
+   uint8_t    *pBuffer;
+};
+
+
+/*
  * Task Control Block
  */
 struct _os_tcb_
@@ -263,7 +280,6 @@ struct _os_tcb_
    uint32_t         dStatStartTime;       /* Statistic start time */
    uint32_t         dStatEndTime;         /* Statistic end time */
    uint32_t         dStatTotalTime;       /* Statistic total task time */
-   uint32_t         dStatTotalLastTime;   /* Statistic total task time of the previous statistic cycle */
    uint32_t         dStatUsage;           /* Statistic in percent * 100, 0 - 10000 */
    
    uint8_t          bFlagTermRequest;     /* Termination request flag */
@@ -287,7 +303,7 @@ typedef void (*OS_TIMER_FUNC)(void);
  * The stack will be 8 byte aligned and the size 4 byte.
  */
 #if !defined(__ARCH_RISCV__) 
-#define OS_STACK(_n,_s)       uint8_t _n[((_s+3)& ~3)] __attribute__((aligned(0x8)))
+#define OS_STACK(_n,_s)       uint8_t _n[((_s+3)& ~3)] __attribute__((aligned(0x8))) __attribute__ ((section (".task_stack")))
 #else
 /*
  * In case of RISC-V, we need an alignment of 16 bytes and size too.
@@ -419,6 +435,7 @@ int       OS_SemaWait (OS_SEMA *pSema, uint32_t dTimeoutMs);
  */
 void      OS_MutexCreate (OS_MUTEX *pMutex);
 void      OS_MutexSignal (OS_MUTEX *pMutex);
+void      OS_MutexSignalFromInt (OS_MUTEX *pMutex);
 int       OS_MutexWait (OS_MUTEX *pMutex, uint32_t dTimeoutMs);
 
 
@@ -442,6 +459,17 @@ void      OS_MboxDelete (OS_MBOX *pMbox);
 int       OS_MboxPost (OS_MBOX *pMbox, void *pMsg);
 int       OS_MboxPostFromInt (OS_MBOX *pMbox, void *pMsg);
 int       OS_MboxWait (OS_MBOX *pMbox, void **pMsg, uint32_t dTimeoutMs);
+
+
+/*
+ * Message queue functionality
+ */
+int       OS_MQCreate (OS_MQ *pMQ, uint16_t wCount, uint16_t wSize, uint8_t *pBuffer);
+//void      OS_MQDelete (OS_MQ *pMQ);
+int       OS_MQPost (OS_MQ *pMQ, void *pMsg);
+int       OS_MQPostFromInt (OS_MQ *pMQ, void *pMsg);
+int       OS_MQWait (OS_MQ *pMQ, void *pMsg, uint32_t dTimeoutMs);
+
 
 #endif /* defined(RTOS_TCTS) */
 

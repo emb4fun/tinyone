@@ -679,6 +679,7 @@ static void st_qword (BYTE* ptr, QWORD val)	/* Store an 8-byte word in little-en
 #endif	/* !FF_FS_READONLY */
 
 
+#if 0
 /* Fill memory block */
 static void mem_set (void* dst, int val, UINT cnt)
 {
@@ -688,6 +689,7 @@ static void mem_set (void* dst, int val, UINT cnt)
 		*d++ = (BYTE)val;
 	} while (--cnt);
 }
+#endif
 
 
 /* Compare memory block */
@@ -704,12 +706,14 @@ static int mem_cmp (const void* dst, const void* src, UINT cnt)	/* ZR:same, NZ:d
 }
 
 
+#if 0
 /* Check if chr is contained in the string */
 static int chk_chr (const char* str, int chr)	/* NZ:contained, ZR:not contained */
 {
 	while (*str && *str != chr) str++;
 	return *str;
 }
+#endif
 
 /*-----------------------------------------------------------------------*/
 /* String functions                                                      */

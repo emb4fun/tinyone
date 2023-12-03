@@ -83,8 +83,11 @@ typedef void (*tal_irq_fnt)(uint32_t IRQ, void *Context);
 void       tal_CPUInit (void);
 void       tal_CPUSysTickStart (void);
 
-void       tal_CPUStatDWTInit (void);
-uint32_t   tal_CPUStatDWTGetCnt (void);
+void       tal_CPUSysTick10kHzInit (void);
+void       tal_CPUSysTick10kHzStart (void);
+uint32_t   tal_CPUSysTick10kHzGet (void);
+void       tal_CPUSysTick10kHzSet (uint32_t dValue);
+
 
 void       tal_CPUIrqEnable (int IRQ);
 void       tal_CPUIrqDisable (int IRQ);

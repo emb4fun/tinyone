@@ -88,7 +88,12 @@
  
 #define DHCP_SERVER_PORT      67
 #define DHCP_CLIENT_PORT      68
+
+#if !defined(IP_DHCP_SERVER_MAX_DEVICE)
 #define DHCP_IP_MAX_SIZE      256
+#else
+#define DHCP_IP_MAX_SIZE      IP_DHCP_SERVER_MAX_DEVICE
+#endif
  
 #define RX_BUFFER_SIZE        576
 #define TX_BUFFER_SIZE        1460
@@ -495,6 +500,11 @@ static int cgi_dhcps_set (HTTPD_SESSION *hs)
          if (0 == dPoolStart) dEnable   = 0;
          if (0 == dPoolSize)  dPoolSize = 10;
          if (0 == dLease)     dLease    = 10;
+
+         if (dPoolSize > DHCP_IP_MAX_SIZE)
+         {
+            dPoolSize = DHCP_IP_MAX_SIZE;
+         }
 
          nvm_DhcpServerGet(&Config);
          Config.dEnable    = (dEnable != 0) ? 1 : 0;

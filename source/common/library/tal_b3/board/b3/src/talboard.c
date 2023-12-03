@@ -40,7 +40,11 @@
 /*=======================================================================*/
 #include <string.h>
 #include "tal.h"
+
+
+#if defined(TAL_ENABLE_ETH)
 #include "ipstack_conf.h"
+#endif
 
 #include "soc_AM335x.h"
 #include "hw_control_AM335x.h"
@@ -245,6 +249,7 @@ TAL_RESULT tal_BoardEnableCAN2 (void)
    return(TAL_ERR_CAN_PORT_NOHW);
 } /* tal_BoardEnableCAN2 */
 
+#if defined(TAL_ENABLE_ETH)
 /*************************************************************************/
 /*  tal_BoardGetMACAddress                                               */
 /*                                                                       */
@@ -266,6 +271,7 @@ TAL_RESULT tal_BoardGetMACAddress (uint8_t *pAddress)
    {
       bMACRetrieved = TAL_TRUE;
       
+      /* Get the MAC address */
       cpsw_GetMACAddress(MACAddress);
    }
 #else
@@ -278,6 +284,7 @@ TAL_RESULT tal_BoardGetMACAddress (uint8_t *pAddress)
    
    return(Error);
 } /* tal_BoardGetMACAddress */
+#endif
 
 /*************************************************************************/
 /*  tal_BoardReset        (examples\beaglebone\watchdogTimer\wdtReset.c) */

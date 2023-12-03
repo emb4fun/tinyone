@@ -60,9 +60,8 @@ int  cert_Check (void);
 void cert_ELCACallback (int nError);
 
 int  cert_Get_DeviceKey(char **buf, size_t *buflen);
-int  cert_Get_DeviceCert(char **buf, size_t *buflen);
-int  cert_Get_IntermediateCert(char **buf, size_t *buflen);
 int  cert_Get_ChainCert (char **buf, size_t *buflen);
+int  cert_Write_ChainCert (char *buf, size_t buflen);
 
 #endif /* !__CERT_H__ */
 

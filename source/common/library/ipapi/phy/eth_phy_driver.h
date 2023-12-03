@@ -56,6 +56,7 @@
 #define PHY_LINK_STATUS_SPEED_100M  0x02
 #define PHY_LINK_STATUS_MODE_HALF   0x04
 #define PHY_LINK_STATUS_MODE_FULL   0x08
+#define PHY_LINK_STATUS_SPEED_1000M 0x10
 
 #define PHY_OK          0
 #define PHY_ERROR       1

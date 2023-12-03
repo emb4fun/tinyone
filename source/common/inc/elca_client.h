@@ -53,6 +53,7 @@ typedef void (*ip_elcac_cb_ready_t)(int nError);
 *  Functions Definitions
 **************************************************************************/
 
+void  IP_ELCAC_Init (void);
 void  IP_ELCAC_Start (ip_elcac_cb_ready_t callback);
 
 char *IP_ELCAC_KeyGet (void);

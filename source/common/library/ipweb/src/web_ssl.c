@@ -213,25 +213,8 @@ static int InitTls (void)
     
    /* Check if a certificate chain is available */
    cert_Get_ChainCert(&buf, &buflen);
-   if (buflen != 0)
-   {
       rc = mbedtls_x509_crt_parse(&srvcert, (const unsigned char *) buf, buflen);
       if(rc != 0) goto exit; /*lint !e801*/
-   }
-   else
-   {
-      /* Check for seperate Device and Intermediate certificates */
-      
-      /* Device certificate */ 
-      cert_Get_DeviceCert(&buf, &buflen);
-      rc = mbedtls_x509_crt_parse(&srvcert, (const unsigned char *) buf, buflen);
-      if(rc != 0) goto exit; /*lint !e801*/
-
-      /* Intermediate certificate */
-      cert_Get_IntermediateCert(&buf, &buflen);
-      rc = mbedtls_x509_crt_parse(&srvcert, (const unsigned char *) buf, buflen);
-      if(rc != 0) goto exit; /*lint !e801*/
-   }  
 
    /* Device private key */
    cert_Get_DeviceKey(&buf, &buflen);

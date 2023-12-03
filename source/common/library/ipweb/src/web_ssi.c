@@ -52,6 +52,7 @@
 #include "ipstack.h"
 #include "ipweb.h"
 #include "fs_xfile.h"
+#include "fs_romfs.h"
 #include "web_sid.h"
 #include "nvm.h"
 #include "etc.h"
@@ -65,6 +66,19 @@
 #else
 #define _IP_WEB_SSI_EXT_CST   IP_WEB_SSI_EXT_CST
 #endif  
+
+#if !defined(IP_WEB_UPLOAD_MODE_SD_TEMP)
+#define _IP_WEB_UPLOAD_MODE_SD_TEMP    0
+#else
+#define _IP_WEB_UPLOAD_MODE_SD_TEMP    IP_WEB_UPLOAD_MODE_SD_TEMP
+#endif
+
+#if !defined(IP_WEB_ROMFS_IS_PRIMARY)
+#define _IP_WEB_ROMFS_IS_PRIMARY       0
+#else
+#define _IP_WEB_ROMFS_IS_PRIMARY       IP_WEB_ROMFS_IS_PRIMARY
+#endif
+
 
 #if (_IP_WEB_SSI_EXT_CST >= 1)
 #include "web_ssi_ext_cst.h"
@@ -291,7 +305,16 @@ static int sys_fw_ver (HTTPD_SESSION *hs)
 /*************************************************************************/
 static int sys_web_name (HTTPD_SESSION *hs)
 {
+
+#if (_IP_WEB_ROMFS_IS_PRIMARY >= 1)
+   s_puts(romfs_GetName(), hs->s_stream);
+#else
+#if (_IP_WEB_UPLOAD_MODE_SD_TEMP == 0)
    s_puts(xfile_GetName(), hs->s_stream);
+#else
+   s_puts(romfs_GetName(), hs->s_stream);
+#endif
+#endif
 
    s_flush(hs->s_stream);
 
@@ -307,7 +330,17 @@ static int sys_web_name (HTTPD_SESSION *hs)
 /*************************************************************************/
 static int sys_web_ver (HTTPD_SESSION *hs)
 {
-   uint32_t dVersion = xfile_GetVersion();
+   uint32_t dVersion;
+   
+#if (_IP_WEB_ROMFS_IS_PRIMARY >= 1)
+   dVersion = romfs_GetVersion();
+#else   
+#if (_IP_WEB_UPLOAD_MODE_SD_TEMP == 0)
+   dVersion = xfile_GetVersion();
+#else
+   dVersion = romfs_GetVersion();
+#endif
+#endif
    
    if (dVersion < 10000)
    {

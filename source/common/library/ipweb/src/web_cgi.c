@@ -55,6 +55,7 @@
 #include "mod_cgi.h"
 #include "nvm.h"
 #include "fs.h"
+#include "fsapi.h"
 
 #include "terminal.h"
 
@@ -66,6 +67,12 @@
 
 #if (_IP_WEB_CGI_EXT_CST >= 1)
 #include "web_cgi_ext_cst.h"
+#endif
+
+#if !defined(IP_WEB_UPLOAD_MODE_SD_TEMP)
+#define _IP_WEB_UPLOAD_MODE_SD_TEMP    0
+#else
+#define _IP_WEB_UPLOAD_MODE_SD_TEMP    IP_WEB_UPLOAD_MODE_SD_TEMP
 #endif
 
 static const CGI_LIST_ENTRY CGIList[]; /*lint !e85*/
@@ -211,6 +218,8 @@ static int UploadFile (HTTPD_SESSION *hs, web_upload_t *Info)
    HTTP_STREAM *stream = hs->s_stream;
    HTTP_REQUEST *req = &hs->s_req;
    long filesize;
+   int  fd;
+   int  rc;
 
    /* Retrieve the boundary string. */
    delim = GetMultipartBoundary(req);
@@ -255,8 +264,28 @@ static int UploadFile (HTTPD_SESSION *hs, web_upload_t *Info)
                   }
                }
                
-               /* Recieve the binary data. */
+
+               /* Receive the binary data. */
                filesize = 0;
+
+#if (_IP_WEB_UPLOAD_MODE_SD_TEMP == 0)
+               /* SD card is not used for the upload, set the "fd" to -1 */
+               (void)fd;
+               (void)rc;
+#else           
+               /* The small buffer is used instead, the "/temp" folder must be used */
+               fd = _open("SD0:/temp/upload.bin", _O_BINARY | _O_WRONLY | _O_CREATE_ALWAYS);
+               if (-1 == fd)
+               {
+                  Info->Error = 1;
+                  
+                  xfree(delim);
+                  xfree(line);
+                  
+                  return(0);
+               }
+#endif               
+
                while (avail) {
                   /* Read until the next boundary line. */
                   got = StreamReadUntilString(stream, delim, line, MIN(avail, MAX_UPSIZE));
@@ -269,6 +298,7 @@ static int UploadFile (HTTPD_SESSION *hs, web_upload_t *Info)
                   //term_printf(".");
                   if (eol) {
                      //term_printf("eol");
+#if (_IP_WEB_UPLOAD_MODE_SD_TEMP == 0)
                      if ((filesize + 2) < Info->lBufferSize)
                      {
                        Info->pBuffer[filesize++] = '\r';
@@ -278,6 +308,17 @@ static int UploadFile (HTTPD_SESSION *hs, web_upload_t *Info)
                      {
                        Info->Error = 1;
                      }  
+#else                     
+                     rc = _write(fd, "\r\n", 2);
+                     if (rc > 0)
+                     {
+                        filesize += 2;
+                     }
+                     else
+                     {
+                        Info->Error = 1;
+                     }
+#endif                        
                   }
                   eol = 0;
                   if (got >= 2 && line[got - 2] == '\r' && line[got - 1] == '\n') {
@@ -286,6 +327,7 @@ static int UploadFile (HTTPD_SESSION *hs, web_upload_t *Info)
                   }
                        
                   /* Write data is memory is available */
+#if (_IP_WEB_UPLOAD_MODE_SD_TEMP == 0)
                   if ((filesize + got) < Info->lBufferSize)
                   {
                      memcpy(&Info->pBuffer[filesize], line, (size_t)got);
@@ -294,10 +336,24 @@ static int UploadFile (HTTPD_SESSION *hs, web_upload_t *Info)
                   {
                      Info->Error = 1;
                   }
+#else                  
+                  rc = _write(fd, line, (size_t)got);
+                  if (rc < 0)
+                  {
+                     Info->Error = 1;
+                  }
+#endif                     
                   filesize += got;
                }
                //term_printf("\r\n");
                    
+#if (_IP_WEB_UPLOAD_MODE_SD_TEMP >= 1)
+               if (fd != -1)
+               {
+                  _close(fd);
+               }
+#endif               
+
                Info->lFileSize = filesize;
                    
                if (got < 0) {
@@ -1212,11 +1268,13 @@ static int Upload (HTTPD_SESSION *hs)
    web_upload_t Info;
    int         nErr = -1;
    
+#if (_IP_WEB_UPLOAD_MODE_SD_TEMP == 0)
    if (NULL == UploadBuffer)
    {
       UploadBuffer = xmalloc(XM_ID_HEAP, WEB_UPLOAD_BUFFER_SIZE);   
       if (NULL == UploadBuffer) return(-1);
    }
+#endif
       
    memset(&Info, 0, sizeof(web_upload_t));
    

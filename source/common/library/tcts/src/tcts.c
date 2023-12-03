@@ -1098,25 +1098,25 @@ static void StatTask (void *pParam)
                dIdleTime = pTask->dStatTotalTime;
             }
       
-            pTask->dStatTotalLastTime = pTask->dStatTotalTime;
-            pTask->dStatTotalTime     = 0;
-         
             pTask = pTask->pTaskNext;
          }
 
-
+         /* Prevent divide by zero */
          if (0 == dStatTotalTaskTime) dStatTotalTaskTime = 1;
 
          /* Calculate usage in percent */
          pTask = pTaskList;
          while (pTask != NULL)
          {
-            dStatUsage = (uint32_t)(((uint64_t)10000 * pTask->dStatTotalLastTime) / dStatTotalTaskTime);
+            dStatUsage = (uint32_t)(((uint64_t)10000 * pTask->dStatTotalTime) / dStatTotalTaskTime);
             if (dStatUsage > 10000)
             {
                dStatUsage = 10000;
             }
             pTask->dStatUsage = dStatUsage;
+
+            /* Clear total time for the next round */
+            pTask->dStatTotalTime = 0;
 
             pTask = pTask->pTaskNext;
          }
@@ -1338,7 +1338,10 @@ void OS_OutputTaskInfo (void)
    TAL_PRINTF("%-16s  ", pTCB->Name);
    TAL_PRINTF("%4d   %4d   %4d   %4d    -   %2d.%02d\n", pTCB->nPrio, dSize, (dSize - dFree), dFree, wTime1, wTime2);
          
+   if (1 == bStatEnabled)
+   {
    TAL_PRINTF("\n--- CPU load: %d%% ---\n", OS_StatGetCPULoad());
+   }      
          
    (void)dSize;
    (void)dFree;
@@ -2569,7 +2572,6 @@ static __inline__ int _OSMutexSignalFromInt (OS_MUTEX *pMutex)
    return(rc);
 } /* _OSMutexSignalFromInt */
 
-#if 0
 /*************************************************************************/
 /*  OS_MutexSignalFromInt                                                */
 /*                                                                       */
@@ -2588,7 +2590,6 @@ void OS_MutexSignalFromInt (OS_MUTEX *pMutex)
    _OSMutexSignalFromInt(pMutex);
    
 } /* OS_MutexSignalFromInt */
-#endif
 
 /*************************************************************************/
 /*  OS_MutexSignal                                                       */
@@ -3156,6 +3157,216 @@ int OS_MboxWait (OS_MBOX *pMbox, void **pMsg, uint32_t dTimeoutMs)
    
    return(rc);
 } /* OS_MboxWait*/
+
+/*************************************************************************/
+/*  OS_MQCreate                                                          */
+/*                                                                       */
+/*  Create a new message queue.                                          */
+/*                                                                       */
+/*  In    : pMQ, wCount, wSize, pBuffer                                  */
+/*  Out   : none                                                         */
+/*  Return: OS_RC_OK / error cause                                       */
+/*************************************************************************/
+int OS_MQCreate (OS_MQ *pMQ, uint16_t wCount, uint16_t wSize, uint8_t *pBuffer)
+{
+   int        rc = OS_RC_ERROR;
+   //uint8_t  *pBuffer;
+
+   //pBuffer = xmalloc(XM_ID_HEAP, (wCount * wSize));
+   if (pBuffer != NULL)
+   {
+      rc = OS_RC_OK;
+      
+      memset(pMQ, 0x00, sizeof(OS_MBOX));
+
+      OS_SemaCreate(&pMQ->UsedCntSema, 0,      wCount);
+      OS_SemaCreate(&pMQ->FreeCntSema, wCount, wCount);
+
+      pMQ->wCountMax = wCount;
+      pMQ->wCount    = 0;
+      pMQ->wSize     = wSize;
+      pMQ->wInIndex  = 0;
+      pMQ->wOutIndex = 0;
+      pMQ->pBuffer   = pBuffer;
+   }
+   
+   return(rc);      
+} /* OS_MboxCreate */
+
+#if 0
+/*************************************************************************/
+/*  OS_MQDelete                                                          */
+/*                                                                       */
+/*  Delete a message queue. All waiting tasks will be released.          */
+/*                                                                       */
+/*  In    : pMQ                                                          */
+/*  Out   : none                                                         */
+/*  Return: none                                                         */
+/*************************************************************************/
+void OS_MQDelete (OS_MQ *pMQ)
+{
+   OS_SemaDelete(&pMQ->UsedCntSema);
+   OS_SemaDelete(&pMQ->FreeCntSema);
+   
+   //xfree(pMQ->pBuffer);
+   
+} /* OS_MboxDelete */
+#endif
+
+/*************************************************************************/
+/*  _OS_MQPostFromInt                                                    */
+/*                                                                       */
+/*  Tries to post a message to the message queue.                        */
+/*                                                                       */
+/*  Must be called with interrupts disabled.                             */
+/*                                                                       */
+/*  Note: Interrupts are disabled and must be disabled.                  */
+/*                                                                       */
+/*  In    : pMQ, pMsg                                                    */
+/*  Out   : none                                                         */
+/*  Return: OS_RC_OK / OS_RC_NO_SPACE                                    */
+/*************************************************************************/
+static __inline__  int _OS_MQPostFromInt (OS_MQ *pMQ, void *pMsg)
+{
+   int       rc = OS_RC_NO_SPACE;
+   uint16_t wFreeCnt;
+   uint16_t wOffset;
+
+   wFreeCnt = pMQ->wCountMax - pMQ->wCount;
+   if (wFreeCnt != 0)
+   {
+      /*
+       * OSSemaWait cannot be used inside an interrupt.
+       * Therefore decrement the semaphore counter direct.
+       */
+      pMQ->FreeCntSema.nCounter--;
+
+      /* Increment counter, one more message available */
+      pMQ->wCount++;
+
+      /* Store message */
+      wOffset = pMQ->wInIndex * pMQ->wSize;
+      memcpy(&pMQ->pBuffer[wOffset], (uint8_t*)pMsg, pMQ->wSize); 
+
+      /* Switch to next place */
+      pMQ->wInIndex++;
+
+      /* Check end of ring buffer */
+      if (pMQ->wCountMax == pMQ->wInIndex)
+      {
+         pMQ->wInIndex = 0;
+      }
+
+      /* Signal message available */
+      OS_SemaSignalFromInt(&pMQ->UsedCntSema);
+
+      rc = OS_RC_OK;
+   }
+
+   return(rc);
+} /* _OSMboxPostFromInt */
+
+/*************************************************************************/
+/*  OS_MQPostFromInt                                                     */
+/*                                                                       */
+/*  Tries to post a message to the message queue.                        */
+/*                                                                       */
+/*  Must be called with interrupts disabled.                             */
+/*                                                                       */
+/*  Note: Interrupts are disabled and must be disabled.                  */
+/*                                                                       */
+/*  In    : pMQ, pMsg                                                    */
+/*  Out   : none                                                         */
+/*  Return: OS_RC_OK / OS_RC_NO_SPACE                                    */
+/*************************************************************************/
+int OS_MQPostFromInt (OS_MQ *pMQ, void *pMsg)
+{
+   return(_OS_MQPostFromInt(pMQ, pMsg));
+} /* OS_MQPostFromInt */
+
+/*************************************************************************/
+/*  OS_MQPost                                                            */
+/*                                                                       */
+/*  Tries to post a message to the message queue.                        */
+/*                                                                       */
+/*  Note: Must not used from inside an interrupt.                        */
+/*                                                                       */
+/*  In    : pMQ, pMsg                                                    */
+/*  Out   : none                                                         */
+/*  Return: OS_RC_OK / OS_RC_NO_SPACE                                    */
+/*************************************************************************/
+int OS_MQPost (OS_MQ *pMQ, void *pMsg)
+{
+   int rc;
+
+   EnterCritical();
+
+   rc = _OS_MQPostFromInt(pMQ, pMsg);
+
+   ExitCritical();
+
+   return(rc);
+} /* OS_MQPost */
+
+/*************************************************************************/
+/*  OS_MQWait                                                            */
+/*                                                                       */
+/*  Blocks the task while waiting for the message queue, with timeout.   */
+/*                                                                       */
+/*  In case the timeout value (dTimeoutMs) is 0, OS_MQWait will use      */
+/*  polling to acquire the message. If the resource counter (dCounter)   */
+/*  is 0, the error cause is OS_RC_TIMEOUT.                              */
+/*                                                                       */
+/*  With a timeout value (dTimeoutMs) of OS_WAIT_INFINITE the waiting    */
+/*  time is not ended until the message queue is signaled.               */
+/*                                                                       */
+/*  Note: Must not used from inside an interrupt.                        */
+/*                                                                       */
+/*  In    : pMQ, pMsg, dTimeoutMs                                        */
+/*  Out   : none                                                         */
+/*  Return: OS_RC_OK / OS_RC_TIMEOUT                                     */
+/*************************************************************************/
+int OS_MQWait (OS_MQ *pMQ, void *pMsg, uint32_t dTimeoutMs)
+{
+   int       rc;
+   uint16_t wOffset;
+
+   if (0 == dTimeoutMs)
+   {
+      if (0 == pMQ->wCount)
+      {
+         return(OS_RC_TIMEOUT);
+      }
+   }
+
+   rc = OS_SemaWait(&pMQ->UsedCntSema, dTimeoutMs);
+   if (OS_RC_OK == rc)
+   {
+      EnterCritical();
+
+      /* Decrement counter, one message will be removed */
+      pMQ->wCount--;
+
+      /* Get message */
+      wOffset = pMQ->wOutIndex * pMQ->wSize;
+      memcpy((uint8_t*)pMsg, &pMQ->pBuffer[wOffset], pMQ->wSize); 
+
+      /* Switch to next place */
+      pMQ->wOutIndex++;
+
+      /* Check end of ring buffer */
+      if (pMQ->wCountMax == pMQ->wOutIndex)
+      {
+         pMQ->wOutIndex = 0;
+      }
+
+      OS_SemaSignalFromInt(&pMQ->FreeCntSema);
+
+      ExitCritical();
+   }
+
+   return(rc);
+} /* OS_MQWait */
 
 #endif /* defined(RTOS_TCTS) */
 

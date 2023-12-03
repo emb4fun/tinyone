@@ -43,11 +43,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include "tal.h"
 #include "fsapi.h"
 #include "xfile.h"
 #include "adler32.h"
+#include "minini.h"
 
 extern const char _romfs_data[];
 
@@ -379,6 +379,49 @@ void romfs_Init (void)
    }       
    
 } /* romfs_Init */
+
+/*************************************************************************/
+/*  romfs_GetName                                                        */
+/*                                                                       */
+/*  Return the name of the romfs.                                        */
+/*                                                                       */
+/*  In    : none                                                         */
+/*  Out   : none                                                         */
+/*  Return: none                                                         */
+/*************************************************************************/
+char *romfs_GetName (void)
+{
+   static char Name[17];
+
+   ini_gets("system", "name", "unknown", Name, sizeof(Name), "ROMFS:/htdocs/etc/config.txt");
+   
+   return(Name);
+} /* xfile_GetName */
+
+/*************************************************************************/
+/*  romfs_GetVersion                                                     */
+/*                                                                       */
+/*  Return the version of the romfs.                                     */
+/*                                                                       */
+/*  In    : none                                                         */
+/*  Out   : none                                                         */
+/*  Return: none                                                         */
+/*************************************************************************/
+uint32_t romfs_GetVersion (void)
+{
+   int      nDigit1;
+   int      nDigit2;
+   int      nDigit3;
+   uint32_t dVersion;
+   
+   nDigit1 = (int)ini_getl("version", "digit1", 0, "ROMFS:/htdocs/etc/config.txt");
+   nDigit2 = (int)ini_getl("version", "digit2", 0, "ROMFS:/htdocs/etc/config.txt");
+   nDigit3 = (int)ini_getl("version", "digit3", 0, "ROMFS:/htdocs/etc/config.txt");
+   
+   dVersion = (uint32_t)((nDigit1 * 100) + (nDigit2 * 10) + nDigit3);
+
+   return(dVersion);
+} /* romfs_GetVersion */
 
 /*** EOF ***/
 
