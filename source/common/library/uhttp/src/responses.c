@@ -38,6 +38,7 @@
 
 #include "tcts.h"
 #include "xmem.h"
+#include "ipweb.h"
 
 #include <cfg/http.h>
 #if !defined(HTTPD_EXCLUDE_DATE)
@@ -169,6 +170,12 @@ void HttpSendStreamHeaderTop(HTTP_STREAM *stream, int status)
 
     s_printf(stream, fmt_P, HTTP_MAJOR_VERSION, HTTP_MINOR_VERSION, status, HttpResponseText(status));
 
+    if (1 == IP_WEBS_IsRunnungSSL())
+    {
+        /* HSTS header */ 
+        s_puts("Strict-Transport-Security: max-age=31536000\r\n", stream);
+    }    
+    
 #if !defined(HTTPD_EXCLUDE_DATE)
     {
         time_t now = OS_UnixtimeGet();

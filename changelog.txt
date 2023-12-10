@@ -2,12 +2,16 @@
 * Project: tinyone
 * Name   : "A small embedded DHCP and SNTP server"
 * Target : BeagleBone Black
-* Version: 20231203
+* Version: 20231210
 ***************************************************************************
 * Tools  : SEGGER Embedded Studio for ARM v7.32a
 ***************************************************************************
 * URL    : https://www.emb4fun.de/projects/tone/index.html
 ***************************************************************************
+
+= Version 1.21 / 1.20, 10.12.2023
+   * Obsoleted CBC ciphers removed.
+   * HSTS header added.
 
 = Version 1.20 / 1.20, 03.12.2023
    * Used SEGGER Embedded Studio for ARM v7.32a.
