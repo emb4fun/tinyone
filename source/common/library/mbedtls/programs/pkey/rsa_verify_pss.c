@@ -2,37 +2,23 @@
  *  RSASSA-PSS/SHA-256 signature verification program
  *
  *  Copyright The Mbed TLS Contributors
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 
-#if !defined(MBEDTLS_CONFIG_FILE)
-#include "mbedtls/config.h"
-#else
-#include MBEDTLS_CONFIG_FILE
-#endif
+#include "mbedtls/build_info.h"
 
 #include "mbedtls/platform.h"
+/* md.h is included this early since MD_CAN_XXX macros are defined there. */
+#include "mbedtls/md.h"
 
 #if !defined(MBEDTLS_MD_C) || !defined(MBEDTLS_ENTROPY_C) ||  \
-    !defined(MBEDTLS_RSA_C) || !defined(MBEDTLS_SHA256_C) ||        \
+    !defined(MBEDTLS_RSA_C) || !defined(MBEDTLS_MD_CAN_SHA256) ||        \
     !defined(MBEDTLS_PK_PARSE_C) || !defined(MBEDTLS_FS_IO) ||    \
     !defined(MBEDTLS_CTR_DRBG_C)
 int main(void)
 {
     mbedtls_printf("MBEDTLS_MD_C and/or MBEDTLS_ENTROPY_C and/or "
-                   "MBEDTLS_RSA_C and/or MBEDTLS_SHA256_C and/or "
+                   "MBEDTLS_RSA_C and/or MBEDTLS_MD_CAN_SHA256 and/or "
                    "MBEDTLS_PK_PARSE_C and/or MBEDTLS_FS_IO and/or "
                    "MBEDTLS_CTR_DRBG_C not defined.\n");
     mbedtls_exit(0);
@@ -42,7 +28,6 @@ int main(void)
 #include "mbedtls/md.h"
 #include "mbedtls/pem.h"
 #include "mbedtls/pk.h"
-#include "mbedtls/md.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -94,7 +79,12 @@ int main(int argc, char *argv[])
         goto exit;
     }
 
-    mbedtls_rsa_set_padding(mbedtls_pk_rsa(pk), MBEDTLS_RSA_PKCS_V21, MBEDTLS_MD_SHA256);
+    if ((ret = mbedtls_rsa_set_padding(mbedtls_pk_rsa(pk),
+                                       MBEDTLS_RSA_PKCS_V21,
+                                       MBEDTLS_MD_SHA256)) != 0) {
+        mbedtls_printf(" failed\n  ! Invalid padding\n");
+        goto exit;
+    }
 
     /*
      * Extract the RSA signature from the file
@@ -140,12 +130,7 @@ exit:
     mbedtls_psa_crypto_free();
 #endif /* MBEDTLS_USE_PSA_CRYPTO */
 
-#if defined(_WIN32)
-    mbedtls_printf("  + Press Enter to exit this program.\n");
-    fflush(stdout); getchar();
-#endif
-
     mbedtls_exit(exit_code);
 }
-#endif /* MBEDTLS_BIGNUM_C && MBEDTLS_RSA_C && MBEDTLS_SHA256_C &&
+#endif /* MBEDTLS_BIGNUM_C && MBEDTLS_RSA_C && MBEDTLS_MD_CAN_SHA256 &&
           MBEDTLS_PK_PARSE_C && MBEDTLS_FS_IO */

@@ -295,6 +295,7 @@ int mbedtls_x509write_crt_set_subject_alternative_name (mbedtls_x509write_csr *c
         ctx,
         MBEDTLS_OID_SUBJECT_ALT_NAME,
         MBEDTLS_OID_SIZE(MBEDTLS_OID_SUBJECT_ALT_NAME),
+        0,
         buf + buflen - len,
         len);
 
@@ -330,6 +331,7 @@ static int set_basic_constraints (mbedtls_x509write_csr *ctx,
 
     return mbedtls_x509write_csr_set_extension( ctx, MBEDTLS_OID_BASIC_CONSTRAINTS,
                                         MBEDTLS_OID_SIZE( MBEDTLS_OID_BASIC_CONSTRAINTS ),
+                                        0,
                                         buf + sizeof(buf) - len, len );
 }
 
@@ -665,11 +667,10 @@ static int CheckNewChainCRT (char *pCRT)
    if ((NULL == pCRT1) || (NULL == pCRT2)) GOTO_END(ELCA_ERR_CRT_CHECK_3);
 
    /* Check if first CRT is not a "ca" */
-   if (pCRT1->ca_istrue != 0) GOTO_END(ELCA_ERR_CRT_CHECK_4);
+   if (pCRT1->private_ca_istrue != 0) GOTO_END(ELCA_ERR_CRT_CHECK_4);
 
    /* Check if second CRT is a "ca" */
-   if (pCRT2->ca_istrue != 1) GOTO_END(ELCA_ERR_CRT_CHECK_5);
-
+   if (pCRT2->private_ca_istrue != 1) GOTO_END(ELCA_ERR_CRT_CHECK_5);
 
    if ((strlen(pCRT)+1) < sizeof(NewCRT))
    {
@@ -770,7 +771,8 @@ static int KeyLoad (void)
 
    /* Load the key */
    cert_Get_DeviceKey(&buf, &buflen);
-   rc = mbedtls_pk_parse_key(&pk, (const unsigned char *) buf, buflen, NULL, 0);
+   rc = mbedtls_pk_parse_key(&pk, (const unsigned char *) buf, buflen, NULL, 0,
+                             mbedtls_ctr_drbg_random, &ctr_drbg);
    if(rc != 0) GOTO_END(-1);
 
 end:
@@ -891,6 +893,7 @@ static int CSRCreate (void)
    /* X509v3 id-kp-serverAuth, see: https://support.apple.com/en-us/HT210176 */
    rc = mbedtls_x509write_csr_set_extension(&req,
                                             MBEDTLS_OID_EXTENDED_KEY_USAGE , MBEDTLS_OID_SIZE(MBEDTLS_OID_EXTENDED_KEY_USAGE),
+                                            0,
                                             server_outh, sizeof(server_outh));
    if (rc != 0) GOTO_END(-1);
 
@@ -940,7 +943,6 @@ static int CRTGet (void)
    uint32_t                  dAddress; 
    elca_msg_t               *pTxMsg = NULL;
    elca_msg_t               *pRxMsg = NULL;
-   mbedtls_md_context_t       sha2_ctx;
    const mbedtls_md_info_t   *info_sha2;
    mbedtls_aes_context        ctx;
    size_t                     Size;
@@ -977,16 +979,11 @@ static int CRTGet (void)
    info_sha2 = mbedtls_md_info_from_type(MBEDTLS_MD_SHA256);
    if (NULL == info_sha2) GOTO_END(-1);
 
-   mbedtls_md_init(&sha2_ctx);
-   rc = mbedtls_md_setup(&sha2_ctx, info_sha2, 1);
-   if (rc != 0) GOTO_END(-1);
-   
-   rc = mbedtls_pkcs5_pbkdf2_hmac(&sha2_ctx, 
+   rc = mbedtls_pkcs5_pbkdf2_hmac_ext(MBEDTLS_MD_SHA256, 
                                   (uint8_t*)PRE_SHARED_KEY, strlen(PRE_SHARED_KEY), 
                                   NULL, 0,
                                   4096,
                                   sizeof(Key), Key);
-   mbedtls_md_free(&sha2_ctx);
    if (rc != 0) GOTO_END(-1);
    
    /* Encrypt CSR first */

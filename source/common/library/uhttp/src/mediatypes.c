@@ -136,7 +136,8 @@ int MediaTypeHandlerBinary(HTTPD_SESSION *hs, const MEDIA_TYPE_ENTRY *mt, const 
         }
 #if !defined(HTTPD_EXCLUDE_DATE)
         if (rc) {
-            mtime = RfcTimeParse("Fri " __DATE__ " " __TIME__) + _timezone;
+            //mtime = RfcTimeParse("Fri " __DATE__ " " __TIME__) + _timezone;
+            mtime = RfcTimeParse("Fri " __DATE__ " " __TIME__); // @@MF
         } else {
             mtime = s.st_mtime;
         }

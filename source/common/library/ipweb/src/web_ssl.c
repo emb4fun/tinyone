@@ -52,7 +52,7 @@
 #include "lwip\api.h"
 #include "lwip\priv\sockets_priv.h"
 
-#include "mbedtls/config.h"
+#include "mbedtls/mbedtls_config.h"
 #include "mbedtls/entropy.h"
 #include "mbedtls/ctr_drbg.h"
 #include "mbedtls/x509.h"
@@ -207,6 +207,13 @@ static int InitTls (void)
    mbedtls_ssl_config_init(&conf);
    mbedtls_ssl_cache_init(&cache);
    
+   psa_status_t status = psa_crypto_init();
+   if (status != PSA_SUCCESS) 
+   {
+      return(-1);
+   }
+   
+   
    /*
     * 1. Load the certificates and private key
     */
@@ -218,7 +225,8 @@ static int InitTls (void)
 
    /* Device private key */
    cert_Get_DeviceKey(&buf, &buflen);
-   rc = mbedtls_pk_parse_key(&pkey, (const unsigned char *) buf, buflen, NULL, 0);
+   rc = mbedtls_pk_parse_key(&pkey, (const unsigned char *) buf, buflen, NULL, 0,
+                             mbedtls_ctr_drbg_random, &ctr_drbg);
    if(rc != 0) goto exit; /*lint !e801*/
 
 

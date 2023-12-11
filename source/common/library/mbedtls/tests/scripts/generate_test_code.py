@@ -2,19 +2,7 @@
 # Test suites code generator.
 #
 # Copyright The Mbed TLS Contributors
-# SPDX-License-Identifier: Apache-2.0
-#
-# Licensed under the Apache License, Version 2.0 (the "License"); you may
-# not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
 """
 This script is a key part of Mbed TLS test suites framework. For
@@ -163,7 +151,6 @@ __MBEDTLS_TEST_TEMPLATE__PLATFORM_CODE
 """
 
 
-import io
 import os
 import re
 import sys
@@ -227,43 +214,57 @@ class GeneratorInputError(Exception):
     pass
 
 
-class FileWrapper(io.FileIO):
+class FileWrapper:
     """
-    This class extends built-in io.FileIO class with attribute line_no,
+    This class extends the file object with attribute line_no,
     that indicates line number for the line that is read.
     """
 
-    def __init__(self, file_name):
+    def __init__(self, file_name) -> None:
         """
-        Instantiate the base class and initialize the line number to 0.
+        Instantiate the file object and initialize the line number to 0.
 
         :param file_name: File path to open.
         """
-        super().__init__(file_name, 'r')
+        # private mix-in file object
+        self._f = open(file_name, 'rb')
         self._line_no = 0
+
+    def __iter__(self):
+        return self
 
     def __next__(self):
         """
-        This method overrides base class's __next__ method and extends it
-        method to count the line numbers as each line is read.
+        This method makes FileWrapper iterable.
+        It counts the line numbers as each line is read.
 
         :return: Line read from file.
         """
-        line = super().__next__()
-        if line is not None:
-            self._line_no += 1
-            # Convert byte array to string with correct encoding and
-            # strip any whitespaces added in the decoding process.
-            return line.decode(sys.getdefaultencoding()).rstrip() + '\n'
-        return None
+        line = self._f.__next__()
+        self._line_no += 1
+        # Convert byte array to string with correct encoding and
+        # strip any whitespaces added in the decoding process.
+        return line.decode(sys.getdefaultencoding()).rstrip()+ '\n'
 
-    def get_line_no(self):
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._f.__exit__(exc_type, exc_val, exc_tb)
+
+    @property
+    def line_no(self):
         """
-        Gives current line number.
+        Property that indicates line number for the line that is read.
         """
         return self._line_no
 
-    line_no = property(get_line_no)
+    @property
+    def name(self):
+        """
+        Property that indicates name of the file that is read.
+        """
+        return self._f.name
 
 
 def split_dep(dep):

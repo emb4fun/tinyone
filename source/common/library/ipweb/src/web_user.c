@@ -69,9 +69,9 @@
 
 
 #define sha2_context    mbedtls_sha256_context
-#define sha2_start(_a)  mbedtls_sha256_starts_ret(_a, 0)
-#define sha2_update     mbedtls_sha256_update_ret
-#define sha2_finish     mbedtls_sha256_finish_ret
+#define sha2_start(_a)  mbedtls_sha256_starts(_a, 0)
+#define sha2_update     mbedtls_sha256_update
+#define sha2_finish     mbedtls_sha256_finish
 
 
 #define USER_MAGIC      0x52455355  /* USER */

@@ -15,32 +15,22 @@
  */
 /*
  *  Copyright The Mbed TLS Contributors
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 
 #ifndef PSA_CRYPTO_TYPES_H
 #define PSA_CRYPTO_TYPES_H
 
-#include "crypto_platform.h"
+/* Make sure the Mbed TLS configuration is visible. */
+#include "mbedtls/build_info.h"
+/* Define the MBEDTLS_PRIVATE macro. */
+#include "mbedtls/private_access.h"
 
-/* If MBEDTLS_PSA_CRYPTO_C is defined, make sure MBEDTLS_PSA_CRYPTO_CLIENT
- * is defined as well to include all PSA code.
- */
-#if defined(MBEDTLS_PSA_CRYPTO_C)
-#define MBEDTLS_PSA_CRYPTO_CLIENT
-#endif /* MBEDTLS_PSA_CRYPTO_C */
+#if defined(MBEDTLS_PSA_CRYPTO_PLATFORM_FILE)
+#include MBEDTLS_PSA_CRYPTO_PLATFORM_FILE
+#else
+#include "crypto_platform.h"
+#endif
 
 #include <stdint.h>
 
@@ -301,8 +291,8 @@ typedef psa_key_id_t mbedtls_svc_key_id_t;
  * functions such as psa_open_key().
  */
 typedef struct {
-    psa_key_id_t key_id;
-    mbedtls_key_owner_id_t owner;
+    psa_key_id_t MBEDTLS_PRIVATE(key_id);
+    mbedtls_key_owner_id_t MBEDTLS_PRIVATE(owner);
 } mbedtls_svc_key_id_t;
 
 #endif /* !MBEDTLS_PSA_CRYPTO_KEY_ID_ENCODES_OWNER */

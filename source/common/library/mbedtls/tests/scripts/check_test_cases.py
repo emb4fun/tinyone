@@ -7,19 +7,7 @@ independently of the checks.
 """
 
 # Copyright The Mbed TLS Contributors
-# SPDX-License-Identifier: Apache-2.0
-#
-# Licensed under the Apache License, Version 2.0 (the "License"); you may
-# not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
 import argparse
 import glob
@@ -147,6 +135,9 @@ state may override this method.
             ssl_opt_sh = os.path.join(directory, 'ssl-opt.sh')
             if os.path.exists(ssl_opt_sh):
                 self.walk_ssl_opt_sh(ssl_opt_sh)
+            for ssl_opt_file_name in glob.glob(os.path.join(directory, 'opt-testcases',
+                                                            '*.sh')):
+                self.walk_ssl_opt_sh(ssl_opt_file_name)
             compat_sh = os.path.join(directory, 'compat.sh')
             if os.path.exists(compat_sh):
                 self.walk_compat_sh(compat_sh)

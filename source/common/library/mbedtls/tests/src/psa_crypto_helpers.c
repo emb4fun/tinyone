@@ -5,19 +5,7 @@
 
 /*
  *  Copyright The Mbed TLS Contributors
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 
 #include <test/helpers.h>
@@ -147,6 +135,17 @@ int mbedtls_test_fail_if_psa_leaking(int line_no, const char *filename)
         mbedtls_test_fail(msg, line_no, filename);
         return 1;
     }
+}
+
+uint64_t mbedtls_test_parse_binary_string(data_t *bin_string)
+{
+    uint64_t result = 0;
+    TEST_LE_U(bin_string->len, 8);
+    for (size_t i = 0; i < bin_string->len; i++) {
+        result = result << 8 | bin_string->x[i];
+    }
+exit:
+    return result; /* returns 0 if len > 8 */
 }
 
 #if defined(MBEDTLS_PSA_INJECT_ENTROPY)

@@ -2,26 +2,10 @@
  *  Certificate reading application
  *
  *  Copyright The Mbed TLS Contributors
- *  SPDX-License-Identifier: Apache-2.0
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 
-#if !defined(MBEDTLS_CONFIG_FILE)
-#include "mbedtls/config.h"
-#else
-#include MBEDTLS_CONFIG_FILE
-#endif
+#include "mbedtls/build_info.h"
 
 #include "mbedtls/platform.h"
 
@@ -29,14 +13,14 @@
     !defined(MBEDTLS_SSL_TLS_C) || !defined(MBEDTLS_SSL_CLI_C) || \
     !defined(MBEDTLS_NET_C) || !defined(MBEDTLS_RSA_C) ||         \
     !defined(MBEDTLS_X509_CRT_PARSE_C) || !defined(MBEDTLS_FS_IO) ||  \
-    !defined(MBEDTLS_CTR_DRBG_C)
+    !defined(MBEDTLS_CTR_DRBG_C) || defined(MBEDTLS_X509_REMOVE_INFO)
 int main(void)
 {
     mbedtls_printf("MBEDTLS_BIGNUM_C and/or MBEDTLS_ENTROPY_C and/or "
                    "MBEDTLS_SSL_TLS_C and/or MBEDTLS_SSL_CLI_C and/or "
                    "MBEDTLS_NET_C and/or MBEDTLS_RSA_C and/or "
                    "MBEDTLS_X509_CRT_PARSE_C and/or MBEDTLS_FS_IO and/or "
-                   "MBEDTLS_CTR_DRBG_C not defined.\n");
+                   "MBEDTLS_CTR_DRBG_C not defined and/or MBEDTLS_X509_REMOVE_INFO defined.\n");
     mbedtls_exit(0);
 }
 #else
@@ -464,11 +448,6 @@ exit:
 #if defined(MBEDTLS_USE_PSA_CRYPTO)
     mbedtls_psa_crypto_free();
 #endif /* MBEDTLS_USE_PSA_CRYPTO */
-
-#if defined(_WIN32)
-    mbedtls_printf("  + Press Enter to exit this program.\n");
-    fflush(stdout); getchar();
-#endif
 
     mbedtls_exit(exit_code);
 }
