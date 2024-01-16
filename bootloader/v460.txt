@@ -1,2 +1,0 @@
-
-CrossWorks for ARM v4.6.0 was used

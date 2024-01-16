@@ -100,7 +100,6 @@ static void OutputBootMessage (void)
    UARTprintf("  Version: v%s\r\n", PROJECT_VER_STRING);
    UARTprintf("  Build  : "__DATE__ " " __TIME__"\r\n");
    UARTprintf("*********************************\r\n");
-   UARTprintf("\r\n");
    
    (void)dValue;
 } /* OutputBootMessage */

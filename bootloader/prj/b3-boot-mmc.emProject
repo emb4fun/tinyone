@@ -45,7 +45,6 @@
     <configuration
       Name="RAM Debug"
       debug_register_definition_file="$(ProjectDir)/AM335x_Register.xml" />
-    <configuration Name="Release" gcc_optimization_level="Level 1" />
     <folder Name="Source Files">
       <configuration Name="Common" filter="c;cpp;cxx;cc;h;s;asm;inc" />
       <folder Name="library">
