@@ -26,7 +26,7 @@
       arm_target_interface_type="JTAG"
       build_intermediate_directory="$(Configuration)"
       build_output_directory="$(Configuration)"
-      c_preprocessor_definitions="am335x;beaglebone;gcc;MMCSD;INITIALIZE_STACKS;STARTUP_FROM_RESET;NO_CACHE_ENABLE;NO_ICACHE_ENABLE;RTOS_TCTS;USE_BOARD_B3;USE_BOARD_B3_CAPE01;BOOT_NAME=&quot;/firmware.bin&quot;"
+      c_preprocessor_definitions="am335x;beaglebone;gcc;MMCSD;INITIALIZE_STACKS;STARTUP_FROM_RESET;NO_CACHE_ENABLE;NO_ICACHE_ENABLE;RTOS_TCTS;USE_BOARD_B3;BOOT_NAME=&quot;/firmware.bin&quot;"
       c_user_include_directories="..\\library\\tal_b3\\board\\b3\\inc;..\\library\\tal_b3\\core\\inc;..\\library\\tal_b3\\cpu\\ti\\am335x\\inc;..\\library\\tal_b3\\cpu\\ti\\am335x\\StarterWare\\include;..\\library\\tal_b3\\cpu\\ti\\am335x\\StarterWare\\include\\armv7a;..\\library\\tal_b3\\cpu\\ti\\am335x\\StarterWare\\include\\armv7a\\am335x;..\\library\\tal_b3\\cpu\\ti\\am335x\\StarterWare\\include\\hw;..\\library\\tal_b3\\cpu\\ti\\am335x\\StarterWare\\bootloader\\include;..\\library\\tal_b3\\cpu\\ti\\am335x\\StarterWare\\bootloader\\include\\armv7a\\am335x;..\\library\\tal_b3\\cpu\\ti\\am335x\\StarterWare\\mmcsdlib\\include;..\\library\\adler32;..\\library\\fatfs\\src;..\\library\\tcts\\inc;..\\inc"
       debug_target_connection="J-Link"
       linker_memory_map_file="$(ProjectDir)/AM335x_MemoryMap.xml"

@@ -260,20 +260,20 @@ void BootAbort (void)
     */      
    for (dLoopCnt = 0; dLoopCnt < 5; dLoopCnt++)
    {
-      tal_LEDSet(TAL_LED_CHANNEL_5_R);
-      tal_LEDSet(TAL_LED_CHANNEL_6_R);
-      tal_LEDSet(TAL_LED_CHANNEL_7_R);
-      tal_LEDSet(TAL_LED_CHANNEL_8_R);
+      tal_LEDSet(TAL_LED_CHANNEL_1);
+      tal_LEDSet(TAL_LED_CHANNEL_2);
+      tal_LEDSet(TAL_LED_CHANNEL_3);
+      tal_LEDSet(TAL_LED_CHANNEL_4);
       
       for (dDelayCnt = 0; dDelayCnt < 1000000; dDelayCnt++)
       {
          dValue++;
       }
       
-      tal_LEDClear(TAL_LED_CHANNEL_5_R);
-      tal_LEDClear(TAL_LED_CHANNEL_6_R);
-      tal_LEDClear(TAL_LED_CHANNEL_7_R);
-      tal_LEDClear(TAL_LED_CHANNEL_8_R);
+      tal_LEDClear(TAL_LED_CHANNEL_1);
+      tal_LEDClear(TAL_LED_CHANNEL_2);
+      tal_LEDClear(TAL_LED_CHANNEL_3);
+      tal_LEDClear(TAL_LED_CHANNEL_4);
       
       for (dDelayCnt = 0; dDelayCnt < 1000000; dDelayCnt++)
       {
