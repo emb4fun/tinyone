@@ -188,6 +188,7 @@
             <file file_name="../common/library/mbedtls/library/oid.c" />
             <file file_name="../common/library/mbedtls/library/pem.c" />
             <file file_name="../common/library/mbedtls/library/pk.c" />
+            <file file_name="../common/library/mbedtls/library/pk_ecc.c" />
             <file file_name="../common/library/mbedtls/library/pk_wrap.c" />
             <file file_name="../common/library/mbedtls/library/pkcs12.c" />
             <file file_name="../common/library/mbedtls/library/pkcs5.c" />

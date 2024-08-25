@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2021-2023 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2021-2024 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -246,7 +246,7 @@ static size_t mbedtls_get_san_list_deep(const mbedtls_write_san_list* sanlist)
     return ret;
 }
 
-int mbedtls_x509write_crt_set_subject_alternative_name (mbedtls_x509write_csr *ctx, const mbedtls_write_san_list* sanlist, uint32_t ip_address)
+int mbedtls_x509write_crt_set_subject_alternative_name_ext (mbedtls_x509write_csr *ctx, const mbedtls_write_san_list* sanlist, uint32_t ip_address)
 {
     int	ret = 0;
     size_t sandeep;
@@ -881,7 +881,7 @@ static int CSRCreate (void)
    sanlist[1].node.hostlen = strlen(sanlist[1].node.host);
    sanlist[1].next = NULL;
 
-   rc = mbedtls_x509write_crt_set_subject_alternative_name(&req, &sanlist[0], ipaddr);
+   rc = mbedtls_x509write_crt_set_subject_alternative_name_ext(&req, &sanlist[0], ipaddr);
    if (rc != 0) GOTO_END(-1);
    
    {  

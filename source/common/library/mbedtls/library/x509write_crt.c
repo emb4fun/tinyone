@@ -16,6 +16,7 @@
 #if defined(MBEDTLS_X509_CRT_WRITE_C)
 
 #include "mbedtls/x509_crt.h"
+#include "x509_internal.h"
 #include "mbedtls/asn1write.h"
 #include "mbedtls/error.h"
 #include "mbedtls/oid.h"
@@ -33,7 +34,7 @@
 #if defined(MBEDTLS_USE_PSA_CRYPTO)
 #include "psa/crypto.h"
 #include "psa_util_internal.h"
-#include "md_psa.h"
+#include "mbedtls/psa_util.h"
 #endif /* MBEDTLS_USE_PSA_CRYPTO */
 
 void mbedtls_x509write_crt_init(mbedtls_x509write_cert *ctx)
@@ -141,13 +142,11 @@ int mbedtls_x509write_crt_set_validity(mbedtls_x509write_cert *ctx,
     return 0;
 }
 
-#if 0 // @@MF
 int mbedtls_x509write_crt_set_subject_alternative_name(mbedtls_x509write_cert *ctx,
                                                        const mbedtls_x509_san_list *san_list)
 {
     return mbedtls_x509_write_set_san_common(&ctx->extensions, san_list);
 }
-#endif
 
 
 int mbedtls_x509write_crt_set_extension(mbedtls_x509write_cert *ctx,
@@ -483,7 +482,7 @@ int mbedtls_x509write_crt_der(mbedtls_x509write_cert *ctx,
      */
     MBEDTLS_ASN1_CHK_ADD(pub_len,
                          mbedtls_pk_write_pubkey_der(ctx->subject_key,
-                                                     buf, c - buf));
+                                                     buf, (size_t) (c - buf)));
     c -= pub_len;
     len += pub_len;
 
