@@ -129,7 +129,8 @@ static mmcsdCtrlInfo ctrlInfo;
 
 
 static DSTATUS DiskStatus = STA_NOINIT;
-static OS_SEMA FSSema;
+
+static OS_SEMA Mutex[FF_VOLUMES + 1];
 
 /*=======================================================================*/
 /*  Definition of all local Procedures                                   */
@@ -652,7 +653,7 @@ static void HSMMCSDControllerSetup(void)
 /*************************************************************************/
 void *ff_memalloc (UINT msize)
 {
-   return(malloc(msize));
+   return(xmalloc(XM_ID_FS, msize));
 } /* ff_memalloc */
 
 /*************************************************************************/
@@ -666,76 +667,69 @@ void *ff_memalloc (UINT msize)
 /*************************************************************************/
 void ff_memfree (void *mblock)
 {
-   free(mblock);
+   xfree(mblock);
 } /* ff_memfree */
 
 #if (FFS_USE_REAL_TIME_OS >= 1)
 /*************************************************************************/
-/*  ff_cre_syncobj                                                       */
+/*  ff_mutex_create                                                      */
 /*                                                                       */
 /*  Create a Synchronization Object                                      */
 /*                                                                       */
 /*  In    : vol,  corresponding logical drive being processed.           */
-/*          sobj, pointer to return the created sync object.             */
 /*  Out   : none                                                         */
 /*  Return: 0 = Error / 1 = OK                                           */
 /*************************************************************************/
-int ff_cre_syncobj (BYTE vol, FF_SYNC_t *sobj)
+int ff_mutex_create (int vol)
 {
-   (void)vol;
+   OS_SemaCreate(&Mutex[vol], 1, 1);
    
-   /* Init the semaphore */
-   OS_SemaCreate(&FSSema, 1, 1);
-   *sobj = &FSSema;
-
    return(1);
-} /* ff_cre_syncobj */
+} /* ff_mutex_create */
 
 /*************************************************************************/
-/*  ff_del_syncobj                                                       */
+/*  ff_mutex_delete                                                      */
 /*                                                                       */
 /*  Delete a Synchronization Object                                      */
 /*                                                                       */
-/*  In    : sobj, sync object tied to the logical drive to be deleted.   */
-/*  Out   : none                                                         */
-/*  Return: 0 = Error / 1 = OK                                           */
-/*************************************************************************/
-int ff_del_syncobj (FF_SYNC_t sobj)
-{
-   OS_SemaDelete(sobj);
-   
-   return(1);
-} /* ff_del_syncobj */
-
-/*************************************************************************/
-/*  ff_req_grant                                                         */
-/*                                                                       */
-/*  Request Grant to Access the Volume                                   */
-/*                                                                       */
-/*  In    : sobj, sync object to wait.                                   */
-/*  Out   : none                                                         */
-/*  Return: 1 = Got a grant / 0 =  Could not get a grant                 */
-/*************************************************************************/
-int ff_req_grant (FF_SYNC_t sobj)
-{
-   OS_SemaWait(sobj, 0);
-   
-   return(1);
-} /* ff_req_grant */
-
-/*************************************************************************/
-/*  ff_rel_grant                                                         */
-/*                                                                       */
-/*  Request Grant to Access the Volume                                   */
-/*                                                                       */
-/*  In    : sobj, Sync object to be signaled.                            */
+/*  In    : vol,  corresponding logical drive being processed.           */
 /*  Out   : none                                                         */
 /*  Return: none                                                         */
 /*************************************************************************/
-void ff_rel_grant (FF_SYNC_t sobj)
+void ff_mutex_delete (int vol)
 {
-   OS_SemaSignal(sobj);
-} /* ff_rel_grant */
+   OS_SemaDelete(&Mutex[vol]);
+} /* ff_mutex_delete */
+
+/*************************************************************************/
+/*  ff_mutex_take                                                        */
+/*                                                                       */
+/*  Request Grant to Access the Volume                                   */
+/*                                                                       */
+/*  In    : vol,  corresponding logical drive being processed.           */
+/*  Out   : none                                                         */
+/*  Return: 1 = Got a grant / 0 =  Could not get a grant                 */
+/*************************************************************************/
+int ff_mutex_take (int vol)
+{
+   OS_SemaWait(&Mutex[vol], OS_WAIT_INFINITE);
+   
+   return(1);
+} /* ff_mutex_take */
+
+/*************************************************************************/
+/*  ff_mutex_give                                                         */
+/*                                                                       */
+/*  Request Grant to Access the Volume                                   */
+/*                                                                       */
+/*  In    : vol,  corresponding logical drive being processed.           */
+/*  Out   : none                                                         */
+/*  Return: none                                                         */
+/*************************************************************************/
+void ff_mutex_give (int vol)
+{
+   OS_SemaSignal(&Mutex[vol]);
+} /* ff_mutex_give */
 #endif /* (FFS_USE_REAL_TIME_OS >= 1) */
 
 /*************************************************************************/
