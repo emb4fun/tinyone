@@ -78,7 +78,7 @@
  * systems, this should be defined to something less resource-consuming.
  */
 #ifndef LWIP_PLATFORM_DIAG
-#define LWIP_PLATFORM_DIAG(x) do {printf x;} while(0)
+#define LWIP_PLATFORM_DIAG(x) do {term_printf x;} while(0)
 #include <stdio.h>
 #include <stdlib.h>
 #endif
@@ -89,7 +89,7 @@
  * systems, this should be defined to something less resource-consuming.
  */
 #ifndef LWIP_PLATFORM_ASSERT
-#define LWIP_PLATFORM_ASSERT(x) do {printf("Assertion \"%s\" failed at line %d in %s\n", \
+#define LWIP_PLATFORM_ASSERT(x) do {term_printf("Assertion \"%s\" failed at line %d in %s\n", \
                                      x, __LINE__, __FILE__); fflush(NULL); abort();} while(0)
 #include <stdio.h>
 #include <stdlib.h>
@@ -382,7 +382,7 @@ extern "C" {
 #define LWIP_PROVIDE_ERRNO
 #endif
 
-/* Use a special, reproducable version of rand() for fuzz tests? */
+/* Use a special, reproducible version of rand() for fuzz tests? */
 #ifdef LWIP_RAND_FOR_FUZZ
 #ifdef LWIP_RAND
 #undef LWIP_RAND

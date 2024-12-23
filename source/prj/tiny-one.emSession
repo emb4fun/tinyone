@@ -66,9 +66,9 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="587" useTextEdit="1" path="../src/main.c" left="0" top="585" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="605" useTextEdit="1" path="../src/main.c" left="0" selected="1" top="585" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="404" useTextEdit="1" path="../common/library/mbedtls/library/pkparse.c" left="0" top="385" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" path="../src/xmempool.c" left="0" selected="1" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" path="../src/xmempool.c" left="0" top="0" codecName="Default"/>
  </Files>
  <EMStudioWindow activeProject="tiny-one" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="RAM Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="D:/Projekte/GitHub/tinyone/source/common/library/mbedtls/library" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

@@ -77,6 +77,7 @@ unsigned long xrand (void);
 #define LWIP_DNS                    1
 
 #define LWIP_DHCP_DOES_ACD_CHECK    0
+#define LWIP_DHCP_DISCOVER_ADD_HOSTNAME   1
 
 
 /*
@@ -100,22 +101,25 @@ unsigned long xrand (void);
 /*    Memory options                                                     */
 /*-----------------------------------------------------------------------*/
 
-/*
- * MEM_LIBC_MALLOC==1: Use malloc/free/realloc provided by your C-library
- * instead of the lwip internal allocator. Can save code size if you
- * already use it.
+/**
+ * MEM_CUSTOM_ALLOCATOR==1: Use malloc/free/realloc provided by a custom
+ * implementation instead of the lwip internal allocator. Can save code size if
+ * you already use it. If enabled, you have to define those functions:
+ *  \#define MEM_CUSTOM_FREE   my_free
+ *  \#define MEM_CUSTOM_MALLOC my_malloc
+ *  \#define MEM_CUSTOM_CALLOC my_calloc
  */
-#define MEM_LIBC_MALLOC             1
+#define MEM_CUSTOM_ALLOCATOR        1
 
-#if (MEM_LIBC_MALLOC >= 1)
+#if (MEM_CUSTOM_ALLOCATOR >= 1)
 #include <stddef.h>
 extern void *lwip_malloc(size_t size);
 extern void *lwip_calloc(size_t n, size_t size);
 extern void  lwip_free(void *ptr);
 
-#define mem_clib_malloc    lwip_malloc
-#define mem_clib_calloc    lwip_calloc
-#define mem_clib_free      lwip_free
+#define MEM_CUSTOM_MALLOC  lwip_malloc
+#define MEM_CUSTOM_CALLOC  lwip_calloc
+#define MEM_CUSTOM_FREE    lwip_free
 #endif
 
 

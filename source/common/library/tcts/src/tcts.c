@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TCTS project (Tiny Cooperative Task Scheduler)
 *
-*  Copyright (c) 2014-2023 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2014-2024 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -131,15 +131,15 @@
  * Idle, statistic and SW-Watchdog stack size
  */
 #if !defined(OS_IDLE_STACK_SIZE)
-#define OS_IDLE_STACK_SIZE    512
+#define OS_IDLE_STACK_SIZE    1024
 #endif
 
 #if !defined(OS_STAT_STACK_SIZE)
-#define OS_STAT_STACK_SIZE    512
+#define OS_STAT_STACK_SIZE    1024
 #endif
 
 #if !defined(OS_SWDOG_STACK_SIZE)
-#define OS_SWWD_STACK_SIZE    512
+#define OS_SWWD_STACK_SIZE    1024
 #endif
 
 /*
@@ -264,7 +264,7 @@ static uint8_t bSWDogEnabled = 0;
 /*
  * Check for Cortex-M style CPU
  */
-#if defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_7M__)
+#if defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_8M_MAINLINE__)
 #include "tcts_cm.c"
 #endif
 
@@ -1347,6 +1347,7 @@ void OS_OutputTaskInfo (void)
    (void)dFree;
    (void)wTime1;
    (void)wTime2;
+   (void)bDog;
          
    TAL_PRINTF("\n");   
 } /* OS_OutputTaskInfo */

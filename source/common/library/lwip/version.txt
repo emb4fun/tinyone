@@ -1,5 +1,5 @@
 
-lwip-STABLE-2_2_0_RELEASE
-(https://git.savannah.nongnu.org/cgit/lwip.git/snapshot/lwip-STABLE-2_2_0_RELEASE.tar.gz)
+lwip-2024-02-19
+(https://git.savannah.nongnu.org/cgit/lwip.git/snapshot/lwip-d0efd9ef7ba08e54b46b1060e2b4629a4907391b.tar.gz)
 
 With some additional changes for DHCP and TLS.

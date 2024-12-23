@@ -145,7 +145,6 @@ typedef enum {
 
 /* DHCP options */
 #define DHCP_OPTION_REQUESTED_IP    50 /* RFC 2132 9.1, requested IP address */
-
 #define DHCP_OPTION_LEASE_TIME      51 /* RFC 2132 9.2, time in seconds, in 4 bytes */
 #define DHCP_OPTION_LEASE_TIME_INFINITY   4294967295
 

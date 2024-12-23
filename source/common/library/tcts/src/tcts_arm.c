@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TCTS project (Tiny Cooperative Task Scheduler)
 *
-*  Copyright (c) 2015 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2015-2024 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Some functionality comes from the Ethernut (www.ethernut.de) project.

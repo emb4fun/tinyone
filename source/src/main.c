@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2019-2023 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2019-2024 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -248,6 +248,7 @@ static void EthernetInit (void)
    {
       /* mDNS will be started later, if DHCP is bound */
       IP_DHCP_CallbackSet(0, DHCPCallbackBound);   
+      //IP_DHCP_TimeoutSet(0, 3000);
       IP_DHCP_Start(0);
    }
    else
