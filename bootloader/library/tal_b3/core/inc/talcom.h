@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2013 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -31,11 +31,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  19.05.2013  mifi  First Version.
 **************************************************************************/
 #if !defined(__TALCOM_H__)
 #define __TALCOM_H__
@@ -121,7 +116,24 @@ typedef struct _tal_com_dcb_
    
    /* HW information from talcpu_com.h */
    TAL_COM_HW        HW;
+   
+#if defined(TAL_COM_PORT_VIRTUAL)   
+   void            *pVCOM;
+#endif
+   
 } TAL_COM_DCB;
+
+typedef struct _tal_com_func_
+{
+   TAL_RESULT (*COMInit) (TAL_COM_DCB *pDCB);
+   TAL_RESULT (*COMIoctl) (TAL_COM_DCB *pDCB, TAL_COM_IOCTL eFunc, uint32_t *pParam);
+   TAL_RESULT (*COMOpen) (TAL_COM_DCB *pDCB);
+   TAL_RESULT (*COMClose) (TAL_COM_DCB *pDCB);
+   TAL_RESULT (*COMStartTx) (TAL_COM_DCB *pDCB);
+   TAL_RESULT (*COMTxIsRunning) (TAL_COM_DCB *pDCB);
+   void       (*COMSendStringASS) (TAL_COM_DCB *pDCB, char *pString);
+
+} TAL_COM_FUNC;
 
 /**************************************************************************
 *  Macro Definitions
@@ -134,6 +146,8 @@ typedef struct _tal_com_dcb_
 **************************************************************************/
 
 void       tal_COMInit (void);
+
+TAL_RESULT tal_COMAdd (TAL_COM_PORT ePort, TAL_COM_FUNC *pFunc);
 
 TAL_RESULT tal_COMInitDCB (TAL_COM_DCB *pDCB, TAL_COM_PORT ePort);
 TAL_RESULT tal_COMIoctl (TAL_COM_DCB *pDCB, TAL_COM_IOCTL eFunc, uint32_t *pParam);
@@ -156,6 +170,7 @@ TAL_RESULT tal_COMSendChar (TAL_COM_DCB *pDCB, char cData);
 TAL_RESULT tal_COMReceiveChar (TAL_COM_DCB *pDCB, uint8_t *pData);
 TAL_RESULT tal_COMReceiveCharWait (TAL_COM_DCB *pDCB, uint8_t *pData, uint32_t dTimeout);
 TAL_RESULT tal_COMReceiveCharTest (TAL_COM_DCB *pDCB);
+TAL_RESULT tal_COMReceiveCharTestWait (TAL_COM_DCB *pDCB, uint32_t dTimeout);
 
 /*************************************************************************/
 
@@ -165,7 +180,6 @@ TAL_RESULT cpu_COMOpen (TAL_COM_DCB *pDCB);
 TAL_RESULT cpu_COMClose (TAL_COM_DCB *pDCB);
 TAL_RESULT cpu_COMStartTx (TAL_COM_DCB *pDCB);
 TAL_RESULT cpu_COMTxIsRunning (TAL_COM_DCB *pDCB);
-
 void       cpu_COMSendStringASS (TAL_COM_DCB *pDCB, char *pString);
 
 #endif /* !__TALCOM_H__ */

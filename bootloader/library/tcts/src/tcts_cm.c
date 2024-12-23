@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TCTS project (Tiny Cooperative Task Scheduler)
 *
-*  Copyright (c) 2015 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2015-2024 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Some functionality comes from the Ethernut (www.ethernut.de) project.
@@ -350,7 +350,7 @@ void OS_Start (void)
     * or Embedded Studio Linker properties. The Main Stack is used
     * for the IRQ and the Process Stack to start the system.
     */
-   if (__stack_process_start__ == __stack_process_end__)
+   if ((uint32_t)__stack_process_start__ == (uint32_t)__stack_process_end__)
    {
       while(1)
       {
@@ -406,6 +406,7 @@ void OS_TaskCreate (OS_TCB *pTCB, OS_TASK Task, void *pParam, int nPrio,
    switch_frame_t *sf;
    call_frame_t   *cf;
    uint32_t        addr;
+   size_t          len;
    
    /* Check 8 byte alignment of the stack */
    addr = (uint32_t)pStack;
@@ -427,7 +428,15 @@ void OS_TaskCreate (OS_TCB *pTCB, OS_TASK Task, void *pParam, int nPrio,
    memset(pStack, 0xCC, wStackSize);
    
    /* Copy name */
-   memcpy(pTCB->Name, pName, sizeof(pTCB->Name) - 1); /*lint !e420*/
+   pTCB->Name[0] = 0;
+   if (pName != NULL)
+   {
+      len = strlen(pName) + 1;
+      if (len < sizeof(pTCB->Name))
+      {
+         memcpy(pTCB->Name, pName, len);
+      }
+   }
    
    /* 
     * -- Do not use the macro SET_TASK_STATE here --

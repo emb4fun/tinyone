@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2018 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2018-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -31,11 +31,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  30.06.2018  mifi  First Version.
 **************************************************************************/
 #if !defined(__TALMEM_H__)
 #define __TALMEM_H__
@@ -58,6 +53,7 @@ typedef enum
    XM_ID_IP   = 2,
    XM_ID_WEB  = 3,
    XM_ID_TLS  = 4,
+   XM_ID_MBOX = 5,
 
    /****************/
    XM_ID_MAX = 16    /* <= Last element, do not use more than 16 */

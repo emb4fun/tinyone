@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2016 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2016-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -31,12 +31,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  14.10.2016  mifi  First Version for the BeagleBone Black (B3).
-*  31.08.2019  Added support for USE_BOARD_B3_HIL01.
 **************************************************************************/
 #if !defined(__TALBOARD_H__) && defined(USE_BOARD_B3)
 #define __TALBOARD_H__
@@ -76,7 +70,11 @@
  */
 
 #if !defined(CPU_TINT2_PRIO)
-#define CPU_TINT2_PRIO        62
+#define CPU_TINT2_PRIO        4     /* SysTick */
+#endif
+
+#if !defined(CPU_ENET_PRIO)
+#define CPU_ENET_PRIO         8
 #endif
 
 #if !defined(CPU_UART0_PRIO)

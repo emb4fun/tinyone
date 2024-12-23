@@ -110,12 +110,12 @@ unsigned int HSMMCSDImageCopy (void)
     */
     if(fresult != FR_OK)
     {
-        UARTPuts("\r\nUnable to open application file\r\n", -1);
+        UARTPuts("Unable to open application file\r\n", -1);
         return 0;
     }
     else
     {
-        UARTPuts("\r\nCopying application image from MMC/SD card to RAM\r\n", -1);
+        UARTPuts("Copying application image from MMC/SD card to RAM\r\n", -1);
         
         destAddr = (unsigned char*)0x80000000;
         entryPoint = 0x80000000;

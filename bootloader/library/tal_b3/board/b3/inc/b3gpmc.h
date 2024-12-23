@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2015 by Michael Fischer (www.emb4fun.de)
+*  Copyright (c) 2015-2023 by Michael Fischer (www.emb4fun.de)
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -29,11 +29,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  15.05.2015  mifi  First Version.
 **************************************************************************/
 #if !defined(__B3GPMC_H__)
 #define __B3GPMC_H__

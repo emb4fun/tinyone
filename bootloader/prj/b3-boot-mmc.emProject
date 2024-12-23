@@ -24,6 +24,7 @@
       arm_supply_absolute_file_path="No"
       arm_target_device_name="AM3359"
       arm_target_interface_type="JTAG"
+      arm_unaligned_access="No"
       build_intermediate_directory="$(Configuration)"
       build_output_directory="$(Configuration)"
       c_preprocessor_definitions="am335x;beaglebone;gcc;MMCSD;INITIALIZE_STACKS;STARTUP_FROM_RESET;NO_CACHE_ENABLE;NO_ICACHE_ENABLE;RTOS_TCTS;USE_BOARD_B3;BOOT_NAME=&quot;/firmware.bin&quot;"
@@ -45,6 +46,7 @@
     <configuration
       Name="RAM Debug"
       debug_register_definition_file="$(ProjectDir)/AM335x_Register.xml" />
+    <configuration Name="Release" gcc_optimization_level="Level 1" />
     <folder Name="Source Files">
       <configuration Name="Common" filter="c;cpp;cxx;cc;h;s;asm;inc" />
       <folder Name="library">

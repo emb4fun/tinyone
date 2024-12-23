@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2016 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2016-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -31,11 +31,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  14.10.2016  mifi  First Version for the BeagleBone Black (B3).
 **************************************************************************/
 #define __TALCPU_C__
 
@@ -81,6 +76,14 @@ typedef struct _rng_
 #define RNG_STATUS_RDY  (1u <<  0)  /* output ready for reading */
 #define RNG_STATUS_ERR  (1u <<  1)  /* FRO shutdown alarm */
 #define RNG_STATUS_CLK  (1u << 31)  /* module functional clock active (no irq) */
+
+
+#define DEBUG_WAIT()    TAL_CPU_DISABLE_ALL_INTS();   \
+                        while(1)                      \
+                        {                             \
+                            __asm("nop");             \
+                        }                             \
+                        TAL_CPU_ENABLE_ALL_INTS(); /*lint !e527*/
 
 /*=======================================================================*/
 /*  Definition of all local Data                                         */
@@ -689,49 +692,55 @@ static void EnableL3L4Uart0Clocks (void)
 /*************************************************************************/
 void tal_CPUInit (void)
 {
-   uint32_t dValue;
+   static uint8_t bInitDone = 0;
+   uint32_t       dValue;
 
-   /*
-    * Here the CrossWorks for ARM code is used for initialize Cache and
-    * MMU. This will be done in Sitara_Startup.s. The "alignment fault"
-    * MUST not enabled.
-    *
-    * The code will look like:
-    *
-    *    Enable the MMU and caches
-    *    mrc p15, 0, r0, c1, c0, 0      Read MMU control register
-    *    orr r0, r0, #0x00001000        Enable ICache
-    *    orr r0, r0, #0x00000005        Enable DCache and MMU
-    *    mcr p15, 0, r0, c1, c0, 0      Write MMU control register
-    */
+   if (0 == bInitDone)
+   {
+      bInitDone = 1;
 
-   /* GPMC initialization */
-   GPMCClkConfig();
-   
-   /* Enable L3, L4 and UART0 clocks */
-   EnableL3L4Uart0Clocks();
-   
-   /* Enable GPIO 0, 1, and 2 clocks */
-   EnableGPIOClocks();
-   
-   /* Initialize the interrupt controller */   
-   IntAINTCInit();
-   
-   /* Initialize the SysTick */
-   dHiResPeriod = SysTickInit();
+      /*
+       * Here the CrossWorks for ARM code is used for initialize Cache and
+       * MMU. This will be done in Sitara_Startup.s. The "alignment fault"
+       * MUST not enabled.
+       *
+       * The code will look like:
+       *
+       *    Enable the MMU and caches
+       *    mrc p15, 0, r0, c1, c0, 0      Read MMU control register
+       *    orr r0, r0, #0x00001000        Enable ICache
+       *    orr r0, r0, #0x00000005        Enable DCache and MMU
+       *    mcr p15, 0, r0, c1, c0, 0      Write MMU control register
+       */
 
-   dValue = tal_CPUGetFrequencyCPU();
-   dValue = tal_CPUGetFrequencyCore(); /*lint !e838*/
-   dValue = tal_CPUGetFrequencyDDR();  /*lint !e838*/
-   dValue = tal_CPUGetFrequencyPeri(); /*lint !e838*/
+      /* GPMC initialization */
+      GPMCClkConfig();
    
-   dValue = tal_CPUGetFrequencyM4();   /*lint !e838*/
-   dValue = tal_CPUGetFrequencyM5();   /*lint !e838*/
-   dValue = tal_CPUGetFrequencyM6();   /*lint !e838*/
+      /* Enable L3, L4 and UART0 clocks */
+      EnableL3L4Uart0Clocks();
+   
+      /* Enable GPIO 0, 1, and 2 clocks */
+      EnableGPIOClocks();
+   
+      /* Initialize the interrupt controller */   
+      IntAINTCInit();
 
-   (void)dValue;
+      /* Initialize the SysTick */
+      dHiResPeriod = SysTickInit();
+
+      dValue = tal_CPUGetFrequencyCPU();
+      dValue = tal_CPUGetFrequencyCore(); /*lint !e838*/
+      dValue = tal_CPUGetFrequencyDDR();  /*lint !e838*/
+      dValue = tal_CPUGetFrequencyPeri(); /*lint !e838*/
    
-   CPUGetRandomData();
+      dValue = tal_CPUGetFrequencyM4();   /*lint !e838*/
+      dValue = tal_CPUGetFrequencyM5();   /*lint !e838*/
+      dValue = tal_CPUGetFrequencyM6();   /*lint !e838*/
+
+      (void)dValue;
+   
+      CPUGetRandomData();
+   }      
 
 } /* tal_CPUInit */
 
@@ -1210,7 +1219,6 @@ void tal_CPURngDeInit (void)
 /*************************************************************************/
 TAL_RESULT tal_CPURngHardwarePoll (uint8_t *pData, uint32_t dSize)
 {
-   int      i;
    uint64_t Random;
    
    while (dSize)
@@ -1232,9 +1240,10 @@ TAL_RESULT tal_CPURngHardwarePoll (uint8_t *pData, uint32_t dSize)
       }
       else
       {
-         for(i = 0; i < (int)dSize; i++)
+         while (dSize)
          {
             *pData++ = (Random & 0xFF); Random = Random >> 8;
+            dSize--;
          }
       }
    }

@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2013 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -31,11 +31,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  19.05.2013  mifi  First Version.
 **************************************************************************/
 #define __TALCOM_C__
 
@@ -49,13 +44,167 @@
 /*  All Structures and Common Constants                                  */
 /*=======================================================================*/
 
+/*
+ * If virtual com port support is not needed
+ */
+#if !defined(TAL_COM_PORT_VIRTUAL)
+#define COMInit            cpu_COMInit
+#define COMIoctl           cpu_COMIoctl
+#define COMOpen            cpu_COMOpen
+#define COMClose           cpu_COMClose
+#define COMStartTx         cpu_COMStartTx
+#define COMTxIsRunning     cpu_COMTxIsRunning
+#define COMSendStringASS   cpu_COMSendStringASS
+#endif 
+
 /*=======================================================================*/
 /*  Definition of all local Data                                         */
 /*=======================================================================*/
 
+#if defined(TAL_COM_PORT_VIRTUAL)
+static TAL_COM_FUNC FuncTable[TAL_COM_PORT_MAX];
+#endif
+
 /*=======================================================================*/
 /*  Definition of all local Procedures                                   */
 /*=======================================================================*/
+
+#if defined(TAL_COM_PORT_VIRTUAL)
+
+/*************************************************************************/
+/*  Virtual com port support                                             */
+/*************************************************************************/
+static TAL_RESULT COMInit (TAL_COM_DCB *pDCB)
+{
+   TAL_RESULT Error = TAL_ERR_NULL_POINTER;
+   
+   if ((int)pDCB->ePort < (int)TAL_COM_PORT_V1)
+   {
+      Error = cpu_COMInit(pDCB);
+   }
+   else
+   {
+      if ((pDCB->ePort < TAL_COM_PORT_MAX) && (FuncTable[pDCB->ePort].COMInit != NULL))
+      {
+         Error = FuncTable[pDCB->ePort].COMInit(pDCB);
+      }   
+   }
+
+   return(Error);   
+} /* COMInit */
+
+static TAL_RESULT COMIoctl (TAL_COM_DCB *pDCB, TAL_COM_IOCTL eFunc, uint32_t *pParam)
+{
+   TAL_RESULT Error = TAL_ERR_NULL_POINTER;
+   
+   if ((int)pDCB->ePort < (int)TAL_COM_PORT_V1)
+   {
+      Error = cpu_COMIoctl(pDCB, eFunc, pParam);
+   }
+   else
+   {
+      if ((pDCB->ePort < TAL_COM_PORT_MAX) && (FuncTable[pDCB->ePort].COMIoctl != NULL))
+      {
+         Error = FuncTable[pDCB->ePort].COMIoctl(pDCB, eFunc, pParam);
+      }         
+   }
+
+   return(Error);   
+} /* COMIoctl */
+
+static TAL_RESULT COMOpen (TAL_COM_DCB *pDCB)
+{
+   TAL_RESULT Error = TAL_ERR_NULL_POINTER;
+   
+   if ((int)pDCB->ePort < (int)TAL_COM_PORT_V1)
+   {
+      Error = cpu_COMOpen(pDCB);
+   }
+   else
+   {
+      if ((pDCB->ePort < TAL_COM_PORT_MAX) && (FuncTable[pDCB->ePort].COMOpen != NULL))
+      {
+         Error = FuncTable[pDCB->ePort].COMOpen(pDCB);
+      }   
+   }
+
+   return(Error);   
+} /* COMOpen */
+
+static TAL_RESULT COMClose (TAL_COM_DCB *pDCB)
+{
+   TAL_RESULT Error = TAL_ERR_NULL_POINTER;
+   
+   if ((int)pDCB->ePort < (int)TAL_COM_PORT_V1)
+   {
+      Error = cpu_COMClose(pDCB);
+   }
+   else
+   {
+      if ((pDCB->ePort < TAL_COM_PORT_MAX) && (FuncTable[pDCB->ePort].COMClose != NULL))
+      {
+         Error = FuncTable[pDCB->ePort].COMClose(pDCB);
+      }         
+   }
+
+   return(Error);   
+} /* COMClose */
+
+static TAL_RESULT COMStartTx (TAL_COM_DCB *pDCB)
+{
+   TAL_RESULT Error = TAL_ERR_NULL_POINTER;
+   
+   if ((int)pDCB->ePort < (int)TAL_COM_PORT_V1)
+   {
+      Error = cpu_COMStartTx(pDCB);
+   }
+   else
+   {
+      if ((pDCB->ePort < TAL_COM_PORT_MAX) && (FuncTable[pDCB->ePort].COMStartTx != NULL))
+      {
+         Error = FuncTable[pDCB->ePort].COMStartTx(pDCB);
+      }         
+   }
+
+   return(Error);   
+} /* COMStartTx */
+
+static TAL_RESULT COMTxIsRunning (TAL_COM_DCB *pDCB)
+{
+   TAL_RESULT Error = TAL_ERR_NULL_POINTER;
+   
+   if ((int)pDCB->ePort < (int)TAL_COM_PORT_V1)
+   {
+      Error = cpu_COMTxIsRunning(pDCB);
+   }
+   else
+   {
+      if ((pDCB->ePort < TAL_COM_PORT_MAX) && (FuncTable[pDCB->ePort].COMTxIsRunning != NULL))
+      {
+         Error = FuncTable[pDCB->ePort].COMTxIsRunning(pDCB);
+      }         
+   }
+
+   return(Error);   
+} /* COMTxIsRunning */
+
+static void COMSendStringASS (TAL_COM_DCB *pDCB, char *pString)
+{
+   if ((int)pDCB->ePort < (int)TAL_COM_PORT_V1)
+   {
+      cpu_COMSendStringASS(pDCB, pString);
+   }
+   else
+   {
+      if ((pDCB->ePort < TAL_COM_PORT_MAX) && (FuncTable[pDCB->ePort].COMSendStringASS != NULL))
+      {
+         FuncTable[pDCB->ePort].COMSendStringASS(pDCB, pString);
+      }         
+   }
+
+} /* COMSendStringASS */ 
+
+#endif /* TAL_COM_PORT_VIRTUAL */
 
 /*************************************************************************/
 /*  GetRxData                                                            */
@@ -112,8 +261,51 @@ static TAL_RESULT GetRxData (TAL_COM_DCB *pDCB, uint8_t *pData)
 /*************************************************************************/
 void tal_COMInit (void)
 {
-   /* Nothing to do here */
+#if defined(TAL_COM_PORT_VIRTUAL)
+   memset(FuncTable, 0, sizeof(FuncTable));
+#endif
+
 } /* tal_COMInit */
+
+#if defined(TAL_COM_PORT_VIRTUAL)
+/*************************************************************************/
+/*  tal_COMAdd                                                           */
+/*                                                                       */
+/*  Add the COM functionality for the given port.                        */
+/*                                                                       */
+/*  In    : ePort, pFunc                                                 */
+/*  Out   : none                                                         */
+/*  Return: TAL_OK / error cause                                         */
+/*************************************************************************/
+TAL_RESULT tal_COMAdd (TAL_COM_PORT ePort, TAL_COM_FUNC *pFunc)
+{
+   TAL_RESULT Error = TAL_ERROR;
+   
+   if ((ePort < TAL_COM_PORT_MAX) && (pFunc != NULL))
+   {
+      if( (NULL != pFunc->COMInit)          &&
+          (NULL != pFunc->COMIoctl)         &&
+          (NULL != pFunc->COMOpen)          &&
+          (NULL != pFunc->COMClose)         &&
+          (NULL != pFunc->COMStartTx)       &&
+          (NULL != pFunc->COMTxIsRunning)   &&
+          (NULL != pFunc->COMSendStringASS) )
+      {
+         Error = TAL_OK;
+         
+         FuncTable[ePort].COMInit          = pFunc->COMInit;
+         FuncTable[ePort].COMIoctl         = pFunc->COMIoctl;
+         FuncTable[ePort].COMOpen          = pFunc->COMOpen;
+         FuncTable[ePort].COMClose         = pFunc->COMClose;
+         FuncTable[ePort].COMStartTx       = pFunc->COMStartTx;
+         FuncTable[ePort].COMTxIsRunning   = pFunc->COMTxIsRunning;
+         FuncTable[ePort].COMSendStringASS = pFunc->COMSendStringASS;
+      }          
+   }
+
+   return(Error);
+} /* tal_COMAdd */
+#endif /* defined(TAL_COM_PORT_VIRTUAL) */
 
 /*************************************************************************/
 /*  tal_COMInitDCB                                                       */
@@ -138,7 +330,7 @@ TAL_RESULT tal_COMInitDCB (TAL_COM_DCB *pDCB, TAL_COM_PORT ePort)
       pDCB->ePort  = ePort;
       
       /* Init the COM hardware layer */
-      Error = cpu_COMInit(pDCB);
+      Error = COMInit(pDCB);
       if (TAL_OK == Error)
       {
          OS_RES_CREATE(&pDCB->Sema);
@@ -174,7 +366,7 @@ TAL_RESULT tal_COMIoctl (TAL_COM_DCB *pDCB, TAL_COM_IOCTL eFunc, uint32_t *pPara
    {
       OS_RES_LOCK(&pDCB->Sema);
       
-      Error = cpu_COMIoctl(pDCB, eFunc, pParam);
+      Error = COMIoctl(pDCB, eFunc, pParam);
    
       OS_RES_FREE(&pDCB->Sema);
    }
@@ -316,7 +508,7 @@ TAL_RESULT tal_COMOpen (TAL_COM_DCB *pDCB, TAL_COM_SETTINGS *pSettings)
          /* Copy settings */
          pDCB->Settings = *pSettings;
          
-         Error = cpu_COMOpen(pDCB);
+         Error = COMOpen(pDCB);
          if (TAL_OK == Error)
          {
             pDCB->bIsOpen = TAL_TRUE;
@@ -356,7 +548,7 @@ TAL_RESULT tal_COMClose (TAL_COM_DCB *pDCB)
       {
          OS_RES_LOCK(&pDCB->Sema);
          
-         Error = cpu_COMClose(pDCB);
+         Error = COMClose(pDCB);
          if (TAL_OK == Error)
          {
             pDCB->bIsOpen = TAL_FALSE;
@@ -378,6 +570,10 @@ TAL_RESULT tal_COMClose (TAL_COM_DCB *pDCB)
 /*                                                                       */
 /*  Send a block of data.                                                */
 /*                                                                       */
+/*  There is currently an issue with the NEORV32. If the data is output  */
+/*  under interrupt control, it could be possible that some data are     */
+/*  lost.                                                                */
+/*                                                                       */
 /*  In    : pDCB, pData, wSize                                           */
 /*  Out   : none                                                         */
 /*  Return: TAL_OK / error cause                                         */
@@ -385,7 +581,7 @@ TAL_RESULT tal_COMClose (TAL_COM_DCB *pDCB)
 TAL_RESULT tal_COMSendBlock (TAL_COM_DCB *pDCB, uint8_t *pData, uint16_t wSize)
 {
    TAL_RESULT Error = TAL_ERR_PARAMETER;
-   
+
    /* Check for valid conditions */
    if ( (pDCB          != NULL)               &&
         (pData         != NULL)               &&
@@ -396,49 +592,125 @@ TAL_RESULT tal_COMSendBlock (TAL_COM_DCB *pDCB, uint8_t *pData, uint16_t wSize)
       if (TAL_TRUE == pDCB->bIsOpen)
       {
          OS_RES_LOCK(&pDCB->TxSema);
-      
+
+#if defined(__NEORV32_FAMILY)
+         /*
+          * Use polling instead of interrupt control
+          */
+         neorv32_uart_t *UARTx;
+         UARTx = (neorv32_uart_t*)pDCB->HW.dBaseAddress;
+         while (wSize)
+         {
+            neorv32_uart_putc(UARTx, *pData);
+            pData++;
+            wSize--;
+         }
+#else
+#if 0
          do
          {
             /* Add data to the ring buffer */
             Error = tal_MISCRingAdd(&pDCB->TxRing, pData);
             if (Error != TAL_OK)
             {
-               /* 
+               /*
                 * The data was not added to the ring buffer!
                 *
-                * Ring buffer is full, wait for an free entry. 
+                * Ring buffer is full, wait for an free entry.
                 */
                while ( 0 == tal_MISCRingGetFreeCount(&pDCB->TxRing) )
                {
                   /* Check if the transmitter is still runing */
-                  if (TAL_ERROR == cpu_COMTxIsRunning(pDCB))
+                  if (TAL_ERROR == COMTxIsRunning(pDCB))
                   {
                      /* No, start the transmitter */
-                     cpu_COMStartTx(pDCB);
-                  }                     
+                     COMStartTx(pDCB);
+                  }
                   OS_TimeDly(1);
                }
-               
+
                /*
                 * A free entry is available, we can add
                 * the data to the ring buffer now.
                 */
                tal_MISCRingAdd(&pDCB->TxRing, pData);
             }
-            
-            /* 
+
+            /*
              * The data was added, switch to the next one
              * and start the transmitter.
              */
             pData++;
             wSize--;
 
-            cpu_COMStartTx(pDCB);
+            COMStartTx(pDCB);
          }
          while (wSize != 0);
-         
+#else
+         uint16_t wFreeCount = tal_MISCRingGetFreeCount(&pDCB->TxRing);
+
+         /* Check if we can put all data in the ring buffer */
+         if (wFreeCount >= wSize)
+         {
+            /* Put all data to send into the ring buffer */
+            while (wSize)
+            {
+               tal_MISCRingAdd(&pDCB->TxRing, pData);
+               pData++;
+               wSize--;
+            }
+            /* Start Tx if needed */
+            COMStartTx(pDCB);
+         }
+         else
+         {
+            /* Ups, no space for all data, add byte by byte into the ring buffer */
+            do
+            {
+               /* Add data to the ring buffer */
+               Error = tal_MISCRingAdd(&pDCB->TxRing, pData);
+               if (Error != TAL_OK)
+               {
+                  /*
+                   * The data was not added to the ring buffer!
+                   *
+                   * Ring buffer is full, wait for an free entry.
+                   */
+                  while ( 0 == tal_MISCRingGetFreeCount(&pDCB->TxRing) )
+                  {
+                     /* Check if the transmitter is still runing */
+                     if (TAL_ERROR == COMTxIsRunning(pDCB))
+                     {
+                        /* No, start the transmitter */
+                        COMStartTx(pDCB);
+                     }
+                     OS_TimeDly(1);
+                  }
+
+                  /*
+                   * A free entry is available, we can add
+                   * the data to the ring buffer now.
+                   */
+                  tal_MISCRingAdd(&pDCB->TxRing, pData);
+               }
+
+               /*
+                * The data was added, switch to the next one
+                * and start the transmitter.
+                */
+               pData++;
+               wSize--;
+
+               /* Start Tx if needed */
+               COMStartTx(pDCB);
+            }
+            while (wSize != 0);
+         } /* end if (wFreeCount >= wSize) */
+#endif
+#endif /* #if defined(__NEORV32_FAMILY) */
+
          OS_RES_FREE(&pDCB->TxSema);
-         
+
          Error = TAL_OK;
       }
       else
@@ -446,8 +718,8 @@ TAL_RESULT tal_COMSendBlock (TAL_COM_DCB *pDCB, uint8_t *pData, uint16_t wSize)
          Error = TAL_ERR_COM_NOT_OPEN;
       }
    }
-   
-   return(Error);        
+
+   return(Error);
 } /* tal_COMSendBlock */
 
 /*************************************************************************/
@@ -622,6 +894,64 @@ TAL_RESULT tal_COMReceiveCharTest (TAL_COM_DCB *pDCB)
 } /* tal_COMReceiveCharTest */
 
 /*************************************************************************/
+/*  tal_COMReceiveCharTestWait                                           */
+/*                                                                       */
+/*  Test if a received char is available, but with timeout.              */
+/*                                                                       */
+/*  In    : pDCB                                                         */
+/*  Out   : none                                                         */
+/*  Return: TAL_OK / error cause                                         */
+/*************************************************************************/
+TAL_RESULT tal_COMReceiveCharTestWait (TAL_COM_DCB *pDCB, uint32_t dTimeoutMs)
+{
+   TAL_RESULT Error = TAL_ERROR;
+   uint16_t  wCount;
+   int        rc;
+   
+   /* Check for valid conditions */
+   if ( (pDCB          != NULL)               &&
+        (TAL_TRUE      == pDCB->bDCBInitDone) &&
+        (TAL_MAGIC_COM == pDCB->eMagic)       )
+   {
+      if (TAL_TRUE == pDCB->bIsOpen)
+      {
+         OS_RES_LOCK(&pDCB->Sema);
+         
+         wCount = tal_MISCRingGetUseCount(&pDCB->RxRing);
+         if (wCount != 0)
+         {
+            Error = TAL_OK;
+         }
+         else
+         {
+            /* Data is not available, wait for it */
+            rc = OS_SemaWait(&pDCB->RxRdySema, dTimeoutMs);
+            if (OS_RC_OK == rc)
+            {
+               /* Data is available */
+
+               /* 
+                * We have consumed the semaphore but does not read 
+                * any data therefore we must signal the semaphore again.
+                */
+               OS_SemaSignal(&pDCB->RxRdySema);
+
+               Error = TAL_OK;
+            }
+         }
+
+         OS_RES_FREE(&pDCB->Sema);
+      }
+      else
+      {
+         Error = TAL_ERR_COM_NOT_OPEN;
+      }
+   }
+   
+   return(Error);        
+} /* tal_COMReceiveCharTestWait */
+
+/*************************************************************************/
 /*  tal_COMSendStringASS                                                 */
 /*                                                                       */
 /*  Send a String.                                                       */
@@ -632,7 +962,7 @@ TAL_RESULT tal_COMReceiveCharTest (TAL_COM_DCB *pDCB)
 /*************************************************************************/
 void tal_COMSendStringASS (TAL_COM_DCB *pDCB, char *pString)
 {
-   cpu_COMSendStringASS(pDCB, pString);
+   COMSendStringASS(pDCB, pString);
 } /* tal_COMSendString */
 
 /*** EOF ***/

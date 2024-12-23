@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2018 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2018-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -31,11 +31,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  30.06.2018  mifi  First Version.
 **************************************************************************/
 #define __TALMEM_C__
 
@@ -66,13 +61,6 @@ extern uint32_t TAL_HEAP_MEM2_START;
 extern uint32_t TAL_HEAP_MEM2_END;
 #endif
 
-
-#if !defined(TAL_MEM_SUPPORT_BIG_MEM)
-#define SUPPORT_BIG_MEM    0
-#else
-#define SUPPORT_BIG_MEM    TAL_MEM_SUPPORT_BIG_MEM
-#endif
-
 /*=======================================================================*/
 /*  All Structures and Common Constants                                  */
 /*=======================================================================*/
@@ -84,12 +72,8 @@ typedef struct _mem_hdr_
 {
    struct _mem_hdr_ *pNext;
    uint32_t          dSize;
-   
-#if (SUPPORT_BIG_MEM >= 1)
    uint32_t          dListID;
-   uint32_t          dSpare;
-#endif
-   
+   uint32_t          dObject;
 } mem_hdr_t;   
 
 
@@ -107,16 +91,11 @@ typedef struct _mem_ctx_
 
 
 #define MEM_LIST_COUNT  16
-#define MEM_MAX_SIZE    0x0FFFFFFF
 
-#define GET_SIZE(_a)    (_a & MEM_MAX_SIZE)
-
-
-#if (SUPPORT_BIG_MEM == 0)
-#define MEM_ALIGN       8
-#else
 #define MEM_ALIGN       16
-#endif
+
+#define OBJ_IS_FREE     0x00123456
+#define OBJ_IN_USE      0xFFEEDDCC
 
 /*=======================================================================*/
 /*  Definition of all local Data                                         */
@@ -144,38 +123,33 @@ static void *MEMMalloc (tal_mem_id ID, uint32_t dSize)
    mem_hdr_t *pFreelist = MemList[ID].pFreelist;
    void      *p = NULL;
    mem_hdr_t *pPrev;
-   mem_hdr_t *pMem;
+   mem_hdr_t *pMem = NULL;
    mem_hdr_t *pTmp;
-   uint32_t   dListID;
+
+   TAL_CPU_DISABLE_ALL_INTS();
    
    if (pFreelist != NULL)
    {
-      /* Align size to 8/16 */
-#if (SUPPORT_BIG_MEM == 0)
-      dSize  = (dSize + 7) & ~7;
-      dSize &= MEM_MAX_SIZE;
-#else
+      /* Align size to 16 */
       dSize  = (dSize + 15) & ~15;
-#endif      
       
       /* Added header info */
       dSize += sizeof(mem_hdr_t);
    
-      /* Check first element */
-      if (pFreelist->dSize >= dSize)
+      /* Check first element for the same size */
+      if (pFreelist->dSize == dSize)
+      {
+         pMem = pFreelist;
+         pFreelist = pFreelist->pNext;
+      }
+      /* Check first element with bigger size */
+      else if (pFreelist->dSize > (dSize + sizeof(mem_hdr_t)))
       {
          pMem = pFreelist;
          
-         if (pFreelist->dSize > dSize)
-         {
-            pFreelist = (mem_hdr_t*)((uint32_t)pFreelist + dSize);
-            pFreelist->pNext = pMem->pNext;
-            pFreelist->dSize = pMem->dSize - dSize;
-         }
-         else
-         {
-            pFreelist = pFreelist->pNext;
-         }   
+         pFreelist = (mem_hdr_t*)((uint32_t)pFreelist + dSize);
+         pFreelist->pNext = pMem->pNext;
+         pFreelist->dSize = pMem->dSize - dSize;
       }
       else
       {
@@ -186,13 +160,15 @@ static void *MEMMalloc (tal_mem_id ID, uint32_t dSize)
          
          while (pMem != NULL)
          {
+            /* Check for same size */
             if (pMem->dSize == dSize)
             {
                pPrev->pNext = pMem->pNext;
                break;
             }
             
-            if (pMem->dSize > dSize)
+            /* Check for bigger size */
+            if (pMem->dSize > (dSize + sizeof(mem_hdr_t)))
             {
                pTmp = (mem_hdr_t*)((uint32_t)pMem + dSize);
                pTmp->pNext = pMem->pNext;
@@ -233,15 +209,11 @@ static void *MEMMalloc (tal_mem_id ID, uint32_t dSize)
    {
       pMem = (mem_hdr_t*)((uint32_t)p - sizeof(mem_hdr_t));   
       
-#if (SUPPORT_BIG_MEM == 0)
-      dListID = ((uint32_t)ID << 28);
-      pMem->dSize |= dListID;
-#else
-      (void)dListID; /*lint !e530*/
       pMem->dListID = (uint32_t)ID;
-      pMem->dSpare  = 0;
-#endif      
+      pMem->dObject = OBJ_IN_USE;
    }
+
+   TAL_CPU_ENABLE_ALL_INTS();
    
    return(p);
 } /* MEMMalloc */
@@ -286,17 +258,32 @@ static void MEMFree (void *pBuffer)
    mem_hdr_t *pMem;
    uint32_t   dListID;
 
+   TAL_CPU_DISABLE_ALL_INTS();
+
    if (pBuffer != NULL)
    {
+      /* Get memory header */
       pMem = (mem_hdr_t*)((uint32_t)pBuffer - sizeof(mem_hdr_t));
 
-      /* Get list ID  */
-#if (SUPPORT_BIG_MEM == 0)
-      dListID      = ((pMem->dSize & 0xF0000000) >> 28);
-      pMem->dSize &= MEM_MAX_SIZE;
-#else
-      dListID      = pMem->dListID;
-#endif      
+      /* Check for a valid memory object */
+      if (pMem->dObject != OBJ_IN_USE)
+      {
+         /* This is not a memory object which is in used */
+         goto MEMFreeEnd;  /*lint !e801*/
+         //return;
+      }
+
+      /* Get list ID */
+      dListID = pMem->dListID;
+      if (dListID >= MEM_LIST_COUNT)
+      {
+         /* Wrong list ID */
+         goto MEMFreeEnd;  /*lint !e801*/
+         //return;
+      }
+
+      /* Set free marker */   
+      pMem->dObject = OBJ_IS_FREE;
 
       pFreelist = MemList[dListID].pFreelist;
 
@@ -386,6 +373,10 @@ static void MEMFree (void *pBuffer)
       MemList[dListID].pFreelist = pFreelist;
 
    } /* end if (pBuffer != NULL) */
+   
+MEMFreeEnd:   
+   
+   TAL_CPU_ENABLE_ALL_INTS();
 
 } /* MEMFree */
 
@@ -403,9 +394,8 @@ static void MEMAdd (tal_mem_id ID, void *pBuffer, uint32_t dSize)
    uint32_t   dAddress;
    uint32_t   dRest;
    mem_hdr_t *pMem;
-   uint32_t   dListID;
    
-   /* Align address to 8/16 */
+   /* Align address to 16 */
    dAddress  = (uint32_t)pBuffer;
    dRest     = dAddress % MEM_ALIGN;
    
@@ -418,24 +408,21 @@ static void MEMAdd (tal_mem_id ID, void *pBuffer, uint32_t dSize)
    
    if (dSize > 32)
    {
-      /* Align size to 8/16 */
+      /* Align size to 16 */
       dRest  = dSize % MEM_ALIGN;
       dSize -= dRest;
+
+      /* Clear data first */
+      memset((void*)dAddress, 0x00, dSize);
 
       MemList[ID].dSize += dSize;
    
       pMem = (mem_hdr_t*)dAddress;
       pMem->pNext = NULL;
       
-#if (SUPPORT_BIG_MEM == 0)
-      dListID = ((uint32_t)ID << 28);
-      pMem->dSize   = dListID | dSize;
-#else
-      (void)dListID; /*lint !e530*/
       pMem->dSize   = dSize;
       pMem->dListID = (uint32_t)ID;
-      pMem->dSpare  = 0;
-#endif      
+      pMem->dObject = OBJ_IN_USE;
       
       pMem = (mem_hdr_t*)((uint32_t)pMem + sizeof(mem_hdr_t));
 
@@ -470,13 +457,7 @@ void tal_MEMInit (void)
     */   
     
    /*lint -save -e506 -e774 */
-#if (SUPPORT_BIG_MEM == 0)
-   if (sizeof(mem_hdr_t) != 8) return;
-#endif          
-   
-#if (SUPPORT_BIG_MEM >= 1)
    if (sizeof(mem_hdr_t) != 16) return;
-#endif
    /*lint -restore */ 
    
    /* 
@@ -488,11 +469,6 @@ void tal_MEMInit (void)
    dSize = ((uint32_t)(&TAL_HEAP_MEM1_END) - (uint32_t)(&TAL_HEAP_MEM1_START)) - 1;
    if (dSize != (uint32_t)-1)
    {
-#if (SUPPORT_BIG_MEM == 0)
-      /* Sepcial check, for B3 */
-      if (dSize > 0x0FFFFFFF) dSize = 0x0FFFFFFF;
-#endif      
-   
       MEMAdd(XM_ID_HEAP, (uint8_t*)dAddr, dSize);
    }
 #endif
@@ -505,10 +481,6 @@ void tal_MEMInit (void)
    /* Get memory pointer */ 
    dAddr = (uint32_t)&TAL_HEAP_MEM2_START;
    dSize = ((uint32_t)(&TAL_HEAP_MEM2_END) - (uint32_t)(&TAL_HEAP_MEM2_START)) - 1;
-
-#if (SUPPORT_BIG_MEM == 0)
-      if (dSize > 0x0FFFFFFF) dSize = 0x0FFFFFFF;
-#endif      
    
    MEMAdd(XM_ID_HEAP, (uint8_t*)dAddr, dSize);
 #endif   
@@ -517,6 +489,9 @@ void tal_MEMInit (void)
    MemList[XM_ID_HEAP].UsedRawMemory = 0;
 
    OS_SemaCreate(&Sema, 1, 1);
+   
+   (void)dAddr;
+   (void)dSize;
 
 } /* tal_MEMInit */
 

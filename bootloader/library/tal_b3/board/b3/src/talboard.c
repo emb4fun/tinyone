@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2016 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2016-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -31,11 +31,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  14.10.2016  mifi  First Version for the BeagleBone Black (B3).
 **************************************************************************/
 #if defined(USE_BOARD_B3)
 #define __TALBOARD_C__
@@ -45,6 +40,11 @@
 /*=======================================================================*/
 #include <string.h>
 #include "tal.h"
+
+
+#if defined(TAL_ENABLE_ETH)
+#include "ipstack_conf.h"
+#endif
 
 #include "soc_AM335x.h"
 #include "hw_control_AM335x.h"
@@ -249,6 +249,7 @@ TAL_RESULT tal_BoardEnableCAN2 (void)
    return(TAL_ERR_CAN_PORT_NOHW);
 } /* tal_BoardEnableCAN2 */
 
+#if defined(TAL_ENABLE_ETH)
 /*************************************************************************/
 /*  tal_BoardGetMACAddress                                               */
 /*                                                                       */
@@ -263,20 +264,27 @@ TAL_RESULT tal_BoardGetMACAddress (uint8_t *pAddress)
 {
    TAL_RESULT      Error         = TAL_ERROR;
    static uint8_t bMACRetrieved  = TAL_FALSE;
-   static uint8_t  MACAddress[6] = {0x00,0x11,0x22,0x33,0x44,0x55};
+   static uint8_t  MACAddress[6] = IP_DEFAULT_MAC_ADDR;
    
+#if !defined(USE_IP_DEFAULT_MAC_ADDR)
    if (TAL_FALSE == bMACRetrieved)
    {
       bMACRetrieved = TAL_TRUE;
       
+      /* Get the MAC address */
       cpsw_GetMACAddress(MACAddress);
    }
+#else
+  (void)bMACRetrieved;
+#endif
+
    
    /* Return MAC address */
    memcpy(pAddress, MACAddress, 6);
    
    return(Error);
 } /* tal_BoardGetMACAddress */
+#endif
 
 /*************************************************************************/
 /*  tal_BoardReset        (examples\beaglebone\watchdogTimer\wdtReset.c) */

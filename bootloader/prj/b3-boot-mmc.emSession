@@ -69,7 +69,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="36" y="275" useTextEdit="1" path="../src/main.c" left="0" selected="1" top="252" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="180" useTextEdit="1" path="../src/main.c" left="0" selected="1" top="160" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="31" y="293" useTextEdit="1" path="../library/tal_b3/board/b3/src/talled.c" left="0" top="288" codecName="Default"/>
  </Files>
  <EMStudioWindow activeProject="b3-boot-mmc" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="RAM Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3199"/>

@@ -26,6 +26,7 @@
       arm_supply_absolute_file_path="No"
       arm_target_device_name="AM3359"
       arm_target_interface_type="JTAG"
+      arm_unaligned_access="No"
       build_intermediate_directory="$(Configuration)"
       build_output_directory="$(Configuration)"
       c_additional_options="-Wno-trigraphs"

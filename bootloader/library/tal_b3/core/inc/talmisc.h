@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2013 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -31,11 +31,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  19.05.2013  mifi  First Version.
 **************************************************************************/
 #if !defined(__TALMISC_H__)
 #define __TALMISC_H__
@@ -69,7 +64,9 @@ typedef struct _tal_misc_ring_
  * https://gcc.gnu.org/onlinedocs/cpp/Stringification.html
  */
 #define XSTR(s)   _STR(s)
+#if !defined(_STR)
 #define _STR(s)   #s
+#endif
 
 /**************************************************************************
 *  Functions Definitions

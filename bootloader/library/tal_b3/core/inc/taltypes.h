@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2013 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -31,12 +31,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  19.05.2013  mifi  First Version.
-*  01.02.2015  mifi  Change TAL_RESULT from uint16_t to enum.
 **************************************************************************/
 #if !defined(__TALTYPES_H__)
 #define __TALTYPES_H__

@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2015 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2015-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -31,11 +31,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  15.05.2015  mifi  First Version.
 **************************************************************************/
 #define __B3GPMC_C__
 
@@ -44,7 +39,7 @@
 /*=======================================================================*/
 #include <stdint.h>
 #include "tal.h"
-#include "cpu_avm.h"
+//#include "cpu_avm.h"
 
 #include "soc_AM335x.h"
 #include "hw_control_AM335x.h"

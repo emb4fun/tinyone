@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2013 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -31,16 +31,11 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  19.05.2013  mifi  First Version.
 **************************************************************************/
 #if !defined(__TAL_H__)
 #define __TAL_H__
 
-#if !defined(__CROSSWORKS_ARM) && !defined(__SES_ARM)
+#if !defined(__CROSSWORKS_ARM) && !defined(__SES_ARM) && !defined(__SES_RISCV)
    Error: Wrong compiler ist used;
 #endif 
 
@@ -72,7 +67,7 @@
  */
 #define TAL_CORE_VER_MAJOR    0
 #define TAL_CORE_VER_MINOR_1  0
-#define TAL_CORE_VER_MINOR_2  1
+#define TAL_CORE_VER_MINOR_2  2
 
 #define TAL_CORE_VER_NUMBER   (((uint32_t)TAL_CORE_VER_MAJOR   << 16) | \
                                ((uint32_t)TAL_CORE_VER_MINOR_1 <<  8) | \

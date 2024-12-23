@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TCTS project (Tiny Cooperative Task Scheduler)
 *
-*  Copyright (c) 2014 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2014-2024 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -66,10 +66,17 @@
 *                    - OSMutexWait
 *                    Change version to v0.18.1
 *  26.05.2020  mifi  Change API from OSxx to OS_xx.
-*                    Change version to v0.20.0.
+*                    Change version to v0.19.0.
+*  24.02.2021  mifi  Change version to v0.20.0.
+*                    Added Software Watchdog support.
+*  25.02.2021  mifi  Change version to v0.21.0.
+*                    Added OS_TaskWakeup and OS_TaskIsSleeping.
+*  16.05.2021  mifi  Change version to v0.22.0.
 **************************************************************************/
 #if !defined(__TCTS_H__)
 #define __TCTS_H__
+
+#if defined(RTOS_TCTS)
 
 /**************************************************************************
 *  Includes
@@ -80,6 +87,8 @@
 /**************************************************************************
 *  All Structures and Common Constants
 **************************************************************************/
+
+#define OS_Init   OS_TCTS_Init
 
 /*
  * Default ticks per second
@@ -92,7 +101,7 @@
  * OS version information
  */
 #define OS_VER_MAJOR          0
-#define OS_VER_MINOR          20
+#define OS_VER_MINOR          22
 #define OS_VER_PATCH          0
 
 #define OS_VER_NUMBER         ((OS_VER_MAJOR << 24) | (OS_VER_MINOR << 16) | (OS_VER_PATCH << 8))
@@ -108,6 +117,13 @@
  * Define for infinite timeout
  */
 #define OS_WAIT_INFINITE   ((uint32_t)-1)
+
+
+/*
+ * Define highest priority value for a user task, 
+ * which is the lowest priority.
+ */
+#define OS_PRIO_MAX        253
 
 
 typedef void (*OS_TASK)(void *arg);
@@ -131,6 +147,7 @@ typedef struct _os_sema_      OS_SEMA;
 typedef struct _os_mutex_     OS_MUTEX; 
 typedef struct _os_event_     OS_EVENT;
 typedef struct _os_mbox_      OS_MBOX;
+typedef struct _os_mq_        OS_MQ;
 
 
 /*
@@ -153,6 +170,8 @@ struct _os_tcb_fifo_
 #define OS_RC_DELETED  -4
 #define OS_RC_RESETED  -5
 
+typedef int            OS_RESULT;
+
 
 /*
  * Semaphore
@@ -169,7 +188,6 @@ struct _os_sema_
 /*
  * Mutex
  */
-#define OS_MUTEX_COUNTER_MAX   INT32_MAX
 struct _os_mutex_
 {
    os_tcb_fifo_t  Fifo;       /* Used for the tasks which are waiting for the mutex */
@@ -211,6 +229,22 @@ struct _os_mbox_
 
 
 /*
+ * Message queue
+ */
+struct _os_mq_
+{
+   OS_SEMA      UsedCntSema;
+   OS_SEMA      FreeCntSema;
+   uint16_t    wCountMax;
+   uint16_t    wCount;
+   uint16_t    wSize;
+   uint16_t    wInIndex;
+   uint16_t    wOutIndex;
+   uint8_t    *pBuffer;
+};
+
+
+/*
  * Task Control Block
  */
 struct _os_tcb_
@@ -246,10 +280,12 @@ struct _os_tcb_
    uint32_t         dStatStartTime;       /* Statistic start time */
    uint32_t         dStatEndTime;         /* Statistic end time */
    uint32_t         dStatTotalTime;       /* Statistic total task time */
-   uint32_t         dStatTotalLastTime;   /* Statistic total task time of the previous statistic cycle */
    uint32_t         dStatUsage;           /* Statistic in percent * 100, 0 - 10000 */
    
    uint8_t          bFlagTermRequest;     /* Termination request flag */
+
+   int32_t          lSWDogTimeout;        /* Software Watchdog timeout */
+   int32_t          lSWDogTimeoutMax;     /* Software Watchdog timeout Max */
 };
 
 
@@ -266,7 +302,14 @@ typedef void (*OS_TIMER_FUNC)(void);
  *
  * The stack will be 8 byte aligned and the size 4 byte.
  */
-#define OS_STACK(_n,_s)       uint8_t _n[((_s+3)& ~3)] __attribute__((aligned(0x8)))
+#if !defined(__ARCH_RISCV__) 
+#define OS_STACK(_n,_s)       uint8_t _n[((_s+3)& ~3)] __attribute__((aligned(0x8))) __attribute__ ((section (".task_stack")))
+#else
+/*
+ * In case of RISC-V, we need an alignment of 16 bytes and size too.
+ */
+#define OS_STACK(_n,_s)       uint8_t _n[((_s+15)& ~15)] __attribute__((aligned(0x10)))
+#endif
 
 
 /*
@@ -296,8 +339,9 @@ typedef void (*OS_TIMER_FUNC)(void);
  */
 #define OS_RES_CREATE(_a)        OS_SemaCreate(_a, 1, 1)
 #define OS_RES_LOCK(_a)          OS_SemaWait(_a, OS_WAIT_INFINITE)
-#define OS_RES_LOCK_TIMED(_a,_b) OSSemaWait(_a, _b)
+#define OS_RES_LOCK_TIMED(_a,_b) OS_SemaWait(_a, _b)
 #define OS_RES_FREE(_a)          OS_SemaSignal(_a)
+
 
 /**************************************************************************
 *  Functions Definitions
@@ -306,12 +350,13 @@ typedef void (*OS_TIMER_FUNC)(void);
 /*
  * General functionality
  */
-void      OS_Init (void);
+void      OS_TCTS_Init (void); 
 void      OS_Start (void);
 void      OS_SysTickStart (void);
 
 void      OS_OutputRuntimeStackInfo (void);
 void      OS_OutputTaskInfo (void);
+void      OS_OutputSWDogInfo (void);
 uint32_t  OS_GetStackInfo (OS_TCB *pTCB, uint32_t *pSize);
 
 
@@ -333,8 +378,13 @@ int       OS_TaskChangePriority (int nPrio);
 void      OS_TaskYield (void);
 void      OS_TaskExit (void);
 void      OS_TaskTerminateRequest (OS_TCB *pTCB);
+void      OS_TaskWakeup (OS_TCB *pTCB);
+uint8_t   OS_TaskIsSleeping (OS_TCB *pTCB);
 uint8_t   OS_TaskShouldTerminate (void);
 OS_TCB   *OS_TaskGetList (void);
+
+int       OS_TaskTestStateNotInUsed (OS_TCB *pTCB);
+void      OS_TaskSetStateNotInUsed (OS_TCB *pTCB);
 
 
 /*
@@ -349,6 +399,7 @@ void      OS_TimeDly (uint32_t dTimeoutMs);
 void      OS_TimeDlyUntil (uint32_t dTicks);
 void      OS_TimeWait (uint32_t dTimeoutMs);
 uint32_t  OS_UnixtimeGet (void);
+uint32_t  OS_UnixtimeGetEx (uint16_t *pMsec);
 void      OS_UnixtimeSet (uint32_t dTime);
 void      OS_TimezoneIDSet (int16_t wID);
 int16_t   OS_TimezoneIDGet (void);
@@ -360,6 +411,15 @@ int32_t   OS_TimezoneDstSecGet (void);
 
 
 /*
+ * Software Watchdog
+ */
+void      OS_SWDogStart (void);
+void      OS_SWDogTrigger (void);
+void      OS_SWDogExpand (uint32_t dTimeoutMs);
+void      OS_SWDogTaskSetTime (uint32_t dTimeoutMs);
+
+
+/*
  * Semaphore functionality
  */
 void      OS_SemaCreate (OS_SEMA *pSema, int32_t nCounterStart, int32_t nCounterMax);
@@ -367,20 +427,15 @@ void      OS_SemaReset (OS_SEMA *pSema, int32_t nCounterStart);
 void      OS_SemaDelete (OS_SEMA *pSema);
 int       OS_SemaSignal (OS_SEMA *pSema);
 int       OS_SemaSignalFromInt (OS_SEMA *pSema);
-int       OS_SemaSignalNoSched (OS_SEMA *pSema);
 int       OS_SemaWait (OS_SEMA *pSema, uint32_t dTimeoutMs);
-
-/* Some functions needed by NutNET */
-int       OS_SemaBroadcast (OS_SEMA *pSema);
-int       OS_SemaBroadcastAsync (OS_SEMA *pSema);  
 
 
 /*
  * Mutex functionality
  */
 void      OS_MutexCreate (OS_MUTEX *pMutex);
-int       OS_MutexSignal (OS_MUTEX *pMutex);
-int       OS_MutexSignalFromInt (OS_MUTEX *pMutex);
+void      OS_MutexSignal (OS_MUTEX *pMutex);
+void      OS_MutexSignalFromInt (OS_MUTEX *pMutex);
 int       OS_MutexWait (OS_MUTEX *pMutex, uint32_t dTimeoutMs);
 
 
@@ -391,9 +446,9 @@ void      OS_EventCreate (OS_EVENT *pEvent);
 void      OS_EventDelete (OS_EVENT *pEvent);
 void      OS_EventSet (OS_EVENT *pEvent, uint32_t dPattern);
 void      OS_EventSetFromInt (OS_EVENT *pEvent, uint32_t dPattern);
-void      OS_EventSetNoSched (OS_EVENT *pEvent, uint32_t dPattern);
 int       OS_EventWait (OS_EVENT *pEvent, uint32_t dWaitPattern, 
                         os_event_mode_t Mode, uint32_t *pPattern, uint32_t dTimeoutMs);
+void      OS_EventClr (OS_EVENT *pEvent, uint32_t dPattern);
 
                        
 /*
@@ -404,6 +459,19 @@ void      OS_MboxDelete (OS_MBOX *pMbox);
 int       OS_MboxPost (OS_MBOX *pMbox, void *pMsg);
 int       OS_MboxPostFromInt (OS_MBOX *pMbox, void *pMsg);
 int       OS_MboxWait (OS_MBOX *pMbox, void **pMsg, uint32_t dTimeoutMs);
+
+
+/*
+ * Message queue functionality
+ */
+int       OS_MQCreate (OS_MQ *pMQ, uint16_t wCount, uint16_t wSize, uint8_t *pBuffer);
+//void      OS_MQDelete (OS_MQ *pMQ);
+int       OS_MQPost (OS_MQ *pMQ, void *pMsg);
+int       OS_MQPostFromInt (OS_MQ *pMQ, void *pMsg);
+int       OS_MQWait (OS_MQ *pMQ, void *pMsg, uint32_t dTimeoutMs);
+
+
+#endif /* defined(RTOS_TCTS) */
 
 #endif /* !__TCTS_H__ */
 

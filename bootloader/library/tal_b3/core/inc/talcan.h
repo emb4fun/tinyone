@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2013 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2023 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -31,13 +31,6 @@
 *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
 *  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 *  SUCH DAMAGE.
-*
-***************************************************************************
-*  History:
-*
-*  19.05.2013  mifi  First Version.
-*  19.12.2015  mifi  Use semaphores like in the COM module.
-*  15.01.2016  mifi  Added timestamp support.
 **************************************************************************/
 #if !defined(__TALCAN_H__)
 #define __TALCAN_H__
@@ -214,6 +207,8 @@ TAL_RESULT cpu_CANIdentRegister (TAL_CAN_DCB   *pDCB,
 TAL_RESULT cpu_CANIdentDeRegister (TAL_CAN_DCB   *pDCB,
                                    uint32_t       dIdentifier,
                                    TAL_CAN_TYPE_ID Type); 
+
+void       cpu_CANGetSpeed (TAL_CAN_PORT ePort, uint32_t *pSpeed);
 
 #endif /* !__TALCAN_H__ */
 
