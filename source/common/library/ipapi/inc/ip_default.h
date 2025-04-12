@@ -112,6 +112,11 @@
 #define IP_DEFAULT_OPT_SYSL         1
 #endif
 
+#ifndef IP_DEFAULT_OPT_SSL
+#define IP_DEFAULT_OPT_SSL          0
+#endif
+
+
 /**************************************************************************
 *  Macro Definitions
 **************************************************************************/
