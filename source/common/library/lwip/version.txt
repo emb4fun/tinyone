@@ -1,5 +1,5 @@
 
-lwip 2.2.1 released
-(https://git.savannah.nongnu.org/cgit/lwip.git/snapshot/lwip-STABLE-2_2_1_RELEASE.tar.gz)
+lwip-56b29f8bcfaefe2974dca67bde16cc7c391feaeb
+(https://cgit.git.savannah.gnu.org/cgit/lwip.git/snapshot/lwip-56b29f8bcfaefe2974dca67bde16cc7c391feaeb.tar.gz)
 
 With some additional changes for DHCP and TLS.

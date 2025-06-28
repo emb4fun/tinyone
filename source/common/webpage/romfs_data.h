@@ -4,11 +4,12 @@
 *  Source: xfile.bin
 **************************************************************************/
 #if !defined(__ROMFS_DATA_H__)
+#define __ROMFS_DATA_H__
 
 /**************************************************************************
 *  Extern Definitions
 **************************************************************************/
-extern const unsigned char _romfs_data[3328];
+extern const unsigned char _romfs_data[3328 + 0];
 
 #endif /* __ROMFS_DATA_H__ */
 /*** EOF ***/

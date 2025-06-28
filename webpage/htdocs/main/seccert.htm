@@ -1,8 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html>
   <head>
-    <meta http-equiv="content-type"     content="text/html;charset=iso-8859-1"/>
+    <meta charset="UTF-8">
     <meta http-equiv="content-language" content="en"/>
     <meta http-equiv="pragma"           content="no-cache"/>
     <title><%sys_longname%></title>
@@ -55,7 +55,7 @@
                   {
                      /* Waiting */
                      document.getElementById("result").innerHTML = "...";
-                     window.setTimeout("WaitUpdateReady()", 999);
+                     window.setTimeout(WaitUpdateReady, 999);
                   }
                   else if (0 == jdata.result)
                   {
@@ -367,7 +367,7 @@
                         <td>
                         
                           <div class="content" style="text-align:center">
-                            <form name="formular0" method="post">
+                            <form name="formular0" method="post" accept-charset="utf-8">
                             
                               <div id="tr0_err" style="display:none">
                                 <p style="text-align:center; font-weight:bold">
@@ -435,7 +435,7 @@
                         
                           <div class="content" style="text-align:center">
                           
-                            <form name="formular1" method="post">
+                            <form name="formular1" method="post" accept-charset="utf-8">
                               <p style="text-align:center">
                                 <br><br>Use this Certificate Signing Request (CSR) for requesting the new certificate.
                                 <br><br>
@@ -531,7 +531,7 @@
                               </p>
                             </div>
 
-                            <form name="formular2" method="post">
+                            <form name="formular2" method="post" accept-charset="utf-8">
                               <p style="text-align:center">
                                 <br><br>Paste the new chained (server + intermediate) certificate here:
                                 <br><br>
@@ -692,7 +692,7 @@
                               </table>
                             </div>
 
-                            <form name="formular3" method="post">
+                            <form name="formular3" method="post" accept-charset="utf-8">
                               <button class="play" type="button" name="button1" value="submit" onclick="javascript:MySubmit3()">
                                 Install the new Certificates
                               </button>

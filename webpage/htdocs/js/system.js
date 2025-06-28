@@ -107,7 +107,7 @@ function LogoutCheck()
       if (LogoutSec != 0)
       {
          LogoutSec = LogoutSec - 1;
-         window.setTimeout("LogoutCheck()", 1000);
+         window.setTimeout(LogoutCheck, 1000);
       }
       else
       {

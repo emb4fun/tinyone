@@ -2,12 +2,18 @@
 * Project: tinyone
 * Name   : "A small embedded DHCP and SNTP server"
 * Target : BeagleBone Black
-* Version: 20250412
+* Version: 20250628
 ***************************************************************************
 * Tools  : SEGGER Embedded Studio for ARM v8.22a
 ***************************************************************************
 * URL    : https://www.emb4fun.de/projects/tone/index.html
 ***************************************************************************
+
+= Version 1.27 / 1.21, 28.06.2025
+   * Updated lwIP to "lwip-56b29f8bcfaefe2974dca67bde16cc7c391feaeb".
+   * Added "Security Header" like X-Frame-Options, Content-Security-Policy,
+     X-Content-Type-Options, Referrer-Policy and Permissions-Policy.
+   * Reworked web pages to work with the Security Header" CSP settings.  
 
 = Version 1.26 / 1.20, 12.04.2025
    * Used SEGGER Embedded Studio for ARM v8.22a.
