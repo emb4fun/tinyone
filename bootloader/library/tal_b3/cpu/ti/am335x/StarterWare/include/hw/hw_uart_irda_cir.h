@@ -85,7 +85,7 @@ extern "C" {
 #define UART_XON2_ADDR2   (0x14)
 #define UART_MSR   (0x18)
 #define UART_TCR   (0x18)
-#define UART_XOFF1 (0x18) 
+#define UART_XOFF1 (0x18)
 #define UART_SPR   (0x1C)
 #define UART_TLR   (0x1C)
 #define UART_XOFF2 (0x1C)

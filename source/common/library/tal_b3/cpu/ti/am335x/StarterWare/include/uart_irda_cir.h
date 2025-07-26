@@ -6,7 +6,7 @@
  *         definitions and some files to be included.
  *
  */
- 
+
 /*
 * Copyright (C) 2010 Texas Instruments Incorporated - http://www.ti.com/
 */
@@ -51,7 +51,7 @@ extern "C" {
 #endif
 
 /****************************************************************************
-**                       MACRO DEFINITIONS 
+**                       MACRO DEFINITIONS
 ****************************************************************************/
 
 /* The size of the Transmitter FIFO. */
@@ -122,8 +122,8 @@ extern "C" {
 #define UART_FRAME_WORD_LENGTH_8            (UART_LCR_CHAR_LENGTH_8BIT)
 
 /****************************************************************************/
-/* 
-** Values associated with setting the Trigger Levels and DMA mode selection. 
+/*
+** Values associated with setting the Trigger Levels and DMA mode selection.
 */
 
 /* Values for trigger level for the Receiver FIFO. */
@@ -248,7 +248,7 @@ extern "C" {
 #define UART_TX_RX_XON1_XOFF1               ((UART_EFR_SW_FLOW_CONTROL_TX_XONOFF1 << \
                                               UART_EFR_SW_FLOW_CONTROL_TX_SHIFT) | \
                                              (UART_EFR_SW_FLOW_CONTROL_RX_XONOFF1 << \
-                                              UART_EFR_SW_FLOW_CONTROL_RX_SHIFT))  
+                                              UART_EFR_SW_FLOW_CONTROL_RX_SHIFT))
 
 #define UART_TX_RX_XON2_XOFF2               ((UART_EFR_SW_FLOW_CONTROL_TX_XONOFF2 << \
                                               UART_EFR_SW_FLOW_CONTROL_TX_SHIFT) | \

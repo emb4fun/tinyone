@@ -60,9 +60,9 @@
 #include "tal.h"
 #include "tcts.h"
 
-#include "lwip\sys.h"
-#include "lwip\api.h"
-#include "lwip\tcpip.h"
+#include "lwip/sys.h"
+#include "lwip/api.h"
+#include "lwip/tcpip.h"
 
 /*=======================================================================*/
 /*  All Structures and Common Constants                                  */

@@ -86,12 +86,12 @@
 #include "ethernetif.h"
 #include "project.h"
 
-#include "lwip\opt.h"
-#include "lwip\tcpip.h"
-#include "netif\etharp.h"
-#include "lwip\ethip6.h"
-#include "lwip\stats.h"
-#include "lwip\igmp.h"
+#include "lwip/opt.h"
+#include "lwip/tcpip.h"
+#include "netif/etharp.h"
+#include "lwip/ethip6.h"
+#include "lwip/stats.h"
+#include "lwip/igmp.h"
 
 #include "arch/sys_arch.h"
 

@@ -43,7 +43,7 @@
 #error Do not include this file directly. Use pro/uhttp/streamio.h instead.
 #endif
 
-#include "lwip\sockets.h"
+#include "lwip/sockets.h"
 
 /*!
  * \addtogroup xgUHTTP

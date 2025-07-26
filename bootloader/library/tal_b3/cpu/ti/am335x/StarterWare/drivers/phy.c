@@ -69,12 +69,12 @@ unsigned int PhyIDGet(unsigned int mdioBaseAddr, unsigned int phyAddr)
 
     /* update the ID1 value */
     id = data << PHY_ID_SHIFT;
- 
+
     /* read the ID2 register */
     MDIOPhyRegRead(mdioBaseAddr, phyAddr, PHY_ID2, &data);
 
     /* update the ID2 value */
-    id |= data; 
+    id |= data;
 
     /* return the ID in ID1:ID2 format */
     return id;
@@ -229,7 +229,7 @@ unsigned int PhyConfigure(unsigned int mdioBaseAddr, unsigned int phyAddr,
 
 /**
  * \brief   This function ask the phy device to start auto negotiation.
- *          
+ *
  *
  * \param   mdioBaseAddr  Base Address of the MDIO Module Registers.
  * \param   phyAddr       PHY Adress.
@@ -245,7 +245,7 @@ unsigned int PhyConfigure(unsigned int mdioBaseAddr, unsigned int phyAddr,
  *               PHY_1000BT_FD - Full duplex capabilty for 1000 Base-T \n
  *               PHY_1000BT_HD - Half duplex capabilty for 1000 Base-T \n
  *               FALSE - It is passed as an argument if phy dosen't support
- *                       Giga bit capability 
+ *                       Giga bit capability
  *
  * \return  status after autonegotiation \n
  *          TRUE if autonegotiation started
@@ -262,7 +262,7 @@ unsigned int PhyAutoNegotiate(unsigned int mdioBaseAddr, unsigned int phyAddr,
     {
         return FALSE;
     }
-   
+
     data |= PHY_AUTONEG_ENABLE;
 
     if (*gigAdvPtr != 0)
@@ -271,7 +271,7 @@ unsigned int PhyAutoNegotiate(unsigned int mdioBaseAddr, unsigned int phyAddr,
         data &= PHY_SPEED_MASK;
         data |= PHY_SPEED_1000MBPS;
     }
-   
+
     /* Enable Auto Negotiation */
     MDIOPhyRegWrite(mdioBaseAddr, phyAddr, PHY_BCR, data);
 
@@ -321,7 +321,7 @@ unsigned int PhyAutoNegStatusGet(unsigned int mdioBaseAddr, unsigned int phyAddr
     {
         return TRUE;
     }
-  
+
     return FALSE;
 }
 
@@ -343,7 +343,7 @@ unsigned int PhyAutoNegStatusGet(unsigned int mdioBaseAddr, unsigned int phyAddr
  *          TRUE if reading successful
  *          FALSE if reading failed
  **/
-unsigned int PhyPartnerAbilityGet(unsigned int mdioBaseAddr, 
+unsigned int PhyPartnerAbilityGet(unsigned int mdioBaseAddr,
                                   unsigned int phyAddr,
                                   unsigned short *ptnerAblty,
                                   unsigned short *gbpsPtnerAblty)
@@ -381,8 +381,8 @@ unsigned int PhyLinkStatusGet(unsigned int mdioBaseAddr,
                               volatile unsigned int retries)
 {
     volatile unsigned short linkStatus;
- 
-    retries++;   
+
+    retries++;
     while (retries)
     {
         /* First read the BSR of the PHY */
@@ -392,7 +392,7 @@ unsigned int PhyLinkStatusGet(unsigned int mdioBaseAddr,
         {
             return TRUE;
         }
-   
+
         retries--;
     }
 

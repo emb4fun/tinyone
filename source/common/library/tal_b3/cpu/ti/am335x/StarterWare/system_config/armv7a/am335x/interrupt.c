@@ -100,14 +100,14 @@ static void IntDefaultHandler(void)
 
 /**
  * \brief    Registers an interrupt Handler in the interrupt vector table for
- *           system interrupts. 
- * 
+ *           system interrupts.
+ *
  * \param    intrNum - Interrupt Number
  * \param    fnHandler - Function pointer to the ISR
- * 
+ *
  * Note: When the interrupt occurs for the sytem interrupt number indicated,
  * the control goes to the ISR given as the parameter.
- * 
+ *
  * \return      None.
  **/
 void IntRegister(unsigned int intrNum, void (*fnHandler)(void))
@@ -118,12 +118,12 @@ void IntRegister(unsigned int intrNum, void (*fnHandler)(void))
 
 /**
  * \brief   Unregisters an interrupt
- * 
+ *
  * \param   intrNum - Interrupt Number
- * 
+ *
  * Note: Once an interrupt is unregistered it will enter infinite loop once
  * an interrupt occurs
- * 
+ *
  * \return      None.
  **/
 void IntUnRegister(unsigned int intrNum)
@@ -133,11 +133,11 @@ void IntUnRegister(unsigned int intrNum)
 }
 
 /**
- * \brief   This API is used to initialize the interrupt controller. This API  
- *          shall be called before using the interrupt controller. 
+ * \brief   This API is used to initialize the interrupt controller. This API
+ *          shall be called before using the interrupt controller.
  *
  * \param   None
- * 
+ *
  * \return  None.
  *
  **/
@@ -147,13 +147,13 @@ void IntAINTCInit(void)
 
     /* Reset the ARM interrupt controller */
     HWREG(SOC_AINTC_REGS + INTC_SYSCONFIG) = INTC_SYSCONFIG_SOFTRESET;
- 
+
     /* Wait for the reset to complete */
-    while((HWREG(SOC_AINTC_REGS + INTC_SYSSTATUS) 
-          & INTC_SYSSTATUS_RESETDONE) != INTC_SYSSTATUS_RESETDONE);    
-  
-    /* Enable any interrupt generation by setting priority threshold */ 
-    HWREG(SOC_AINTC_REGS + INTC_THRESHOLD) = 
+    while((HWREG(SOC_AINTC_REGS + INTC_SYSSTATUS)
+          & INTC_SYSSTATUS_RESETDONE) != INTC_SYSSTATUS_RESETDONE);
+
+    /* Enable any interrupt generation by setting priority threshold */
+    HWREG(SOC_AINTC_REGS + INTC_THRESHOLD) =
                                        INTC_THRESHOLD_PRIORITYTHRESHOLD;
 
     /* Register the default handler for all interrupts */
@@ -173,7 +173,7 @@ void IntAINTCInit(void)
  * \param   hostIntRoute - The host interrupt IRQ/FIQ to which the interrupt
  *                         is to be routed.
  *     'priority' can take any value from 0 to 127, 0 being the highest and
- *     127 being the lowest priority.              
+ *     127 being the lowest priority.
  *
  *     'hostIntRoute' can take one of the following values \n
  *             AINTC_HOSTINT_ROUTE_IRQ - To route the interrupt to IRQ \n
@@ -192,9 +192,9 @@ void IntPrioritySet(unsigned int intrNum, unsigned int priority,
 }
 
 /**
- * \brief   This API enables the system interrupt in AINTC. However, for 
- *          the interrupt generation, make sure that the interrupt is 
- *          enabled at the peripheral level also. 
+ * \brief   This API enables the system interrupt in AINTC. However, for
+ *          the interrupt generation, make sure that the interrupt is
+ *          enabled at the peripheral level also.
  *
  * \param   intrNum  - Interrupt number
  *
@@ -204,14 +204,14 @@ void IntPrioritySet(unsigned int intrNum, unsigned int priority,
 void IntSystemEnable(unsigned int intrNum)
 {
     __asm(" dsb");
-    
+
     /* Disable the system interrupt in the corresponding MIR_CLEAR register */
     HWREG(SOC_AINTC_REGS + INTC_MIR_CLEAR(intrNum >> REG_IDX_SHIFT))
                                    = (0x01 << (intrNum & REG_BIT_MASK));
 }
 
 /**
- * \brief   This API disables the system interrupt in AINTC. 
+ * \brief   This API disables the system interrupt in AINTC.
  *
  * \param   intrNum  - Interrupt number
  *
@@ -222,9 +222,9 @@ void IntSystemDisable(unsigned int intrNum)
 {
 
     __asm(" dsb");
-    
+
     /* Enable the system interrupt in the corresponding MIR_SET register */
-    HWREG(SOC_AINTC_REGS + INTC_MIR_SET(intrNum >> REG_IDX_SHIFT)) 
+    HWREG(SOC_AINTC_REGS + INTC_MIR_SET(intrNum >> REG_IDX_SHIFT))
                                    = (0x01 << (intrNum & REG_BIT_MASK));
 }
 
@@ -238,12 +238,12 @@ void IntSystemDisable(unsigned int intrNum)
  **/
 void IntIfClkFreeRunSet(void)
 {
-    HWREG(SOC_AINTC_REGS + INTC_SYSCONFIG)&= ~INTC_SYSCONFIG_AUTOIDLE; 
+    HWREG(SOC_AINTC_REGS + INTC_SYSCONFIG)&= ~INTC_SYSCONFIG_AUTOIDLE;
 }
 
 /**
  * \brief   When this API is called,  automatic clock gating strategy is applied
- *          based on the interface bus activity. 
+ *          based on the interface bus activity.
  *
  * \param   None.
  *
@@ -252,7 +252,7 @@ void IntIfClkFreeRunSet(void)
  **/
 void IntIfClkAutoGateSet(void)
 {
-    HWREG(SOC_AINTC_REGS + INTC_SYSCONFIG)|= INTC_SYSCONFIG_AUTOIDLE; 
+    HWREG(SOC_AINTC_REGS + INTC_SYSCONFIG)|= INTC_SYSCONFIG_AUTOIDLE;
 }
 
 /**
@@ -279,8 +279,8 @@ unsigned int IntActiveIrqNumGet(void)
  **/
 unsigned int IntSpurIrqFlagGet(void)
 {
-    return ((HWREG(SOC_AINTC_REGS + INTC_SIR_IRQ) 
-             & INTC_SIR_IRQ_SPURIOUSIRQ) 
+    return ((HWREG(SOC_AINTC_REGS + INTC_SIR_IRQ)
+             & INTC_SIR_IRQ_SPURIOUSIRQ)
             >> INTC_SIR_IRQ_SPURIOUSIRQ_SHIFT);
 }
 
@@ -301,7 +301,7 @@ void IntProtectionEnable(void)
 
 /**
  * \brief   Disables protection mode for the interrupt controller register access.
- *          When the protection is disabled, the registers will be accessible 
+ *          When the protection is disabled, the registers will be accessible
  *          in both unprivileged and privileged mode of the CPU.
  *
  * \param   None
@@ -328,7 +328,7 @@ void IntSyncClkFreeRunSet(void)
 }
 
 /**
- * \brief   When this API is called, Input synchronizer clock is auto-gated 
+ * \brief   When this API is called, Input synchronizer clock is auto-gated
  *          based on interrupt input activity
  *
  * \param   None
@@ -373,12 +373,12 @@ void IntFuncClkAutoGateSet(void)
  *
  * \param   None
  *
- * \return  Current IRQ priority 
+ * \return  Current IRQ priority
  *
  **/
 unsigned int IntCurrIrqPriorityGet(void)
 {
-    return (HWREG(SOC_AINTC_REGS + INTC_IRQ_PRIORITY) 
+    return (HWREG(SOC_AINTC_REGS + INTC_IRQ_PRIORITY)
             & INTC_IRQ_PRIORITY_IRQPRIORITY);
 }
 
@@ -392,24 +392,24 @@ unsigned int IntCurrIrqPriorityGet(void)
  **/
 unsigned int IntPriorityThresholdGet(void)
 {
-    return (HWREG(SOC_AINTC_REGS + INTC_THRESHOLD) 
+    return (HWREG(SOC_AINTC_REGS + INTC_THRESHOLD)
             & INTC_THRESHOLD_PRIORITYTHRESHOLD);
 }
 
 /**
- * \brief   Sets the given priority threshold value. 
+ * \brief   Sets the given priority threshold value.
  *
  * \param   threshold - Priority threshold value
  *
  *      'threshold' can take any value from 0x00 to 0x7F. To disable
  *      priority threshold, write 0xFF.
- *             
+ *
  * \return  None.
  *
  **/
 void IntPriorityThresholdSet(unsigned int threshold)
 {
-    HWREG(SOC_AINTC_REGS + INTC_THRESHOLD) = 
+    HWREG(SOC_AINTC_REGS + INTC_THRESHOLD) =
                      threshold & INTC_THRESHOLD_PRIORITYTHRESHOLD;
 }
 
@@ -419,7 +419,7 @@ void IntPriorityThresholdSet(unsigned int threshold)
  * \param   intrNum - the system interrupt number.
  *
  * \return  TRUE - if the raw status is set \n
- *          FALSE - if the raw status is not set.   
+ *          FALSE - if the raw status is not set.
  *
  **/
 unsigned int IntRawStatusGet(unsigned int intrNum)
@@ -478,8 +478,8 @@ unsigned int IntPendingIrqMaskedStatusGet(unsigned int intrNum)
 }
 
 /**
- * \brief  Enables the processor IRQ only in CPSR. Makes the processor to 
- *         respond to IRQs.  This does not affect the set of interrupts 
+ * \brief  Enables the processor IRQ only in CPSR. Makes the processor to
+ *         respond to IRQs.  This does not affect the set of interrupts
  *         enabled/disabled in the AINTC.
  *
  * \param    None
@@ -496,8 +496,8 @@ void IntMasterIRQEnable(void)
 }
 
 /**
- * \brief  Disables the processor IRQ only in CPSR.Prevents the processor to 
- *         respond to IRQs.  This does not affect the set of interrupts 
+ * \brief  Disables the processor IRQ only in CPSR.Prevents the processor to
+ *         respond to IRQs.  This does not affect the set of interrupts
  *         enabled/disabled in the AINTC.
  *
  * \param    None
@@ -513,8 +513,8 @@ void IntMasterIRQDisable(void)
 }
 
 /**
- * \brief  Enables the processor FIQ only in CPSR. Makes the processor to 
- *         respond to FIQs.  This does not affect the set of interrupts 
+ * \brief  Enables the processor FIQ only in CPSR. Makes the processor to
+ *         respond to FIQs.  This does not affect the set of interrupts
  *         enabled/disabled in the AINTC.
  *
  * \param    None
@@ -530,8 +530,8 @@ void IntMasterFIQEnable(void)
 }
 
 /**
- * \brief  Disables the processor FIQ only in CPSR.Prevents the processor to 
- *         respond to FIQs.  This does not affect the set of interrupts 
+ * \brief  Disables the processor FIQ only in CPSR.Prevents the processor to
+ *         respond to FIQs.  This does not affect the set of interrupts
  *         enabled/disabled in the AINTC.
  *
  * \param    None
@@ -562,7 +562,7 @@ unsigned int IntMasterStatusGet(void)
 
 /**
  * \brief  Read and save the stasus and Disables the processor IRQ .
- *         Prevents the processor to respond to IRQs.  
+ *         Prevents the processor to respond to IRQs.
  *
  * \param    None
  *
@@ -584,7 +584,7 @@ unsigned char IntDisable(void)
 }
 
 /**
- * \brief  Restore the processor IRQ only status. This does not affect 
+ * \brief  Restore the processor IRQ only status. This does not affect
  *          the set of interrupts enabled/disabled in the AINTC.
  *
  * \param    The status returned by the IntDisable fundtion.
@@ -595,10 +595,10 @@ unsigned char IntDisable(void)
  **/
 void IntEnable(unsigned char  status)
 {
-    if((status & 0x80) == 0) 
+    if((status & 0x80) == 0)
     {
         IntMasterIRQEnable();
-    } 
+    }
 }
 
 /********************************** End Of File ******************************/

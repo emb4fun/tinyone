@@ -1,7 +1,7 @@
 /**
  * \file   beaglebone.h
  *
- * \brief  This file contains prototype declarations of functions which 
+ * \brief  This file contains prototype declarations of functions which
  *         performs EVM configurations.
  */
 

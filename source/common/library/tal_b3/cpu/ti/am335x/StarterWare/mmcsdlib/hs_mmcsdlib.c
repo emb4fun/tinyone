@@ -225,8 +225,8 @@ unsigned int HSMMCSDCmdSend(mmcsdCtrlInfo *ctrl, mmcsdCmd *c)
  * \param    mmcsdCtrlInfo It holds the mmcsd control information.
  *
  * \param   buswidth   SD/MMC bus width.\n
- * 
- *  buswidth can take the values.\n 
+ *
+ *  buswidth can take the values.\n
  *     HS_MMCSD_BUS_WIDTH_4BIT.\n
  *     HS_MMCSD_BUS_WIDTH_1BIT.\n
  *

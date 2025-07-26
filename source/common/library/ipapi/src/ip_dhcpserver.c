@@ -51,10 +51,10 @@
 #include "ipweb.h"
 #include "nvm.h"
 
-#include "lwip\prot\dhcp.h"
-#include "lwip\prot\iana.h"
-#include "lwip\netifapi.h"
-#include "lwip\priv\sockets_priv.h"
+#include "lwip/prot/dhcp.h"
+#include "lwip/prot/iana.h"
+#include "lwip/netifapi.h"
+#include "lwip/priv/sockets_priv.h"
 
 /*=======================================================================*/
 /*  All extern definitions                                               */

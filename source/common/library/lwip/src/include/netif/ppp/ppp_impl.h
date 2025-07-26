@@ -384,7 +384,7 @@ struct pppd_stats {
  * PPP private functions
  */
 
- 
+
 /*
  * Functions called from lwIP core.
  */

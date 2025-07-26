@@ -49,8 +49,8 @@
 #include "ipweb.h"
 #include "cert.h"
 
-#include "lwip\api.h"
-#include "lwip\priv\sockets_priv.h"
+#include "lwip/api.h"
+#include "lwip/priv/sockets_priv.h"
 
 #include "mbedtls/mbedtls_config.h"
 #include "mbedtls/entropy.h"

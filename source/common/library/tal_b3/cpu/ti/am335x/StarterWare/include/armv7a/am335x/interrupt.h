@@ -3,7 +3,7 @@
  *
  *  \brief  Interrupt related API declarations.
  *
- *   This file contains the API prototypes for configuring INTC for 
+ *   This file contains the API prototypes for configuring INTC for
  *   ARM Cortex-A8
 */
 

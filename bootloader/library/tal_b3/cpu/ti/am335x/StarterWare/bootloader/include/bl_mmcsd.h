@@ -45,7 +45,7 @@ extern int HSMMCSDInit(void);
 extern unsigned int HSMMCSDImageCopy(void);
 
 /******************************************************************************
-**                    External Function Declarations 
+**                    External Function Declarations
 *******************************************************************************/
 
 #endif

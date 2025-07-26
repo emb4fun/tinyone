@@ -42,7 +42,7 @@ START_TEST(test_pppos_empty_packet_with_valid_fcs)
   u8_t other_packet[] = { 0x7e, 0x7d, 0x20, 0x00, 0x7e };
   /* Set internal states of the underlying pcb */
   pppos_pcb *pppos = (pppos_pcb *)ppp->link_ctx_cb;
- 
+
   LWIP_UNUSED_ARG(_i);
 
   pppos->open = 1;  /* Pretend the connection is open already */

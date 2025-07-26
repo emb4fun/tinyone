@@ -50,11 +50,11 @@
 #include "ipstack.h"
 #include "terminal.h"
 
-#include "lwip\api.h"
-#include "lwip\tcpip.h"
-#include "lwip\inet.h"
-#include "lwip\netif.h"
-#include "netif\etharp.h"
+#include "lwip/api.h"
+#include "lwip/tcpip.h"
+#include "lwip/inet.h"
+#include "lwip/netif.h"
+#include "netif/etharp.h"
 
 #include "ethernetif.h"
 

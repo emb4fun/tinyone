@@ -460,7 +460,7 @@ const char *StreamInfo(HTTP_STREAM *sp, int item)
         break;
     }
 #else
-    (void)sp; 
+    (void)sp;
     (void)item;
 #endif
     if (env_value == NULL) {

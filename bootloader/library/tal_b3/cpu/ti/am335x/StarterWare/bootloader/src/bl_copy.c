@@ -2,7 +2,7 @@
  * \file  bl_copy.c
  *
  * \brief Initializes the Spi. Copies the application from SPI flash to DDR.
- *  
+ *
  */
 
 /*
@@ -53,12 +53,12 @@
 
 
 /******************************************************************************
-**                          Extern Declarations 
+**                          Extern Declarations
 *******************************************************************************/
 
 
 /******************************************************************************
-**                     Local Function Declarations 
+**                     Local Function Declarations
 *******************************************************************************/
 #if defined(SPI)
     static unsigned int SPIBootCopy(void);
@@ -78,19 +78,19 @@
 
 
 /******************************************************************************
-**                      Global Variable Declarations 
+**                      Global Variable Declarations
 *******************************************************************************/
 
 
 /******************************************************************************
-**                       Global Function Definitions 
+**                       Global Function Definitions
 *******************************************************************************/
 /*
- * \brief This function copies Image 
+ * \brief This function copies Image
  *
  * \param  none
  *
- * \return none 
+ * \return none
 */
 void ImageCopy(void)
 {
@@ -111,16 +111,16 @@ void ImageCopy(void)
 }
 
 /******************************************************************************
-**                       Local Function Definitions 
+**                       Local Function Definitions
 *******************************************************************************/
 
 /*
- * \brief This function Initializes and configures SPI and copies 
+ * \brief This function Initializes and configures SPI and copies
  *        data from SPI FLASH.
  *
  * \param  none
  *
- * \return unsigned int: Status (Success or Failure) 
+ * \return unsigned int: Status (Success or Failure)
 */
 #ifdef SPI
 static unsigned int SPIBootCopy(void)
@@ -138,12 +138,12 @@ static unsigned int SPIBootCopy(void)
 #endif
 
 /*
- * \brief This function Initializes and configures MMCSD and copies 
- *        data from MMCSD. 
+ * \brief This function Initializes and configures MMCSD and copies
+ *        data from MMCSD.
  *
  * \param  none
  *
- * \return unsigned int: Status (Success or Failure) 
+ * \return unsigned int: Status (Success or Failure)
 */
 #ifdef MMCSD
 static unsigned int MMCSDBootCopy(void)
@@ -188,7 +188,7 @@ static unsigned int NANDBootCopy(void)
 
 /**
 *
-* \brief   : This function receives the file from UART using XMODEM protocol. 
+* \brief   : This function receives the file from UART using XMODEM protocol.
 * \param   : None
 * \return  : Status (Success or Failure)
 

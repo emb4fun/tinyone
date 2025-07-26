@@ -44,7 +44,7 @@
 #include "ipstack.h"
 #include "terminal.h"
 
-#include "lwip\netifapi.h"
+#include "lwip/netifapi.h"
 
 /*=======================================================================*/
 /*  All extern definitions                                               */

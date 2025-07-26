@@ -50,11 +50,11 @@ extern "C" {
 
 /*****************************************************************************/
 /*
-** Macros which can be passed to CP15ControlFeatureDisable/Enable APIs 
+** Macros which can be passed to CP15ControlFeatureDisable/Enable APIs
 ** as 'features'. Any, or an OR combination of the below macros can be
 ** passed to disable/enable the corresponding feature.
 */
-#define CP15_CONTROL_TEXREMAP                  (0x10000000) 
+#define CP15_CONTROL_TEXREMAP                  (0x10000000)
 #define CP15_CONTROL_ACCESSFLAG                (0x20000000)
 #define CP15_CONTROL_ALIGN_CHCK                (0x00000002)
 #define CP15_CONTROL_MMU                       (0x00000001)

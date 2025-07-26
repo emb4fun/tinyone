@@ -21,8 +21,8 @@ typedef enum sioBaudrates {
 	SIO_BAUD_9600,
 	SIO_BAUD_19200,
 	SIO_BAUD_38400,
-	SIO_BAUD_57600,	
-	SIO_BAUD_115200	
+	SIO_BAUD_57600,
+	SIO_BAUD_115200
 } sioBaudrates;
 
 /**
@@ -47,7 +47,7 @@ void sio_expect_string(u8_t *str, sio_status_t * siostat);
 void sio_send_string(u8_t *str, sio_status_t * siostat);
 
 /**
-*	Flush outbuffer (send everything in buffer now), useful if some layer below is 
+*	Flush outbuffer (send everything in buffer now), useful if some layer below is
 *	holding on to data, waitng to fill a buffer
 * @param 	siostat siostatus struct, contains sio instance data, given by sio_open
 */

@@ -1,7 +1,7 @@
 /**
  * \file  phy.h
  *
- * \brief Macros and function definitions for EMAC PHY 
+ * \brief Macros and function definitions for EMAC PHY
  */
 
 /*
@@ -124,17 +124,17 @@ extern unsigned int PhyConfigure(unsigned int mdioBaseAddr,
                                  unsigned int phyAddr,
                                  unsigned short speed,
                                  unsigned short duplexMode);
-extern unsigned int PhyAutoNegotiate(unsigned int mdioBaseAddr, 
+extern unsigned int PhyAutoNegotiate(unsigned int mdioBaseAddr,
                                      unsigned int phyAddr,
                                      unsigned short *advPtr,
                                      unsigned short *gigAdvPtr);
-extern unsigned int PhyRegRead(unsigned int mdioBaseAddr, 
+extern unsigned int PhyRegRead(unsigned int mdioBaseAddr,
                                unsigned int phyAddr,
-                               unsigned int regIdx, 
+                               unsigned int regIdx,
                                unsigned short *regValAdr);
-extern void PhyRegWrite(unsigned int mdioBaseAddr, 
+extern void PhyRegWrite(unsigned int mdioBaseAddr,
                         unsigned int phyAddr,
-                        unsigned int regIdx, 
+                        unsigned int regIdx,
                         unsigned short regVal);
 extern unsigned int PhyPartnerAbilityGet(unsigned int mdioBaseAddr,
                                          unsigned int phyAddr,
@@ -143,7 +143,7 @@ extern unsigned int PhyPartnerAbilityGet(unsigned int mdioBaseAddr,
 extern unsigned int PhyLinkStatusGet(unsigned int mdioBaseAddr,
                                      unsigned int phyAddr,
                                      volatile unsigned int retries);
-extern unsigned int PhyAutoNegStatusGet(unsigned int mdioBaseAddr, 
+extern unsigned int PhyAutoNegStatusGet(unsigned int mdioBaseAddr,
                                         unsigned int phyAddr);
 #ifdef __cplusplus
 }

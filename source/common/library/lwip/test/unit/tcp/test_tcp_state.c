@@ -31,7 +31,7 @@ test_tcp_tmr(void)
 }
 
 /* Get TCP flags from packets */
-static u8_t 
+static u8_t
 get_tcp_flags_from_packet(struct pbuf *p, u16_t tcp_hdr_offset)
 {
   struct tcp_hdr tcphdr;
@@ -108,7 +108,7 @@ tcp_state_teardown(void)
 
 /* helper functions */
 
-static void 
+static void
 test_rst_generation_with_incoming_packet(struct pbuf *p,
   struct netif *netif, struct test_tcp_txcounters *tx_counters)
 {
@@ -214,7 +214,7 @@ START_TEST(test_tcp_connect_active_open)
   tcp_ticks = SEQNO1 - ISS;
   pcb = test_tcp_new_counters_pcb(&counters);
   EXPECT_RET(pcb != NULL);
-  
+
   /* Get seqno from SYN packet */
   test_txcounters.copy_tx_packets = 1;
   err = tcp_connect(pcb, &test_remote_ip, test_port, NULL);

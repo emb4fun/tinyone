@@ -55,9 +55,9 @@
 #include "ip_sntpserver.h"
 #include "ip_syslog.h"
 
-#include "lwip\netdb.h"
-#include "lwip\sockets.h"
-#include "lwip\stats.h"
+#include "lwip/netdb.h"
+#include "lwip/sockets.h"
+#include "lwip/stats.h"
 
 /**************************************************************************
 *  Global Definitions

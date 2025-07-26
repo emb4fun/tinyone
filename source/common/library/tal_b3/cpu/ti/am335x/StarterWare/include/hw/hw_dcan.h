@@ -84,22 +84,22 @@ extern "C" {
 #define DCAN_NWDAT_X   (0x98)
 #define DCAN_NWDAT(n)   (0x9c + (n * 4))
 #define DCAN_INTPND_X   (0xac)
-#define DCAN_INTPND(n)   (0xB0 + (n * 4))           
+#define DCAN_INTPND(n)   (0xB0 + (n * 4))
 #define DCAN_MSGVAL_X   (0xc0)
-#define DCAN_MSGVAL(n)   (0xC4 + (n * 4))           
-#define DCAN_INTMUX(n)   (0xD8 + (n * 4))           
-#define DCAN_IFCMD(n)   (0x100 + (((n) - 1) * 0x20))          
-#define DCAN_IFMSK(n)   (0x104 + (((n) - 1) * 0x20))          
-#define DCAN_IFARB(n)   (0x108 + (((n) - 1) * 0x20))          
-#define DCAN_IFMCTL(n)   (0x10c + (((n) - 1) * 0x20))       
-#define DCAN_IFDATA(n)   (0x110 + (((n) - 1) * 0x20))      
-#define DCAN_IFDATB(n)   (0x114 + (((n) - 1) * 0x20))    
-#define DCAN_IF3OBS   (0x140)                       
-#define DCAN_IF3UPD(n)   (0x160 + (n * 4))          
+#define DCAN_MSGVAL(n)   (0xC4 + (n * 4))
+#define DCAN_INTMUX(n)   (0xD8 + (n * 4))
+#define DCAN_IFCMD(n)   (0x100 + (((n) - 1) * 0x20))
+#define DCAN_IFMSK(n)   (0x104 + (((n) - 1) * 0x20))
+#define DCAN_IFARB(n)   (0x108 + (((n) - 1) * 0x20))
+#define DCAN_IFMCTL(n)   (0x10c + (((n) - 1) * 0x20))
+#define DCAN_IFDATA(n)   (0x110 + (((n) - 1) * 0x20))
+#define DCAN_IFDATB(n)   (0x114 + (((n) - 1) * 0x20))
+#define DCAN_IF3OBS   (0x140)
+#define DCAN_IF3UPD(n)   (0x160 + (n * 4))
 #define DCAN_TIOC   (0x1e0)
 #define DCAN_RIOC   (0x1e4)
 
-/**************************************************************************\ 
+/**************************************************************************\
  * Field Definition Macros
 \**************************************************************************/
 
@@ -322,13 +322,13 @@ extern "C" {
 #define DCAN_TEST_TX_DOMINANT   (0x2u)
 #define DCAN_TEST_TX_NORMAL   (0x0u)
 #define DCAN_TEST_TX_RECESSIVE   (0x3u)
-#define DCAN_TEST_TX_SAMPLEPOINT   (0x1u)     
+#define DCAN_TEST_TX_SAMPLEPOINT   (0x1u)
 
-#define DCAN_TEST_SILENT   (0x00000008u) 
+#define DCAN_TEST_SILENT   (0x00000008u)
 #define DCAN_TEST_SILENT_SHIFT   (0x00000003u)
 #define DCAN_TEST_SILENT_DISABLED   (0x0u)
 #define DCAN_TEST_SILENT_ENABLED   (0x1u)
-                                                              
+
 
 /* PERR */
 #define DCAN_PERR_MESSAGE_NUMBER   (0x000000FFu)
@@ -552,7 +552,7 @@ extern "C" {
 
 
 /* MSGVAL34 */
-#define DCAN_MSGVAL34_MSGVAL_48_33   (0x0000FFFFu)              
+#define DCAN_MSGVAL34_MSGVAL_48_33   (0x0000FFFFu)
 #define DCAN_MSGVAL34_MSGVAL_48_33_SHIFT   (0x00000001u)
 
 #define DCAN_MSGVAL34_MSGVAL_64_49   (0xFFFF0000u)
@@ -575,7 +575,7 @@ extern "C" {
 #define DCAN_MSGVAL78_MSGVAL_128_113_SHIFT   (0x00000010u)
 
 
-/* INTMUX12 */                                                     
+/* INTMUX12 */
 #define DCAN_INTMUX12_INTMUX_16_1   (0x0000FFFFu)
 #define DCAN_INTMUX12_INTMUX_16_1_SHIFT   (0x00000001u)
 
@@ -613,7 +613,7 @@ extern "C" {
 #define DCAN_IFCMD_ARB_OBJTOREG   (0x1u)
 #define DCAN_IFCMD_ARB_REGTOOBJ   (0x1u)
 
-#define DCAN_IFCMD_BUSY   (0x00008000u) 
+#define DCAN_IFCMD_BUSY   (0x00008000u)
 #define DCAN_IFCMD_BUSY_SHIFT   (0x0000000Fu)
 #define DCAN_IFCMD_BUSY_NOTRANSFER   (0x0u)
 #define DCAN_IFCMD_BUSY_TRANSFER   (0x1u)

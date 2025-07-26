@@ -64,7 +64,7 @@ void UARTConsolePutc(unsigned char data);
 unsigned char UARTConsoleGetc(void);
 void UARTConsoleInit(unsigned int instanceNum);
 
-static unsigned int UART_CONSOLE_BASE = (SOC_UART_0_REGS); 
+static unsigned int UART_CONSOLE_BASE = (SOC_UART_0_REGS);
 
 /******************************************************************************
 **              FUNCTION DEFINITIONS
@@ -72,9 +72,9 @@ static unsigned int UART_CONSOLE_BASE = (SOC_UART_0_REGS);
 
 /**
  * \brief   This function initializes the specified UART instance for use.
- *          This does the following:        
+ *          This does the following:
  *          - Enables the FIFO and performs the FIFO settings\n
- *          - Performs the Baud Rate settings\n 
+ *          - Performs the Baud Rate settings\n
  *          - Configures the Line Characteristics to 8-N-1 format\n
  *
  * \param   baudRate     The baud rate to be used for communication
@@ -177,7 +177,7 @@ void UARTConsoleInit(unsigned int instanceNum)
     if (0 == instanceNum)
     {
         UART_CONSOLE_BASE = (SOC_UART_0_REGS);
-        
+
         /* Configuring the system clocks for UART0 instance. */
         UART0ModuleClkConfig();
 
@@ -188,13 +188,13 @@ void UARTConsoleInit(unsigned int instanceNum)
     if (1 == instanceNum)
     {
         UART_CONSOLE_BASE = (SOC_UART_1_REGS);
-    
+
         /* Configuring the system clocks for UART1 instance. */
         UART1ModuleClkConfig();
 
         /* Performing the Pin Multiplexing for UART1 instance. */
         UARTPinMuxSetup(1);
-    }    
+    }
 
     UARTStdioInitExpClk(BAUD_RATE_115200, 1, 1);
 }

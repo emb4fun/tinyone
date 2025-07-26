@@ -160,8 +160,8 @@ extern "C" {
 #define SOC_EDMA30CC_0_REGS                  (0x49000000)
 
 /** @brief Base address of DCAN module memory mapped registers                */
-#define SOC_DCAN_0_REGS                      (0x481CC000) 
-#define SOC_DCAN_1_REGS                      (0x481D0000) 
+#define SOC_DCAN_0_REGS                      (0x481CC000)
+#define SOC_DCAN_1_REGS                      (0x481D0000)
 
 /******************************************************************************\
 *  Parameterizable Configuration:- These are fed directly from the RTL
@@ -190,15 +190,15 @@ extern "C" {
 
 #define SOC_EQEP_0_REGS                     (SOC_PWMSS0_REGS + SOC_EQEP_REGS)
 #define SOC_EQEP_1_REGS                     (SOC_PWMSS1_REGS + SOC_EQEP_REGS)
-#define SOC_EQEP_2_REGS                     (SOC_PWMSS2_REGS + SOC_EQEP_REGS) 
+#define SOC_EQEP_2_REGS                     (SOC_PWMSS2_REGS + SOC_EQEP_REGS)
 
 #define SOC_EPWM_0_REGS                     (SOC_PWMSS0_REGS + SOC_EPWM_REGS)
 #define SOC_EPWM_1_REGS                     (SOC_PWMSS1_REGS + SOC_EPWM_REGS)
 #define SOC_EPWM_2_REGS                     (SOC_PWMSS2_REGS + SOC_EPWM_REGS)
 
 
-#define SOC_EPWM_MODULE_FREQ                 100 
- 
+#define SOC_EPWM_MODULE_FREQ                 100
+
 #ifdef __cplusplus
 }
 #endif

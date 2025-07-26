@@ -50,7 +50,7 @@
 /**
  * \brief   This function selects the UART pins for use. The UART pins
  *          are multiplexed with pins of other peripherals in the SoC
- *          
+ *
  * \param   instanceNum       The instance number of the UART to be used.
  *
  * \return  None.
@@ -63,24 +63,24 @@ void UARTPinMuxSetup(unsigned int instanceNum)
      if(0 == instanceNum)
      {
           /* RXD */
-          HWREG(SOC_CONTROL_REGS + CONTROL_CONF_UART_RXD(0)) = 
-          (CONTROL_CONF_UART0_RXD_CONF_UART0_RXD_PUTYPESEL | 
+          HWREG(SOC_CONTROL_REGS + CONTROL_CONF_UART_RXD(0)) =
+          (CONTROL_CONF_UART0_RXD_CONF_UART0_RXD_PUTYPESEL |
            CONTROL_CONF_UART0_RXD_CONF_UART0_RXD_RXACTIVE);
 
           /* TXD */
-          HWREG(SOC_CONTROL_REGS + CONTROL_CONF_UART_TXD(0)) = 
+          HWREG(SOC_CONTROL_REGS + CONTROL_CONF_UART_TXD(0)) =
            CONTROL_CONF_UART0_TXD_CONF_UART0_TXD_PUTYPESEL;
      }
-    
+
     if(1 == instanceNum)
     {
         /* RXD */
-        HWREG(SOC_CONTROL_REGS + CONTROL_CONF_UART_RXD(1)) = 
-              (CONTROL_CONF_UART1_RXD_CONF_UART1_RXD_PUTYPESEL | 
+        HWREG(SOC_CONTROL_REGS + CONTROL_CONF_UART_RXD(1)) =
+              (CONTROL_CONF_UART1_RXD_CONF_UART1_RXD_PUTYPESEL |
                CONTROL_CONF_UART1_RXD_CONF_UART1_RXD_RXACTIVE);
 
         /* TXD */
-        HWREG(SOC_CONTROL_REGS + CONTROL_CONF_UART_TXD(1)) = 
+        HWREG(SOC_CONTROL_REGS + CONTROL_CONF_UART_TXD(1)) =
          CONTROL_CONF_UART1_TXD_CONF_UART1_TXD_PUTYPESEL;
     }
 }
@@ -283,12 +283,12 @@ void UART0ModuleClkConfig(void)
 void UART1ModuleClkConfig(void)
 {
     /* Writing to MODULEMODE field of CM_PER_UART1_CLKCTRL register. */
-    HWREG(SOC_CM_PER_REGS + CM_PER_UART1_CLKCTRL) = 
+    HWREG(SOC_CM_PER_REGS + CM_PER_UART1_CLKCTRL) =
           CM_PER_UART1_CLKCTRL_MODULEMODE_ENABLE;
 
     /* Waiting for MODULEMODE field to reflect the written value. */
     while(CM_PER_UART1_CLKCTRL_MODULEMODE_ENABLE !=
-          (HWREG(SOC_CM_PER_REGS + CM_PER_UART1_CLKCTRL) & 
+          (HWREG(SOC_CM_PER_REGS + CM_PER_UART1_CLKCTRL) &
            CM_PER_UART1_CLKCTRL_MODULEMODE));
 }
 

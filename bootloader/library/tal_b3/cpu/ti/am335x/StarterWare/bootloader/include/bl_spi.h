@@ -43,19 +43,19 @@
 
 typedef struct _spibootheader_
 {
-    unsigned int magicNum;    
-    unsigned int entryPoint;  
-    unsigned int appSize;    
-    unsigned int memAddress; 
-    unsigned int ldAddress;   
+    unsigned int magicNum;
+    unsigned int entryPoint;
+    unsigned int appSize;
+    unsigned int memAddress;
+    unsigned int ldAddress;
 }
 BL_SPI_Header;
 
 /******************************************************************************
-**                    External Function Declarations 
+**                    External Function Declarations
 *******************************************************************************/
 extern void BlSPIConfigure(void);
-extern void BlSPIReadFlash(unsigned int flashAddr, 
+extern void BlSPIReadFlash(unsigned int flashAddr,
                            unsigned int size,
                            unsigned char *destAddr);
 #endif

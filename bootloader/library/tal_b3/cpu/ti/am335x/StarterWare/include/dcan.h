@@ -56,11 +56,11 @@ extern "C" {
 
 /******************************************************************************/
 /*
-** Values that can be passed to 'DCANIntLineEnable' and 'DCANIntLineDisable'APIs 
-** as 'enableLine' and 'disableLine' respectively. 
+** Values that can be passed to 'DCANIntLineEnable' and 'DCANIntLineDisable'APIs
+** as 'enableLine' and 'disableLine' respectively.
 ** 'enableLine','disableLine' can take both the values.
 ** For e.g. (DCAN_INT_LINE0 | DCAN_INT_LINE1) can be passed.
-*/ 
+*/
 /* Enable/Disable Interrupt line 0 of DCAN peripheral */
 #define DCAN_INT_LINE0                       (DCAN_CTL_IE0)
 /* Enable/Disable Interrupt line 1 of DCAN peripheral */
@@ -68,7 +68,7 @@ extern "C" {
 
 /******************************************************************************/
 /*
-** Values that can be passed to 'DCANIntEnable' and 'DCANIntDisable' APIs as 
+** Values that can be passed to 'DCANIntEnable' and 'DCANIntDisable' APIs as
 ** 'intFlags'.
 ** 'intFlags' can take more than one value.
 ** For e.g. (DCAN_STATUS_CHANGE_INT | DCAN_ERROR_INT) can be passed.
@@ -89,7 +89,7 @@ extern "C" {
 
 /******************************************************************************/
 /*
-** Values that can be passed to 'DCANConfigRegWriteAccessControl' API as 
+** Values that can be passed to 'DCANConfigRegWriteAccessControl' API as
 ** 'regConfig'.
 */
 /* CPU has write access to the configuration registers */
@@ -128,7 +128,7 @@ extern "C" {
 
 /******************************************************************************/
 /*
-** Values that can be passed to 'DCANDmaRequestLineEnable' and 
+** Values that can be passed to 'DCANDmaRequestLineEnable' and
 ** 'DCANDmaRequestLineDisable' APIs as 'ifRegFlags'.
 ** 'ifRegFlags' can take more than one value.
 ** For e.g. (DCAN_DMA_REQUEST_LINE_ENABLE_IF1 | DCAN_DMA_REQUEST_LINE_ENABLE_IF2)
@@ -182,8 +182,8 @@ extern "C" {
 /******************************************************************************/
 /*
 ** Values that can be sent to 'DCANErrCntrRegStatusGet' API as 'cntrFlags'.
-** 'cntrFlags' can take more than one value. 
-** For e.g. (DCAN_TX_ERR_CNTR | DCAN_RX_ERR_CNTR | DCAN_RX_ERR_PASSIVE) can be 
+** 'cntrFlags' can take more than one value.
+** For e.g. (DCAN_TX_ERR_CNTR | DCAN_RX_ERR_CNTR | DCAN_RX_ERR_PASSIVE) can be
 ** sent as 'cntrFlags'.
 */
 /* Macro used to return the status of TEC[7:0] field of DCAN_ERRC register */
@@ -197,7 +197,7 @@ extern "C" {
 /*
 ** Values that can be passed to 'DCANIntRegStatusGet' API as 'intLnFlag'.
 ** 'intLnFlag' can take more than one value.
-** For e.g. (DCAN_INT_LINE0_STAT | DCAN_INT_LINE1_STAT) can be passed as 
+** For e.g. (DCAN_INT_LINE0_STAT | DCAN_INT_LINE1_STAT) can be passed as
 ** 'intLnFlag'.
 */
 /* Macro used to return the status of INT0ID[15:0] field of DCAN_INT register */
@@ -250,17 +250,17 @@ extern "C" {
 
 /******************************************************************************/
 /*
-** Values that can be used to check the status received from 
+** Values that can be used to check the status received from
 ** 'DCANParityErrCdRegStatusGet' API.
 */
 /* Macro used to return the message number status from DCAN_PERR register */
-#define DCAN_PARITY_ERR_MSG_NUM             (DCAN_PERR_MESSAGE_NUMBER) 
+#define DCAN_PARITY_ERR_MSG_NUM             (DCAN_PERR_MESSAGE_NUMBER)
 /* Macro used to return the word number status from DCAN_PERR register */
 #define DCAN_PARITY_ERR_WRD_NUM             (DCAN_PERR_WORD_NUMBER)
 
 /******************************************************************************/
 /*
-** Value that can be used while checking the status obtained from 
+** Value that can be used while checking the status obtained from
 ** 'DCANTxRqstXStatusGet' API.
 ** 'n' can take these values
 ** 1 <= n <= 8.
@@ -271,7 +271,7 @@ extern "C" {
 
 /******************************************************************************/
 /*
-** Value that can be used while checking the status obtained from 
+** Value that can be used while checking the status obtained from
 ** 'DCANNewDataXStatusGet' API.
 ** 'n' can take these values
 ** 1 <= n <= 8.
@@ -328,15 +328,15 @@ extern "C" {
 /* DCANINT0 line is active if corresponding IntPnd flag is one */
 #define DCAN_INT0_ACTIVE                    (0x00000000u)
 /* DCANINT1 line is active if corresponding IntPnd flag is one */
-#define DCAN_INT1_ACTIVE                    (0x00000001u) 
-                                             
+#define DCAN_INT1_ACTIVE                    (0x00000001u)
+
 /******************************************************************************/
 /*
-** Values that can be sent to 'DCANMsgObjValidate', 'DCANMsgObjInvalidate, 
-** 'DCANCommandRegSet', 'DCANIFBusyStatusGet, 'DCANMsgIdSet', 
-** 'DCANMsgDirectionSet', 'DCANDataWrite', 'DCANDataRead', 
+** Values that can be sent to 'DCANMsgObjValidate', 'DCANMsgObjInvalidate,
+** 'DCANCommandRegSet', 'DCANIFBusyStatusGet, 'DCANMsgIdSet',
+** 'DCANMsgDirectionSet', 'DCANDataWrite', 'DCANDataRead',
 ** 'DCANDataLengthCodeSet', 'DCANMsgObjIntEnable', 'DCANMsgObjIntDisable',
-** 'DCANFIFOEndOfBlockControl', 'DCANMsgObjectDirectionConfig', 
+** 'DCANFIFOEndOfBlockControl', 'DCANMsgObjectDirectionConfig',
 ** 'DCANMsgObjectMskConfig', APIs as ''regNum'.
 */
 /* Interface register 1 is used */
@@ -364,7 +364,7 @@ extern "C" {
 
 /******************************************************************************/
 /*
-** Values that can be sent to 'DCANMsgObjIntEnable' and 'DCANMsgObjIntDisable' 
+** Values that can be sent to 'DCANMsgObjIntEnable' and 'DCANMsgObjIntDisable'
 ** APIs as 'intFlags'.
 */
 /* Enable/disable transmit interrupt */
@@ -392,7 +392,7 @@ extern "C" {
 /* Access data from IF DataA register */
 #define DCAN_DAT_A_ACCESS                   (DCAN_IFCMD_DATAA)
 /* Access data from IF DataB register */
-#define DCAN_DAT_B_ACCESS                   (DCAN_IFCMD_DATAB) 
+#define DCAN_DAT_B_ACCESS                   (DCAN_IFCMD_DATAB)
 /* Access the TxRqst bit */
 #define DCAN_TXRQST_ACCESS                  (DCAN_IFCMD_TXRQST_NEWDAT)
 /* Clear the IntPnd bit */
@@ -423,7 +423,7 @@ extern "C" {
 ** 'mask' can take values between 0 <= idMsk <= 0x1FFFFFFF \n
 ** 'idType' can take the following values \n
 ** DCAN_ID_MSK_11_BIT - 11 bit identifier is used \n
-** DCAN_ID_MSK_29_BIT - 29 bit identifier is used \n 
+** DCAN_ID_MSK_29_BIT - 29 bit identifier is used \n
 */
 #define DCAN_IDENTIFIER_MSK(mask, idType)  (mask << idType)
 
@@ -456,7 +456,7 @@ extern "C" {
 /* Arbitration data read observation */
 #define DCAN_ARB_DATA                       (DCAN_IF3OBS_ARB)
 /* Ctrl read observation */
-#define DCAN_CTRL_DATA                      (DCAN_IF3OBS_CTRL) 
+#define DCAN_CTRL_DATA                      (DCAN_IF3OBS_CTRL)
 /* Data A read observation */
 #define DCAN_DAT_A_DATA                     (DCAN_IF3OBS_DATAA)
 /* Data B read observation */
@@ -464,7 +464,7 @@ extern "C" {
 
 /******************************************************************************/
 /*
-** Values that can be used to check the status obtained from 
+** Values that can be used to check the status obtained from
 ** 'DCANIF3ObservationFlagStatGet' API.
 */
 /* IF3 status of Mask data read access */
@@ -482,7 +482,7 @@ extern "C" {
 
 /******************************************************************************/
 /*
-** Values that can be used to check the status obtained from 
+** Values that can be used to check the status obtained from
 ** 'DCANIFMaskStatusGet' API.
 */
 /* Read Identifier mask */
@@ -508,7 +508,7 @@ extern "C" {
 
 /******************************************************************************/
 /*
-** Values that can be used to check the status obtained from 
+** Values that can be used to check the status obtained from
 ** 'DCANIFMsgCtlStatusGet' API.
 */
 /* Read data length code */
@@ -564,7 +564,7 @@ extern "C" {
 /******************************************************************************/
 extern void DCANInitModeSet(unsigned int baseAdd);
 extern void DCANNormalModeSet(unsigned int baseAdd);
-extern void DCANBitTimingConfig(unsigned int baseAdd, 
+extern void DCANBitTimingConfig(unsigned int baseAdd,
                                 unsigned int btrValue);
 extern void DCANReset(unsigned int baseAdd);
 extern void DCANIntEnable(unsigned int baseAdd, unsigned int intFlags);
@@ -605,7 +605,7 @@ extern unsigned int DCANIntPendingXStatusGet(unsigned int baseAdd);
 extern unsigned int DCANIntPendingStatusGet(unsigned int baseAdd, unsigned int msgNum);
 extern unsigned int DCANMsgValidXStatusGet(unsigned int baseAdd);
 extern unsigned int DCANMsgValidStatusGet(unsigned int baseAdd, unsigned int msgNum);
-extern void DCANIntMuxConfig(unsigned int baseAdd, unsigned int intLine, 
+extern void DCANIntMuxConfig(unsigned int baseAdd, unsigned int intLine,
                              unsigned int msgNum, unsigned int maxMsgObjects);
 extern unsigned int DCANIFBusyStatusGet(unsigned int baseAdd, unsigned int regNum);
 extern void DCANMsgIdSet(unsigned int baseAdd, unsigned int msgId,
@@ -633,7 +633,7 @@ extern void DCANIF3ObservationFlagSet(unsigned int baseAdd, unsigned int obsFlag
 extern void DCANIF3ObservationFlagClear(unsigned int baseAdd, unsigned int obsFlags);
 extern unsigned int DCANIFMaskStatusGet(unsigned int baseAdd, unsigned int regNum);
 extern unsigned int DCANIFArbStatusGet(unsigned int baseAdd, unsigned int regNum);
-extern unsigned int DCANIFMsgCtlStatusGet(unsigned int baseAdd, unsigned int regNum); 
+extern unsigned int DCANIFMsgCtlStatusGet(unsigned int baseAdd, unsigned int regNum);
 extern void DCANClrIntPnd(unsigned int baseAdd, unsigned int regNum);
 extern void DCANNewDataControl(unsigned int baseAdd, unsigned int newDat,
                         unsigned int regNum);

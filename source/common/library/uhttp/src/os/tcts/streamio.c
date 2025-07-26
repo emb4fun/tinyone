@@ -54,10 +54,10 @@
 #include "tal.h"
 #include "ipstack.h"
 
-#include "lwip\api.h"
-#include "lwip\priv\sockets_priv.h"
+#include "lwip/api.h"
+#include "lwip/priv/sockets_priv.h"
 
-#include "pro\uhttp\streamio.h"
+#include "pro/uhttp/streamio.h"
 
 /*=======================================================================*/
 /*  All extern data                                                      */

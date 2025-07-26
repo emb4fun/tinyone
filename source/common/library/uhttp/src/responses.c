@@ -40,8 +40,8 @@
 #include "xmem.h"
 #include "ipweb.h"
 
-#include "lwip\api.h"
-#include "lwip\priv\sockets_priv.h"
+#include "lwip/api.h"
+#include "lwip/priv/sockets_priv.h"
 
 #include <cfg/http.h>
 #if !defined(HTTPD_EXCLUDE_DATE)

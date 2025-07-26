@@ -437,8 +437,8 @@ dhcp_handle_offer(struct netif *netif, struct dhcp_msg *msg_in)
 
     /******* @@MF start *******/
     dhcp->offered_t0_lease = 0;
-    
-    if (dhcp_option_given(dhcp, DHCP_OPTION_IDX_LEASE_TIME)) 
+
+    if (dhcp_option_given(dhcp, DHCP_OPTION_IDX_LEASE_TIME))
     {
        /* remember offered lease time */
        dhcp->offered_t0_lease = dhcp_get_option_value(dhcp, DHCP_OPTION_IDX_LEASE_TIME);
@@ -1541,14 +1541,14 @@ static u16_t dhcp_option_clientid (u16_t options_out_len, u8_t *options) /* @@MF
    if ((clientid != NULL) && (clientid_len != 0)) {
       size_t len;
       const char *p = (char*)clientid;
-   
+
       options_out_len = dhcp_option(options_out_len, options, DHCP_OPTION_CLIENT_ID, (u8_t)clientid_len);
       len = clientid_len;
       while (len--) {
         options_out_len = dhcp_option_byte(options_out_len, options, *p++);
       }
    }
-   
+
    return(options_out_len);
 }
 
@@ -1990,11 +1990,11 @@ dhcp_create_msg(struct netif *netif, struct dhcp *dhcp, u8_t message_type, u16_t
   msg_out->htype = LWIP_IANA_HWTYPE_ETHERNET;
   msg_out->hlen = netif->hwaddr_len;
   msg_out->xid = lwip_htonl(dhcp->xid);
-  
+
   if (dhcp->state != DHCP_STATE_RENEWING) {
      msg_out->flags = lwip_htons(0x8000); /* @@MF */
-  }   
-  
+  }
+
   /* we don't need the broadcast flag since we can receive unicast traffic
      before being fully configured! */
   /* set ciaddr to netif->ip_addr based on message_type and state */

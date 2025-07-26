@@ -2,7 +2,7 @@
  * \file   uartStdio.c
  *
  * \brief  This file contains functions which interface interactively
- *         with the user through the serial console to perform some 
+ *         with the user through the serial console to perform some
  *         utility operations.
  */
 
@@ -65,7 +65,7 @@
                                       rxByte = UARTGetc();\
                                  }
 
-/* 
+/*
 ** Echoes back the delimiting character entered by the user
 ** after the actual input value has been read from the user.
 */
@@ -78,8 +78,8 @@
                                  else                                     \
                                  {                                        \
                                      UARTPutc(rxByte);                    \
-                                 }                       
-        
+                                 }
+
 /* A mapping from an integer between 0 and 15 to its ASCII character
  * equivalent. */
 static const char * const g_pcHex = "0123456789abcdef";
@@ -157,24 +157,24 @@ static inline void UARTStdioRead(unsigned char *rxBuff, unsigned char rxByte)
  * \brief  This function writes data from a specified buffer onto the
  *         transmitter FIFO of UART.
  *
- * \param  pTxBuffer        Pointer to a buffer in the transmitter.  
- * \param  numBytesToWrite  Number of bytes to be transmitted to the 
- *                          transmitter FIFO. The user has the freedom to not 
+ * \param  pTxBuffer        Pointer to a buffer in the transmitter.
+ * \param  numBytesToWrite  Number of bytes to be transmitted to the
+ *                          transmitter FIFO. The user has the freedom to not
  *                          specify any valid value for this if he wants to
  *                          print until the occurence of a NULL character.
  *                          In this case, he has to pass a negative value as
- *                          this parameter. 
- *  
+ *                          this parameter.
+ *
  * \return  Number of bytes written to the transmitter FIFO.
  *
- * \note   1> Whenever a null character(\0) is encountered in the 
+ * \note   1> Whenever a null character(\0) is encountered in the
  *            data to be transmitted, the transmission is stopped. \n
- *         2> Whenever the transmitter data has a new line character(\n), 
+ *         2> Whenever the transmitter data has a new line character(\n),
  *            it is interpreted as a new line(\n) + carraige return(\r)
- *            characters. This is because the serial console interprets a 
- *            new line character as it is and does not introduce a carraige 
+ *            characters. This is because the serial console interprets a
+ *            new line character as it is and does not introduce a carraige
  *            return. \n
- *            
+ *
  *         Some example function calls of this function are: \n
  *
  *         UARTPuts(txArray, -2): This shall print the contents of txArray[]
@@ -186,7 +186,7 @@ static inline void UARTStdioRead(unsigned char *rxBuff, unsigned char rxByte)
  *         UARTPuts("Hello World", 20): This shall print the string shown until
  *         the occurence of the NULL character. Here, the NULL character is
  *         encountered earlier than the length of 20 bytes.\n
- * 
+ *
  */
 unsigned int UARTPuts(char *pTxBuffer, int numBytesToWrite)
 {
@@ -197,7 +197,7 @@ unsigned int UARTPuts(char *pTxBuffer, int numBytesToWrite)
      {
           flag = 1;
      }
-     
+
      while('\0' != *pTxBuffer)
      {
           /* Checks if data is a newline character. */
@@ -240,12 +240,12 @@ unsigned int UARTPuts(char *pTxBuffer, int numBytesToWrite)
  * \note   The two exit points for this function are:
  *         1> Enter a carriage return character('Enter' key on the Keyboard).\n
  *         2> Specify a limit to the number of bytes to be read. \n
- * 
+ *
  *         Some example function calls of this function are:
  *
  *         UARTGets(rxBuffer, -2): This will not read any characters and returns
  *         without any functionality.
- *           
+ *
  *         UARTGets(rxBuffer, 12): This reads characters until
  *         11 characters have been read or until an occurrence of a carriage
  *         return , whichever occurs first.
@@ -277,20 +277,20 @@ char*  UARTGets(char *pRxBuffer, int numBytesToRead)
 
         *writePtr = '\0';
      }
-     
+
      return pRxBuffer;
 }
 
 
 /**
- *  \brief   This function prints the specified numbers(positive or negative) 
+ *  \brief   This function prints the specified numbers(positive or negative)
  *           on the serial console.
  *
  *  \param   value     The number to be printed on the serial console.
- *      
+ *
  *  \return  None.
  *
- *  \note    The numbers that this function can print should lie in the 
+ *  \note    The numbers that this function can print should lie in the
  *           following range:
  *           [-2^(31)] to [2^(31) - 1] i.e.
  *           0x80000000 to 0x7FFFFFFF
@@ -306,15 +306,15 @@ void UARTPutNum(int value)
 
      if(value < 0)
      {
-          UARTPutc('-');      
-          /* 
-          ** Making the negative number as positive. 
+          UARTPutc('-');
+          /*
+          ** Making the negative number as positive.
           ** This is done to simplify further processing and printing.
           */
-          value = -value; 
+          value = -value;
      }
 
-     dividend = value; 
+     dividend = value;
      do
      {
           quotient = dividend/10;
@@ -322,17 +322,17 @@ void UARTPutNum(int value)
           if(0 == quotient)
           {
                break;
-          }            
+          }
           count++;
           dividend = quotient;
 
-     }while(count < 10);      
+     }while(count < 10);
 
      if(10 == count)
      {
           count--;
      }
-      
+
      /* Printing the digits. */
      do
      {
@@ -404,11 +404,11 @@ void UARTPutHexNum(unsigned int hexValue)
  * \note    The numbers that this function can recieve should lie in the
  *          following range:
  *          [-2^(31)] to [2^(31) - 1] i.e.
- *          0x80000000 to  0x7FFFFFFF  
+ *          0x80000000 to  0x7FFFFFFF
  *
  */
 
-int UARTGetNum(void)  
+int UARTGetNum(void)
 {
      unsigned char rxByte;
      int sign = 1;
@@ -426,8 +426,8 @@ int UARTGetNum(void)
      {
           UARTPutc(rxByte);
           value = value*10 + (rxByte - 0x30);
-     } 
-     
+     }
+
      do
      {
           rxByte = UARTGetc();
@@ -436,20 +436,20 @@ int UARTGetNum(void)
           UARTPutc(rxByte);
           /*
           ** Checking if the entered character is a carriage return.
-          ** Pressing the 'Enter' key on the keyboard executes a 
+          ** Pressing the 'Enter' key on the keyboard executes a
           ** carriage return on the serial console.
           */
           if('\r' == rxByte)
           {
                break;
           }
-          /* 
-          ** Subtracting 0x30 to convert the representation of the digit 
+          /*
+          ** Subtracting 0x30 to convert the representation of the digit
           ** from ASCII to hexadecimal.
           */
           value = value*10 + (rxByte - 0x30);
 
-      }while(1);                 
+      }while(1);
 
       /* Accounting for the sign of the number.*/
       value = value * sign;
@@ -619,7 +619,7 @@ unsigned int UARTGetHexNum(void)
     return value;
 }
 
-/** 
+/**
  * \brief   This function writes a byte on the serial console.
  *
  * \param   byteTx   The byte to be transmitted.
@@ -670,7 +670,7 @@ unsigned char UARTGetc(void)
  */
 unsigned int UARTwrite(const char *pcBuf, unsigned int len)
 {
-    unsigned int uIdx;    
+    unsigned int uIdx;
 
     /* Send the characters */
     for(uIdx = 0; uIdx < len; uIdx++)
@@ -1044,8 +1044,8 @@ convert:
  * - %x or %X to read a hexadecimal value
  * - %p to read a pointer as a hexadecimal value
  *
- * Note: The width option in the format specifier is not supported. So this 
- *       function will take input as much as supported by the data type. The 
+ * Note: The width option in the format specifier is not supported. So this
+ *       function will take input as much as supported by the data type. The
  *       size specification in the format specifier will be treated as invalid
  *       specifier.
  *
@@ -1085,9 +1085,9 @@ int UARTScanf(const char *format, va_list vaArg)
                     */
                     inputMatch++;
 
-                    /* 
-                    ** Wait until the byte entered is new line or carriage 
-                    ** return or space 
+                    /*
+                    ** Wait until the byte entered is new line or carriage
+                    ** return or space
                     */
                     while((rxByte != '\n') && (rxByte != '\r') && (rxByte != ' '))
                     {
@@ -1132,7 +1132,7 @@ int UARTScanf(const char *format, va_list vaArg)
                     }
                     /*
                     ** Check whether the byte entered is not either the carriage
-                    ** return or space or new line, if yes then break from the 
+                    ** return or space or new line, if yes then break from the
                     ** loop.
                     */
                     while((rxByte != '\n') && (rxByte != '\r') && (rxByte != ' '))
@@ -1191,7 +1191,7 @@ int UARTScanf(const char *format, va_list vaArg)
                     rxByte = rxBuffer[byteCount];
                     /*
                     ** Check whether the byte entered is not either the carriage
-                    ** return or space or new line, if yes then break from the 
+                    ** return or space or new line, if yes then break from the
                     ** loop.
                     */
                     while((rxByte != '\n') && (rxByte != '\r') && (rxByte != ' '))

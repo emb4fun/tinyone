@@ -118,8 +118,8 @@ unsigned int MMCSDAppCmdSend(mmcsdCtrlInfo *ctrl, mmcsdCmd *c)
  * \param    mmcsdCtrlInfo It holds the mmcsd control information.
  *
  * \param   buswidth   SD/MMC bus width.\n
- * 
- *  buswidth can take the values.\n 
+ *
+ *  buswidth can take the values.\n
  *     HS_MMCSD_BUS_WIDTH_4BIT.\n
  *     HS_MMCSD_BUS_WIDTH_1BIT.\n
  *
@@ -282,14 +282,14 @@ unsigned int MMCSDStopCmdSend(mmcsdCtrlInfo *ctrl)
  * \param    mmcsdCtrlInfo It holds the mmcsd control information.
  *
  * \returns  type of the MMCSD card
- *         
+ *
  **/
 unsigned int MMCSDCardTypeCheck(mmcsdCtrlInfo * ctrl)
 {
     unsigned int status;
     mmcsdCmd cmd;
 
-    /* 
+    /*
      * Card type can be found by sending CMD55. If the card responds,
      * it is a SD card. Else, we assume it is a MMC Card
      */

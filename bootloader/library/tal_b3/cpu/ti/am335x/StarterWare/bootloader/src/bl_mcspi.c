@@ -3,7 +3,7 @@
  *
  * \brief Spi Initialization functions.  And a funciton to copy data from Flash
  *        to the given address.
- *  
+ *
  */
 
 /*
@@ -44,9 +44,9 @@
 #include "bl_spi.h"
 #include "uartStdio.h"
 
- 
+
 /******************************************************************************
-**                     Macro Defination 
+**                     Macro Defination
 *******************************************************************************/
 
 #define CHAR_LENGTH             0x8
@@ -57,7 +57,7 @@
 #define SPI_FLASH_READ          0x03
 
 /******************************************************************************
-**                    Local  Declaration 
+**                    Local  Declaration
 *******************************************************************************/
 static void McSPITransfer(unsigned char *p_tx,
                          unsigned char *p_rx,
@@ -87,8 +87,8 @@ void SPIConfigure(void)
     retVal = McSPIMasterModeConfig(SPI_BASE, MCSPI_SINGLE_CH, MCSPI_TX_RX_MODE,\
                                    MCSPI_DATA_LINE_COMM_MODE_1, SPI_CHAN);
 
-    /* 
-    ** If combination of trm and IS,DPE0 and DPE1 is not valid then retVal is 
+    /*
+    ** If combination of trm and IS,DPE0 and DPE1 is not valid then retVal is
     ** false.
     */
     if(!retVal)
@@ -98,15 +98,15 @@ void SPIConfigure(void)
         BootAbort();
     }
 
-    /* 
-    ** Default granularity is used. Also as per my understanding clock mode 
+    /*
+    ** Default granularity is used. Also as per my understanding clock mode
     ** 0 is proper.
-    */    
-    McSPIClkConfig(SPI_BASE, MCSPI_IN_CLK, MCSPI_OUT_CLK, 
-                   SPI_CHAN, MCSPI_CLK_MODE_0);                                        
+    */
+    McSPIClkConfig(SPI_BASE, MCSPI_IN_CLK, MCSPI_OUT_CLK,
+                   SPI_CHAN, MCSPI_CLK_MODE_0);
 
-    /* Configure the word length.*/    
-    McSPIWordLengthSet(SPI_BASE, MCSPI_WORD_LENGTH(8), SPI_CHAN);                
+    /* Configure the word length.*/
+    McSPIWordLengthSet(SPI_BASE, MCSPI_WORD_LENGTH(8), SPI_CHAN);
 
     /* Set polarity of SPIEN to low.*/
     McSPICSPolarityConfig(SPI_BASE, MCSPI_CS_POL_LOW, SPI_CHAN);
@@ -115,8 +115,8 @@ void SPIConfigure(void)
     McSPITxFIFOConfig(SPI_BASE, MCSPI_TX_FIFO_ENABLE, SPI_CHAN);
 
     /* Enable the receiver FIFO of McSPI peripheral.*/
-    McSPIRxFIFOConfig(SPI_BASE, MCSPI_RX_FIFO_ENABLE, SPI_CHAN);     
-} 
+    McSPIRxFIFOConfig(SPI_BASE, MCSPI_RX_FIFO_ENABLE, SPI_CHAN);
+}
 
 /**
 * \brief - Reads bytes from SPI Flash.
@@ -164,7 +164,7 @@ void BlSPIReadFlash (unsigned int offset,
 
     /* Read all the bytes */
     len = 0;
-    tx_data = 0;    
+    tx_data = 0;
 
     while(len < size)
     {
@@ -201,7 +201,7 @@ static void McSPITransfer(unsigned char *p_tx, unsigned char *p_rx,
 
         p_tx++;
 
-	/* Wait till the DATA in RX. */       
+	/* Wait till the DATA in RX. */
         while(MCSPI_INT_RX_FULL(SPI_CHAN) !=
               (McSPIIntStatusGet(SPI_BASE) & MCSPI_INT_RX_FULL(SPI_CHAN)));
         *p_rx = McSPIReceiveData(SPI_BASE, SPI_CHAN);

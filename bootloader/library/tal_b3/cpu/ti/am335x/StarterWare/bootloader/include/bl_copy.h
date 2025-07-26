@@ -1,7 +1,7 @@
 /**
  * \file  bl_copy.h
  *
- * \brief This file exports functions required during boot 
+ * \brief This file exports functions required during boot
  *
  */
 
@@ -51,13 +51,13 @@
      */
     typedef struct _ti_header_
     {
-        unsigned int image_size;  
-        unsigned int load_addr; 
+        unsigned int image_size;
+        unsigned int load_addr;
     }ti_header;
 #endif
 
 /******************************************************************************
-**                    External Function Declarations 
+**                    External Function Declarations
 *******************************************************************************/
 
 extern void ImageCopy(void);

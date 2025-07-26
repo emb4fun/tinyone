@@ -46,7 +46,7 @@
 
 
 /**
- *  \brief    This function maps the crossbar events. 
+ *  \brief    This function maps the crossbar events.
  *
  *  \param    baseAdd         It is the Control Module Address.
  *
@@ -67,10 +67,10 @@ unsigned int EDMA3CrossBarChannelMap(unsigned int baseAdd, unsigned int crossBar
     /* offset of the TPCC_MUX to be configured */
     offset = Channel / 4;
 
-    /* 
+    /*
     ** Each TPCC_MUX register has four event mux which can be used for
     ** cross bar mapping.Thus "select" variable is used to select,
-    ** which of the event mux out of four,for a given TPCC_MUX register 
+    ** which of the event mux out of four,for a given TPCC_MUX register
     ** to be used.
     */
     select = Channel - offset * 4;
@@ -96,7 +96,7 @@ unsigned int EDMA3CrossBarChannelMap(unsigned int baseAdd, unsigned int crossBar
          default:
          break;
     }
-    
+
     /* 'n' specifies the offset of the event mux */
     HWREG(baseAdd + TPCC_MUX(offset)) &= ~(crossBarEvent << n);
 
@@ -106,10 +106,10 @@ unsigned int EDMA3CrossBarChannelMap(unsigned int baseAdd, unsigned int crossBar
 }
 
 
- /**  
- * \brief  This API returns a unique number which identifies itself  
- *         with the EDMA IP in AM335x SoC.  
- * \param  None  
+ /**
+ * \brief  This API returns a unique number which identifies itself
+ *         with the EDMA IP in AM335x SoC.
+ * \param  None
  * \return This returns a number '2' which is unique to EDMA IP in AM335x.
  */
 unsigned int EDMAVersionGet(void)

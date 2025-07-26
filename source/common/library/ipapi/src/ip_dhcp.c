@@ -46,10 +46,10 @@
 #include "ipstack.h"
 #include "terminal.h"
 
-#include "lwip\prot\dhcp.h"
-#include "lwip\netif.h"
-#include "lwip\netifapi.h"
-#include "lwip\dns.h"
+#include "lwip/prot/dhcp.h"
+#include "lwip/netif.h"
+#include "lwip/netifapi.h"
+#include "lwip/dns.h"
 
 #if (IP_DEFAULT_OPT_DHCP >= 1)
 /*=======================================================================*/

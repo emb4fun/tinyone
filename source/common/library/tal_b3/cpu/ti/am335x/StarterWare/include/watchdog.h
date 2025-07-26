@@ -80,7 +80,7 @@ extern "C" {
 /*
 ** Values that can be passed to WatchdogTimerIntRawStatusSet,
 ** WatchdogTimerIntStatusClear APIs as intFlags.
-** These values can also be used to read the status obatined from 
+** These values can also be used to read the status obatined from
 ** WatchdogTimerIntRawStatusGet, WatchdogTimerIntStatusGet APIs.
 ** These values can also be combined together and passed.
 ** For e.g. (WDT_INT_DELAY | WDT_INT_OVERFLOW)
@@ -94,7 +94,7 @@ extern "C" {
 /*****************************************************************************/
 /*
 ** Values that can be passed to WatchdogTimerIntEnable as intFlags.
-** These values can also be used to read the status obtained from 
+** These values can also be used to read the status obtained from
 ** WatchdogTimerIntEnableStatusGet API.
 ** These values can also be combined together and passed.
 ** For e.g. (WDT_INT_ENABLE_DELAY | WDT_INT_ENABLE_OVRFLW)
@@ -119,7 +119,7 @@ extern "C" {
 
 /*****************************************************************************/
 /*
-** Values that can be used to read the status obtained from 
+** Values that can be used to read the status obtained from
 ** WatchdogTimerWritePostedStatusGet API.
 ** These values can also be combined while reading.
 ** For e.g. (WDT_WRITE_PENDING_WCLR | WDT_WRITE_PENDING_WCRR)
@@ -146,7 +146,7 @@ extern "C" {
 
 /***************************************************************************/
 /*
-** Watchdog timer API prototypes 
+** Watchdog timer API prototypes
 */
 extern void WatchdogTimerEnable(unsigned int baseAdd);
 extern void WatchdogTimerDisable(unsigned int baseAdd);

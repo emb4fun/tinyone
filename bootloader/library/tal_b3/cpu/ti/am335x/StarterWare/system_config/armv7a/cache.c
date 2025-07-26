@@ -46,7 +46,7 @@
 **                      INTERNAL MACRO DEFINITIONS
 ******************************************************************************/
 #define CORTEX_A8_L2EN                   (0x02)
-#define PRIMARY_PART_CORTEX_A8           (0xC08) 
+#define PRIMARY_PART_CORTEX_A8           (0xC08)
 
 /*****************************************************************************
 **                         FUNCTION DEFINITIONS
@@ -110,13 +110,13 @@ void CacheDisable(unsigned int disFlag)
 void CacheEnable(unsigned int enFlag)
 {
     if(enFlag & CACHE_ICACHE)
-    { 
+    {
         CP15ICacheFlush();
         CP15ICacheEnable();
     }
 
     if(enFlag & CACHE_DCACHE)
-    {   
+    {
         /* For Cortex A8, L2EN has to be enabled for L2 Cache */
         if(PRIMARY_PART_CORTEX_A8 == CP15MainIdPrimPartNumGet())
         {
@@ -142,7 +142,7 @@ void CacheInstInvalidateAll(void)
 }
 
 /**
- * \brief   This API invalidates a section of I-Cache. 
+ * \brief   This API invalidates a section of I-Cache.
  *
  * \param   startAddr    Starting address to be invalidated
  * \param   numBytes     The number of bytes to be invalidated
@@ -198,8 +198,8 @@ void CacheDataInvalidateAll(void)
  * \brief   This API clean a section of D-Cache, upto PoC. This API
  *          can be used to make a buffer in D-Cache to be coherent
  *          with the memory. For example, If DMA engine has to access
- *          a memory area for transmitting, to make sure that the 
- *          D-Cache values for the corresponding buffer is written to 
+ *          a memory area for transmitting, to make sure that the
+ *          D-Cache values for the corresponding buffer is written to
  *          memory, this API can be used.
  *
  * \param   startAddr    Starting address of the buffer to be cleaned
@@ -233,7 +233,7 @@ void CacheDataInvalidateBuff(unsigned int startAddr, unsigned int numBytes)
 /**
  * \brief   This API cleans and invalidates a section of D-Cache to PoC.
  *
- * \param   startAddr    Starting address of the buffer to be cleaned 
+ * \param   startAddr    Starting address of the buffer to be cleaned
  *                       and invalidated
  * \param   numBytes     The number of bytes to be cleaned and invalidated
  *
