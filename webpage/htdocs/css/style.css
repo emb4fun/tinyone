@@ -151,7 +151,9 @@ body
 
 .table_navi1 ul
 {
-   padding-top: 6px;
+   list-style: none;
+   margin: 0;
+   overflow: hidden;   
 }
 
 .table_navi1 li
@@ -165,6 +167,8 @@ body
    height: 22px;
    border-right: 2px solid;
    border-right-color: #9C9C9C;
+   margin-top: 6px;
+   margin-bottom: 6px;
 }
 
 .table_navi1 li.nm
@@ -174,12 +178,16 @@ body
    border-right: 2px solid;
    border-right-color: #9C9C9C;
    padding-left: 14px;
+   margin-top: 6px;
+   margin-bottom: 6px;   
 }
 
 .table_navi1 li.ne
 {
    /* Navigation end, ne */
    padding-left: 16px;
+   margin-top: 6px;
+   margin-bottom: 6px;   
 }
 
 .table_navi1 li a

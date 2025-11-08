@@ -68,5 +68,5 @@
  <Files>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="601" useTextEdit="1" path="../src/main.c" left="0" selected="1" top="585" codecName="Default"/>
  </Files>
- <EMStudioWindow activeProject="tiny-one" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="RAM Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="D:/Projekte/GitHub/tinyone/source/common/library/mbedtls/library" debugSearchPath="" autoConnectCapabilities="3199"/>
+ <EMStudioWindow activeProject="tiny-one" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="RAM Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="D:/Projekte/GitHub/tinyone/source/common/library/mbedtls/library" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

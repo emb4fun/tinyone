@@ -19,7 +19,7 @@ del build\*.bin >NUL 2>&1
 :: Create file system
 ::
 cd build
-..\tools\xfile -i:..\htdocs -c:etc\config.txt -z -a:4096
+..\tools\xfile -i ..\htdocs -c etc\config.txt -z -a 4096
 
 ::
 :: Rename file system to "project" files
@@ -31,6 +31,6 @@ rename xfile.bin %PRJ_NAME%.bin
 ::
 :: Add version info to the filenames
 ::
-..\tools\xname -o:%PRJ_NAME%.bin -v:..\htdocs\etc\config.txt >NUL 2>&1
+..\tools\xname -o %PRJ_NAME%.bin -v ..\htdocs\etc\config.txt
 
 cd..

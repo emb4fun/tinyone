@@ -666,28 +666,28 @@ extern void  mbedtls_free(void *ptr);
  *
  * Enable Cipher Feedback mode (CFB) for symmetric ciphers.
  */
-#define MBEDTLS_CIPHER_MODE_CFB
+//#define MBEDTLS_CIPHER_MODE_CFB
 
 /**
  * \def MBEDTLS_CIPHER_MODE_CTR
  *
  * Enable Counter Block Cipher mode (CTR) for symmetric ciphers.
  */
-#define MBEDTLS_CIPHER_MODE_CTR
+//#define MBEDTLS_CIPHER_MODE_CTR
 
 /**
  * \def MBEDTLS_CIPHER_MODE_OFB
  *
  * Enable Output Feedback mode (OFB) for symmetric ciphers.
  */
-#define MBEDTLS_CIPHER_MODE_OFB
+//#define MBEDTLS_CIPHER_MODE_OFB
 
 /**
  * \def MBEDTLS_CIPHER_MODE_XTS
  *
  * Enable Xor-encrypt-xor with ciphertext stealing mode (XTS) for AES.
  */
-#define MBEDTLS_CIPHER_MODE_XTS
+//#define MBEDTLS_CIPHER_MODE_XTS
 
 /**
  * \def MBEDTLS_CIPHER_NULL_CIPHER
@@ -732,10 +732,10 @@ extern void  mbedtls_free(void *ptr);
  *
  * Enable padding modes in the cipher layer.
  */
-#define MBEDTLS_CIPHER_PADDING_PKCS7
-#define MBEDTLS_CIPHER_PADDING_ONE_AND_ZEROS
-#define MBEDTLS_CIPHER_PADDING_ZEROS_AND_LEN
-#define MBEDTLS_CIPHER_PADDING_ZEROS
+//#define MBEDTLS_CIPHER_PADDING_PKCS7
+//#define MBEDTLS_CIPHER_PADDING_ONE_AND_ZEROS
+//#define MBEDTLS_CIPHER_PADDING_ZEROS_AND_LEN
+//#define MBEDTLS_CIPHER_PADDING_ZEROS
 
 /** \def MBEDTLS_CTR_DRBG_USE_128_BIT_KEY
  *
@@ -1773,6 +1773,20 @@ extern void  mbedtls_free(void *ptr);
 #define MBEDTLS_SSL_KEEP_PEER_CERTIFICATE
 
 /**
+ * \def MBEDTLS_SSL_KEYING_MATERIAL_EXPORT
+ *
+ * When this option is enabled, the client and server can extract additional
+ * shared symmetric keys after an SSL handshake using the function
+ * mbedtls_ssl_export_keying_material().
+ *
+ * The process for deriving the keys is specified in RFC 5705 for TLS 1.2 and
+ * in RFC 8446, Section 7.5, for TLS 1.3.
+ *
+ * Comment this macro to disable mbedtls_ssl_export_keying_material().
+ */
+#define MBEDTLS_SSL_KEYING_MATERIAL_EXPORT
+
+/**
  * \def MBEDTLS_SSL_RENEGOTIATION
  *
  * Enable support for TLS renegotiation.
@@ -2145,7 +2159,19 @@ extern void  mbedtls_free(void *ptr);
 /**
  * \def MBEDTLS_THREADING_ALT
  *
- * Provide your own alternate threading implementation.
+ * Provide your own alternate implementation of threading primitives
+ * for mutexes. If you enable this option:
+ *
+ * - Provide a header file `"threading_alt.h"`, defining the
+ *   type `mbedtls_threading_mutex_t` of mutex objects.
+ *
+ * - Call the function mbedtls_threading_set_alt() in your application
+ *   before calling any other library function (in particular before
+ *   calling psa_crypto_init(), performing an asymmetric cryptography
+ *   operation, or starting a TLS connection).
+ *
+ * See mbedtls/threading.h for more details, especially the documentation
+ * of mbedtls_threading_set_alt().
  *
  * Requires: MBEDTLS_THREADING_C
  *
@@ -2833,7 +2859,7 @@ extern void  mbedtls_free(void *ptr);
  * \warning If using a hash that is only provided by PSA drivers, you must
  * call psa_crypto_init() before doing any EC J-PAKE operations.
  */
-#define MBEDTLS_ECJPAKE_C
+//#define MBEDTLS_ECJPAKE_C
 
 /**
  * \def MBEDTLS_ECP_C
@@ -2947,7 +2973,7 @@ extern void  mbedtls_free(void *ptr);
  *
  * Uncomment to enable the LMS verification algorithm and public key operations.
  */
-#define MBEDTLS_LMS_C
+//#define MBEDTLS_LMS_C
 
 /**
  * \def MBEDTLS_LMS_PRIVATE
@@ -2972,7 +2998,7 @@ extern void  mbedtls_free(void *ptr);
  *
  * Requires: MBEDTLS_AES_C and MBEDTLS_CIPHER_C
  */
-#define MBEDTLS_NIST_KW_C
+//#define MBEDTLS_NIST_KW_C
 
 /**
  * \def MBEDTLS_MD_C
@@ -3215,7 +3241,7 @@ extern void  mbedtls_free(void *ptr);
  *
  * This module is required for the PKCS #7 parsing modules.
  */
-#define MBEDTLS_PKCS7_C
+//#define MBEDTLS_PKCS7_C
 
 /**
  * \def MBEDTLS_PKCS12_C
@@ -3234,7 +3260,7 @@ extern void  mbedtls_free(void *ptr);
  *
  * This module enables PKCS#12 functions.
  */
-#define MBEDTLS_PKCS12_C
+//#define MBEDTLS_PKCS12_C
 
 /**
  * \def MBEDTLS_PLATFORM_C
@@ -3405,7 +3431,7 @@ extern void  mbedtls_free(void *ptr);
  *            on it, and considering stronger message digests instead.
  *
  */
-#define MBEDTLS_SHA1_C
+//#define MBEDTLS_SHA1_C
 
 /**
  * \def MBEDTLS_SHA224_C
@@ -3418,7 +3444,7 @@ extern void  mbedtls_free(void *ptr);
  *
  * This module adds support for SHA-224.
  */
-#define MBEDTLS_SHA224_C
+//#define MBEDTLS_SHA224_C
 
 /**
  * \def MBEDTLS_SHA256_C
