@@ -2,12 +2,14 @@
 <session>
  <Bookmarks/>
  <Breakpoints groups="Breakpoints" active_group="Breakpoints">
-  <Exceptions set="Reset;Undef;P_Abort;D_Abort"/>
+  <Exceptions>
+   <Group group="ARM Exceptions" set="D_Abort;P_Abort;Undef"/>
+  </Exceptions>
  </Breakpoints>
  <ExecutionProfileWindow/>
  <FrameBuffer>
-  <FrameBufferWindow width="16843009" keepAspectRatio="0" zoomToFitWindow="0" showGrid="0" addressSpace="" format="0" height="16843009" autoEvaluate="0" scaleFactor="1" refreshPeriod="0" name="tiny-one_RAM Debug" addressText="" accessByDisplayWidth="0"/>
-  <FrameBufferWindow width="16843009" keepAspectRatio="0" zoomToFitWindow="0" showGrid="0" addressSpace="" format="0" height="16843009" autoEvaluate="0" scaleFactor="1" refreshPeriod="0" name="tiny-one_RAM Release" addressText="" accessByDisplayWidth="0"/>
+  <FrameBufferWindow width="16843009" keepAspectRatio="0" flipHorizontally="0" zoomToFitWindow="0" showGrid="0" flipVertically="0" addressSpace="" format="0" height="16843009" autoEvaluate="0" rotationDegrees="0" scaleFactor="1" refreshPeriod="0" name="tiny-one_RAM Debug" addressText="" accessByDisplayWidth="0"/>
+  <FrameBufferWindow width="16843009" keepAspectRatio="0" flipHorizontally="0" zoomToFitWindow="0" showGrid="0" flipVertically="0" addressSpace="" format="0" height="16843009" autoEvaluate="0" rotationDegrees="0" scaleFactor="1" refreshPeriod="0" name="tiny-one_RAM Release" addressText="" accessByDisplayWidth="0"/>
  </FrameBuffer>
  <Memory1>
   <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" viewType="4" addressOrder="0" columnsText="" refreshPeriod="0" name="tiny-one_RAM Debug" sizeText="" addressText=""/>
@@ -29,6 +31,9 @@
   <ProjectSessionItem path="tiny-one"/>
   <ProjectSessionItem path="tiny-one;tiny-one"/>
   <ProjectSessionItem path="tiny-one;tiny-one;Source Files"/>
+  <ProjectSessionItem path="tiny-one;tiny-one;Source Files;common"/>
+  <ProjectSessionItem path="tiny-one;tiny-one;Source Files;common;library"/>
+  <ProjectSessionItem path="tiny-one;tiny-one;Source Files;common;library;fsapi"/>
   <ProjectSessionItem path="tiny-one;tiny-one;Source Files;src"/>
  </Project>
  <Register1>
@@ -67,6 +72,7 @@
  </Watch4>
  <Files>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="601" useTextEdit="1" path="../src/main.c" left="0" selected="1" top="585" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="68" y="372" useTextEdit="1" path="../common/library/fsapi/src/fs_fatfs.c" left="0" top="368" codecName="Default"/>
  </Files>
- <EMStudioWindow activeProject="tiny-one" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="RAM Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="D:/Projekte/GitHub/tinyone/source/common/library/mbedtls/library" debugSearchPath="" autoConnectCapabilities="3199"/>
+ <EMStudioWindow activeProject="tiny-one" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="RAM Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="D:/Projekte/GitHub/tinyone/source/common/library/mbedtls/library" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

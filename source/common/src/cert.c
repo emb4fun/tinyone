@@ -46,9 +46,13 @@
 #include "ff.h"
 #include "elca_client.h"
 
+#include "mbedtls/x509_crt.h"
+
 /*=======================================================================*/
 /*  All Structures and Common Constants                                  */
 /*=======================================================================*/
+
+#define GOTO_END(_a)    { rc = _a; goto end; }
 
 /*=======================================================================*/
 /*  Definition of all global Data                                        */
@@ -57,6 +61,40 @@
 /*=======================================================================*/
 /*  Definition of all local Data                                         */
 /*=======================================================================*/
+
+/*
+ * Root and Intermediate certificate
+ */
+const uint8_t CAChainCert[] =
+"-----BEGIN CERTIFICATE-----\r\n"
+"MIICRTCCAcygAwIBAgIUKV/OsH13oCr1hbmGMx5Nask13UkwCgYIKoZIzj0EAwIw\r\n"
+"UjELMAkGA1UEBhMCREUxFTATBgNVBAoMDEV4YW1wbGVUcnVzdDEsMCoGA1UEAwwj\r\n"
+"RXhhbXBsZVRydXN0IE5vbi1QdWJsaWMgRUNDIFJvb3QgQ0EwHhcNMjAwMzA1MTg1\r\n"
+"MjAyWhcNNDAwMzA1MTg1MjAyWjBSMQswCQYDVQQGEwJERTEVMBMGA1UECgwMRXhh\r\n"
+"bXBsZVRydXN0MSwwKgYDVQQDDCNFeGFtcGxlVHJ1c3QgTm9uLVB1YmxpYyBFQ0Mg\r\n"
+"Um9vdCBDQTB2MBAGByqGSM49AgEGBSuBBAAiA2IABCiq5cypqvaI1vFgIAAl10C6\r\n"
+"Aaynss2NvteZc4Q/M6nypAGvmyut0zD5iyYkhLUTqqwFziyzOJ4PHGkVvBmhDkxK\r\n"
+"NxqRBB2waaJMcuiROPoIr9i73ZtUCC2o8XMehMCEF6NjMGEwHQYDVR0OBBYEFAZB\r\n"
+"5B1SjIz7U9N8l3oAx/7ZtQT/MB8GA1UdIwQYMBaAFAZB5B1SjIz7U9N8l3oAx/7Z\r\n"
+"tQT/MA8GA1UdEwEB/wQFMAMBAf8wDgYDVR0PAQH/BAQDAgGGMAoGCCqGSM49BAMC\r\n"
+"A2cAMGQCMAzwri8/vb36joNQRzuYDC+fXaVQlq+vmoPVM08ZOnLjSzk6HreXLKnw\r\n"
+"U2uz7ZWGlQIwPHx6NHWsJ0oLa6SR2vvu6cmi+XNEYYrVjsShQT3Zl8pjzrqCD7vU\r\n"
+"ousqas284irW\r\n"
+"-----END CERTIFICATE-----\r\n"
+"-----BEGIN CERTIFICATE-----\r\n"
+"MIICIzCCAamgAwIBAgIQHbHqNR+v1iYy/Phf9jUQGDAKBggqhkjOPQQDAjBSMQsw\r\n"
+"CQYDVQQGEwJERTEVMBMGA1UECgwMRXhhbXBsZVRydXN0MSwwKgYDVQQDDCNFeGFt\r\n"
+"cGxlVHJ1c3QgTm9uLVB1YmxpYyBFQ0MgUm9vdCBDQTAeFw0yMDAzMDUxODUyMDVa\r\n"
+"Fw0zMDAzMDYxODUyMDVaME0xCzAJBgNVBAYTAkRFMRUwEwYDVQQKDAxFeGFtcGxl\r\n"
+"VHJ1c3QxJzAlBgNVBAMMHkV4YW1wbGVUcnVzdCBOb24tUHVibGljIEVDQyBDQTBZ\r\n"
+"MBMGByqGSM49AgEGCCqGSM49AwEHA0IABE8vzQdN+tr90W5TP8sQUdOjdT0JEohL\r\n"
+"vKbmdRRIKrzvvZY5tjl11VFk1VMwk7+UziPwd9cpnz3mgyqKPdMuDI+jZjBkMB0G\r\n"
+"A1UdDgQWBBR9TK14Fd3w372gvE0hadhvoENIBzAfBgNVHSMEGDAWgBQGQeQdUoyM\r\n"
+"+1PTfJd6AMf+2bUE/zASBgNVHRMBAf8ECDAGAQH/AgEAMA4GA1UdDwEB/wQEAwIB\r\n"
+"hjAKBggqhkjOPQQDAgNoADBlAjBZENzK3wskPKYcNRaS6Yq3WDjC+BtqAnogBRj0\r\n"
+"1+l/Nqmcl/rbvJ3TamgcDxOhU1MCMQDCG4LGB7hgXY4TawivEgVh/6QeCVmvk/uH\r\n"
+"Q/91ez2GoKotqM7jELZVxIBf143NV/s=\r\n"
+"-----END CERTIFICATE-----\r\n";
 
 static char DeviceKey[2048];
 static char ChainCert[2048];
@@ -282,5 +320,52 @@ int cert_Write_ChainCert (char *buf, size_t buflen)
 
    return(rc);
 } /* cert_Write_ChainCert */
+
+/*************************************************************************/
+/*  cert_CheckPeerCert                                                   */
+/*                                                                       */
+/*  Check the peer certificate, must be in pem format.                   */
+/*                                                                       */
+/*  In    : buf, buflen, cn                                              */
+/*  Out   : none                                                         */
+/*  Return: 0 == OK / error cause                                        */
+/*************************************************************************/
+int cert_CheckPeerCert (char *buf, size_t buflen, const char *cn)
+{
+   int                     rc;
+   uint32_t                flags;
+   static mbedtls_x509_crt ca_crt;
+   static mbedtls_x509_crt peer_crt;
+      
+   mbedtls_x509_crt_init(&ca_crt);
+   mbedtls_x509_crt_init(&peer_crt);
+
+   /* Check parameter. cn is allowed to be NULL */   
+   if ((NULL == buf) || (0 == buflen)) GOTO_END(-1);  /*lint !e801*/
+
+   /* "Read" Root and Intermediate certificate */
+   rc = mbedtls_x509_crt_parse(&ca_crt, CAChainCert, sizeof(CAChainCert));
+   if (rc < 0) GOTO_END(rc);  /*lint !e801*/
+
+   /* "Read" Peer certificate */
+   rc = mbedtls_x509_crt_parse(&peer_crt, (uint8_t*)buf, buflen);
+   if (rc < 0) GOTO_END(rc);  /*lint !e801*/
+
+   flags = 0;
+   rc = mbedtls_x509_crt_verify(&peer_crt, 
+                                &ca_crt, 
+                                NULL, 
+                                cn,  
+                                &flags, 
+                                NULL, 
+                                NULL);
+
+end:
+   
+   mbedtls_x509_crt_free(&ca_crt);
+   mbedtls_x509_crt_free(&peer_crt);
+   
+   return(rc);
+} /* cert_CheckPeerCert */
 
 /*** EOF ***/

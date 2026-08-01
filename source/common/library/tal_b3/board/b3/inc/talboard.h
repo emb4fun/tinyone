@@ -93,6 +93,10 @@
 #define CPU_CAN1_PRIO         9
 #endif
 
+#if !defined(CPU_USB0_PRIO)
+#define CPU_USB0_PRIO         9
+#endif
+
 
 #define SYSTICK_INT     CPU_TINT2_INT 
 #define SYSTICK_PRIO    CPU_TINT2_PRIO

@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TCTS project (Tiny Cooperative Task Scheduler)
 *
-*  Copyright (c) 2015-2024 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2015-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Some functionality comes from the Ethernut (www.ethernut.de) project.
@@ -54,6 +54,7 @@
 /*=======================================================================*/
 #include <string.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "tcts.h"
 
@@ -77,6 +78,11 @@ extern uint8_t __stack_process_end__[];
 
 #define EnterCritical()    __disable_irq()
 #define ExitCritical()     __enable_irq()
+
+static inline bool InISR(void)
+{
+   return (__get_IPSR() != 0);
+}
 
 
 /*

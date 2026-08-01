@@ -55,6 +55,12 @@
 #define _MAX_WEB_CLIENT_TASKS   IP_WEB_MAX_HTTP_TASKS
 #endif
 
+#if !defined(IP_WEB_TLS_ONLY)
+#define _IP_WEB_TLS_ONLY         0
+#else
+#define _IP_WEB_TLS_ONLY         IP_WEB_TLS_ONLY
+#endif
+
 /*=======================================================================*/
 /*  Global                                                               */
 /*=======================================================================*/
@@ -135,8 +141,10 @@ typedef struct _client_info_
 /* 
  * Stack and TCB definition
  */
+#if (_IP_WEB_TLS_ONLY == 0)      
 static OS_STACK (ServerStack, TASK_IP_WEB_SERVER_STK_SIZE); 
 static OS_TCB TCBServerTask;
+#endif
 
 static client_info_t       ClientArray[_MAX_WEB_CLIENT_TASKS];
 static uint64_t            ClientStack[_MAX_WEB_CLIENT_TASKS][TASK_IP_WEB_CLIENT_STK_SIZE/8];
@@ -491,6 +499,7 @@ int IP_WEBS_Start (uint16_t wPort)
       nWebsRunning = 1;
       wServerPort  = wPort;
         
+#if (_IP_WEB_TLS_ONLY == 0)
       IP_WEBS_APIStart();
       IP_WEBS_CGIStart();
       IP_WEBS_SSIStart();
@@ -498,6 +507,7 @@ int IP_WEBS_Start (uint16_t wPort)
       /* Create the HTTP server tasks */
       OS_TaskCreate(&TCBServerTask, WebServer, NULL, TASK_IP_WEB_SERVER_PRIORITY,
                     ServerStack, sizeof(ServerStack), "WebServer");
+#endif                    
                    
       rc = 0;                   
    }

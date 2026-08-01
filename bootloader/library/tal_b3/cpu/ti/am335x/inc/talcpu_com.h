@@ -39,6 +39,7 @@
 *  Includes
 **************************************************************************/
 #include <stdint.h>
+#include "tal_conf.h"
 
 /**************************************************************************
 *  Global Definitions
@@ -55,6 +56,11 @@ typedef enum _tal_com_port_
    TAL_COM_PORT_4,
    TAL_COM_PORT_5,
    TAL_COM_PORT_6,
+
+   /* Virtual com ports */
+#if defined(TAL_COM_PORT_VIRTUAL)
+   TAL_COM_PORT_V1,
+#endif   
 
    TAL_COM_PORT_MAX
 } TAL_COM_PORT; 

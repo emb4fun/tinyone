@@ -2,13 +2,18 @@
 * Project: tinyone
 * Name   : "A small embedded DHCP and SNTP server"
 * Target : BeagleBone Black
-* Version: 20251108
+* Version: 20260801
 ***************************************************************************
-* Tools  : SEGGER Embedded Studio for ARM v8.22a
+* Tools  : SEGGER Embedded Studio v8.30
 ***************************************************************************
 * URL    : https://www.emb4fun.de/projects/tone/index.html
 ***************************************************************************
 
+= Version 1.29 / 1.21, 01.08.2026
+   * Updated lwIP to version from 2026-06-16.
+   * Updated MbedTLS to v3.6.7.
+   * Updated FatFS to R0.16 with patch 2.
+   
 = Version 1.28 / 1.21, 08.11.2025
    * Updated lwIP to version from 2025-08-03
      "lwip-56b29f8bcfaefe2974dca67bde16cc7c391feaeb"

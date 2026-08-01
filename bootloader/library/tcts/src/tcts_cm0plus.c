@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TCTS project (Tiny Cooperative Task Scheduler)
 *
-*  Copyright (c) 2016-2024 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2016-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Some functionality comes from the Ethernut (www.ethernut.de) project.
@@ -304,7 +304,7 @@ static void ContextSwitchExit (void)
 /*=======================================================================*/
 
 /*************************************************************************/
-/*  OSStart                                                              */
+/*  OS_Start                                                             */
 /*                                                                       */
 /*  Start the "Cooperative Task Scheduler".                              */
 /*                                                                       */
@@ -312,7 +312,7 @@ static void ContextSwitchExit (void)
 /*  Out   : none                                                         */
 /*  Return: never                                                        */
 /*************************************************************************/
-void OSStart (void)
+void OS_Start (void)
 {
    OS_TCB *pTask;  
    
@@ -359,14 +359,14 @@ void OSStart (void)
 } /* OSStart */
 
 /*************************************************************************/
-/*  OSTaskCreate                                                         */
+/*  OS_TaskCreate                                                         */
 /*                                                                       */
 /*  In    : none                                                         */
 /*  Out   : none                                                         */
 /*  Return: TAL_OK / error cause                                         */
 /*************************************************************************/
-void OSTaskCreate (OS_TCB *pTCB, OS_TASK Task, void *pParam, int nPrio,
-                   uint8_t *pStack, uint16_t wStackSize, char *pName)
+void OS_TaskCreate (OS_TCB *pTCB, OS_TASK Task, void *pParam, int nPrio,
+                    uint8_t *pStack, uint16_t wStackSize, char *pName)
 {
    switch_frame_t *sf;
    call_frame_t   *cf;
@@ -386,7 +386,7 @@ void OSTaskCreate (OS_TCB *pTCB, OS_TASK Task, void *pParam, int nPrio,
    }
                                             
    /* Clear the TCB memory */
-   memset(pTCB, 0x00, sizeof(os_tcb_t));
+   memset(pTCB, 0x00, sizeof(OS_TCB));
    
    /* Fill the stack memory with a check pattern */
    memset(pStack, 0xCC, wStackSize);
@@ -450,7 +450,7 @@ void OSTaskCreate (OS_TCB *pTCB, OS_TASK Task, void *pParam, int nPrio,
    sf->csf_r8   = 0x08080808;
    sf->csf_r9   = 0x09090909;
    sf->csf_r10  = 0x10101010;
-   sf->csf_r11  = (uintptr_t)OSTaskExit;
+   sf->csf_r11  = (uintptr_t)OS_TaskExit;
    sf->csf_lr   = (uintptr_t)TaskCall;
    
    pTCB->StackPtr = (uintptr_t)sf;

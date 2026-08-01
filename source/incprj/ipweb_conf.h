@@ -44,7 +44,7 @@
 #define IP_WEB_MAX_HTTP_TASKS             32
 #define IP_WEB_TLS_MAX_HTTP_TASKS         32
 
-#define IP_WEB_SID_SUPPORT                1
+#define IP_WEB_SID_SUPPORT                PROJECT_SUPPORT_LOGIN
 #define IP_WEB_SID_LOGIN_ERROR_CNT_MAX    3
 #define IP_WEB_SID_LOGIN_TIMEOUT_SEC      60
 #define IP_WEB_SID_TIMEOUT_SEC            (10*60)

@@ -1,33 +1,33 @@
 /**************************************************************************
-*  Copyright (c) 2016 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2016-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
-*  Redistribution and use in source and binary forms, with or without 
-*  modification, are permitted provided that the following conditions 
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions
 *  are met:
-*  
-*  1. Redistributions of source code must retain the above copyright 
+*
+*  1. Redistributions of source code must retain the above copyright
 *     notice, this list of conditions and the following disclaimer.
 *
 *  2. Redistributions in binary form must reproduce the above copyright
-*     notice, this list of conditions and the following disclaimer in the 
+*     notice, this list of conditions and the following disclaimer in the
 *     documentation and/or other materials provided with the distribution.
 *
-*  3. Neither the name of the author nor the names of its contributors may 
-*     be used to endorse or promote products derived from this software 
+*  3. Neither the name of the author nor the names of its contributors may
+*     be used to endorse or promote products derived from this software
 *     without specific prior written permission.
 *
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
-*  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
-*  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
-*  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL 
-*  THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
-*  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
-*  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS 
-*  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED 
-*  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-*  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
-*  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+*  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+*  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+*  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+*  THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+*  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+*  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+*  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+*  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+*  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+*  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 *  SUCH DAMAGE.
 *
 ***************************************************************************
@@ -70,17 +70,17 @@
  * Register bit definitions
  */
 #define PHY_BCR_AUTO_NEG_RESTART 0x0200
-#define PHY_BCR_AUTO_NEG_EN      0x1000 
+#define PHY_BCR_AUTO_NEG_EN      0x1000
 
 #define PHY_BSR_LINK_UP          0x0004
- 
+
 #define PHY_ANAR_10              0x0020
 #define PHY_ANAR_10_FD           0x0040
 #define PHY_ANAR_100_TX          0x0080
 #define PHY_ANAR_100_TX_FD       0x0100
-  
+
 #define PHY_PHYSCSR_AUTO_DONE    0x1000
-#define PHY_PHYSCSR_SPEED_MASK   0x001C  
+#define PHY_PHYSCSR_SPEED_MASK   0x001C
 #define PHY_PHYSCSR_SPEED_10_HD  0x0004
 #define PHY_PHYSCSR_SPEED_10_FD  0x0014
 #define PHY_PHYSCSR_SPEED_100_HD 0x0008
@@ -107,12 +107,12 @@ static void Init (ETH_PHY_DRIVER *pPHY)
    uint16_t Value;
 
    /*
-    * Set Negotiation Advertisement Register 
+    * Set Negotiation Advertisement Register
     */
    Value  = pPHY->ReadReg(pPHY, PHY_ANAR);
    Value |= (PHY_ANAR_10 | PHY_ANAR_10_FD | PHY_ANAR_100_TX | PHY_ANAR_100_TX_FD);
    pPHY->WriteReg(pPHY, PHY_ANAR, Value);
-    
+
    /*
     * Start Auto-Negotiation
     */
@@ -133,35 +133,35 @@ static uint8_t GetLinkStatus (ETH_PHY_DRIVER *pPHY)
 {
    static uint16_t OldLinkStatus = 0;
    uint16_t        LinkStatus;
-   
+
    uint8_t  Status = 0;
    uint16_t Value = 0;
-   
+
    LinkStatus = pPHY->ReadReg(pPHY, PHY_BSR);
    if (LinkStatus != OldLinkStatus)
    {
       OldLinkStatus = LinkStatus;
-      
+
       if (LinkStatus & PHY_BSR_LINK_UP)
       {
          Value  = pPHY->ReadReg(pPHY, PHY_PHYSCSR);
          Value &= PHY_PHYSCSR_SPEED_MASK;
-         
+
          if (PHY_PHYSCSR_SPEED_10_HD == Value)
          {
             Status = PHY_LINK_STATUS_SPEED_10M | PHY_LINK_STATUS_MODE_HALF;
-         } 
-         
+         }
+
          if (PHY_PHYSCSR_SPEED_10_FD == Value)
          {
             Status = PHY_LINK_STATUS_SPEED_10M | PHY_LINK_STATUS_MODE_FULL;
          }
-         
+
          if (PHY_PHYSCSR_SPEED_100_HD == Value)
          {
             Status = PHY_LINK_STATUS_SPEED_100M | PHY_LINK_STATUS_MODE_HALF;
-         } 
-         
+         }
+
          if (PHY_PHYSCSR_SPEED_100_FD == Value)
          {
             Status = PHY_LINK_STATUS_SPEED_100M | PHY_LINK_STATUS_MODE_FULL;
@@ -171,10 +171,10 @@ static uint8_t GetLinkStatus (ETH_PHY_DRIVER *pPHY)
       pPHY->Status = Status;
    }
    else
-   {      
+   {
       Status = pPHY->Status;
    } /* end if (LinkStatus != OldLinkStatus) */
-   
+
    return(Status);
 } /* GetLinkStatus */
 

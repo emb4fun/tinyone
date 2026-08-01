@@ -200,7 +200,7 @@ extern "C" {
 #define SOC_EDMA3_NUM_DMACH                 64
 #define SOC_EDMA3_NUM_QDMACH                8
 #define SOC_EDMA3_NUM_PARAMSETS             256
-#define SOC_EDMA3_NUM_EVQUE                 4
+#define SOC_EDMA3_NUM_EVQUE                 3
 #define SOC_EDMA3_CHMAPEXIST                0
 #define SOC_EDMA3_NUM_REGIONS               8
 #define SOC_EDMA3_MEMPROTECT                0

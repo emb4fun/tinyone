@@ -131,7 +131,6 @@ OBJS_CRYPTO= \
 	     ecjpake.o \
 	     ecp.o \
 	     ecp_curves.o \
-	     ecp_curves_new.o \
 	     entropy.o \
 	     entropy_poll.o \
 	     error.o \
@@ -167,6 +166,7 @@ OBJS_CRYPTO= \
 	     psa_crypto_hash.o \
 	     psa_crypto_mac.o \
 	     psa_crypto_pake.o \
+	     psa_crypto_random.o \
 	     psa_crypto_rsa.o \
 	     psa_crypto_se.o \
 	     psa_crypto_slot_management.o \

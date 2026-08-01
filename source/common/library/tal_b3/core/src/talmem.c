@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2018-2023 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2018-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -481,7 +481,7 @@ void tal_MEMInit (void)
    /* Get memory pointer */ 
    dAddr = (uint32_t)&TAL_HEAP_MEM2_START;
    dSize = ((uint32_t)(&TAL_HEAP_MEM2_END) - (uint32_t)(&TAL_HEAP_MEM2_START)) - 1;
-   
+
    MEMAdd(XM_ID_HEAP, (uint8_t*)dAddr, dSize);
 #endif   
    

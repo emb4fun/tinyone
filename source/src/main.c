@@ -168,7 +168,7 @@ static void SecFunction (void)
       IP_TNP_DHCPCallbackBound(0);
       IP_SNTP_TimeSync();
       
-      nLedMode = LED_MODE_READY;;
+      nLedMode = LED_MODE_READY;
    }
    
    /********************************************/   
@@ -545,7 +545,10 @@ static void StartTask (void *p)
    IP_SNTP_ServerInit();  /* Initialize the SNTP server */
 
    IP_WEBS_Start(80);     /* Start the web server */
-   IP_WEBS_SSLStart(443);
+   
+#if (PROJECT_SUPPORT_TLS == 1)
+   IP_WEBS_SSLStart(443); /* Start the SSL web server */
+#endif
 
    /*******************************************************************/
 
@@ -571,10 +574,12 @@ static void StartTask (void *p)
    /*
     * Check if the ELCA client must be started
     */
+#if (PROJECT_SUPPORT_TLS == 1)
    if (-1 == cert_Check())
    {
       IP_ELCAC_Start(cert_ELCACallback);
    }      
+#endif   
                    
    OS_TaskChangePriority(TASK_START_PRIORITY_IDLE);
 

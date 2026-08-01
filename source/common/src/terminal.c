@@ -48,6 +48,11 @@
 #include "tal.h"
 #include "terminal.h"
 
+#if defined(TAL_COM_PORT_VIRTUAL)
+#include "vcom.h"
+#include "usbd_vcom.h"
+#endif
+
 /*=======================================================================*/
 /*  All Structures and Common Constants                                  */
 /*=======================================================================*/
@@ -80,9 +85,23 @@ static uint8_t          TxRingBuffer[TX_RING_BUFFER_SIZE];
 static OS_SEMA          PrintfSema;
 static uint8_t          PrintfBuffer[PRINTF_BUFFER_SIZE];
 
+static TAL_COM_DCB    *pCOMPort = NULL;
+
 /*=======================================================================*/
 /*  Definition of all local Procedures                                   */
 /*=======================================================================*/
+
+/*************************************************************************/
+/*  USBD_VCOM_FirstTimeConnected                                         */
+/*                                                                       */
+/*  In    : none                                                         */
+/*  Out   : none                                                         */
+/*  Return: none                                                         */
+/*************************************************************************/
+void __attribute__((weak)) USBD_VCOM_FirstTimeConnected (void)
+{
+   /* Only an empty function */
+} /* USBD_VCOM_FirstTimeConnected */
 
 /*************************************************************************/
 /*  TermTask                                                             */
@@ -99,8 +118,38 @@ static void TermTask (void *arg)
    TAL_COM_DCB *pPort = (TAL_COM_DCB *)arg;
    uint8_t      bData;
    
+#if defined(TAL_COM_PORT_VIRTUAL)
+   uint8_t      bUSBConnected = 0;
+#endif
+   
    while (1)
    {
+      /*
+       * Check if the virtual COM port must be used
+       */
+#if defined(TAL_COM_PORT_VIRTUAL)
+      if (0 == USBD_VCOM_IsConnected())
+      {
+         bUSBConnected = 0;
+         pCOMPort      = &COMPort;
+         pPort         = &COMPort;
+      }
+      else
+      {
+         pCOMPort = vcom_GetPort();
+         pPort    = vcom_GetPort();
+         
+         if (0 == bUSBConnected)
+         {
+            bUSBConnected = 1;
+            USBD_VCOM_FirstTimeConnected();
+         }
+      }
+#endif   
+
+      /*
+       * Get char if available
+       */   
       Error = tal_COMReceiveCharWait(pPort, &bData, TASK_TERM_DELAY_MS);
       if (TAL_OK == Error)
       {
@@ -154,10 +203,19 @@ void term_Start (void)
    {
       OS_RES_CREATE(&PrintfSema);
    
+      pCOMPort = &COMPort;
       OS_TaskCreate(&TCBTermTask, TermTask, &COMPort, TASK_TERM_PRIORITY,
                     TermStack, sizeof(TermStack), 
                     "Terminal");
    }
+
+   
+   /*
+    * Start the VCOM functionality
+    */
+#if defined(TAL_COM_PORT_VIRTUAL)
+   vcom_Start();
+#endif
 
 } /* term_Start */
 
@@ -177,7 +235,7 @@ int term_printf (const char *fmt, ...)
    int     n = 0; /* Number of characters transmitted */
    va_list ap;
 
-   if (TAL_TRUE == tal_COMIsOpen(&COMPort))
+   if (TAL_TRUE == tal_COMIsOpen(pCOMPort))
    {
       OS_RES_LOCK(&PrintfSema);
   
@@ -186,7 +244,7 @@ int term_printf (const char *fmt, ...)
       va_end(ap);
       (void)ap;
   
-      tal_COMSendBlock(&COMPort, PrintfBuffer, (uint16_t)n);
+      tal_COMSendBlock(pCOMPort, PrintfBuffer, (uint16_t)n);
   
       OS_RES_FREE(&PrintfSema);
    }
@@ -205,13 +263,13 @@ int term_printf (const char *fmt, ...)
 /*************************************************************************/
 void term_puts (char *string)
 {
-   if (TAL_TRUE == tal_COMIsOpen(&COMPort))
+   if (TAL_TRUE == tal_COMIsOpen(pCOMPort))
    {
       OS_RES_LOCK(&PrintfSema);
   
-      tal_COMSendBlock(&COMPort, (uint8_t*)string, (uint16_t)strlen(string));
-      tal_COMSendChar(&COMPort, '\r');
-      tal_COMSendChar(&COMPort, '\n');
+      tal_COMSendBlock(pCOMPort, (uint8_t*)string, (uint16_t)strlen(string));
+      tal_COMSendChar(pCOMPort, '\r');
+      tal_COMSendChar(pCOMPort, '\n');
         
       OS_RES_FREE(&PrintfSema);
    }
@@ -231,14 +289,14 @@ int term_putchar (int ch)
    TAL_RESULT Error = TAL_ERROR;
    int        r = EOF;
 
-   if (TAL_TRUE == tal_COMIsOpen(&COMPort))
+   if (TAL_TRUE == tal_COMIsOpen(pCOMPort))
    {
       OS_RES_LOCK(&PrintfSema);
    
-      Error = tal_COMSendChar(&COMPort, (char)ch);
+      Error = tal_COMSendChar(pCOMPort, (char)ch);
       if ('\n' == ch)
       {
-         Error = tal_COMSendChar(&COMPort, '\r');
+         Error = tal_COMSendChar(pCOMPort, '\r');
       }
    
       if (TAL_OK == Error)

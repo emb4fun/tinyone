@@ -38,7 +38,6 @@
 /*  Include                                                              */
 /*=======================================================================*/
 #include <stdlib.h>
-#include <intrinsics.h>
 #include "tal.h"
 
 #include "soc_AM335x.h"
@@ -107,6 +106,8 @@ static volatile rng_t *rng = (rng_t*)RNG_BASE;
 /*************************************************************************/
 static void SysTickTimer (void)
 {
+
+#if defined(RTOS_TCTS)
    TAL_CPU_IRQ_ENTER();
 
    OS_TimerCallback();
@@ -115,6 +116,8 @@ static void SysTickTimer (void)
    DMTimerIntStatusClear(SOC_DMTIMER_2_REGS, DMTIMER_INT_OVF_IT_FLAG);
    
    TAL_CPU_IRQ_EXIT();
+#endif
+
 } /* SysTickTimer */
 
 /*************************************************************************/
@@ -677,6 +680,18 @@ static void EnableL3L4Uart0Clocks (void)
 
 } /* EnableL3L4Uart0Clocks */
 
+/*************************************************************************/
+/*  GPMCInit                                                             */
+/*                                                                       */
+/*  In    : none                                                         */
+/*  Out   : none                                                         */
+/*  Return: none                                                         */
+/*************************************************************************/
+void __attribute__((weak)) GPMCInit (void)
+{
+   /* Only an empty function */
+} /* GPMCInit */
+
 /*=======================================================================*/
 /*  All code exported                                                    */
 /*=======================================================================*/
@@ -713,9 +728,6 @@ void tal_CPUInit (void)
        *    mcr p15, 0, r0, c1, c0, 0      Write MMU control register
        */
 
-      /* GPMC initialization */
-      GPMCClkConfig();
-   
       /* Enable L3, L4 and UART0 clocks */
       EnableL3L4Uart0Clocks();
    
@@ -738,7 +750,12 @@ void tal_CPUInit (void)
       dValue = tal_CPUGetFrequencyM6();   /*lint !e838*/
 
       (void)dValue;
+
+      /* GPMC initialization */
+      GPMCClkConfig();
+      GPMCInit();      
    
+      /* RNG initialization */
       CPUGetRandomData();
    }      
 
@@ -1187,11 +1204,12 @@ void tal_CPUReboot (void)
 /*                                                                       */
 /*  In    : none                                                         */
 /*  Out   : none                                                         */
-/*  Return: none                                                         */
+/*  Return: TAL_OK                                                       */
 /*************************************************************************/
-void tal_CPURngInit (void)
+TAL_RESULT tal_CPURngInit (void)
 {
    /* Empty function */
+   return(TAL_OK);
 } /* tal_CPURngInit */
    
 /*************************************************************************/
@@ -1201,11 +1219,12 @@ void tal_CPURngInit (void)
 /*                                                                       */
 /*  In    : none                                                         */
 /*  Out   : none                                                         */
-/*  Return: none                                                         */
+/*  Return: TAL_OK                                                       */
 /*************************************************************************/
-void tal_CPURngDeInit (void)
+TAL_RESULT tal_CPURngDeInit (void)
 {
    /* Empty function */
+   return(TAL_OK);
 } /* tal_CPURngDeInit */
    
 /*************************************************************************/

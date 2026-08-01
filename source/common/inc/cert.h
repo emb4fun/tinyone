@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2020 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2020-2024 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -62,6 +62,8 @@ void cert_ELCACallback (int nError);
 int  cert_Get_DeviceKey(char **buf, size_t *buflen);
 int  cert_Get_ChainCert (char **buf, size_t *buflen);
 int  cert_Write_ChainCert (char *buf, size_t buflen);
+
+int  cert_CheckPeerCert (char *buf, size_t buflen, const char *cn);
 
 #endif /* !__CERT_H__ */
 

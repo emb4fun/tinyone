@@ -52,7 +52,8 @@
 #include "diskio.h"
 
 #include "ff.h"
-#include "pro/uhttp/modules/mod_redir.h"
+
+void disk_removed (BYTE pdrv);
 
 /*=======================================================================*/
 /*  All Structures and Common Constants                                  */

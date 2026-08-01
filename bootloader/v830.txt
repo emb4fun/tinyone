@@ -1,0 +1,2 @@
+
+SEGGER Embedded Studio v8.30 was used.

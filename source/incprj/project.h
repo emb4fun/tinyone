@@ -49,13 +49,22 @@
 
 #define PROJECT_VER_MAJOR     1
 #define PROJECT_VER_MINOR_1   2
-#define PROJECT_VER_MINOR_2   8
+#define PROJECT_VER_MINOR_2   9
 
 #define PROJECT_VER_NUMBER    ((PROJECT_VER_MAJOR * 100) + (PROJECT_VER_MINOR_1 * 10) + PROJECT_VER_MINOR_2)
 
 #define PROJECT_VER_STRING    (XSTR(PROJECT_VER_MAJOR) "." \
                                XSTR(PROJECT_VER_MINOR_1)   \
                                XSTR(PROJECT_VER_MINOR_2))
+
+#define PROJECT_SUPPORT_LOGIN 1
+#define PROJECT_SUPPORT_TLS   1
+
+/* If TLS is not enabled, disable LOGIN too */
+#if (PROJECT_SUPPORT_TLS == 0)
+#undef PROJECT_SUPPORT_LOGIN
+#define PROJECT_SUPPORT_LOGIN 0
+#endif
 
 
 /*-----------------------------------------------------------------------*/

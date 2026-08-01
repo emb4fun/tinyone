@@ -121,6 +121,7 @@
 /*  Definition of all local Procedures                                   */
 /*=======================================================================*/
 
+#if 0
 /*************************************************************************/
 /*  GPIO2ModuleClkConfig                                                 */
 /*                                                                       */
@@ -229,6 +230,7 @@ static void GPIO1ModuleClkConfig (void)
           CM_PER_L4LS_CLKSTCTRL_CLKACTIVITY_GPIO_1_GDBCLK));
           
 } /* GPIO1ModuleClkConfig */
+#endif
 
 /*************************************************************************/
 /*  GPMCPinMuxSetup                                                      */
@@ -457,8 +459,8 @@ void GPMCInit (void)
    /* 
     * Init GPIO clocks 
     */
-   GPIO1ModuleClkConfig();    
-   GPIO2ModuleClkConfig();
+//   GPIO1ModuleClkConfig();    
+//   GPIO2ModuleClkConfig();
           
    /*
     * Configure reset signal, gpio2[5] 

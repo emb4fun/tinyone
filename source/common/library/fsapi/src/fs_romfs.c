@@ -49,8 +49,6 @@
 #include "adler32.h"
 #include "minini.h"
 
-extern const char _romfs_data[];
-
 /*=======================================================================*/
 /*  All Structures and Common Constants                                  */
 /*=======================================================================*/
@@ -70,6 +68,13 @@ typedef struct _FCB_
 /*=======================================================================*/
 /*  Definition of all local Data                                         */
 /*=======================================================================*/
+
+#if defined(PROJECT_SUPPORT_LOGIN) && (PROJECT_SUPPORT_LOGIN == 0)
+extern const char _romfs_data_ns[];
+static const char *_romfs_data = _romfs_data_ns;
+#else
+extern const char _romfs_data[];
+#endif
 
 static time_t             FileTime    = 0;
 static XFILE_FAT_ENTRY  *pDir         = NULL;

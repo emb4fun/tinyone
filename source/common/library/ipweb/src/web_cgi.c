@@ -108,7 +108,7 @@ extern uint8_t __stack_und_end__[];
 
 #endif /* defined(__ARM_ARCH_4T__) || defined(__ARM_ARCH_7A__) */
 
-#if defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_7M__)
+#if defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_8M_MAINLINE__)
 
 extern uint8_t __stack_start__[];
 extern uint8_t __stack_end__[];
@@ -116,7 +116,7 @@ extern uint8_t __stack_end__[];
 extern uint8_t __stack_process_start__[];
 extern uint8_t __stack_process_end__[];
 
-#endif /* defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_7M__) */
+#endif /* defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_8M_MAINLINE__) */
 
 extern char   *LastUpdateName;
 extern uint8_t LastUpdateError;
@@ -1143,7 +1143,7 @@ static int StatRun (HTTPD_SESSION *hs)
    
 #endif /* defined(__ARM_ARCH_4T__) || defined(__ARM_ARCH_7A__) */
 
-#if defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_7M__)
+#if defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_8M_MAINLINE__)
 
    /* Main Stack */
    dSize = (uint32_t)(__stack_end__ - __stack_start__);
@@ -1169,7 +1169,7 @@ static int StatRun (HTTPD_SESSION *hs)
    s_printf(hs->s_stream, "  <td>&nbsp;</td>\r\n");
    s_printf(hs->s_stream, "</tr>\r\n");
 
-#endif /* defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_7M__) */
+#endif /* defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_8M_MAINLINE__) */
    
    return(0);
 } /* StatRun */

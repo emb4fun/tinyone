@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2013 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -54,9 +54,12 @@
 #include "lwip/tcpip.h"
 #include "lwip/inet.h"
 #include "lwip/netif.h"
+#include "lwip/dns.h"
+#include "lwip/mld6.h"
 #include "netif/etharp.h"
 
-#include "ethernetif.h"
+err_t ethernetif_init(struct netif *netif);
+err_t ethernetif1_init(struct netif *netif);
 
 /*=======================================================================*/
 /*  Extern                                                               */
@@ -177,6 +180,12 @@ static void NetIfLinkCallback0 (struct netif *netif)
    {
       TAL_PRINTF("Link 0 is up\r\n");
       LinkIsUp[0] = 1;
+      
+#if defined(LWIP_IPV6) && (LWIP_IPV6 >= 1)
+#if defined(LWIP_IPV6_DHCP6) && (LWIP_IPV6_DHCP6 >= 1)
+      dhcp6_enable_stateless(netif);
+#endif      
+#endif
    }
    else
    {
@@ -667,10 +676,20 @@ int IP_IF_Start (uint8_t iface)
       {
 
 #if defined(LWIP_IPV6) && (LWIP_IPV6 >= 1)
-         netif_set_ip6_autoconfig_enabled(pNetIf[iface], 0);
          netif_create_ip6_linklocal_address(pNetIf[iface], 1);
          netif_ip6_addr_set_state(pNetIf[iface], 0, IP6_ADDR_VALID);
-         term_printf("\r\nIPv6 Address: %s\r\n\r\n", ip6addr_ntoa(netif_ip6_addr(pNetIf[iface], 0)));
+         term_printf("\r\nIPv6 Link-Local: %s\r\n\r\n", ip6addr_ntoa(netif_ip6_addr(pNetIf[iface], 0)));
+
+         /* 
+          * Join ff02::1 (All-Nodes Multicast)
+          * Required in many real-world networks because some routers
+          * (including AVM FritzBox) send Router Advertisements (RA)
+          * to ff02::1 instead of the solicited-node multicast address.
+          * lwIP does NOT automatically join this group.
+          */
+         ip6_addr_t addr;
+         ip6addr_aton("ff02::1", &addr);
+         mld6_joingroup_netif(pNetIf[iface], &addr);
 #endif /* LWIP_IPV6 */
 
          /* Set the network interface as the default network interface. */
@@ -853,11 +872,50 @@ void IP_IF_OutputConfig (uint8_t iface)
       term_printf("Subnet Mask    : %s\r\n", htoa(IP_IF_MaskGet(iface), Buffer, sizeof(Buffer)));
       term_printf("Gateway        : %s\r\n", htoa(IP_IF_GWGet(iface), Buffer, sizeof(Buffer)));
       term_printf("DHCP Server    : %s\r\n", htoa(IP_DHCP_ServerGet(iface), Buffer, sizeof(Buffer)));
-      term_printf("DNS 1 Servcer  : %s\r\n", htoa(IP_DNS_ServerGet(0), Buffer, sizeof(Buffer)));
-      term_printf("DNS 2 Server   : %s\r\n", htoa(IP_DNS_ServerGet(1), Buffer, sizeof(Buffer)));
+      term_printf("DNS Server 1   : %s\r\n", htoa(IP_DNS_ServerGet(0), Buffer, sizeof(Buffer)));
+      term_printf("DNS Server 2   : %s\r\n", htoa(IP_DNS_ServerGet(1), Buffer, sizeof(Buffer)));
       term_printf("NTP Server     : %s\r\n", htoa(IP_SNTP_ServerGet(), Buffer, sizeof(Buffer)));
       term_printf("Syslog Server  : %s\r\n", htoa(IP_SYSL_ServerGet(iface), Buffer, sizeof(Buffer)));
       term_printf("\r\n");
+      
+#if defined(LWIP_IPV6) && (LWIP_IPV6 >= 1)
+      struct netif     *netif = pNetIf[iface];
+      const ip6_addr_t *a;
+      const ip_addr_t  *dns;
+      
+      term_printf("IPv6:\r\n");
+      a = netif_ip6_addr(netif, 0);
+      if (!ip6_addr_isinvalid(a))
+      {
+         term_printf("   Link-Local  : %s\r\n", ip6addr_ntoa(a));
+      }
+
+      a = netif_ip6_addr(netif, 1);
+      if (!ip6_addr_isinvalid(a))
+      {
+         term_printf("   Global      : %s\r\n", ip6addr_ntoa(a));
+      }
+      
+      a = netif_ip6_addr(netif, 2);
+      if (!ip6_addr_isinvalid(a))
+      {
+         term_printf("   ULA         : %s\r\n", ip6addr_ntoa(a));
+      }
+
+      term_printf("DNSv6:\r\n");
+      dns = dns_getserver(0);
+      if (!ip_addr_isany(dns))
+      {
+         term_printf("   Server 1    : %s\r\n", ipaddr_ntoa(dns));
+      }
+
+      dns = dns_getserver(1);
+      if (!ip_addr_isany(dns))
+      {
+         term_printf("   Server 2    : %s\r\n", ipaddr_ntoa(dns));
+      }
+      term_printf("\r\n");
+#endif      
    }      
 
 } /* IP_IF_OutputConfig */

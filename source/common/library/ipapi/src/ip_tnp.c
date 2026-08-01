@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2015 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2015-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -613,7 +613,7 @@ static void TNPTask (void *arg)
    OS_TimeDly(OS_MS_2_TICKS(500));
    SendResponse(0);
    OS_TimeDly(OS_MS_2_TICKS(500));
-   
+
 #if (ETH_MAX_IFACE == 2)
    SendResponse(1);
    OS_TimeDly(OS_MS_2_TICKS(500));
@@ -802,7 +802,7 @@ void IP_TNP_SendRequest (uint8_t bIface)
        * before the list is cleared in all other nodes. And with the 
        * response here, the other one can add us again.
        */
-      SendResponse(bIface);   
+      SendResponse(bIface); 
    }      
    
 } /* IP_TNP_SendRequest */
@@ -825,7 +825,7 @@ void IP_TNP_DHCPCallbackBound (uint8_t bIface)
       OS_TimeDly(OS_MS_2_TICKS(500));
       SendResponse(bIface);
       OS_TimeDly(OS_MS_2_TICKS(500));
-   
+      
       /* Request information from the network */
       SendRequest(bIface);
    }      

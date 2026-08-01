@@ -9,7 +9,7 @@
 /**************************************************************************
 *  Extern Definitions
 **************************************************************************/
-extern const unsigned char _romfs_data[3328 + 0];
+extern const unsigned char _romfs_data[3040 + 0];
 
 #endif /* __ROMFS_DATA_H__ */
 /*** EOF ***/

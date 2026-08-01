@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TCTS project (Tiny Cooperative Task Scheduler)
 *
-*  Copyright (c) 2015-2024 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2015-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Some functionality comes from the Ethernut (www.ethernut.de) project.
@@ -316,10 +316,15 @@ static void TaskCall (void)
                       "bic  r0, r0, #0xC0\n"
                       "msr  cpsr, r0\n" );
 
-   /* Call the task. */
-   __asm__ volatile ( "pop  {r0-r1}\n"    /* Load argument in r0 */
-                      "mov  lr, pc\n"     /* Store pc */
-                      "bx   r1\n" );      /* Call the task */
+   /*
+    * Load r11 (OSTaskExit) in lr, and set r11.
+    * The content of r11 (OSTaskExit) was set in OSTaskCreate.
+    * Load argument in r0 and jump to thread entry r1.
+    */   
+   __asm__ volatile ( "mov  lr, r11\n"
+                      "ldr  r11, =0x11111111\n"
+                      "pop  {r0-r1}\n"
+                      "bx   r1\n");
       
    /* Jump to OSTaskExit, in case the task returns. */
    __asm__ volatile ( "bl   OS_TaskExit" );
@@ -445,9 +450,6 @@ void OS_Start (void)
    /* Disable all interrupts */   
    EnterCritical();
    
-   /* Start the SysTick */
-//   tal_CPUSysTickStart();
-
    /* Unlock the scheduler */
    bIsSchedLocked = 0;  
 
@@ -477,9 +479,9 @@ void OS_Start (void)
 #endif
    
                       "pop    {r0}\n"              /* Get saved status... */
-                      "msr    cpsr, r0\n"             /* ...and save in cpsr. */
+                      "msr    cpsr, r0\n"          /* ...and save in cpsr. */
                       "pop    {r4-r11, lr}\n"      /* Restore registers. */
-                      "mov    pc, lr\n"               /* Jump to last lr. */
+                      "mov    pc, lr\n"            /* Jump to last lr. */
                       :: [StackPtr] "m"(RunningTask->StackPtr) : "r0", "memory" ); 
                       
 } /* OS_Start */
@@ -585,7 +587,7 @@ void OS_TaskCreate (OS_TCB *pTCB, OS_TASK Task, void *pParam, int nPrio,
    sf->r8   = 0x08080808;
    sf->r9   = 0x09090909;
    sf->r10  = 0x10101010;
-   sf->r11  = 0x11111111;
+   sf->r11  = (uintptr_t)OS_TaskExit;
    sf->lr   = (uintptr_t)TaskCall;
 
 #if defined(MCU_USE_CORTEX_FPU)

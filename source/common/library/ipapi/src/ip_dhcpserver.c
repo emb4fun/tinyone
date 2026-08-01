@@ -1,33 +1,33 @@
 /**************************************************************************
-*  Copyright (c) 2018 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2018-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
-*  Redistribution and use in source and binary forms, with or without 
-*  modification, are permitted provided that the following conditions 
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions
 *  are met:
-*  
-*  1. Redistributions of source code must retain the above copyright 
+*
+*  1. Redistributions of source code must retain the above copyright
 *     notice, this list of conditions and the following disclaimer.
 *
 *  2. Redistributions in binary form must reproduce the above copyright
-*     notice, this list of conditions and the following disclaimer in the 
+*     notice, this list of conditions and the following disclaimer in the
 *     documentation and/or other materials provided with the distribution.
 *
-*  3. Neither the name of the author nor the names of its contributors may 
-*     be used to endorse or promote products derived from this software 
+*  3. Neither the name of the author nor the names of its contributors may
+*     be used to endorse or promote products derived from this software
 *     without specific prior written permission.
 *
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
-*  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
-*  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
-*  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL 
-*  THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
-*  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
-*  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS 
-*  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED 
-*  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-*  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
-*  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+*  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+*  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+*  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+*  THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+*  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+*  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+*  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+*  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+*  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+*  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 *  SUCH DAMAGE.
 *
 ***************************************************************************
@@ -85,7 +85,7 @@
  * Reference is made to RFC2131 and:
  * https://de.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol
  */
- 
+
 #define DHCP_SERVER_PORT      67
 #define DHCP_CLIENT_PORT      68
 
@@ -94,12 +94,12 @@
 #else
 #define DHCP_IP_MAX_SIZE      IP_DHCP_SERVER_MAX_DEVICE
 #endif
- 
+
 #define RX_BUFFER_SIZE        576
 #define TX_BUFFER_SIZE        1460
 #define REQUEST_LIST_SIZE     15
-#define HOST_NAME_SIZE        255 
-#define CLIENT_ID_SIZE        255 
+#define HOST_NAME_SIZE        255
+#define CLIENT_ID_SIZE        255
 
 
 typedef struct _dhcp_server_
@@ -145,7 +145,7 @@ typedef struct _msg_options_
 /*  Definition of all local Data                                         */
 /*=======================================================================*/
 
-/* 
+/*
  * Some TASK variables like stack and task control block.
  */
 static OS_STACK (DHCPStack, TASK_IP_DHCP_SERVER_STK_SIZE);
@@ -171,10 +171,10 @@ static int ssi_dhcps_ip_chk (HTTPD_SESSION *hs)
    uint32_t ServerUse;
 
    /* Get client info */
-   ClientUse = nvm_IPUseDHCPGet();   
+   ClientUse = nvm_IPUseDHCPGet();
 
    /* Get server info */
-   ServerUse = nvm_DhcpServerUseGet();   
+   ServerUse = nvm_DhcpServerUseGet();
 
    /*
     * The server is only allowed to run if the client is disabled
@@ -194,7 +194,7 @@ static int ssi_dhcps_ip_chk (HTTPD_SESSION *hs)
    {
       /* The client is enabled, server is not allowed */
       s_printf(hs->s_stream, "0");
-   }            
+   }
 
    s_flush(hs->s_stream);
 
@@ -208,7 +208,7 @@ static int ssi_dhcps_ip_start (HTTPD_SESSION *hs)
    char      String[16];
    NVM_DHCPS DHCPS;
 
-   nvm_DhcpServerGet(&DHCPS); 
+   nvm_DhcpServerGet(&DHCPS);
 
    dStart = DHCPS.dPoolStart;
    dSize  = DHCPS.dPoolSize;
@@ -217,7 +217,7 @@ static int ssi_dhcps_ip_start (HTTPD_SESSION *hs)
    s_puts(String, hs->s_stream);
 
    s_flush(hs->s_stream);
-   
+
    (void)dSize;
 
    return(0);
@@ -229,7 +229,7 @@ static int ssi_dhcps_ip_size (HTTPD_SESSION *hs)
    uint32_t dSize;
    NVM_DHCPS DHCPS;
 
-   nvm_DhcpServerGet(&DHCPS); 
+   nvm_DhcpServerGet(&DHCPS);
 
    dStart = DHCPS.dPoolStart;
    dSize  = DHCPS.dPoolSize;
@@ -246,8 +246,8 @@ static int ssi_dhcps_ip_lease (HTTPD_SESSION *hs)
    uint32_t dLease;
    NVM_DHCPS DHCPS;
 
-   nvm_DhcpServerGet(&DHCPS); 
-   
+   nvm_DhcpServerGet(&DHCPS);
+
    dLease = DHCPS.dLease;
 
    s_printf(hs->s_stream, "%d", dLease);
@@ -260,8 +260,8 @@ static int ssi_dhcps_ip_gate (HTTPD_SESSION *hs)
    char String[16];
    NVM_DHCPS DHCPS;
 
-   nvm_DhcpServerGet(&DHCPS); 
-   
+   nvm_DhcpServerGet(&DHCPS);
+
    htoa(DHCPS.dIPGate, String, sizeof(String));
    s_puts(String, hs->s_stream);
 
@@ -275,8 +275,8 @@ static int ssi_dhcps_ip_dns (HTTPD_SESSION *hs)
    char String[16];
    NVM_DHCPS DHCPS;
 
-   nvm_DhcpServerGet(&DHCPS); 
-   
+   nvm_DhcpServerGet(&DHCPS);
+
    htoa(DHCPS.dIPDns, String, sizeof(String));
    s_puts(String, hs->s_stream);
 
@@ -290,8 +290,8 @@ static int ssi_dhcps_ip_dns2 (HTTPD_SESSION *hs)
    char String[16];
    NVM_DHCPS DHCPS;
 
-   nvm_DhcpServerGet(&DHCPS); 
-   
+   nvm_DhcpServerGet(&DHCPS);
+
    htoa(DHCPS.dIPDns2, String, sizeof(String));
    s_puts(String, hs->s_stream);
 
@@ -305,8 +305,8 @@ static int ssi_dhcps_ip_ntp (HTTPD_SESSION *hs)
    char      String[16];
    NVM_DHCPS DHCPS;
 
-   nvm_DhcpServerGet(&DHCPS); 
-   
+   nvm_DhcpServerGet(&DHCPS);
+
    htoa(DHCPS.dIPNtp, String, sizeof(String));
    s_puts(String, hs->s_stream);
 
@@ -320,8 +320,8 @@ static int ssi_dhcps_ip_sysl (HTTPD_SESSION *hs)
    char      String[16];
    NVM_DHCPS DHCPS;
 
-   nvm_DhcpServerGet(&DHCPS); 
-   
+   nvm_DhcpServerGet(&DHCPS);
+
    htoa(DHCPS.dIPSysl, String, sizeof(String));
    s_puts(String, hs->s_stream);
 
@@ -376,9 +376,9 @@ static int cgi_dhcps_table (HTTPD_SESSION *hs)
 
          if (pList->HostName[0] != 0)
          {
-            Len = (int)strlen(pList->HostName);   
+            Len = (int)strlen(pList->HostName);
             CopySize = MIN(Len, (int)(sizeof(String)-1));
-            memcpy(String, pList->HostName, CopySize); /*lint !e732*/   
+            memcpy(String, pList->HostName, CopySize); /*lint !e732*/
             String[CopySize] = 0;
             s_printf(hs->s_stream, "  <td>%s</td>\r\n", String);
          }
@@ -404,7 +404,7 @@ static int cgi_dhcps_table (HTTPD_SESSION *hs)
 
          s_flush(hs->s_stream);
 
-         Dim++; 
+         Dim++;
       } /* end if (IPList[Index].Used != 0) */
    } /* end for */
 
@@ -440,7 +440,7 @@ static int cgi_dhcps_set (HTTPD_SESSION *hs)
    uint32_t dIPSysl    = 0;
 
    Avail = hs->s_req.req_length;
-   while (Avail) 
+   while (Avail)
    {
       pArg = HttpArgReadNext(hs, &Avail);
       if (pArg != NULL)
@@ -488,9 +488,9 @@ static int cgi_dhcps_set (HTTPD_SESSION *hs)
             {
                pRedir = xstrdup(XM_ID_IP, pVal);
             }
-         }            
+         }
       }
-   } 
+   }
 
    if (pRedir != NULL)
    {
@@ -523,7 +523,7 @@ static int cgi_dhcps_set (HTTPD_SESSION *hs)
 
          /*
           * Update new settings and reboot
-          */ 
+          */
          nvm_Write();
          OS_TimeDly(2000);
          tal_CPUReboot();
@@ -531,8 +531,8 @@ static int cgi_dhcps_set (HTTPD_SESSION *hs)
       else
       {
          HttpSendRedirection(hs, 303, "/403.htm", NULL);
-      }         
-   }      
+      }
+   }
 
    xfree(pRedir);
 
@@ -553,7 +553,7 @@ static const SSI_EXT_LIST_ENTRY SSIList[] =
    { "sys_dhcps_ip_dns2",        ssi_dhcps_ip_dns2  },
    { "sys_dhcps_ip_ntp",         ssi_dhcps_ip_ntp   },
    { "sys_dhcps_ip_sysl",        ssi_dhcps_ip_sysl  },
-   
+
    {NULL, NULL}
 };
 
@@ -585,14 +585,14 @@ static void DebugInfoIn (uint8_t MsgType, uint32_t XID)
    switch (MsgType)
    {
       case DHCP_DISCOVER: TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: => DHCP Discover - Transaction ID 0x%08X", XID); break;
-      case DHCP_OFFER:    TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: => DHCP Offer    - Transaction ID 0x%08X", XID); break; 
+      case DHCP_OFFER:    TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: => DHCP Offer    - Transaction ID 0x%08X", XID); break;
       case DHCP_REQUEST:  TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: => DHCP Request  - Transaction ID 0x%08X", XID); break;
       case DHCP_DECLINE:  TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: => DHCP Decline  - Transaction ID 0x%08X", XID); break;
       case DHCP_ACK:      TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: => DHCP ACK      - Transaction ID 0x%08X", XID); break;
       case DHCP_NAK:      TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: => DHCP NAK      - Transaction ID 0x%08X", XID); break;
       case DHCP_RELEASE:  TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: => DHCP Release  - Transaction ID 0x%08X", XID); break;
       case DHCP_INFORM:   TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: => DHCP Inform   - Transaction ID 0x%08X", XID); break;
-      
+
       default:
       {
          /* Do nothing */
@@ -618,14 +618,14 @@ static void DebugInfoOut (uint8_t MsgType, uint32_t XID)
    switch (MsgType)
    {
       case DHCP_DISCOVER: TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: <= DHCP Discover - Transaction ID 0x%08X", XID); break;
-      case DHCP_OFFER:    TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: <= DHCP Offer    - Transaction ID 0x%08X", XID); break; 
+      case DHCP_OFFER:    TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: <= DHCP Offer    - Transaction ID 0x%08X", XID); break;
       case DHCP_REQUEST:  TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: <= DHCP Request  - Transaction ID 0x%08X", XID); break;
       case DHCP_DECLINE:  TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: <= DHCP Decline  - Transaction ID 0x%08X", XID); break;
       case DHCP_ACK:      TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: <= DHCP ACK      - Transaction ID 0x%08X", XID); break;
       case DHCP_NAK:      TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: <= DHCP NAK      - Transaction ID 0x%08X", XID); break;
       case DHCP_RELEASE:  TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: <= DHCP Release  - Transaction ID 0x%08X", XID); break;
       case DHCP_INFORM:   TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: <= DHCP Inform   - Transaction ID 0x%08X", XID); break;
-      
+
       default:
       {
          /* Do nothing */
@@ -688,7 +688,7 @@ static void CheckLeaseTime (void)
       /* Only used entries must be handled */
       if (IPList[Index].Used != 0)
       {
-         /* Check timeout */       
+         /* Check timeout */
          if (OS_TEST_TIMEOUT(Actual, IPList[Index].StartTime, Server.LeaseTimeSec))
          {
             /* This entry can be reused */
@@ -700,7 +700,7 @@ static void CheckLeaseTime (void)
          {
             Diff = Actual - IPList[Index].StartTime;
             IPList[Index].RemainingTime = Server.LeaseTimeSec - Diff;
-         }   
+         }
       }
    }
 
@@ -722,9 +722,9 @@ static uint32_t FindFreeIP (uint8_t *MACAddr)
    uint32_t RequestedIP = 0;
    uint32_t ValidIP;
 
-   /* 
+   /*
     * In case of a DHCP_REQUEST, check if the requested IP is in a valid range
-    */ 
+    */
    if ((DHCP_REQUEST == MsgRxOptions.MsgType) && (MsgRxOptions.RequestedIP != 0))
    {
       ValidIP = Server.PoolStart & Server.NETMask;
@@ -733,7 +733,7 @@ static uint32_t FindFreeIP (uint8_t *MACAddr)
       if ((RequestedIP & Server.NETMask) != ValidIP)
       {
          /* Error, requested IP is out of range in case of DHCP_REQUEST  */
-         goto FindFreeIPExit; /*lint !e801*/   
+         goto FindFreeIPExit; /*lint !e801*/
       }
    }
 
@@ -760,7 +760,7 @@ static uint32_t FindFreeIP (uint8_t *MACAddr)
          IPAddr = Server.PoolStart + Index;
 
          IPList[Index].IPAddr    = IPAddr;
-         IPList[Index].StartTime = OS_TimeGetSeconds(); 
+         IPList[Index].StartTime = OS_TimeGetSeconds();
          IPList[Index].RemainingTime = IPList[Index].StartTime;
 
          /* Clear first */
@@ -772,9 +772,9 @@ static uint32_t FindFreeIP (uint8_t *MACAddr)
          memcpy(IPList[Index].ClientID, MsgRxOptions.ClientID, CLIENT_ID_SIZE);
          IPList[Index].ClientIDLen = MsgRxOptions.ClientIDLen;
          break;
-      } 
+      }
    }
-   
+
    if (0 == IPAddr)
    {
       /* MAC address is not in the list, use a free entry */
@@ -786,9 +786,9 @@ static uint32_t FindFreeIP (uint8_t *MACAddr)
             IPAddr = Server.PoolStart + Index;
 
             IPList[Index].Used = 1;
-            memcpy(IPList[Index].MACAddr, MACAddr, 6); 
+            memcpy(IPList[Index].MACAddr, MACAddr, 6);
             IPList[Index].IPAddr    = IPAddr;
-            IPList[Index].StartTime = OS_TimeGetSeconds(); 
+            IPList[Index].StartTime = OS_TimeGetSeconds();
             IPList[Index].RemainingTime = IPList[Index].StartTime;
 
             /* Clear first */
@@ -800,7 +800,7 @@ static uint32_t FindFreeIP (uint8_t *MACAddr)
             memcpy(IPList[Index].ClientID, MsgRxOptions.ClientID, CLIENT_ID_SIZE);
             IPList[Index].ClientIDLen = MsgRxOptions.ClientIDLen;
             break;
-         } 
+         }
       }
    }
 
@@ -827,9 +827,9 @@ static uint8_t *AddOption (uint8_t *Option, uint8_t *Data, uint8_t Size, uint8_t
       *Option++ = Size;    /* Len */
       memcpy(Option, Data, Size);
       Option += Size;
-   }  
-   
-   return(Option); 
+   }
+
+   return(Option);
 } /* AddOption */
 
 /*************************************************************************/
@@ -856,28 +856,28 @@ static msg_options_t *DecodeOptions (struct dhcp_msg *Msg, uint16_t MsgSize)
 
    /* Clear MsgOptions first */
    memset(&MsgRxOptions, 0x00, sizeof(MsgRxOptions));
-   
+
    OptionsEnd = FALSE;
    while(Options < End)
    {
       Len = 0;
-      
+
       switch (*Options)
       {
          case DHCP_OPTION_MESSAGE_TYPE:            /* 53 */
          {
             Options++;
             Len = *Options++;
-            
+
             MsgRxOptions.MsgType = *Options;
             break;
          }
-         
+
          case DHCP_OPTION_HOSTNAME:                /* 12 */
          {
             Options++;
             Len = *Options++;
-            
+
             CopySize = MIN(Len, HOST_NAME_SIZE);
             memcpy(MsgRxOptions.HostName, Options, CopySize); /*lint !e670*/
             break;
@@ -896,39 +896,39 @@ static msg_options_t *DecodeOptions (struct dhcp_msg *Msg, uint16_t MsgSize)
          {
             Options++;
             Len = *Options++;
-            
+
             memcpy(&MsgRxOptions.LeaseTime, Options, 4);
             MsgRxOptions.LeaseTime = ntohl(MsgRxOptions.LeaseTime);
             break;
          }
-         
+
          case DHCP_OPTION_PARAMETER_REQUEST_LIST:  /* 55 */
          {
             Options++;
             Len = *Options++;
-            
+
             CopySize = MIN(Len, REQUEST_LIST_SIZE);
             memcpy(MsgRxOptions.RequestList, Options, CopySize);
             break;
          }
-         
+
          case DHCP_OPTION_CLIENT_ID:               /* 61 */
          {
             Options++;
             Len = *Options++;
 
-            CopySize = MIN(Len, CLIENT_ID_SIZE); 
+            CopySize = MIN(Len, CLIENT_ID_SIZE);
             memcpy(MsgRxOptions.ClientID, Options, Len); /*lint !e670*/
             MsgRxOptions.ClientIDLen = CopySize;
             break;
          }
-         
+
          case DHCP_OPTION_END:                     /* 255 */
          {
             OptionsEnd = TRUE;
             break;
          }
-          
+
          default:
          {
             Options++;
@@ -936,18 +936,18 @@ static msg_options_t *DecodeOptions (struct dhcp_msg *Msg, uint16_t MsgSize)
             break;
          }
       }
-      
+
       if (TRUE == OptionsEnd)
       {
          break;
       }
-      
-      /* Switch to next option */      
+
+      /* Switch to next option */
       Options += Len;
    }
-   
+
    return(&MsgRxOptions);
-} /* DecodeOptions */ 
+} /* DecodeOptions */
 
 /*************************************************************************/
 /*  BuildResponseMsg                                                     */
@@ -958,14 +958,14 @@ static msg_options_t *DecodeOptions (struct dhcp_msg *Msg, uint16_t MsgSize)
 /*  Out   : MsgTxSize                                                    */
 /*  Return: none                                                         */
 /*************************************************************************/
-static void BuildResponseMsg (struct dhcp_msg *MsgRx, uint16_t  MsgRxSize, 
+static void BuildResponseMsg (struct dhcp_msg *MsgRx, uint16_t  MsgRxSize,
                               struct dhcp_msg *MsgTx, uint16_t *MsgTxSize, uint8_t Type)
 {
    uint8_t  *Options;
    uint16_t  OptionsSize;
    uint32_t  YourIP;
    uint32_t  Value;
-   
+
    (void)MsgRxSize;
 
    /* Check if we have a free IP */
@@ -991,64 +991,64 @@ static void BuildResponseMsg (struct dhcp_msg *MsgRx, uint16_t  MsgRxSize,
    MsgTx->secs   = 0;
    MsgTx->flags  = MsgRx->flags;
    MsgTx->cookie = htonl(DHCP_MAGIC_COOKIE);
-   
+
    MsgTx->ciaddr.addr = 0;
    MsgTx->yiaddr.addr = htonl(YourIP);
    MsgTx->siaddr.addr = 0;
    MsgTx->giaddr.addr = 0;
-   
+
    Options = &MsgTx->options[0];
-   
+
    /* 53 */
-   Value = Type; 
-   Options = AddOption(Options, (uint8_t*)&Value, 1, DHCP_OPTION_MESSAGE_TYPE); 
-   
-   /* 54 */      
+   Value = Type;
+   Options = AddOption(Options, (uint8_t*)&Value, 1, DHCP_OPTION_MESSAGE_TYPE);
+
+   /* 54 */
    Value = htonl(IP_IF_AddrGet(0));
-   Options = AddOption(Options, (uint8_t*)&Value, sizeof(Value), DHCP_OPTION_SERVER_ID); 
-   
-   if (Type != DHCP_NAK) 
+   Options = AddOption(Options, (uint8_t*)&Value, sizeof(Value), DHCP_OPTION_SERVER_ID);
+
+   if (Type != DHCP_NAK)
    {
-      /* 51 */      
+      /* 51 */
       Value = htonl(Server.LeaseTimeSec);
-      Options = AddOption(Options, (uint8_t*)&Value, sizeof(Value), DHCP_OPTION_LEASE_TIME); 
- 
-      /* 1 */      
+      Options = AddOption(Options, (uint8_t*)&Value, sizeof(Value), DHCP_OPTION_LEASE_TIME);
+
+      /* 1 */
       Value = htonl(Server.NETMask);
-      Options = AddOption(Options, (uint8_t*)&Value, sizeof(Value), DHCP_OPTION_SUBNET_MASK); 
- 
-      /* 3 */      
+      Options = AddOption(Options, (uint8_t*)&Value, sizeof(Value), DHCP_OPTION_SUBNET_MASK);
+
+      /* 3 */
       Value = htonl(Server.GWAddr);
-      Options = AddOption(Options, (uint8_t*)&Value, sizeof(Value), DHCP_OPTION_ROUTER); 
- 
-      /* 6 */      
+      Options = AddOption(Options, (uint8_t*)&Value, sizeof(Value), DHCP_OPTION_ROUTER);
+
+      /* 6 */
       Value = htonl(Server.DNSAddr);
-      Options = AddOption(Options, (uint8_t*)&Value, sizeof(Value), DHCP_OPTION_DNS_SERVER); 
+      Options = AddOption(Options, (uint8_t*)&Value, sizeof(Value), DHCP_OPTION_DNS_SERVER);
 
       /* 42 */
       if ((CheckRequestList(DHCP_OPTION_NTP)) && (Server.NTPAddr != 0))
       {
          Value = htonl(Server.NTPAddr);
-         Options = AddOption(Options, (uint8_t*)&Value, sizeof(Value), DHCP_OPTION_NTP); 
+         Options = AddOption(Options, (uint8_t*)&Value, sizeof(Value), DHCP_OPTION_NTP);
       }
 
       /* 7 */
       if ((CheckRequestList(DHCP_OPTION_SYSL)) && (Server.SyslAddr != 0))
       {
          Value = htonl(Server.SyslAddr);
-         Options = AddOption(Options, (uint8_t*)&Value, sizeof(Value), DHCP_OPTION_SYSL); 
+         Options = AddOption(Options, (uint8_t*)&Value, sizeof(Value), DHCP_OPTION_SYSL);
       }
    }
- 
-   /* End of list */  
-   Options = AddOption(Options, 0, 0, DHCP_OPTION_END); 
-   
+
+   /* End of list */
+   Options = AddOption(Options, 0, 0, DHCP_OPTION_END);
+
    /* Calculate options size */
    OptionsSize = (uint16_t)(Options - &MsgTx->options[0]);
-   
+
    /* Calculate total size */
    *MsgTxSize = (uint16_t)(DHCP_OPTIONS_OFS + OptionsSize);
-   
+
 } /* BuildResponseMsg */
 
 /*************************************************************************/
@@ -1063,9 +1063,9 @@ static void BuildResponseMsg (struct dhcp_msg *MsgRx, uint16_t  MsgRxSize,
 static struct dhcp_msg *HandleDiscover (struct dhcp_msg *MsgRx, uint16_t MsgRxSize, uint16_t *MsgTxSize)
 {
    struct dhcp_msg *MsgTx = (struct dhcp_msg*)TxBuffer;
-   
+
    BuildResponseMsg(MsgRx, MsgRxSize, MsgTx, MsgTxSize, DHCP_OFFER);
-   
+
    return(MsgTx);
 } /* HandleDiscover */
 
@@ -1083,7 +1083,7 @@ static struct dhcp_msg *HandleRequest (struct dhcp_msg *MsgRx, uint16_t MsgRxSiz
    struct dhcp_msg *MsgTx = (struct dhcp_msg*)TxBuffer;
 
    BuildResponseMsg(MsgRx, MsgRxSize, MsgTx, MsgTxSize, DHCP_ACK);
-   
+
    return(MsgTx);
 } /* HandleRequest */
 
@@ -1105,17 +1105,17 @@ static void DHCPTask (void *arg)
    struct sockaddr_in ServerAddr;
    struct sockaddr_in SourceAddr;
    struct sockaddr_in ClientAddr;
-   int                SourceLen; 
+   int                SourceLen;
    int                Size;
-   struct lwip_sock  *Sock; 
+   struct lwip_sock  *Sock;
    msg_options_t     *Options;
    struct dhcp_msg   *MsgRx;
    uint16_t           MsgRxSize;
    struct dhcp_msg   *MsgTx;
    uint16_t           MsgTxSize;
-   
+
    (void)arg;
-   
+
    /* Wait that the IP interface is ready for use */
    while(0 == IP_IF_IsReady(IFACE_ANY))
    {
@@ -1124,14 +1124,14 @@ static void DHCPTask (void *arg)
 
    /* Wait some time for the external switch */
    OS_TimeDly(DELAY_AFTER_LINK_MS);
-   
+
    TAL_DEBUG(TAL_DBG_DHCPs, "DHCPs: Server started...");
-   
+
    /* Clear DHCP list first */
    memset(IPList, 0x00, sizeof(IPList));
-   
+
    /*
-    * Create Rx socket 
+    * Create Rx socket
     */
    RxSock = socket(AF_INET, SOCK_DGRAM, 0);
    TAL_ASSERT(RxSock != SOCKET_ERROR);
@@ -1141,29 +1141,29 @@ static void DHCPTask (void *arg)
    Err = setsockopt(RxSock, SOL_SOCKET, SO_BROADCAST, &Value, sizeof(Value));
    TAL_ASSERT(0 == Err);
 
-   /* Set receive timeout */   
+   /* Set receive timeout */
    Value = SOCKET_RCVTIMEO_MS;
    Err = setsockopt(RxSock, SOL_SOCKET, SO_RCVTIMEO, &Value, sizeof(Value));
    TAL_ASSERT(0 == Err);
 
 
-   /* 
-    * Create Tx socket 
+   /*
+    * Create Tx socket
     */
    TxSock = socket(AF_INET, SOCK_DGRAM, 0);
    TAL_ASSERT(TxSock != SOCKET_ERROR);
-   
+
    /* Send broadcast messages too */
    Value = 1;
    Err = setsockopt(TxSock, SOL_SOCKET, SO_BROADCAST, &Value, sizeof(Value));
    TAL_ASSERT(0 == Err);
-   
+
    /* Set local UDP port */
    Sock = lwip_socket_dbg_get_socket(TxSock); /* Hack Alert */
    Sock->conn->pcb.udp->local_port = 67;      /* Hack Alert */
-   
+
    /*
-    * Create server 
+    * Create server
     */
    ServerAddr.sin_addr.s_addr = INADDR_ANY;
    ServerAddr.sin_port        = htons(DHCP_SERVER_PORT);
@@ -1184,19 +1184,19 @@ static void DHCPTask (void *arg)
       {
          MsgRx     = (struct dhcp_msg *)RxBuffer;
          MsgRxSize = (uint16_t)Size;
-         
+
          MsgTx     = NULL;
          MsgTxSize = 0;
-         
+
          /* Check for a valid DHCP frame */
-         if( (DHCP_BOOTREQUEST          == MsgRx->op)            && 
-             (LWIP_IANA_HWTYPE_ETHERNET == MsgRx->htype)         && 
-             (NETIF_MAX_HWADDR_LEN      == MsgRx->hlen)          && 
+         if( (DHCP_BOOTREQUEST          == MsgRx->op)            &&
+             (LWIP_IANA_HWTYPE_ETHERNET == MsgRx->htype)         &&
+             (NETIF_MAX_HWADDR_LEN      == MsgRx->hlen)          &&
              (DHCP_MAGIC_COOKIE         == ntohl(MsgRx->cookie)) )
          {
             Options = DecodeOptions(MsgRx, MsgRxSize);
 
-            DebugInfoIn(Options->MsgType, MsgRx->xid); 
+            DebugInfoIn(Options->MsgType, MsgRx->xid);
 
             switch (Options->MsgType)
             {
@@ -1205,26 +1205,26 @@ static void DHCPTask (void *arg)
                   MsgTx = HandleDiscover(MsgRx, MsgRxSize, &MsgTxSize);
                   break;
                }
-               
+
                case DHCP_REQUEST:
                {
                   MsgTx = HandleRequest(MsgRx, MsgRxSize, &MsgTxSize);
                   break;
-               } 
-               
+               }
+
                case DHCP_RELEASE:
                {
                   /* Must be tested with a PC */
                   break;
-               }  
-               
+               }
+
                default:
                {
                   /* Do nothing */
                   break;
                }
             }
-            
+
             /* Check if an answer must be send */
             if ((MsgTx != NULL) && (MsgTxSize != 0))
             {
@@ -1236,15 +1236,15 @@ static void DHCPTask (void *arg)
                ClientAddr.sin_family      = AF_INET;
                sendto(TxSock, MsgTx, (size_t)MsgTxSize, 0, (struct sockaddr *)&ClientAddr, sizeof(ClientAddr)); /*lint !e740*/
             }
-            
-         } /* end if "valid frame" */   
+
+         } /* end if "valid frame" */
       } /* end if (Size >= (int)DHCP_OPTIONS_OFS) */
 
       CheckLeaseTime();
 
    } /* end while(1) */
 
-} /* DHCPTask */  
+} /* DHCPTask */
 
 /*=======================================================================*/
 /*  All code exported                                                    */
@@ -1262,10 +1262,10 @@ static void DHCPTask (void *arg)
 void IP_DHCP_ServerInit (void)
 {
    memset(&Server, 0x00, sizeof(Server));
-   
+
    IP_WEBS_SSIListAdd((SSI_EXT_LIST_ENTRY*)SSIList);
    IP_WEBS_CGIListAdd((CGI_LIST_ENTRY*)CGIList);
-   
+
 } /* IP_DHCP_ServerInit */
 
 /*************************************************************************/
@@ -1283,7 +1283,7 @@ void IP_DHCP_ServerStart (void)
    uint32_t      PoolSize;
    NVM_DHCPS     Config;
    struct netif *netif;
-   
+
    if (0 == Server.InUse)
    {
       netif = netif_find("en0");
@@ -1294,9 +1294,9 @@ void IP_DHCP_ServerStart (void)
 
          /* Get configuration */
          nvm_DhcpServerGet(&Config);
-         
-         /* 
-          * Configure DHCPS settings 
+
+         /*
+          * Configure DHCPS settings
           */
          AddrLow = (Config.dPoolStart & 0x000000FF);
          if ((AddrLow + Config.dPoolSize) >= 254)
@@ -1306,11 +1306,11 @@ void IP_DHCP_ServerStart (void)
          else
          {
             PoolSize = Config.dPoolSize;
-         } 
+         }
 
          Server.PoolStart = Config.dPoolStart;
          Server.PoolSize  = PoolSize;
-   
+
          Server.LeaseTimeSec = Config.dLease * 60;
          Server.NETMask      = IP_IF_MaskGet(0);
          Server.GWAddr       = Config.dIPGate;
@@ -1318,13 +1318,13 @@ void IP_DHCP_ServerStart (void)
          Server.DNS2Addr     = Config.dIPDns2;
          Server.NTPAddr      = Config.dIPNtp;
          Server.SyslAddr     = Config.dIPSysl;
-                  
-         OS_TaskCreate(&TCBDHCP, DHCPTask, NULL, TASK_IP_DHCP_SERVER_PRIORITY, 
-                       DHCPStack, sizeof(DHCPStack), 
-                       "DHCPServer"); 
-      }   
-   }   
-   
+
+         OS_TaskCreate(&TCBDHCP, DHCPTask, NULL, TASK_IP_DHCP_SERVER_PRIORITY,
+                       DHCPStack, sizeof(DHCPStack),
+                       "DHCPServer");
+      }
+   }
+
 } /* IP_DHCP_ServerStart */
 
 /*************************************************************************/
@@ -1339,14 +1339,14 @@ void IP_DHCP_ServerStart (void)
 void IP_DHCP_ServerStop (void)
 {
    struct netif *netif;
-   
+
    if (1 == Server.InUse)
    {
       netif = netif_find("en0");
       if (netif != NULL)
       {
          //Server.InUse = 0;
-      }   
+      }
    }
 } /* IP_DHCP_ServerStop */
 

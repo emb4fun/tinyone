@@ -67,6 +67,12 @@
 #define _MAX_WEB_TLS_CLIENT_TASKS   IP_WEB_TLS_MAX_HTTP_TASKS
 #endif
 
+#if !defined(IP_WEB_TLS_ONLY)
+#define _IP_WEB_TLS_ONLY         0
+#else
+#define _IP_WEB_TLS_ONLY         IP_WEB_TLS_ONLY
+#endif
+
 /*=======================================================================*/
 /*  All Structures and Common Constants                                  */
 /*=======================================================================*/
@@ -253,6 +259,7 @@ static int InitTls (void)
    
    mbedtls_ssl_conf_session_cache(&conf, &cache, mbedtls_ssl_cache_get, mbedtls_ssl_cache_set);
 
+   mbedtls_ssl_conf_authmode(&conf, MBEDTLS_SSL_VERIFY_NONE);
    mbedtls_ssl_conf_ca_chain(&conf, srvcert.next, NULL);
 
    rc = mbedtls_ssl_conf_own_cert(&conf, &srvcert, &pkey);
@@ -497,6 +504,12 @@ int IP_WEBS_SSLStart (uint16_t wPort)
    {
       nWebsTlsRunning = 1;
       wServerPort     = wPort;
+
+#if (_IP_WEB_TLS_ONLY >= 1)
+      IP_WEBS_APIStart();
+      IP_WEBS_CGIStart();
+      IP_WEBS_SSIStart();
+#endif
 
       /*
        * Initialize the stream interface. 

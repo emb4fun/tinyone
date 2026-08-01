@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2013-2023 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -98,7 +98,7 @@ typedef struct _tal_can_settings_
 /*
  * Timestamp
  */
-typedef uint32_t (*GET_TIMESTAMP)(void);
+typedef uint32_t (*GET_CAN_TIMESTAMP)(void);
 
 /*
  * CAN device control block
@@ -125,7 +125,7 @@ typedef struct _tal_can_dcb_
    TAL_MISC_RING     TxRing;
 
    /* Timestamp function */
-   GET_TIMESTAMP     GetRxTimestamp;
+   GET_CAN_TIMESTAMP GetRxTimestamp;
    
    /* HW information from talcpu_can.h */
    TAL_CAN_HW        HW;
@@ -168,7 +168,7 @@ TAL_RESULT tal_CANSetRingBuffer (TAL_CAN_DCB    *pDCB,
                                  uint16_t        wBufferSize);
 
 TAL_RESULT tal_CANSetRxTimestampFunc (TAL_CAN_DCB *pDCB, 
-                                      GET_TIMESTAMP GetRxTimestamp);                                 
+                                      GET_CAN_TIMESTAMP GetRxTimestamp);                                 
 TAL_RESULT tal_CANClearOverflow (TAL_CAN_DCB *pDCB); 
 
 TAL_RESULT tal_CANOpen (TAL_CAN_DCB *pDCB, TAL_CAN_SETTINGS *pSettings);

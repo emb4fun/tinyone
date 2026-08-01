@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2013-2023 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -214,7 +214,7 @@ TAL_RESULT tal_CANSetRingBuffer (TAL_CAN_DCB    *pDCB,
 /*  Out   : none                                                         */
 /*  Return: TAL_OK / error cause                                         */
 /*************************************************************************/
-TAL_RESULT tal_CANSetTimestampFunc (TAL_CAN_DCB *pDCB, GET_TIMESTAMP GetRxTimestamp)
+TAL_RESULT tal_CANSetTimestampFunc (TAL_CAN_DCB *pDCB, GET_CAN_TIMESTAMP GetRxTimestamp)
 {
    TAL_RESULT Error = TAL_ERR_PARAMETER;
    
@@ -259,6 +259,8 @@ TAL_RESULT tal_CANClearOverflow (TAL_CAN_DCB *pDCB)
          /* Clear counting semaphore */
          OS_SemaDelete(&pDCB->RxRdySema);
          OS_SemaCreate(&pDCB->RxRdySema, 0, OS_SEMA_COUNTER_MAX);
+
+         pDCB->bRxOverflow = TAL_FALSE;
          
          OS_RES_FREE(&pDCB->Sema);
          
@@ -632,7 +634,7 @@ TAL_RESULT tal_CANMsgGet (TAL_CAN_DCB *pDCB, TAL_CAN_OBJECT *pCANObject)
          
          OS_RES_FREE(&pDCB->Sema);
          
-         if ((TAL_OK == Error) || (TAL_ERR_COM_OVERFLOW == Error))
+         if ((TAL_OK == Error) || (TAL_ERR_CAN_OVERFLOW == Error))
          {
             /* Data was available, RxRdySema must be decrease */
             OS_SemaWait(&pDCB->RxRdySema, 1);
@@ -674,7 +676,7 @@ TAL_RESULT tal_CANMsgGetWait (TAL_CAN_DCB *pDCB, TAL_CAN_OBJECT *pCANObject, uin
          
          /* Check if data is available */         
          Error = GetRxObject(pDCB, pCANObject);
-         if ((TAL_OK == Error) || (TAL_ERR_COM_OVERFLOW == Error))
+         if ((TAL_OK == Error) || (TAL_ERR_CAN_OVERFLOW == Error))
          {
             /* Data was available, RxRdySema must be decrease */
             OS_SemaWait(&pDCB->RxRdySema, 1);

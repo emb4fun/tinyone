@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2020-2023 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2020-2024 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -165,7 +165,7 @@ void *lwip_calloc (size_t n, size_t size)
 {
    void *p;
 
-   p = xcalloc(XM_ID_TLS, n, size);
+   p = xcalloc(XM_ID_IP, n, size);
 
    return(p);
 } /* lwip_calloc */

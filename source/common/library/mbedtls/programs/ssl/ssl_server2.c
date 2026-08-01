@@ -374,9 +374,6 @@ int main(void)
 #define USAGE_ANTI_REPLAY ""
 #endif
 
-#define USAGE_BADMAC_LIMIT \
-    "    badmac_limit=%%d     default: (library default: disabled)\n"
-
 #if defined(MBEDTLS_SSL_PROTO_DTLS)
 #define USAGE_DTLS \
     "    dtls=%%d             default: 0 (TLS)\n"                           \
@@ -385,7 +382,8 @@ int main(void)
     "    mtu=%%d              default: (library default: unlimited)\n"  \
     "    dgram_packing=%%d    default: 1 (allowed)\n"                   \
     "                        allow or forbid packing of multiple\n" \
-    "                        records within a single datgram.\n"
+    "                        records within a single datagram.\n" \
+    "    badmac_limit=%%d     default: (library default: disabled)\n"
 #else
 #define USAGE_DTLS ""
 #endif
@@ -536,7 +534,6 @@ int main(void)
     USAGE_SRTP                                              \
     USAGE_COOKIES                                           \
     USAGE_ANTI_REPLAY                                       \
-    USAGE_BADMAC_LIMIT                                      \
     "\n"
 #define USAGE2 \
     "    auth_mode=%%s        default: (library default: none)\n"      \
@@ -3592,6 +3589,7 @@ handshake:
      * 5. Verify the client certificate
      */
     mbedtls_printf("  . Verifying peer X.509 certificate...");
+    fflush(stdout);
 
     if ((flags = mbedtls_ssl_get_verify_result(&ssl)) != 0) {
         char vrfy_buf[512];
@@ -3609,6 +3607,7 @@ handshake:
         char crt_buf[512];
 
         mbedtls_printf("  . Peer certificate information    ...\n");
+        fflush(stdout);
         mbedtls_x509_crt_info(crt_buf, sizeof(crt_buf), "      ",
                               mbedtls_ssl_get_peer_cert(&ssl));
         mbedtls_printf("%s\n", crt_buf);
@@ -4061,6 +4060,7 @@ data_exchange:
         size_t buf_len;
 
         mbedtls_printf("  . Serializing live connection...");
+        fflush(stdout);
 
         ret = mbedtls_ssl_context_save(&ssl, NULL, 0, &buf_len);
         if (ret != MBEDTLS_ERR_SSL_BUFFER_TOO_SMALL) {
@@ -4095,6 +4095,7 @@ data_exchange:
             size_t b64_len;
 
             mbedtls_printf("  . Save serialized context to a file... ");
+            fflush(stdout);
 
             mbedtls_base64_encode(NULL, 0, &b64_len, context_buf, buf_len);
 
@@ -4143,6 +4144,7 @@ data_exchange:
         if (opt.serialize == 1) {
             /* nothing to do here, done by context_save() already */
             mbedtls_printf("  . Context has been reset... ok\n");
+            fflush(stdout);
         }
 
         /*
@@ -4155,6 +4157,7 @@ data_exchange:
          */
         if (opt.serialize == 2) {
             mbedtls_printf("  . Freeing and reinitializing context...");
+            fflush(stdout);
 
             mbedtls_ssl_free(&ssl);
 
@@ -4191,6 +4194,7 @@ data_exchange:
         }
 
         mbedtls_printf("  . Deserializing connection...");
+        fflush(stdout);
 
         if ((ret = mbedtls_ssl_context_load(&ssl, context_buf,
                                             buf_len)) != 0) {
@@ -4220,6 +4224,7 @@ data_exchange:
      */
 close_notify:
     mbedtls_printf("  . Closing the connection...");
+    fflush(stdout);
 
     /* No error checking, the connection might be closed already */
     do {

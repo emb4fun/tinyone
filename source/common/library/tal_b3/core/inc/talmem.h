@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2018-2023 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2018-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -48,12 +48,13 @@
 
 typedef enum
 {
-   XM_ID_HEAP = 0,
-   XM_ID_FS   = 1,
-   XM_ID_IP   = 2,
-   XM_ID_WEB  = 3,
-   XM_ID_TLS  = 4,
-   XM_ID_MBOX = 5,
+   XM_ID_HEAP   = 0,
+   XM_ID_FS     = 1,
+   XM_ID_IP     = 2,
+   XM_ID_WEB    = 3,
+   XM_ID_TLS    = 4,
+   XM_ID_MBOX   = 5,
+   XM_ID_USER_1 = 6,
 
    /****************/
    XM_ID_MAX = 16    /* <= Last element, do not use more than 16 */

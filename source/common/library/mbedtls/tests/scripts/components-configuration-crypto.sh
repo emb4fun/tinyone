@@ -792,7 +792,7 @@ component_test_everest () {
     make test
 
     msg "test: metatests (clang, ASan)"
-    tests/scripts/run-metatests.sh any asan poison
+    framework/scripts/run-metatests.sh any asan poison
 
     msg "test: Everest ECDH context - ECDH-related part of ssl-opt.sh (ASan build)" # ~ 5s
     tests/ssl-opt.sh -f ECDH
@@ -882,7 +882,7 @@ component_test_crypto_for_psa_service () {
 component_build_crypto_baremetal () {
   msg "build: make, crypto only, baremetal config"
   scripts/config.py crypto_baremetal
-  make CFLAGS="-O1 -Werror -I$PWD/framework/tests/include/baremetal-override/"
+  make CFLAGS="-O1 -Werror -I$PWD/framework/tests/include/baremetal-override/ -DMBEDTLS_TEST_PLATFORM_IS_NOT_UNIXLIKE"
   are_empty_libraries library/libmbedx509.* library/libmbedtls.*
 }
 

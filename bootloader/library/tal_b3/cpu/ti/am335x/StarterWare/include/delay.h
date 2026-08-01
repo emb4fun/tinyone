@@ -49,7 +49,7 @@ extern "C" {
 void DelayTimerSetup(void);
 void delay(unsigned int milliSec);
 void StartTimer(unsigned int millisec);
-void StopTimer();
+void StopTimer(void);
 unsigned int IsTimerElapsed(void);
 /*
 * External functions

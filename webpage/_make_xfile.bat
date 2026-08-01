@@ -34,3 +34,5 @@ rename xfile.bin %PRJ_NAME%.bin
 ..\tools\xname -o %PRJ_NAME%.bin -v ..\htdocs\etc\config.txt
 
 cd..
+
+:: *** EOF ***

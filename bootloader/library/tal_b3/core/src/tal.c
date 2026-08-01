@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2013-2023 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -66,10 +66,26 @@
 /*  Out   : none                                                         */
 /*  Return: none                                                         */
 /*************************************************************************/
+void __attribute__((weak)) OS_TCTS_Init (void);
 void __attribute__((weak)) OS_TCTS_Init (void)
 {
    /* Only an empty function */
 } /* OS_TCTS_Init */
+
+/*************************************************************************/
+/*  tal_COMInit                                                          */
+/*                                                                       */
+/*  If the CPU does not support COM, talcom.c will not included in the   */
+/*  project. But the function "tal_COMInit" is still needed.             */ 
+/*                                                                       */
+/*  In    : none                                                         */
+/*  Out   : none                                                         */
+/*  Return: none                                                         */
+/*************************************************************************/
+void __attribute__((weak)) tal_COMInit (void)
+{
+   /* Only an empty function */
+} /* tal_COMInit */
 
 /*************************************************************************/
 /*  tal_CANInit                                                          */

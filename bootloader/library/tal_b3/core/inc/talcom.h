@@ -1,7 +1,7 @@
 /**************************************************************************
 *  This file is part of the TAL project (Tiny Abstraction Layer)
 *
-*  Copyright (c) 2013-2023 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -49,8 +49,9 @@
 
 typedef enum _tal_com_buffer_
 {
-   TAL_COM_BUFFER_RX = 0,
-   TAL_COM_BUFFER_TX
+   TAL_COM_BUFFER_RX      = 0,
+   TAL_COM_BUFFER_TX,
+   TAL_COM_BUFFER_RX_TIME
 } TAL_COM_BUFFER;
 
 typedef enum _tal_com_length_
@@ -91,6 +92,11 @@ typedef enum _tal_com_ioctl_
 } TAL_COM_IOCTL;
 
 /*
+ * Timestamp
+ */
+typedef uint32_t (*GET_COM_TIMESTAMP)(void);
+
+/*
  * COM device control block
  */
 typedef struct _tal_com_dcb_
@@ -101,6 +107,7 @@ typedef struct _tal_com_dcb_
    TAL_COM_PORT     ePort;
    uint8_t          bIsOpen;
    uint8_t          bRxOverflow;
+   TAL_COM_BUFFER   eBufferRx;
 
    /* Synchronisation */
    OS_SEMA           Sema;
@@ -113,11 +120,14 @@ typedef struct _tal_com_dcb_
    /* Rx and Tx ring buffer */   
    TAL_MISC_RING     RxRing;
    TAL_MISC_RING     TxRing;
+
+   /* Timestamp function */
+   GET_COM_TIMESTAMP GetRxTimestamp;
    
    /* HW information from talcpu_com.h */
    TAL_COM_HW        HW;
    
-#if defined(TAL_COM_PORT_VIRTUAL)   
+#if defined(TAL_COM_PORT_VIRTUAL)
    void            *pVCOM;
 #endif
    
@@ -134,6 +144,16 @@ typedef struct _tal_com_func_
    void       (*COMSendStringASS) (TAL_COM_DCB *pDCB, char *pString);
 
 } TAL_COM_FUNC;
+
+
+/*
+ * Here comes the COM object-time
+ */
+typedef struct _tal_com_object_time_
+{
+   uint32_t dTimestamp;
+   uint32_t dData;
+} TAL_COM_OBJECT_TIME;
 
 /**************************************************************************
 *  Macro Definitions
@@ -156,6 +176,9 @@ TAL_RESULT tal_COMSetRingBuffer (TAL_COM_DCB   *pDCB,
                                  TAL_COM_BUFFER eBuffer,
                                  uint8_t       *pBuffer,
                                  uint16_t       wBufferSize);
+
+TAL_RESULT tal_COMSetRxTimestampFunc (TAL_COM_DCB *pDCB, 
+                                      GET_COM_TIMESTAMP GetRxTimestamp);                                 
                                  
 TAL_RESULT tal_COMClearOverflow (TAL_COM_DCB *pDCB); 
 

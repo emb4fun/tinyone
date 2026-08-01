@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2016 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2016-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -528,7 +528,7 @@ void sys_arch_unprotect (uint32_t mask)
 #endif /* defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_7M__) */
 
 
-#if (SYS_LIGHTWEIGHT_PROT) && defined(beaglebone)
+#if ((SYS_LIGHTWEIGHT_PROT) && defined(beaglebone))
 
 /* Sitara header files required for this interface driver. */
 #include "interrupt.h"
@@ -566,6 +566,47 @@ void sys_arch_unprotect (sys_prot_t lev)
    if((lev & 0x80) == 0) 
    {
       IntMasterIRQEnable();
+   }
+}
+
+#endif /* ((SYS_LIGHTWEIGHT_PROT) && defined(beaglebone)) */
+
+
+#if ((SYS_LIGHTWEIGHT_PROT) && defined(soc_zynq_7000))
+
+/**
+ * This function is used to lock access to critical sections when lwipopt.h
+ * defines SYS_LIGHTWEIGHT_PROT. It disables interrupts and returns a value
+ * indicating the interrupt enable state when the function entered. This
+ * value must be passed back on the matching call to sys_arch_unprotect().
+ *
+ * @return the interrupt level when the function was entered.
+ */
+sys_prot_t sys_arch_protect (void)
+{
+   sys_prot_t status;
+
+   status = (__disable_irq() & 0xFF);
+
+   return status;
+}
+
+/**
+ * This function is used to unlock access to critical sections when lwipopt.h
+ * defines SYS_LIGHTWEIGHT_PROT. It enables interrupts if the value of the lev
+ * parameter indicates that they were enabled when the matching call to
+ * sys_arch_protect() was made.
+ *
+ * @param lev is the interrupt level when the matching protect function was
+ * called
+ */
+void sys_arch_unprotect (sys_prot_t lev)
+{
+   /* Only turn interrupts back on if they were originally on when the matching
+      sys_arch_protect() call was made. */
+   if((lev & 0x80) == 0) 
+   {
+      __enable_irq();
    }
 }
 
