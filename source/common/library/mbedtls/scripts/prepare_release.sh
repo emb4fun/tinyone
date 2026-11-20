@@ -33,7 +33,5 @@ for GITIGNORE in $(git ls-files --recurse-submodules -- '*.gitignore'); do
         psed 's/###END_GENERATED_FILES###/###END_COMMENTED_GENERATED_FILES###/' "$GITIGNORE"
 done
 
-#### Build scripts ####
-psed 's/^\(GEN_FILES[ ?:]*=\)\([^#]*\)/\1/' Makefile */Makefile
-psed '/[Oo][Ff][Ff] in development/! s/^\( *option *( *GEN_FILES  *"[^"]*"  *\)\([A-Za-z0-9][A-Za-z0-9]*\)/\1OFF/' CMakeLists.txt
-
+#### Build system ####
+psed '/[Oo][Ff][Ff] in development/! s/^\( *option *( *GEN_FILES  *"[^"]*"  *\)\([A-Za-z0-9][A-Za-z0-9]*\)/\1OFF/' CMakeLists.txt tf-psa-crypto/CMakeLists.txt

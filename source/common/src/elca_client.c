@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2021-2024 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2021-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -46,10 +46,8 @@
 
 #include "mbedtls/platform.h"
 #include "mbedtls/base64.h"
-#include "mbedtls/pkcs5.h"
 #include "mbedtls/pk.h"
-#include "mbedtls/entropy.h"
-#include "mbedtls/ctr_drbg.h"
+#include "mbedtls/psa_util.h"
 #include "mbedtls/asn1write.h"
 #include "mbedtls/oid.h"
 #include "mbedtls/x509.h"
@@ -181,8 +179,7 @@ static OS_STACK (ClientStack, TASK_IP_ELCAC_STK_SIZE);
 static OS_TCB TCBClient;
 
 static mbedtls_pk_context       pk;
-static mbedtls_entropy_context  entropy;
-static mbedtls_ctr_drbg_context ctr_drbg;
+static psa_key_id_t             DeviceKeyId = 0;
 static mbedtls_x509write_csr    req;
 
 const uint8_t server_outh[] = { 0x30, 0x0A, 0x06, 0x08, 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x03, 0x01 };
@@ -758,21 +755,13 @@ static int KeyLoad (void)
    int    rc;
    char  *buf;
    size_t buflen;
-   const char *pers = "elca";
-         
+
    /* Prepare key load */
    mbedtls_pk_init(&pk);
-   mbedtls_ctr_drbg_init(&ctr_drbg);
-   mbedtls_entropy_init(&entropy);
-
-   rc =  mbedtls_ctr_drbg_seed(&ctr_drbg, mbedtls_entropy_func, &entropy,
-                               (const unsigned char *)pers, strlen( pers ));
-   if (rc != 0) GOTO_END(-1);
 
    /* Load the key */
    cert_Get_DeviceKey(&buf, &buflen);
-   rc = mbedtls_pk_parse_key(&pk, (const unsigned char *) buf, buflen, NULL, 0,
-                             mbedtls_ctr_drbg_random, &ctr_drbg);
+   rc = mbedtls_pk_parse_key(&pk, (const unsigned char *) buf, buflen, NULL, 0);
    if(rc != 0) GOTO_END(-1);
 
 end:
@@ -791,34 +780,61 @@ end:
 /*************************************************************************/
 static int KeyCreate (void)
 {
-   int         rc;
-   const char *pers = "elca";
-   
-   /* Prepare key generation */
+   int                    rc;
+   psa_status_t           status;
+   psa_key_attributes_t   attributes = PSA_KEY_ATTRIBUTES_INIT;
+
+   /*
+    * Generate the key with the PSA crypto library. The key will stay
+    * in the PSA key store and will be used as an opaque key by the
+    * X.509 and CSR functions. Therefore PSA_KEY_USAGE_EXPORT is
+    * needed too, to allow the PEM output of the private key.
+    *
+    * Note: PSA_ALG_ECDSA_ANY can not be used as the key algorithm,
+    * because it is no hash wildcard in this mbedTLS version. The
+    * concrete algorithm is needed, the CSR will be signed with
+    * SHA-256.
+    */
+   psa_set_key_type(&attributes, PSA_KEY_TYPE_ECC_KEY_PAIR(PSA_ECC_FAMILY_SECP_R1));
+   psa_set_key_bits(&attributes, 256);
+   psa_set_key_usage_flags(&attributes, PSA_KEY_USAGE_EXPORT | PSA_KEY_USAGE_SIGN_HASH);
+   psa_set_key_algorithm(&attributes, PSA_ALG_ECDSA(PSA_ALG_SHA_256));
+
+   status = psa_generate_key(&attributes, &DeviceKeyId);
+   if (status != PSA_SUCCESS) GOTO_END(-1);
+
+   /*
+    * Setup the pk context with the opaque PSA key. The key can be
+    * used for the CSR signing, mbedtls_pk_write_key_pem will export
+    * the key data by the PSA export functions.
+    */
    mbedtls_pk_init(&pk);
-   mbedtls_ctr_drbg_init(&ctr_drbg);
-   mbedtls_entropy_init(&entropy);
-
-   rc =  mbedtls_ctr_drbg_seed(&ctr_drbg, mbedtls_entropy_func, &entropy,
-                               (const unsigned char *)pers, strlen( pers ));
-   if (rc != 0) GOTO_END(-1);
-
-   /* Generate the key */
-   rc = mbedtls_pk_setup(&pk, mbedtls_pk_info_from_type(MBEDTLS_PK_ECKEY));
-   if (rc != 0) GOTO_END(-1);
-
-   rc = mbedtls_ecp_gen_key(MBEDTLS_ECP_DP_SECP256R1, mbedtls_pk_ec(pk), 
-                            mbedtls_ctr_drbg_random, &ctr_drbg);
-   if (rc != 0) GOTO_END(-1);
+   /*
+    * Setup the pk context with the opaque PSA key. Since mbedTLS 4.x
+    * mbedtls_pk_setup_opaque() is replaced by mbedtls_pk_wrap_psa().
+    */
+   rc = mbedtls_pk_wrap_psa(&pk, DeviceKeyId);
+   if (rc != 0)
+   {
+      psa_destroy_key(DeviceKeyId);
+      DeviceKeyId = 0;
+      GOTO_END(-1);
+   }
 
    /* Print private key */
    rc = mbedtls_pk_write_key_pem(&pk, (unsigned char*)KeyData, sizeof(KeyData));
-   if (rc != 0) GOTO_END(-1);
+   if (rc != 0)
+   {
+      mbedtls_pk_free(&pk);
+      psa_destroy_key(DeviceKeyId);
+      DeviceKeyId = 0;
+      GOTO_END(-1);
+   }
 
 end:
 
-   return(rc);   
-} /* KeyCreate */ 
+   return(rc);
+} /* KeyCreate */
 
 /*************************************************************************/
 /*  CSRCreate                                                            */
@@ -901,7 +917,7 @@ static int CSRCreate (void)
    mbedtls_x509write_csr_set_key(&req, &pk);
    
    /* Create CSR in PEM format */
-   rc = mbedtls_x509write_csr_pem(&req, (unsigned char*)CSRData, sizeof(CSRData), mbedtls_ctr_drbg_random, &ctr_drbg);
+   rc = mbedtls_x509write_csr_pem(&req, (unsigned char*)CSRData, sizeof(CSRData));
 
 //static char CSRAN[256];    
 
@@ -918,9 +934,14 @@ static int CSRCreate (void)
 #endif   
 
    mbedtls_pk_free(&pk);
-   mbedtls_ctr_drbg_free(&ctr_drbg);
-   mbedtls_entropy_free(&entropy);
    mbedtls_x509write_csr_free(&req);
+
+   /*
+    * The pk context is freed, so the PSA device key
+    * is no longer needed and can be destroyed.
+    */
+   psa_destroy_key(DeviceKeyId);
+   DeviceKeyId = 0;
 
 end:
 
@@ -943,8 +964,14 @@ static int CRTGet (void)
    uint32_t                  dAddress; 
    elca_msg_t               *pTxMsg = NULL;
    elca_msg_t               *pRxMsg = NULL;
-   const mbedtls_md_info_t   *info_sha2;
-   mbedtls_aes_context        ctx;
+   psa_status_t               status;
+   psa_key_attributes_t       attributes = PSA_KEY_ATTRIBUTES_INIT;
+   psa_key_derivation_operation_t Derive = PSA_KEY_DERIVATION_OPERATION_INIT;
+   psa_cipher_operation_t     operation = PSA_CIPHER_OPERATION_INIT;
+   psa_key_id_t               key_id = 0;
+   uint8_t                    Cipher[ELCA_RPC_CSR_SIZE];
+   size_t                     CipherLen = 0;
+   size_t                     FinalLen = 0;
    size_t                     Size;
    uint8_t                    Random[16];
    uint8_t                    Key[32];
@@ -975,17 +1002,46 @@ static int CRTGet (void)
    pTxMsg->Header.Func    = ELCA_MSG_GET_CRT;   
    pTxMsg->Header.Len     = ELCA_CALL_GET_CRT_SIZE; 
 
-   /* Create AES key */
-   info_sha2 = mbedtls_md_info_from_type(MBEDTLS_MD_SHA256);
-   if (NULL == info_sha2) GOTO_END(-1);
+   /*
+    * Create the AES key by PBKDF2-HMAC-SHA256, with 4096 iterations.
+    * Note: The empty salt must be set to keep the ELCA RPC format
+    * compatible with the previous legacy implementation.
+    */
+   status = psa_key_derivation_setup(&Derive,
+                                     PSA_ALG_PBKDF2_HMAC(PSA_ALG_SHA_256));
+   if (status == PSA_SUCCESS)
+   {
+      status = psa_key_derivation_input_integer(&Derive,
+                                                PSA_KEY_DERIVATION_INPUT_COST,
+                                                4096);
+   }
 
-   rc = mbedtls_pkcs5_pbkdf2_hmac_ext(MBEDTLS_MD_SHA256, 
-                                  (uint8_t*)PRE_SHARED_KEY, strlen(PRE_SHARED_KEY), 
-                                  NULL, 0,
-                                  4096,
-                                  sizeof(Key), Key);
-   if (rc != 0) GOTO_END(-1);
-   
+   if (status == PSA_SUCCESS)
+   {
+      /* The empty salt must be provided, see note above */
+      status = psa_key_derivation_input_bytes(&Derive,
+                                              PSA_KEY_DERIVATION_INPUT_SALT,
+                                              NULL, 0);
+   }
+
+   if (status == PSA_SUCCESS)
+   {
+      status = psa_key_derivation_input_bytes(&Derive,
+                                              PSA_KEY_DERIVATION_INPUT_PASSWORD,
+                                              (const uint8_t *)PRE_SHARED_KEY,
+                                              strlen(PRE_SHARED_KEY));
+   }
+
+   if (status == PSA_SUCCESS)
+   {
+      status = psa_key_derivation_output_bytes(&Derive, Key, sizeof(Key));
+   }
+
+   /* In the finished or error state, abort is always safe */
+   psa_key_derivation_abort(&Derive);
+
+   if (status != PSA_SUCCESS) GOTO_END(-1);
+
    /* Encrypt CSR first */
    tal_CPURngHardwarePoll(Random, ELCA_RPC_RAND_SIZE);
    memcpy(pTxMsg->Data.cGetCRT.Random, Random, ELCA_RPC_RAND_SIZE);
@@ -993,17 +1049,58 @@ static int CRTGet (void)
    Size = strlen(CSRData);
    Size = (Size + 15) & ~15;
    pTxMsg->Data.cGetCRT.CSRLen = (uint16_t)Size;
-   
-   mbedtls_aes_init(&ctx);
-   mbedtls_aes_setkey_enc(&ctx, Key, (sizeof(Key)*8));
-   rc = mbedtls_aes_crypt_cbc(&ctx, MBEDTLS_AES_ENCRYPT, 
-                              (size_t)Size,
-                              Random,
-                              (uint8_t*)CSRData,
-                              (uint8_t*)pTxMsg->Data.cGetCRT.CSR);
-   mbedtls_aes_free(&ctx);
+
+   /* Import the AES key for the PSA cipher operation */
+   psa_set_key_type(&attributes, PSA_KEY_TYPE_AES);
+   psa_set_key_bits(&attributes, (sizeof(Key) * 8));
+   psa_set_key_usage_flags(&attributes, PSA_KEY_USAGE_ENCRYPT);
+   psa_set_key_algorithm(&attributes, PSA_ALG_CBC_NO_PADDING);
+
+   status = psa_import_key(&attributes, Key, sizeof(Key), &key_id);
+
+   /* Wipe the key material, the PSA key store holds the key */
    memset(Key, 0x00, sizeof(Key));
-   if (rc != 0) GOTO_END(-1);
+
+   /*
+    * Encrypt the CSR with AES-256-CBC, without padding. The IV
+    * will be set by psa_cipher_set_iv(), to keep the ELCA RPC
+    * format, the IV is part of the Random field.
+    */
+   if (status == PSA_SUCCESS)
+   {
+      status = psa_cipher_encrypt_setup(&operation, key_id,
+                                        PSA_ALG_CBC_NO_PADDING);
+   }
+
+   if (status == PSA_SUCCESS)
+   {
+      status = psa_cipher_set_iv(&operation, Random, ELCA_RPC_RAND_SIZE);
+   }
+
+   if (status == PSA_SUCCESS)
+   {
+      status = psa_cipher_update(&operation,
+                                 (const uint8_t *)CSRData, Size,
+                                 Cipher, sizeof(Cipher), &CipherLen);
+   }
+
+   if (status == PSA_SUCCESS)
+   {
+      status = psa_cipher_finish(&operation,
+                                 &Cipher[CipherLen],
+                                 (sizeof(Cipher) - CipherLen), &FinalLen);
+   }
+
+   CipherLen += FinalLen;
+
+   /* The operation will be finished or in error state, abort is always safe */
+   psa_cipher_abort(&operation);
+   psa_destroy_key(key_id);
+
+   if ((status != PSA_SUCCESS) || (CipherLen != Size)) GOTO_END(-1);
+
+   /* Copy the cipher data into the RPC message */
+   memcpy(pTxMsg->Data.cGetCRT.CSR, Cipher, CipherLen);
 
    /* Call RPC */
    rc = HandleGetReq(pTxMsg, pRxMsg, dAddress); 

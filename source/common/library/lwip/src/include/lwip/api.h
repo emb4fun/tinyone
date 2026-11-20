@@ -223,6 +223,7 @@ struct netconn {
 
   /** SSL/TLS state @@MF */   
   void *ssl;
+  /* @@MF */
 
   /** the lwIP internal protocol control block */
   union {

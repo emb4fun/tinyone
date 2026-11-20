@@ -355,28 +355,28 @@ void fsm_input(fsm *f, u_char *inpacket, int l) {
     case CONFREQ:
 	fsm_rconfreq(f, id, inp, len);
 	break;
-
+    
     case CONFACK:
 	fsm_rconfack(f, id, inp, len);
 	break;
-
+    
     case CONFNAK:
     case CONFREJ:
 	fsm_rconfnakrej(f, code, id, inp, len);
 	break;
-
+    
     case TERMREQ:
 	fsm_rtermreq(f, id, inp, len);
 	break;
-
+    
     case TERMACK:
 	fsm_rtermack(f);
 	break;
-
+    
     case CODEREJ:
 	fsm_rcoderej(f, inp, len);
 	break;
-
+    
     default:
 	if( !f->callbacks->extcode
 	   || !(*f->callbacks->extcode)(f, code, id, inp, len) )
@@ -788,7 +788,7 @@ void fsm_sdata(fsm *f, u_char code, u_char id, const u_char *data, int datalen) 
 
     outp = (u_char*)p->payload;
     if (datalen && data != NULL) { /* && data != outp + PPP_HDRLEN + HEADERLEN)  -- was only for fsm_sconfreq() */
-	MEMCPY(outp + PPP_HDRLEN + HEADERLEN, data, datalen);
+      MEMCPY(outp + PPP_HDRLEN + HEADERLEN, data, datalen);
     }
     MAKEHEADER(outp, f->protocol);
     PUTCHAR(code, outp);

@@ -2,6 +2,33 @@
  * @file
  * SMTP client module
  *
+ * Copyright (c) 2011 Simon Goldschmidt
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 3. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+ * SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+ * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+ * OF SUCH DAMAGE.
+ *
+ * This file is part of the lwIP TCP/IP stack.
+ *
  * Author: Simon Goldschmidt
  *
  * @defgroup smtp SMTP client
@@ -488,6 +515,18 @@ smtp_send_mail_alloced(struct smtp_session *s)
   ip_addr_t addr;
 
   LWIP_ASSERT("no smtp_session supplied", s != NULL);
+
+  /* Reject fields that would overflow the fixed-size tx_buf. The MAIL FROM and
+     RCPT TO commands and the combined message header must each fit
+     SMTP_TX_BUF_LEN; otherwise smtp_prepare_mail()/_rcpt()/_header() overflow
+     tx_buf when LWIP_ASSERT is disabled (CWE-120/CWE-787). */
+  if ((s->from_len > (u16_t)(SMTP_TX_BUF_LEN - SMTP_CMD_MAIL_1_LEN - SMTP_CMD_MAIL_2_LEN)) ||
+      (s->to_len   > (u16_t)(SMTP_TX_BUF_LEN - SMTP_CMD_RCPT_1_LEN - SMTP_CMD_RCPT_2_LEN)) ||
+      ((u32_t)SMTP_CMD_HEADER_1_LEN + SMTP_CMD_HEADER_2_LEN + SMTP_CMD_HEADER_3_LEN +
+       SMTP_CMD_HEADER_4_LEN + s->from_len + s->to_len + s->subject_len > SMTP_TX_BUF_LEN)) {
+    err = ERR_ARG;
+    goto leave;
+  }
 
 #if SMTP_CHECK_DATA
   /* check that body conforms to RFC:

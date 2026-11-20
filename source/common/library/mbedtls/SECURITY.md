@@ -19,6 +19,17 @@ Only the maintained branches, as listed in [`BRANCHES.md`](BRANCHES.md),
 get security fixes.
 Users are urged to always use the latest version of a maintained branch.
 
+## Use of TF-PSA-Crypto
+
+Note that Mbed TLS uses the cryptography API provided by TF-PSA-Crypto.
+Its
+[threat model](https://github.com/Mbed-TLS/TF-PSA-Crypto/blob/development/SECURITY.md#threat-model)
+applies to all cryptographic operations performed by Mbed TLS. In particular,
+users of Mbed TLS should note the considerations around
+[block ciphers](https://github.com/Mbed-TLS/TF-PSA-Crypto/blob/development/SECURITY.md#block-ciphers)
+since they apply to the block ciphers used in TLS and to software GCM's GHASH
+implementation.
+
 ## Threat model
 
 We classify attacks based on the capabilities of the attacker.
@@ -36,10 +47,6 @@ protection is limited to providing security guarantees offered by the protocol
 being implemented. (For example Mbed TLS alone won't guarantee that the
 messages will arrive without delay, as the TLS protocol doesn't guarantee that
 either.)
-
-**Warning!** Block ciphers do not yet achieve full protection against attackers
-who can measure the timing of packets with sufficient precision. For details
-and workarounds see the [Block Ciphers](#block-ciphers) section.
 
 ### Local attacks
 
@@ -68,9 +75,6 @@ yet.
 physical side channels as well. Remote and physical timing attacks are covered
 in the [Remote attacks](remote-attacks) and [Physical
 attacks](physical-attacks) sections respectively.
-
-**Warning!** Block ciphers do not yet achieve full protection. For
-details and workarounds see the [Block Ciphers](#block-ciphers) section.
 
 #### Local non-timing side channels
 
@@ -120,36 +124,6 @@ The presence of such countermeasures don't mean that Mbed TLS provides
 protection against a class of attacks outside of the above described threat
 model. Neither does it mean that the failure of such a countermeasure is
 considered a vulnerability.
-
-#### Block ciphers
-
-Currently there are four block ciphers in Mbed TLS: AES, CAMELLIA, ARIA and
-DES. The pure software implementation in Mbed TLS implementation uses lookup
-tables, which are vulnerable to timing attacks.
-
-These timing attacks can be physical, local or depending on network latency
-even a remote. The attacks can result in key recovery.
-
-**Workarounds:**
-
-- Turn on hardware acceleration for AES. This is supported only on selected
-  architectures and currently only available for AES. See configuration options
-  `MBEDTLS_AESCE_C`, `MBEDTLS_AESNI_C` and `MBEDTLS_PADLOCK_C` for details.
-- Add a secure alternative implementation (typically hardware acceleration) for
-  the vulnerable cipher. See the [Alternative Implementations
-Guide](docs/architecture/alternative-implementations.md) for more information.
-- Use cryptographic mechanisms that are not based on block ciphers. In
-  particular, for authenticated encryption, use ChaCha20/Poly1305 instead of
-  block cipher modes. For random generation, use HMAC\_DRBG instead of CTR\_DRBG.
-
-#### Everest
-
-The HACL* implementation of X25519 taken from the Everest project only protects
-against remote timing attacks. (See their [Security
-Policy](https://github.com/hacl-star/hacl-star/blob/main/SECURITY.md).)
-
-The Everest variant is only used when `MBEDTLS_ECDH_VARIANT_EVEREST_ENABLED`
-configuration option is defined. This option is off by default.
 
 #### Formatting of X509 data
 

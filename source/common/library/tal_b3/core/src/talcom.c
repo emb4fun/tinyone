@@ -634,6 +634,19 @@ TAL_RESULT tal_COMSendBlock (TAL_COM_DCB *pDCB, uint8_t *pData, uint16_t wSize)
       {
          OS_RES_LOCK(&pDCB->TxSema);
 
+#if defined(__NEORV32_FAMILY)
+         /*
+          * Use polling instead of interrupt control
+          */
+         neorv32_uart_t *UARTx;
+         UARTx = (neorv32_uart_t*)pDCB->HW.dBaseAddress;
+         while (wSize)
+         {
+            neorv32_uart_putc(UARTx, *pData);
+            pData++;
+            wSize--;
+         }
+#else
 #if 0
          do
          {
@@ -735,6 +748,7 @@ TAL_RESULT tal_COMSendBlock (TAL_COM_DCB *pDCB, uint8_t *pData, uint16_t wSize)
             while (wSize != 0);
          } /* end if (wFreeCount >= wSize) */
 #endif
+#endif /* #if defined(__NEORV32_FAMILY) */
 
          OS_RES_FREE(&pDCB->TxSema);
 

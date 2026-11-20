@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2013-2024 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2013-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -117,7 +117,7 @@ static void TermTask (void *arg)
    TAL_RESULT    Error;
    TAL_COM_DCB *pPort = (TAL_COM_DCB *)arg;
    uint8_t      bData;
-   
+
 #if defined(TAL_COM_PORT_VIRTUAL)
    uint8_t      bUSBConnected = 0;
 #endif

@@ -80,7 +80,7 @@ static u16_t udp_port = UDP_LOCAL_PORT_RANGE_START;
 /* exported in udp.h (was static) */
 struct udp_pcb *udp_pcbs;
 
-static u8_t mcast_ttl = UDP_TTL;
+static u8_t mcast_ttl = UDP_TTL; /* @@MF */
 
 /**
  * Initialize this module.
@@ -346,6 +346,9 @@ udp_input(struct pbuf *p, struct netif *inp)
                checksum! (Again, see RFC 3828 chap. 3.1) */
             goto chkerr;
           }
+        } else if ((chklen != 0) && (chklen > p->tot_len)) {
+          /* chklen exceeds received packet */
+          goto chkerr;
         }
         if (ip_chksum_pseudo_partial(p, IP_PROTO_UDPLITE,
                                      p->tot_len, chklen,
@@ -1238,7 +1241,7 @@ udp_new(void)
     memset(pcb, 0, sizeof(struct udp_pcb));
     pcb->ttl = UDP_TTL;
 #if LWIP_MULTICAST_TX_OPTIONS
-    udp_set_multicast_ttl(pcb, mcast_ttl);
+    udp_set_multicast_ttl(pcb, mcast_ttl); /* @@MF */
 #endif /* LWIP_MULTICAST_TX_OPTIONS */
     pcb_tci_init(pcb);
   }
@@ -1306,6 +1309,7 @@ void udp_set_mcast_ttl (u8_t ttl)
    mcast_ttl = ttl;
    
 } /* udp_set_mcast_ttl */
+/* @@MF */
 
 #if UDP_DEBUG
 /**

@@ -1,4 +1,13 @@
 
-Version from 2026-06-16 (https://cgit.git.savannah.nongnu.org/cgit/lwip.git)
+Version from 2026-11-19 (https://github.com/lwip-tcpip/lwip)
+
+=========================================================================================
+Commit 777e6d4
+
+tcp: fix Denial-of-Service via FIN-copy after window trimming in tcp_receive()
+see bug #68416
+
+Tested-by: Simon Goldschmidt <goldsimon@gmx.de>
+=========================================================================================
 
 With some additional changes for DHCP and TLS.

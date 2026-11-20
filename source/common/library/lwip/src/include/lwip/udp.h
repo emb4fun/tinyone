@@ -186,7 +186,7 @@ void udp_debug_print(struct udp_hdr *udphdr);
 
 void udp_netif_ip_addr_changed(const ip_addr_t* old_addr, const ip_addr_t* new_addr);
 
-void udp_set_mcast_ttl (u8_t ttl);
+void udp_set_mcast_ttl (u8_t ttl); /* @@MF */
 
 #ifdef __cplusplus
 }

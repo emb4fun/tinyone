@@ -102,7 +102,7 @@ static void   igmp_timeout(struct netif *netif, struct igmp_group *group);
 static void   igmp_start_timer(struct igmp_group *group, u8_t max_time);
 static void   igmp_delaying_member(struct igmp_group *group, u8_t maxresp);
 static err_t  igmp_ip_output_if(struct pbuf *p, const ip4_addr_t *src, const ip4_addr_t *dest, struct netif *netif);
-void          igmp_send(struct netif *netif, struct igmp_group *group, u8_t type);
+void          igmp_send(struct netif *netif, struct igmp_group *group, u8_t type); /* @@MF */
 
 static ip4_addr_t     allsystems;
 static ip4_addr_t     allrouters;
@@ -754,7 +754,7 @@ igmp_ip_output_if(struct pbuf *p, const ip4_addr_t *src, const ip4_addr_t *dest,
  * @param group the group to which to send the packet
  * @param type the type of igmp packet to send
  */
-void
+void /* @@MF */
 igmp_send(struct netif *netif, struct igmp_group *group, u8_t type)
 {
   struct pbuf     *p    = NULL;

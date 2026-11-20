@@ -1,5 +1,5 @@
 /**************************************************************************
-*  Copyright (c) 2021-2024 by Michael Fischer (www.emb4fun.de).
+*  Copyright (c) 2021-2026 by Michael Fischer (www.emb4fun.de).
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without 
@@ -72,6 +72,7 @@
 #define ELCA_RPC_ERR_FUNC         -4
 #define ELCA_RPC_ERR_ROOT_SIZE    -5
 #define ELCA_RPC_ERR_INTER_SIZE   -6
+#define ELCA_RPC_ERR_CRT_GEN      -7
 #define ELCA_RPC_ERR_NO_SERVER    -100  
 
 /*

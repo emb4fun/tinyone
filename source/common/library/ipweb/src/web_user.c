@@ -48,9 +48,7 @@
 #include "adler32.h"
 #include "base32.h"
 
-#include "mbedtls/md.h"
-#include "mbedtls/sha1.h"
-#include "mbedtls/sha256.h"
+#include "psa/crypto.h"
 
 /*=======================================================================*/
 /*  Extern                                                               */
@@ -59,20 +57,6 @@
 /*=======================================================================*/
 /*  All Structures and Common Constants                                  */
 /*=======================================================================*/
-
-#define SHA1_HASH_SIZE  20
-
-#define sha1_context    mbedtls_sha1_context
-#define sha1_start(_a)  mbedtls_sha1_starts_ret(_a)
-#define sha1_update     mbedtls_sha1_update_ret
-#define sha1_finish     mbedtls_sha1_finish_ret
-
-
-#define sha2_context    mbedtls_sha256_context
-#define sha2_start(_a)  mbedtls_sha256_starts(_a, 0)
-#define sha2_update     mbedtls_sha256_update
-#define sha2_finish     mbedtls_sha256_finish
-
 
 #define USER_MAGIC      0x52455355  /* USER */
 #define USER_SIZEVER    ((((uint32_t)sizeof(user_db_t)) << 16) | 0x0001)
@@ -171,54 +155,54 @@ static user_t *CheckDBUser (char *pUser)
 /*************************************************************************/
 static uint32_t CalcTOTPValue (uint8_t *pKey, size_t KeySize, uint32_t dUnixtime)
 {
-   uint32_t            dValue;
-   uint64_t             Counter; /* 8-byte counter value, the moving factor */
-   mbedtls_md_context_t ctx;
-   mbedtls_md_type_t    md_type = MBEDTLS_MD_SHA1;
-   uint8_t              hash[SHA1_HASH_SIZE];
-   uint8_t              offset;
-   uint32_t             bin_code;
+   uint64_t Counter = (uint64_t)dUnixtime / 30;
+   uint8_t  counter_bytes[8];
+   uint8_t  hash[20] = {0};
+   size_t   hash_len = 0;
    
-   /*
-    * Calculate counter first, for a window of 30 seconds
-    */
-   Counter = (dUnixtime / 30);
+   /* 1. Convert counter to 8-byte big-endian format */
+   for (int i = 7; i >= 0; i--)
+   {
+      counter_bytes[i] = (uint8_t)(Counter & 0xFF);
+      Counter >>= 8;
+   }
 
-   /* 
-    * Counter must in big-endian format.
-    * This took some time to figure out, Google can help :)
-    * Take a look here: https://github.com/fmount/c_otp/blob/master/src/rfc4226.c
-    */
-   Counter = (uint64_t)htonl((uint32_t)Counter) << 32;
+   /* 2. Set key attributes for HMAC-SHA1 */
+   psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
+   psa_set_key_usage_flags(&attributes, PSA_KEY_USAGE_SIGN_MESSAGE);
+   psa_set_key_algorithm(&attributes, PSA_ALG_HMAC(PSA_ALG_SHA_1));
+   psa_set_key_type(&attributes, PSA_KEY_TYPE_HMAC);
    
-   /*
-    * Step 1: Generate an HMAC-SHA-1 value Let HS = HMAC-SHA-1(K,C)
-    * HS is a 20-byte string
-    */
-   mbedtls_md_init(&ctx);   
-   mbedtls_md_setup(&ctx, mbedtls_md_info_from_type(md_type), 1);   
+   psa_key_id_t key_id = 0;
+   psa_status_t status = psa_import_key(&attributes, pKey, KeySize, &key_id);
+   if (status != PSA_SUCCESS)
+   {
+      term_printf("PSA import_key error: %d\r\n", (int)status);
+      return 0;
+   }
 	
-   mbedtls_md_hmac_starts(&ctx, pKey, KeySize);   
-   mbedtls_md_hmac_update(&ctx, (const unsigned char *)&Counter, sizeof(Counter));   
-   mbedtls_md_hmac_finish(&ctx, hash); 
+   /* 3. Compute HMAC-SHA1 in a single step */
+   status = psa_mac_compute(key_id,
+                            PSA_ALG_HMAC(PSA_ALG_SHA_1),
+                            counter_bytes, sizeof(counter_bytes),
+                            hash, sizeof(hash), &hash_len);
 
-   mbedtls_md_free(&ctx);   
+   psa_destroy_key(key_id); // Destroy key and free resources
 
-   /*
-    * Step 2: Generate a 4-byte string (Dynamic Truncation)
-    */
-   offset   = hash[19] & 0x0f;
-   bin_code = ((hash[offset]   & 0x7f) << 24) |
+   if (status != PSA_SUCCESS)
+   {
+      term_printf("PSA mac_compute error: %d\r\n", (int)status);
+      return 0;
+   }
+
+   /* 4. Dynamic truncation (RFC 4226) */
+   uint8_t  offset   = hash[19] & 0x0f;
+   uint32_t bin_code = ((hash[offset]     & 0x7f) << 24) |
               ((hash[offset+1] & 0xff) << 16) |
               ((hash[offset+2] & 0xff) <<  8) |
                (hash[offset+3] & 0xff);
 
-   /*
-    * Step 3: Compute an HOTP value
-    */ 
-   dValue = bin_code % 1000000;              
-   
-   return(dValue);
+   return(bin_code % 1000000);
 } /* CalcTOTPValue */
 
 /*************************************************************************/
@@ -372,12 +356,32 @@ static void CreateTOTP (uint8_t *pTOTP)
 /*************************************************************************/
 static void CreateHashBySalt (uint8_t *pSalt, char *pPass, size_t PassLen, uint8_t *pHash)
 {
-   static sha2_context HASHctx;
+   psa_status_t         status;
+   psa_hash_operation_t Hash    = PSA_HASH_OPERATION_INIT;
+   size_t               HashLen = 0;
 
-   sha2_start(&HASHctx);
-   sha2_update(&HASHctx, (uint8_t*)pSalt, SALT_SIZE);
-   sha2_update(&HASHctx, (uint8_t*)pPass, PassLen);
-   sha2_finish(&HASHctx, pHash);
+   status = psa_hash_setup(&Hash, PSA_ALG_SHA_256);
+   if (status == PSA_SUCCESS)
+   {
+      status = psa_hash_update(&Hash, pSalt, SALT_SIZE);
+   }
+
+   if (status == PSA_SUCCESS)
+   {
+      status = psa_hash_update(&Hash, (const uint8_t *)pPass, PassLen);
+   }
+
+   if (status == PSA_SUCCESS)
+   {
+      status = psa_hash_finish(&Hash, pHash, HASH_SIZE, &HashLen);
+   }
+
+   if (status != PSA_SUCCESS)
+   {
+      /* Error, clear the hash for an invalid hash result */
+      (void)psa_hash_abort(&Hash);
+      memset(pHash, 0x00, HASH_SIZE);
+   }
 
 } /* CreateHashBySalt */
 
@@ -1106,7 +1110,9 @@ int WebUserTOTPEnable (char *pUser, uint32_t dValueIn)
          /* Check If TOTP is not enabled */
          if (0 == (pDBUser->Mode & USER_MODE_TOTP))
          {
-            dValue = CalcTOTPValue(pDBUser->TOTP, TOTP_SIZE, OS_UnixtimeGet());
+            uint32_t dUnixtime = OS_UnixtimeGet();
+            
+            dValue = CalcTOTPValue(pDBUser->TOTP, TOTP_SIZE, dUnixtime);
             if (dValue == dValueIn)
             {
                /* Enable, code is valid */

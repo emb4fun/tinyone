@@ -14,10 +14,10 @@ component_test_no_x509_info () {
     scripts/config.py full
     scripts/config.py unset MBEDTLS_MEMORY_BACKTRACE # too slow for tests
     scripts/config.py set MBEDTLS_X509_REMOVE_INFO
-    make CFLAGS='-Werror -O2'
+    $MAKE_COMMAND CFLAGS='-Werror -O2'
 
     msg "test: full + MBEDTLS_X509_REMOVE_INFO" # ~ 10s
-    make test
+    $MAKE_COMMAND test
 
     msg "test: ssl-opt.sh, full + MBEDTLS_X509_REMOVE_INFO" # ~ 1 min
     tests/ssl-opt.sh

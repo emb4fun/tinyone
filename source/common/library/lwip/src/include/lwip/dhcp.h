@@ -141,7 +141,7 @@ void dhcp_fine_tmr(void);
 /** This function must exist, in other to add offered NTP servers to
  * the NTP (or SNTP) engine.
  * See LWIP_DHCP_MAX_NTP_SERVERS */
-extern void dhcp_set_ntp_servers(struct netif *netif, u8_t num_ntp_servers, const ip4_addr_t* ntp_server_addrs);
+extern void dhcp_set_ntp_servers(struct netif *netif, u8_t num_ntp_servers, const ip4_addr_t* ntp_server_addrs); /* @@MF */
 #endif /* LWIP_DHCP_GET_NTP_SRV */
 
 #define netif_dhcp_data(netif) ((struct dhcp*)netif_get_client_data(netif, LWIP_NETIF_CLIENT_DATA_INDEX_DHCP))

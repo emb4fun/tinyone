@@ -78,7 +78,7 @@
  * systems, this should be defined to something less resource-consuming.
  */
 #ifndef LWIP_PLATFORM_DIAG
-#define LWIP_PLATFORM_DIAG(x) do {term_printf x;} while(0)
+#define LWIP_PLATFORM_DIAG(x) do {term_printf x;} while(0) /* @@MF */
 #include <stdio.h>
 #include <stdlib.h>
 #endif
@@ -90,7 +90,7 @@
  */
 #ifndef LWIP_PLATFORM_ASSERT
 #define LWIP_PLATFORM_ASSERT(x) do {term_printf("Assertion \"%s\" failed at line %d in %s\n", \
-                                     x, __LINE__, __FILE__); fflush(NULL); abort();} while(0)
+                                     x, __LINE__, __FILE__); fflush(NULL); abort();} while(0) /* @@MF */
 #include <stdio.h>
 #include <stdlib.h>
 #endif

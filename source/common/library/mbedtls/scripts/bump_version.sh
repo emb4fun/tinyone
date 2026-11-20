@@ -69,18 +69,14 @@ then
 fi
 
 [ $VERBOSE ] && echo "Bumping VERSION in CMakeLists.txt"
-sed -e "s/ VERSION [0-9.]\{1,\}/ VERSION $VERSION/g" < CMakeLists.txt > tmp
+sed -e "s/(MBEDTLS_VERSION [0-9.]\{1,\})/(MBEDTLS_VERSION $VERSION)/g" < CMakeLists.txt > tmp
 mv tmp CMakeLists.txt
-
-[ $VERBOSE ] && echo "Bumping VERSION in library/CMakeLists.txt"
-sed -e "s/ VERSION [0-9.]\{1,\}/ VERSION $VERSION/g" < library/CMakeLists.txt > tmp
-mv tmp library/CMakeLists.txt
 
 if [ "X" != "X$SO_CRYPTO" ];
 then
-  [ $VERBOSE ] && echo "Bumping SOVERSION for libmbedcrypto in library/CMakeLists.txt"
-  sed -e "/mbedcrypto/ s/ SOVERSION [0-9]\{1,\}/ SOVERSION $SO_CRYPTO/g" < library/CMakeLists.txt > tmp
-  mv tmp library/CMakeLists.txt
+  [ $VERBOSE ] && echo "Bumping SOVERSION for libmbedcrypto in CMakeLists.txt"
+  sed -e "s/(MBEDTLS_CRYPTO_SOVERSION [0-9]\{1,\})/(MBEDTLS_CRYPTO_SOVERSION $SO_CRYPTO)/g" < CMakeLists.txt > tmp
+  mv tmp CMakeLists.txt
 
   [ $VERBOSE ] && echo "Bumping SOVERSION for libmbedcrypto in library/Makefile"
   sed -e "s/SOEXT_CRYPTO?=so.[0-9]\{1,\}/SOEXT_CRYPTO?=so.$SO_CRYPTO/g" < library/Makefile > tmp
@@ -89,9 +85,9 @@ fi
 
 if [ "X" != "X$SO_X509" ];
 then
-  [ $VERBOSE ] && echo "Bumping SOVERSION for libmbedx509 in library/CMakeLists.txt"
-  sed -e "/mbedx509/ s/ SOVERSION [0-9]\{1,\}/ SOVERSION $SO_X509/g" < library/CMakeLists.txt > tmp
-  mv tmp library/CMakeLists.txt
+  [ $VERBOSE ] && echo "Bumping SOVERSION for libmbedx509 in CMakeLists.txt"
+  sed -e "s/(MBEDTLS_X509_SOVERSION [0-9]\{1,\})/(MBEDTLS_X509_SOVERSION $SO_X509)/g" < CMakeLists.txt > tmp
+  mv tmp CMakeLists.txt
 
   [ $VERBOSE ] && echo "Bumping SOVERSION for libmbedx509 in library/Makefile"
   sed -e "s/SOEXT_X509?=so.[0-9]\{1,\}/SOEXT_X509?=so.$SO_X509/g" < library/Makefile > tmp
@@ -100,9 +96,9 @@ fi
 
 if [ "X" != "X$SO_TLS" ];
 then
-  [ $VERBOSE ] && echo "Bumping SOVERSION for libmbedtls in library/CMakeLists.txt"
-  sed -e "/mbedtls/ s/ SOVERSION [0-9]\{1,\}/ SOVERSION $SO_TLS/g" < library/CMakeLists.txt > tmp
-  mv tmp library/CMakeLists.txt
+  [ $VERBOSE ] && echo "Bumping SOVERSION for libmbedtls in CMakeLists.txt"
+  sed -e "s/(MBEDTLS_TLS_SOVERSION [0-9]\{1,\})/(MBEDTLS_TLS_SOVERSION $SO_TLS)/g" < CMakeLists.txt > tmp
+  mv tmp CMakeLists.txt
 
   [ $VERBOSE ] && echo "Bumping SOVERSION for libmbedtls in library/Makefile"
   sed -e "s/SOEXT_TLS?=so.[0-9]\{1,\}/SOEXT_TLS?=so.$SO_TLS/g" < library/Makefile > tmp
@@ -141,7 +137,4 @@ scripts/generate_query_config.pl
 
 [ $VERBOSE ] && echo "Re-generating library/version_features.c"
 scripts/generate_features.pl
-
-[ $VERBOSE ] && echo "Re-generating visualc files"
-scripts/generate_visualc_files.pl
 

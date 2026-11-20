@@ -5,7 +5,7 @@
  *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 
-#include "common.h"
+#include "ssl_misc.h"
 
 #if defined(MBEDTLS_SSL_TLS_C) && defined(MBEDTLS_SSL_PROTO_TLS1_3)
 
@@ -18,15 +18,15 @@
 #include "mbedtls/constant_time.h"
 #include "psa/crypto.h"
 #include "mbedtls/psa_util.h"
+#include "mbedtls_utils.h"
 
-#include "ssl_misc.h"
 #include "ssl_tls13_invasive.h"
 #include "ssl_tls13_keys.h"
 #include "ssl_debug_helpers.h"
 
 #include "psa/crypto.h"
-#include "psa_util_internal.h"
 
+#if defined(MBEDTLS_SSL_TLS1_3_KEY_EXCHANGE_MODE_SOME_EPHEMERAL_ENABLED)
 /* Define a local translating function to save code size by not using too many
  * arguments in each translating place. */
 static int local_err_translation(psa_status_t status)
@@ -36,16 +36,7 @@ static int local_err_translation(psa_status_t status)
                                  psa_generic_status_to_mbedtls);
 }
 #define PSA_TO_MBEDTLS_ERR(status) local_err_translation(status)
-
-int mbedtls_ssl_tls13_crypto_init(mbedtls_ssl_context *ssl)
-{
-    psa_status_t status = psa_crypto_init();
-    if (status != PSA_SUCCESS) {
-        (void) ssl; // unused when debugging is disabled
-        MBEDTLS_SSL_DEBUG_RET(1, "psa_crypto_init", status);
-    }
-    return PSA_TO_MBEDTLS_ERR(status);
-}
+#endif
 
 const uint8_t mbedtls_ssl_tls13_hello_retry_request_magic[
     MBEDTLS_SERVER_HELLO_RANDOM_LEN] =
@@ -269,16 +260,11 @@ static int ssl_tls13_parse_certificate_verify(mbedtls_ssl_context *ssl,
     const unsigned char *p = buf;
     uint16_t algorithm;
     size_t signature_len;
-    mbedtls_pk_type_t sig_alg;
+    mbedtls_pk_sigalg_t sig_alg;
     mbedtls_md_type_t md_alg;
     psa_algorithm_t hash_alg = PSA_ALG_NONE;
     unsigned char verify_hash[PSA_HASH_MAX_SIZE];
     size_t verify_hash_len;
-
-    void const *options = NULL;
-#if defined(MBEDTLS_X509_RSASSA_PSS_SUPPORT)
-    mbedtls_pk_rsassa_pss_options rsassa_pss_options;
-#endif /* MBEDTLS_X509_RSASSA_PSS_SUPPORT */
 
     /*
      * struct {
@@ -314,7 +300,7 @@ static int ssl_tls13_parse_certificate_verify(mbedtls_ssl_context *ssl,
         goto error;
     }
 
-    if (mbedtls_ssl_get_pk_type_and_md_alg_from_sig_alg(
+    if (mbedtls_ssl_get_pk_sigalg_and_md_alg_from_sig_alg(
             algorithm, &sig_alg, &md_alg) != 0) {
         goto error;
     }
@@ -330,7 +316,9 @@ static int ssl_tls13_parse_certificate_verify(mbedtls_ssl_context *ssl,
     /*
      * Check the certificate's key type matches the signature alg
      */
-    if (!mbedtls_pk_can_do(&ssl->session_negotiate->peer_cert->pk, sig_alg)) {
+    if (!mbedtls_pk_can_do_psa(&ssl->session_negotiate->peer_cert->pk,
+                               mbedtls_psa_alg_from_pk_sigalg(sig_alg, hash_alg),
+                               PSA_KEY_USAGE_VERIFY_HASH)) {
         MBEDTLS_SSL_DEBUG_MSG(1, ("signature algorithm doesn't match cert key"));
         goto error;
     }
@@ -352,20 +340,13 @@ static int ssl_tls13_parse_certificate_verify(mbedtls_ssl_context *ssl,
     }
 
     MBEDTLS_SSL_DEBUG_BUF(3, "verify hash", verify_hash, verify_hash_len);
-#if defined(MBEDTLS_X509_RSASSA_PSS_SUPPORT)
-    if (sig_alg == MBEDTLS_PK_RSASSA_PSS) {
-        rsassa_pss_options.mgf1_hash_id = md_alg;
 
-        rsassa_pss_options.expected_salt_len = PSA_HASH_LENGTH(hash_alg);
-        options = (const void *) &rsassa_pss_options;
-    }
-#endif /* MBEDTLS_X509_RSASSA_PSS_SUPPORT */
-
-    if ((ret = mbedtls_pk_verify_ext(sig_alg, options,
-                                     &ssl->session_negotiate->peer_cert->pk,
-                                     md_alg, verify_hash, verify_hash_len,
-                                     p, signature_len)) == 0) {
-        return 0;
+    ret = mbedtls_pk_verify_ext((mbedtls_pk_sigalg_t) sig_alg,
+                                &ssl->session_negotiate->peer_cert->pk,
+                                md_alg, verify_hash, verify_hash_len,
+                                p, signature_len);
+    if (ret == 0) {
+        return ret;
     }
     MBEDTLS_SSL_DEBUG_RET(1, "mbedtls_pk_verify_ext", ret);
 
@@ -566,7 +547,7 @@ int mbedtls_ssl_tls13_parse_certificate(mbedtls_ssl_context *ssl,
         switch (ret) {
             case 0: /*ok*/
                 break;
-            case MBEDTLS_ERR_X509_UNKNOWN_SIG_ALG + MBEDTLS_ERR_OID_NOT_FOUND:
+            case MBEDTLS_ERR_X509_UNKNOWN_OID:
                 /* Ignore certificate with an unknown algorithm: maybe a
                    prior certificate was already trusted. */
                 break;
@@ -988,7 +969,7 @@ static int ssl_tls13_write_certificate_verify_body(mbedtls_ssl_context *ssl,
 
     for (; *sig_alg != MBEDTLS_TLS1_3_SIG_NONE; sig_alg++) {
         psa_status_t status = PSA_ERROR_CORRUPTION_DETECTED;
-        mbedtls_pk_type_t pk_type = MBEDTLS_PK_NONE;
+        mbedtls_pk_sigalg_t pk_type = MBEDTLS_PK_SIGALG_NONE;
         mbedtls_md_type_t md_alg = MBEDTLS_MD_NONE;
         psa_algorithm_t psa_algorithm = PSA_ALG_NONE;
         unsigned char verify_hash[PSA_HASH_MAX_SIZE];
@@ -1006,7 +987,7 @@ static int ssl_tls13_write_certificate_verify_body(mbedtls_ssl_context *ssl,
             continue;
         }
 
-        if (mbedtls_ssl_get_pk_type_and_md_alg_from_sig_alg(
+        if (mbedtls_ssl_get_pk_sigalg_and_md_alg_from_sig_alg(
                 *sig_alg, &pk_type, &md_alg) != 0) {
             return MBEDTLS_ERR_SSL_INTERNAL_ERROR;
         }
@@ -1024,10 +1005,9 @@ static int ssl_tls13_write_certificate_verify_body(mbedtls_ssl_context *ssl,
 
         MBEDTLS_SSL_DEBUG_BUF(3, "verify hash", verify_hash, verify_hash_len);
 
-        if ((ret = mbedtls_pk_sign_ext(pk_type, own_key,
+        if ((ret = mbedtls_pk_sign_ext((mbedtls_pk_sigalg_t) pk_type, own_key,
                                        md_alg, verify_hash, verify_hash_len,
-                                       p + 4, (size_t) (end - (p + 4)), &signature_len,
-                                       ssl->conf->f_rng, ssl->conf->p_rng)) != 0) {
+                                       p + 4, (size_t) (end - (p + 4)), &signature_len)) != 0) {
             MBEDTLS_SSL_DEBUG_MSG(2, ("CertificateVerify signature failed with %s",
                                       mbedtls_ssl_sig_alg_to_str(*sig_alg)));
             MBEDTLS_SSL_DEBUG_RET(2, "mbedtls_pk_sign_ext", ret);
@@ -1206,7 +1186,8 @@ static int ssl_tls13_prepare_finished_message(mbedtls_ssl_context *ssl)
                                                   ssl->handshake->state_local.finished_out.digest,
                                                   sizeof(ssl->handshake->state_local.finished_out.
                                                          digest),
-                                                  &ssl->handshake->state_local.finished_out.digest_len,
+                                                  &ssl->handshake->state_local.finished_out.
+                                                  digest_len,
                                                   ssl->conf->endpoint);
 
     if (ret != 0) {
@@ -1526,6 +1507,8 @@ int mbedtls_ssl_tls13_read_public_xxdhe_share(mbedtls_ssl_context *ssl,
     }
     memcpy(handshake->xxdh_psa_peerkey, p, peerkey_len);
     handshake->xxdh_psa_peerkey_len = peerkey_len;
+    handshake->tls13_key_exchange_inputs |=
+        MBEDTLS_SSL_TLS1_3_KEY_EXCHANGE_INPUT_EPHEMERAL_PEER;
 
     return 0;
 }
@@ -1642,6 +1625,8 @@ int mbedtls_ssl_tls13_generate_and_write_xxdh_key_exchange(
         return ret;
     }
 
+    handshake->tls13_key_exchange_inputs |=
+        MBEDTLS_SSL_TLS1_3_KEY_EXCHANGE_INPUT_EPHEMERAL_PRIVATE;
     *out_len = own_pubkey_len;
 
     return 0;
